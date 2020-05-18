@@ -6,6 +6,7 @@ import {ui_fragment, $svg, media_zoom} from '../dom.js'
 import {wrap} from '../drawer.js'
 import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
+import {handle_step} from '../user_action/step.js'
 
 const tpl = `<section class="vertical-align">
 	<h3>Pagină</h3>
@@ -16,6 +17,8 @@ const tpl = `<section class="vertical-align">
 	<hr/>
 	<label for="bleed">Bleed</label>
 	<input type="number" min="0.0" max="5.0" value="2" step="0.5" id="bleed">
+    <label for="step">Mărime pas</label>
+    <input type="number" min="0.01" max="90" value="2" step="0.1" id="step">
 	<hr/>
 	<label class="tooltip" data-tooltip-text="Alegi culoarea fundalului" data-tooltip-bottom  for="bkcolor">Background
 		<input type="checkbox" class="switch" id="bkcolor-switch">
@@ -62,6 +65,9 @@ $media_width.addEventListener('change', media_zoom_event, true)
 $media_height.addEventListener('change', media_zoom_event, true)
 
 export const $bleed = $ui.querySelector('#bleed')
+
+export const $step = $ui.querySelector('#step')
+document.addEventListener('keyup', evt => handle_step($step.value, evt.key))      
 
 export const $bkcolor = $ui.querySelector('#bkcolor')
 // try to gues background color of page

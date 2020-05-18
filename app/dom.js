@@ -122,8 +122,8 @@ function rectpage(id='rectpage', d=px($bleed.value)) {
 }
 
 function px(units) {
-		let BB = $svg.viewBox.baseVal
-		return units*(BB.width/$svg.width.baseVal.valueInSpecifiedUnits)
+		//let BB = $svg.viewBox.baseVal
+		return units*(parseFloat(window.getComputedStyle($svg).width)/$svg.width.baseVal.valueInSpecifiedUnits)
 }
 
 export function unit_conv(unit_src, u_dst) {

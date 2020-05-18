@@ -1,12 +1,11 @@
 import {$textname, $text_features, $font_size, $word_spacing, $letter_spacing, $line_spacing} from './section/text.js'
-import{$step} from './user_action/step.js'
 import{$fonts} from './section/text.js'
 import{$fill} from './section/general_properties.js'
 import{$align, $reference} from './user_action/align.js'
 import{$delete_element, $undelete_element, $clone_element} from './user_action/del_undel_clone.js'
 import{$angle} from './user_action/rotate.js'
 import{$stroke_fill, $stroke_fill_switch, $stroke_width, $stroke_opacity, $fill_opacity, $fill_switch, 
-$size, $media_width, $media_height, $bleed, $bkcolor} from './section/general_properties.js'
+$size, $media_width, $media_height, $bleed, $step, $bkcolor} from './section/general_properties.js'
 import{$fliph, $flipv} from './user_action/mirror.js'
 import{$skewx, $skewy} from './user_action/skew.js'
 import{$group, $group_repr} from './section/move.js'
