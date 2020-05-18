@@ -162,7 +162,7 @@ export function after_click_update_ui($el) {
 	}
 	$stroke_fill.style.backgroundColor = $stroke_fill.value
 
-	if (stroke_fill != 'none') {
+	if (!['', 'none'].includes(stroke_fill)) {
 		$stroke_fill_switch.checked = true
 		$stroke_fill.style.display = 'block'
 		const xid = $stroke_fill_switch.dataset.proxy

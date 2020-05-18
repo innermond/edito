@@ -1,7 +1,10 @@
 import {$selection} from '../selection/grouping.js'
 import {computed_color} from '../color.js'
+import {px} from '../dom.js'
 
 export function stroke_width(val) {
+	// receive val units, apply to selection as pixels
+	val = px(val)
 	$selection.forEach($el => {
 		let $ee = [$el]
 		if ($el.nodeName === 'g') {
