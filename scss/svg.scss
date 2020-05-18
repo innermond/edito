@@ -1,0 +1,13 @@
+body {
+	font-family: Roboto;
+}
+
+#editor > svg {
+	flex: 1 1 100%;
+	height: 100%;
+}
+image, rect, line, path, textPath, circle, ellipse, tspan {cursor: pointer;}
+text {
+	cursor: default;
+	user-select: none;
+}

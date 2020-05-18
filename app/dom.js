@@ -1,0 +1,281 @@
+import {$bleed} from './ui.js'
+import {m2e, get_u} from './mtx.js'
+
+const ns = 'http://www.w3.org/2000/'
+const nsattr = 'http://www.w3.org/1999/'
+const xmlns = ns+'svg'
+
+const  rnd = () => Math.floor(Math.random() * 1000000)
+
+const attr = (n, v=null) => {
+	for (let p in v){
+    n.setAttributeNS(null, p.replace(/[A-Z]/g, (m, p, o, s) => "-" + m.toLowerCase()), v[p])
+	}
+}
+
+const newtag = (n, v=null) => {
+  n = document.createElementNS(xmlns, n);
+	n.setAttributeNS(null, 'id', '_'+rnd())
+	if (!v) return n
+
+	attr(n, v)
+  return n
+}
+
+export const newtag_html = (n, v=null) => {
+  n = document.createElement(n);
+	n.setAttribute('id', '_'+rnd())
+	if (!v) return n
+
+	attr(n, v)
+  return n
+}
+
+export const ui_fragment = (html) => {
+	const $ui = new DocumentFragment()
+	let $tmp = newtag_html('div')
+	$tmp.innerHTML = html
+	// do not iterate and modify / move node on a live collection
+	// collection will be shorten while iterating
+	// and next iteration will jump / skip element
+	for (let $e of Array.from($tmp.children)) $ui.appendChild($e)
+	return $ui
+}
+
+export const $svg = document.querySelector('svg')
+
+export const $defs = document.querySelector('svg > defs') ?? newtag('defs')
+export const $style = $defs.querySelector(':scope > style') ?? newtag('style')
+// force a style element to be there
+if (!$style.ownerSVGElement){
+	$svg.insertBefore($style, $svg.firstChild)
+}
+	
+export function group_parent($el) {
+	if ($el.parentNode?.nodeName === 'g') {
+		return $el.parentNode
+	} 
+	if ($el.nodeName === 'tspan') {
+		return group_parent($el.parentNode)
+	}
+	return null
+}
+
+function el_furthest($el, selector, gap=true) {
+    let $further = null
+    let $next = $el.parentElement
+    let fit
+    // climbing to top
+    while ($next) {
+        fit = $next.matches(selector)
+        // no gap allowed so next element must fit
+        if (!gap){
+            // go out
+            if (!fit) break
+            $further = $next 
+        } else {
+            if (fit) $further = $next 
+        } 
+        $next = $next.parentElement
+    }
+    return $further 
+}
+
+export function element_from($el) {
+	//$el = $el.closest('g[data-group=true]') ?? group_parent($el) ?? $el
+	$el = el_furthest($el, 'g') ?? $el
+	if (['textPath', 'tspan'].includes($el.nodeName)) $el = $el.closest('text') 
+	return $el
+}
+
+export function  change_id($el) {
+	if ($el.children.length) {
+		for (let $e of $el.children) change_id($e)
+	}
+	let id = $el.getAttributeNS(null, 'id')
+	if (id) $el.setAttributeNS(null, 'id', id+rnd())
+}
+
+function rectpage(id='rectpage', d=px($bleed.value)) {
+	if (id === null) id = 'rectpage'
+	if (d === null) d = px($bleed.value)
+	let x = $svg.viewBox.baseVal.x
+	let y = $svg.viewBox.baseVal.y
+	let w = $svg.viewBox.baseVal.width
+	let h = $svg.viewBox.baseVal.height
+
+	let $box = document.querySelector('#'+id)
+	if (!$box) {
+		$box = newtag('rect', {id:id, x:x-d, y:y-d, width:w+2*d, height:h+2*d, 'class': 'is-reference rectpage'})
+		$box.setAttributeNS(null, 'fill', 'none')
+		$box.setAttributeNS(null, 'stroke-fill', 'none')
+		$box.setAttributeNS(null, 'stroke-width', '0')
+		$svg.appendChild($box)
+	} else {
+		$box.classList.add('is-reference', 'rectpage')
+		$box.setAttributeNS(null, 'x', x-d)
+		$box.setAttributeNS(null, 'y', y-d)
+		$box.setAttributeNS(null, 'width', w+2*d)
+		$box.setAttributeNS(null, 'height', h+2*d)
+	}
+	return $box
+}
+
+function px(units) {
+		let BB = $svg.viewBox.baseVal
+		return units*(BB.width/$svg.width.baseVal.valueInSpecifiedUnits)
+}
+
+export function unit_conv(unit_src, u_dst) {
+	if (unit_src.length === 0) return 0
+	const u_src = unit_src.substr(-2)
+	if (u_src === u_dst) return parseFloat(unit_src)
+
+	const div = document.createElement('div')
+	const unit_val = 10
+	// assume unit is epressed as last 2 chars
+	div.style.width = unit_val+u_src
+	document.body.appendChild(div)
+	let unit_px = u_src !== 'px' ? 
+		1*window.getComputedStyle(div).width :
+		unit_val
+	div.style.width = unit_val+u_dst
+	let k = window.getComputedStyle(div).width
+	k = unit_px/parseFloat(k)
+
+	div.remove()
+
+	return parseFloat(unit_src)*k
+}
+
+export function get_paren_id($el, attr) {
+	let f = $el?.getAttributeNS(null, attr)
+	if (!f || f.length === 0) return null
+	return f.trim().match(/"?#([^\)]+)"?/)?.[1]
+}
+
+export function media_zoom(w, h) {
+	$svg.width.baseVal.valueInSpecifiedUnits = w
+	$svg.viewBox.baseVal.width=$svg.width.baseVal.value
+	$svg.height.baseVal.valueInSpecifiedUnits = h
+	$svg.viewBox.baseVal.height=$svg.height.baseVal.value
+}
+
+export const scale_prevs = new Map() 
+export const scaling = ($el, k = 0) => {
+	if (!$el) return
+	let prev = scale_prevs.get($el) ?? 1
+	scale_prevs.set($el,  k)
+	k = k / prev
+	let bb = $el.getBBox()
+	let x = bb.x + bb.width/2
+	x *= (1-k)
+	let y = bb.y + bb.height/2
+	y *= (1-k)
+
+	let tsf = $svg.createSVGTransform()
+	switch (k) {
+	case 1:
+			tsf.setScale(k,-k)
+			break
+	case -1:
+			tsf.setScale(-k,k)
+			break
+	default:
+			tsf.setScale(k,k)
+	}
+	let trans = $svg.createSVGTransform()
+	trans.setTranslate(x, y)
+
+	let lst = $el.transform.baseVal
+	lst.appendItem(trans)
+	lst.appendItem(tsf)
+}
+
+export const get_angle = $el => {
+		let m0 = $svg.createSVGTransform().matrix
+		let m = $el.transform?.baseVal?.consolidate()?.matrix || m0
+		return Math.atan2(m.b, m.a)*(180/Math.PI)
+}
+
+export const angle_prevs = new Map() 
+export function angle($el, a) {
+		let prev = angle_prevs.get($el) ?? 0
+		angle_prevs.set($el,  a)
+		a = a - prev
+		let bb = $el.getBBox()
+		let cx = bb.x + bb.width/2
+		let cy = bb.y + bb.height/2
+
+		let tsf = $svg.createSVGTransform()
+		tsf.setRotate(a, cx, cy)
+
+		let lst = $el.transform.baseVal
+		lst.appendItem(tsf)
+}
+
+export const mirror = ($el, k) => {
+		if (!$el) return
+		if (k !== 1 &&  k !== -1) return false
+
+		let bb = $el.getBoundingClientRect()
+		let $p1 = $svg.createSVGPoint()
+		$p1.x = bb.x+bb.width/2
+		$p1.y = bb.y+bb.height/2
+		$p1 = $p1.matrixTransform($el.getScreenCTM().inverse())
+		let x = $p1.x
+		let y = $p1.y
+		let lst = $el.transform.baseVal
+		let xel = m2e($el, $svg)
+		let u = get_u(xel)
+		if (k === -1) {
+			let uc = -2*u
+			if (xel.b<0===xel.c<0) uc=-uc
+			xel = xel.translate(x,y).rotate(uc).translate(-x, -y)
+			xel = xel.flipY().translate(0, -2*y)
+		} else if (k === 1) {
+			let uc = -2*u
+			if (xel.b<0===xel.c<0) uc=-uc
+			xel = xel.translate(x,y).rotate(uc).translate(-x, -y)
+			xel = xel.flipX().translate(-2*x, 0)
+		}
+		lst.initialize($svg.createSVGTransformFromMatrix(xel))
+}
+
+export function set_xlink_href($el, id) {
+	$el.setAttributeNS(nsattr+'xlink', 'xlink:href', id)
+}
+
+export function text_path($e) {
+	if ($e.nodeName !== 'path') return
+	let $tp = $svg.getElementsByTagNameNS(xmlns, 'textPath')
+	$tp = Array.from($tp).filter($t => $t.getAttributeNS(nsattr+'xlink', 'href') === `#${$e.id}`)
+	$tp = $tp[0]
+	return $tp.closest('text')
+}
+
+export function path_text($e) {
+	if ($e.nodeName === 'text' && $e.firstChild?.nodeName === 'textPath') {
+		let pathid = $e.firstChild.getAttributeNS(nsattr+'xlink', 'href')
+		if (pathid) {
+			return $svg.querySelector(pathid)
+		}
+	}
+	return
+}
+
+export function previousSiblingNoAnts($el) {
+	while ($el.previousElementSibling?.dataset.ants === 'true') {
+		$el = $el.previousElementSibling
+	}
+	return $el.previousElementSibling
+}
+
+export function nextSiblingNoAnts($el) {
+	while ($el.nextElementSibling?.dataset.ants === 'true') {
+		$el = $el.nextElementSibling
+	}
+	return $el.nextElementSibling
+}
+
+export {attr, newtag, rnd, xmlns, nsattr, rectpage, px}

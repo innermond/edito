@@ -1,0 +1,4 @@
+#!/bin/bash
+echo start php server - the proxy
+echo start lite-server
+php -S localhost:2999 & yarn run dev && fg

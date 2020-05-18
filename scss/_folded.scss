@@ -1,0 +1,26 @@
+ul.folded {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	&> li {
+		display: none;
+		cursor: pointer;
+		list-style-type: none;
+		border-bottom: 0.25rem solid $bk-color-loud;
+		padding: 1rem;
+		background-color: $bk-color;
+		transition: all .2s ease-out;
+		&:hover {
+			background-color: black;
+			color: $txt-color;
+		}
+		&:first-child {
+			display: list-item;
+			border-color: $bk-color-loud;
+			&:after {
+				content: '▾';
+				float: right;
+			}
+		}
+	}
+}

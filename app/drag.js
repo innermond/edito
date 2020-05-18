@@ -1,0 +1,130 @@
+import {dragging_all_marks_reset} from './ui.js'
+import {$svg, element_from} from './dom.js'
+import {point_screen, point_in, outpoint} from './pos.js'
+import {m, setm} from './mtx.js'
+import {$clicked} from './selection/index.js'
+
+let supportsPassive = false;
+try {
+  let opts = Object.defineProperty({}, 'passive', {
+    get: function() {
+      supportsPassive = true;
+    }
+  });
+  window.addEventListener("testPassive", null, opts);
+  window.removeEventListener("testPassive", null, opts);
+} catch (e) {}
+
+// manage dragging
+$svg.addEventListener('mousedown', startDrag);
+$svg.addEventListener('mouseup', endDrag);
+$svg.addEventListener('mousemove', drag);
+$svg.addEventListener('mouseleave', endDrag);
+$svg.addEventListener('touchstart', startDrag, supportsPassive ? { passive: true } : false);
+$svg.addEventListener('touchmove', drag, supportsPassive ? { passive: true } : false);
+$svg.addEventListener('touchend', endDrag);
+$svg.addEventListener('touchleave', endDrag);
+$svg.addEventListener('touchcancel', endDrag);
+
+let mouseStart
+// is startDrag ~= click event?
+function startDrag(evt) {
+	if (evt.target.nodeName === 'svg') return
+	
+	// avoid ants elements
+	if (!!!evt.target.dataset.ants) {
+		if (!evt.shiftKey && !evt.ctrlKey) dragging_all_marks_reset()
+		$clicked.from(element_from(evt.target))
+		$clicked.clues.dragging = true
+	}
+	// posibly a click on an embeded svg into a svg
+	// TODO check if point_screen will work
+	// in case of an embeded svg
+	let $othersvg = $clicked.closest('svg')
+	let $pt = $othersvg.createSVGPoint()
+	$pt = $pt.matrixTransform($svg.getScreenCTM().inverse())
+	$pt.x = evt.clientX
+	$pt.y = evt.clientY
+	mouseStart = $pt.matrixTransform($svg.getScreenCTM().inverse())
+	$clicked.over()
+}
+
+function endDrag(evt) {
+	$clicked.clues.dragging = false
+}
+
+function drag(evt) {
+	switch (true) {
+		case !$clicked:
+			return
+		case $clicked.is_zero():
+			return
+		case $clicked.clues.is_reset():
+			return
+		break
+	}
+
+	let $othersvg = $clicked.closest('svg')
+	let $pt = $othersvg.createSVGPoint()
+	$pt = $pt.matrixTransform($svg.getScreenCTM().inverse())
+	let current = point_screen(evt)
+	let $pta = point_in($clicked, current.x, current.y)
+	let $ptz = point_in($clicked, mouseStart.x, mouseStart.y)
+	$pt.x = $pta.x-$ptz.x
+	$pt.y = $pta.y-$ptz.y
+	mouseStart = current
+	let bb = $clicked.getBBox()
+	let mtx = m($clicked)
+	// rotation
+	if ($clicked.clues.rotating){
+		let x = bb.x+bb.width*0.5
+		let y = bb.y+bb.height*0.5
+		if ('useThat' in $clicked) {
+			bb = $clicked.useThat.bbox
+			x = bb.x+bb.width*0.5
+			y = bb.y+bb.height*0.5
+			// TODO: relative boxes
+			let mtx = m($clicked.useThat.el)
+			let p = outpoint(x,y,mtx)
+			x=p.x
+			y=p.y
+		}
+		mtx = mtx.translate(x,y)
+		setm($clicked, mtx)
+		let $pta = point_in($clicked, current.x, current.y)
+		if ($pta.x != 0 && $pta.y != 0) mtx = mtx.rotateFromVector(-$pta.x, -$pta.y)
+		mtx = mtx.translate(-x,-y)
+	} else if ($clicked.clues.sizing){
+		let x = bb.x
+		let y = bb.y
+		if ('useThat' in $clicked) {
+			bb = $clicked.useThat.bbox
+			x = bb.x
+			y = bb.y
+			// TODO: relative boxes
+			let mtx = m($clicked.useThat.el)
+			let p = outpoint(x,y,mtx)
+			x=p.x
+			y=p.y
+		}
+		mtx = mtx.translate(x,y)
+		let dx = 1+$pta.x/bb.width-$ptz.x/bb.width
+		let dy = 1+$pta.y/bb.height-$ptz.y/bb.height
+		if (evt.shiftKey) {
+			mtx = mtx.scaleNonUniform(dx,dy)
+		} else {
+			mtx = mtx.scale(dx,dy)
+		}
+		mtx = mtx.translate(-x,-y)
+	} else {
+		mtx = mtx.translate($pt.x, $pt.y)
+	}
+	setm($clicked, mtx)
+	if ($clicked?.textPath) {
+		// textPath path is replicating in its coordinates system 
+		// the transformations made to $clicked path in its own coordinates system
+		setm($clicked.textPath.path, $clicked.textPath.text.getCTM().inverse().multiply($clicked.getCTM()))
+	}
+
+	$clicked.follow()
+}
