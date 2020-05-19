@@ -3,13 +3,10 @@ import{$fonts} from './section/text.js'
 import{$fill} from './section/general_properties.js'
 import{$align, $reference} from './user_action/align.js'
 import{$delete_element, $undelete_element, $clone_element} from './user_action/del_undel_clone.js'
-import{$angle} from './user_action/rotate.js'
 import{$stroke_fill, $stroke_fill_switch, $stroke_width, $stroke_opacity, $fill_opacity, $fill_switch, 
-$size, $media_width, $media_height, $bleed, $step, $bkcolor} from './section/general_properties.js'
-import{$fliph, $flipv} from './user_action/mirror.js'
+$size, $angle, $media_width, $media_height, $bleed, $step, $bkcolor} from './section/general_properties.js'
 import{$skewx, $skewy} from './user_action/skew.js'
-import{$group, $ungroup, $group_repr} from './section/move.js'
-import{$stack_front, $stack_back} from './user_action/front_back.js'
+import{$grouping, $group_repr, $ordering, $flipping} from './section/move.js'
 import {$add_rect, $add_circle, $add_line} from './user_action/add.js'
 import {$url_image, $add_url_image, $file_image} from './section/image.js'
 import {$masking, $cliping, $pathing, $pathing_side} from './user_action/mask_clip_path.js'
@@ -34,11 +31,12 @@ $text_features,
 $align, $reference, $size,
 $delete_element, $undelete_element,
 $angle, 
+$flipping,
 $fill, 
 $stroke_fill, $stroke_width, $stroke_opacity, 
 $bkcolor, $fill_opacity, $fill_switch,
-$fliph, $flipv, $skewx, $skewy, 
-$group, $ungroup, $group_repr, $stack_front, $stack_back,
+$skewx, $skewy, 
+$grouping, $group_repr, $ordering,
 $add_rect, $add_circle, $add_line,
 $url_image, $add_url_image, $file_image,
 $masking, $cliping, $pathing, $pathing_side,

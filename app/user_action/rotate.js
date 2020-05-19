@@ -1,16 +1,9 @@
-import {$svg, ui_fragment, angle} from '../dom.js'
+import {angle} from '../dom.js'
 import {$clicked, $selection} from '../selection/index.js'
 
-const tpl = `<label for="angle">Rotație</label>
-    <input type="range" min="-180" max="180" value="0" step="0.0001" id="angle">`
-const $ui = ui_fragment(tpl)
-
-export const $angle = $ui.querySelector('#angle')
-$angle.addEventListener('input', rotate)
-
-function rotate(evt) {
+export function rotate(val) {
 	$selection.forEach($el => {
-		angle($el, $angle.value)
+		angle($el, val)
 		$clicked.from($el)
 		$clicked.over()
 	})

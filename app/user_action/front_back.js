@@ -1,16 +1,8 @@
-import {ui_fragment, previousSiblingNoAnts, nextSiblingNoAnts} from '../dom.js'
+import {previousSiblingNoAnts, nextSiblingNoAnts} from '../dom.js'
 import {$clicked, $selection} from '../selection/index.js'
 
-const tpl = `<button id="stack_front">Un pas in fata</button>
-<button id="stack_back">Un pas in spate</button>`
-const $ui = ui_fragment(tpl)
 
-export const $stack_back = $ui.querySelector('#stack_back')
-export const $stack_front = $ui.querySelector('#stack_front')
-$stack_back.addEventListener('click', back)
-$stack_front.addEventListener('click', front)
-
-function back(evt) {
+export function back(evt) {
 	if ($selection.size > 1) $selection.as_group(true) // temporary group; $selection is kept intact
 	let $host = $clicked.closest('g:not([data-group=true])') || $clicked.ownerSVGElement
 	if ($host === $clicked) $host = $clicked.ownerSVGElement
@@ -27,7 +19,7 @@ function back(evt) {
 	if ($selection.size > 1) $clicked.remove()
 }
 
-function front(evt) {
+export function front(evt) {
 	if ($selection.size > 1) $selection.as_group(true) // temporary group; $selection is kept intact
 	let $host = $clicked.closest('g:not([data-group=true])') || $clicked.ownerSVGElement
 	if ($host === $clicked) $host = $clicked.ownerSVGElement

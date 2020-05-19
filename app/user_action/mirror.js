@@ -1,16 +1,7 @@
-import {ui_fragment, mirror} from '../dom.js'
+import {mirror} from '../dom.js'
 import {$clicked, $selection} from '../selection/index.js'
 
-const tpl = `<button id="fliph">Oglindire orizontală</button>
-<button id="flipv">Oglindire verticală</button>`
-const $ui = ui_fragment(tpl)
-
-export const $fliph = $ui.querySelector('#fliph')
-export const $flipv = $ui.querySelector('#flipv')
-$fliph.addEventListener('click', mirror_h)
-$flipv.addEventListener('click', mirror_w)
-
-function mirror_h(evt) {
+export function mirror_h() {
 	$selection.forEach($el => {
 		let $ee = [$el]
 		if ($el.nodeName === 'g') {
@@ -24,7 +15,7 @@ function mirror_h(evt) {
 	})
 }
 
-function mirror_w(evt) {
+export function mirror_v() {
 	$selection.forEach($el => {
 		let $ee = [$el]
 		if ($el.nodeName === 'g') {

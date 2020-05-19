@@ -1,4 +1,5 @@
 import {scale} from '../user_action/size.js'
+import {rotate} from '../user_action/rotate.js'
 import {fill_opacity} from '../user_action/opacity.js'
 import {stroke_opacity, stroke_width} from '../user_action/stroke.js'
 import {colorize, uncolorize} from '../selection/colorize.js'
@@ -27,6 +28,8 @@ const tpl = `<section class="vertical-align">
 	<hr/>
 	<label for="size">Scalare</label>
 	<input class="tooltip" data-tooltip-text="Modifică mărimea proporțional" data-tooltip-bottom  type="range" min="0.0001" max="2" value="1" step="0.0001" id="size">
+<label for="angle">Rotație</label>
+<input class="tooltip" data-tooltip-text="Rotește obiectul" data-tooltip-bottom   type="range" min="-180" max="180" value="0" step="0.0001" id="angle">
 	<hr/>
 	<h3>Umplere</h3>
 	<label class="tooltip" data-tooltip-text="Alegi culoarea de umplere" data-tooltip-bottom for="fill">Culoare
@@ -100,6 +103,9 @@ $bkcolor_switch.addEventListener('change', evt => {
 
 export const $size = $ui.querySelector('#size')
 $size.addEventListener('input', evt => scale($size.value))
+
+export const $angle = $ui.querySelector('#angle')
+$angle.addEventListener('input', evt => rotate($angle.value))
 
 export const $fill = $ui.querySelector('#fill')
 $fill.addEventListener('input', evt => {
