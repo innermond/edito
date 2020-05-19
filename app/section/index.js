@@ -3,5 +3,6 @@ import {$ui as $section_text} from './text.js'
 import {$ui as $section_image} from './image.js'
 import {$ui as $section_properties} from './general_properties.js'
 import {$ui as $section_move} from './move.js'
+import {$ui as $section_add_shape} from './add_shape.js'
 
-export {$section_menubar, $section_text, $section_image, $section_properties, $section_move}
+export {$section_menubar, $section_text, $section_add_shape, $section_image, $section_properties, $section_move}
