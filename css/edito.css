@@ -316,20 +316,23 @@ hr {
   background-color: #292c31;
   opacity: 0.0;
   margin-left: 0;
-  transition: opacity top .2s ease-out; }
-  .scroller[class~=active] {
-    opacity: 1.0; }
-    .scroller[class~=active] > .thumb {
+  transition: opacity .2s ease-out; }
+  .scroller[class~=active], .scroller:hover {
+    opacity: 1.0;
+    background-color: #5a544b; }
+    .scroller[class~=active] > .thumb, .scroller:hover > .thumb {
       width: 1rem;
-      background-color: #5a544b;
+      background-color: #d6d3ce;
       margin-left: -0.5rem; }
+  .scroller[class~=active] > .thumb {
+    transition: width .2s ease-out, .2s ease-out, top 0s, margin-left .2s ease-out; }
   .scroller > .thumb {
     width: 0.5rem;
     height: 8rem;
-    background-color: #d6d3ce;
     cursor: pointer;
     position: absolute;
-    transition: width .2s ease-in-out, margin-left .2s ease-in-out; }
+    background-color: #5a544b;
+    transition: width .2s ease-out, top .2s ease-out, margin-left .2s ease-out; }
 
 #editor {
   border: 1px solid silver;

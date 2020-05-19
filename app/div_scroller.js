@@ -19,7 +19,6 @@ export function div_scroller($ss) {
 				$scrollee.addEventListener('mouseleave', evt => {
 					move = false
 					$e.style.opacity = 0.0
-					$e.classList.remove('active')
 				})
 
 				// terminate

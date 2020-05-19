@@ -8,7 +8,7 @@ import{$stroke_fill, $stroke_fill_switch, $stroke_width, $stroke_opacity, $fill_
 $size, $media_width, $media_height, $bleed, $step, $bkcolor} from './section/general_properties.js'
 import{$fliph, $flipv} from './user_action/mirror.js'
 import{$skewx, $skewy} from './user_action/skew.js'
-import{$group, $group_repr} from './section/move.js'
+import{$group, $ungroup, $group_repr} from './section/move.js'
 import{$stack_front, $stack_back} from './user_action/front_back.js'
 import {$add_rect, $add_circle, $add_line} from './user_action/add.js'
 import {$url_image, $add_url_image, $file_image} from './section/image.js'
@@ -38,7 +38,7 @@ $fill,
 $stroke_fill, $stroke_width, $stroke_opacity, 
 $bkcolor, $fill_opacity, $fill_switch,
 $fliph, $flipv, $skewx, $skewy, 
-$group, $group_repr, $stack_front, $stack_back,
+$group, $ungroup, $group_repr, $stack_front, $stack_back,
 $add_rect, $add_circle, $add_line,
 $url_image, $add_url_image, $file_image,
 $masking, $cliping, $pathing, $pathing_side,
@@ -258,9 +258,6 @@ export function after_click_update_ui($el) {
 			}
 		}
 	}
-
-	let typ = $el.nodeName
-	$group.innerText = typ === 'g' ? 'Degrupează' : 'Grupează'
 
 }
 

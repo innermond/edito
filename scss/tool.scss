@@ -63,10 +63,6 @@ $space-tooltip: 5px;
 // 24px height of image
 $top-tooltip: 24px*0.5+$space-tooltip;
 
-.tooltip {
-//	position: relative;
-}
-
 .tooltip-text {
 	background-color: $bk-tooltip;
   visibility: hidden;
@@ -381,21 +377,25 @@ hr {
 	background-color: $bk-color;
 	opacity: 0.0;
 	margin-left: 0;
-	&[class~=active] {
+	&[class~=active], &:hover {
 		opacity: 1.0;
 		& > .thumb {
 			width: 1rem;
-			background-color: $txt-color-darkest;
+			background-color: $txt-color;
 			margin-left: -0.5rem;
 		}
+		background-color: $txt-color-darkest;
 	}
-	transition: opacity top .2s ease-out;
+	&[class~=active] > .thumb {
+		transition: width .2s ease-out, .2s ease-out, top 0s, margin-left .2s ease-out;
+	}
+	transition: opacity .2s ease-out;
 	& > .thumb {
 		width: 0.5rem;
 		height: 8rem;
-		background-color: $txt-color;
 		cursor: pointer;
 		position: absolute;
-		transition: width .2s ease-in-out, margin-left .2s ease-in-out;
+		background-color: $txt-color-darkest;
+		transition:  width .2s ease-out, top .2s ease-out, margin-left .2s ease-out;
 	}
 }

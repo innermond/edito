@@ -1,5 +1,5 @@
 import {initial, dragging_marks_reset, dragging_all_marks_reset, dragging_all_marks_relax, after_click_update_ui} from './ui.js'
-import {$svg, element_from, group_parent} from './dom.js'
+import {$svg, element_from} from './dom.js'
 import {$selection} from './selection/grouping.js'
 import {$clicked} from './selection/clicked.js'
 
