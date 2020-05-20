@@ -335,9 +335,27 @@ hr {
     transition: width .2s ease-out, top .2s ease-out, margin-left .2s ease-out; }
 
 #editor {
-  border: 1px solid silver;
+  background-color: black;
   display: flex;
-  max-width: 800px; }
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0; }
+
+#canvas {
+  display: flex;
+  max-width: 800px;
+  width: 100%;
+  max-height: 800px;
+  background: url(/img/square-bg.png);
+  margin: 0;
+  padding: 0;
+  margin-left: 50px; }
 
 ul.folded {
   margin: 0;

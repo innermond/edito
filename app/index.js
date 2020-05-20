@@ -3,6 +3,8 @@ import './drag.js'
 import './ul_select.js'
 import {$section_menubar, $section_properties, $section_move, $section_add_shape, $section_text, $section_image} from './section/index.js'
 
+import {$svg} from './dom.js'
+
 /*function append($el) {
 	// append only dom elements
 	if (!($el instanceof Element || $el instanceof HTMLElement)) return
@@ -25,4 +27,8 @@ $ui.appendChild($section_add_shape)
 $ui.appendChild($section_text)
 $ui.appendChild($section_image)
 
-document.body.appendChild($ui)
+document.querySelector('#editor').appendChild($ui)
+$svg.style.width = '100%'
+$svg.style.height = '100%'
+
+document.querySelector('#canvas').style.opacity = 1

@@ -14,7 +14,9 @@
 <body>
 
 <div id="editor">
+<div id="canvas" style="opacity:0">
 <?php include('src.svg') ?>
+</div>
 </div>
 
 <script type="module" src="app/index.js"></script>

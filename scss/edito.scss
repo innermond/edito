@@ -1,6 +1,27 @@
 #editor {
-	border: 1px solid silver;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    //width: 100vw;
+    //height: 100vh;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right:0;
+
+}
+#canvas {
 	display: flex;
 	max-width: 800px;
+    width: 100%;
+    max-height: 800px;
+    background: url(/img/square-bg.png);
+    margin: 0;
+    padding: 0;
+    margin-left: $tool-width;
 }
 
