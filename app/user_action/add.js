@@ -1,21 +1,8 @@
-import {$svg, ui_fragment, newtag} from '../dom.js'
+import {$svg, newtag} from '../dom.js'
 import {center} from '../pos.js'
 import {colorDefault} from '../ui.js'
 
-const tpl = `<button id="add_rect">Adaugă dreptunghi</button>
-<button id="add_circle">Adaugă cerc</button>
-<button id="add_line">Adaugă linie</button>`
-const $ui = ui_fragment(tpl)
-
-export const $add_rect = $ui.querySelector('#add_rect')
-export const $add_circle = $ui.querySelector('#add_circle')
-export const $add_line = $ui.querySelector('#add_line')
-
-$add_rect.addEventListener('click', add_rect)
-$add_circle.addEventListener('click', add_circle)
-$add_line.addEventListener('click', add_line)
-
-export function add_rect(evt) {
+export function add_rect() {
 	let bb = $svg.getBBox()
 	let rect = newtag('rect')
 	rect.setAttributeNS(null, 'width', bb.width*0.25)
@@ -28,7 +15,7 @@ export function add_rect(evt) {
 	rect.dispatchEvent(event)
 }
 
-function add_circle(evt) {
+export function add_circle() {
 	let bb = $svg.getBBox()
 	let circle = newtag('circle')
 	circle.setAttributeNS(null, 'cx', bb.width*0.5)
@@ -42,7 +29,7 @@ function add_circle(evt) {
 	circle.dispatchEvent(event)
 }
 
-function add_line(evt) {
+export function add_line() {
 	let bb = $svg.getBBox()
 	let line = newtag('line')
 	line.setAttributeNS(null, 'x1', bb.width*0.1)

@@ -7,7 +7,7 @@ import{$stroke_fill, $stroke_fill_switch, $stroke_width, $stroke_opacity, $fill_
 $size, $angle, $media_width, $media_height, $bleed, $step, $bkcolor} from './section/general_properties.js'
 import{$skewx, $skewy} from './user_action/skew.js'
 import{$grouping, $group_repr, $ordering, $flipping} from './section/move.js'
-import {$add_rect, $add_circle, $add_line} from './user_action/add.js'
+import {$add_rect, $add_circle, $add_line} from './section/add_shape.js'
 import {$url_image, $add_url_image, $file_image} from './section/image.js'
 import {$masking, $cliping, $pathing, $pathing_side} from './user_action/mask_clip_path.js'
 import {
