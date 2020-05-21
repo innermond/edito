@@ -1,24 +1,34 @@
 import {newtag_html} from './dom.js'
 
-export function ul_select($select, opt_func=val=>val) {
+export function ul_select($select, opt_func=($opt, $li)=>$opt.textContent, options={'class': 'folded', 'handle_select': true}) {
 	// create select like
-	const $ul = newtag_html('ul', {'class': 'folded'})
+	const $ul = newtag_html('ul', options)
 	$select.dataset.ul_id = $ul.id
 	Array.from($select.children).forEach($opt => {
 		const $li = document.createElement('li')
 		$li.dataset.value = $opt.value
 		// add li with customised 
-		$li.innerHTML = opt_func($opt.value)
+		$li.innerHTML = opt_func($opt, $li)
 		$ul.appendChild($li)
 	})
 	// implement select like behaviour
-	Array.from($ul.children).forEach($li =>
-		$li.addEventListener('click', handle_ul_select($ul, $e => {
-			$select.value = $e.dataset.value
-			$select.dispatchEvent(new Event('change'));
-		})))
+	if (options.handle_select) {
+		Array.from($ul.children).forEach($li =>
+			$li.addEventListener('click', handle_ul_select($ul, $e => {
+				$select.value = $e.dataset.value
+				$select.dispatchEvent(new Event('change'));
+			})))
+	} else {
+		Array.from($ul.children).forEach($li =>
+			$li.addEventListener('click', evt => {
+				$select.value = $li.dataset.value
+				$select.dispatchEvent(new Event('change'));
+			}))
+	}
 	// insert after replaced native select
 	$select.parentNode.insertBefore($ul, $select.nextSibling)
+
+	return $ul
 }
 
 function handle_ul_select($ul, func) {

@@ -1,7 +1,7 @@
 import {$textname, $text_features, $font_size, $word_spacing, $letter_spacing, $line_spacing} from './section/text.js'
 import{$fonts} from './section/text.js'
 import{$fill} from './section/general_properties.js'
-import{$align, $reference} from './user_action/align.js'
+import{$align, $reference} from './section/move.js'
 import{$delete_element, $undelete_element, $clone_element} from './user_action/del_undel_clone.js'
 import{$stroke_fill, $stroke_fill_switch, $stroke_width, $stroke_opacity, $fill_opacity, $fill_switch, 
 $size, $angle, $media_width, $media_height, $bleed, $step, $bkcolor} from './section/general_properties.js'

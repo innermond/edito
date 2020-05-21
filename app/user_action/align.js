@@ -1,38 +1,13 @@
-import {$svg, ui_fragment, rectpage, px} from '../dom.js'
+import {$svg, rectpage, px} from '../dom.js'
 import {outpoint, outpoints, centerpoint} from '../pos.js'
 import {m, m2e, appendm} from '../mtx.js'
 import {$clicked, $selection} from '../selection/index.js'
 import {$bleed, dragging_all_marks_reset} from '../ui.js'
 
-const tpl = `<select id="align">
-		<option>Aliniază</option>
-		<option value="l">stanga</option>
-		<option value="r">dreapta</option>
-		<option value="c">centru</option>
-		<option value="t">sus</option>
-		<option value="b">jos</option>
-		<option value="m">mijloc</option>
-</select>
-<select id="reference">
-		<option>aliniere la</option>
-		<option value="0">centru comun</option>
-		<option value="1">ultimul selectat</option>
-		<option value="2">primul selectat</option>
-		<option value="3">pagina (cu bleed)</option>
-		<option value="4">pagina (siguranța text)</option>
-</select>`
-
-const $ui = ui_fragment(tpl)
-
-export const $align = $ui.querySelector('#align')
-$align.addEventListener('change', aligning)
-export const $reference = $ui.querySelector('#reference')
-$reference.addEventListener('change', referencing)
-
-function aligning(evt) {
+export function aligning(val, refval) {
 	if ($clicked.is_zero()) return
-	set_reference($reference.value)
-	let mode = alignMap[evt.target.value] ?? ''
+	set_reference(refval)
+	let mode = alignMap[val] ?? ''
 	let is_group = $clicked.nodeName === 'g' 
 	let $ee = is_group ? Array.from($clicked.children) : [$clicked]
 	if ($selection.size > 1) $ee = Array.from($selection)
@@ -159,7 +134,7 @@ function set_reference(to) {
 	}
 }
 
-function referencing(evt) {
+export function referencing(val) {
 	if ($clicked.is_zero()) return
-	set_reference(evt.target.value)
+	set_reference(val)
 }

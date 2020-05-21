@@ -159,6 +159,24 @@ $title-height: 3rem;
 		& > * {
 			margin: 0.5rem 1rem;
 		}
+
+		select {
+			background-color: $bk-color-loud;
+			border: none;
+			padding: 1rem;
+			margin: auto 0rem;
+			font-size: 1rem;
+			color: $txt-color-darker;
+			outline: $txt-color-darkest;
+			line-height: 1.5rem;
+			& > * {
+				border: none;
+				outline: none;
+				font-size: 1.2rem;
+			}
+		}
+
+
 	}
 }
 

@@ -138,6 +138,19 @@ text {
         margin-top: 0.5rem; }
     .tool-drawer-scroll > section > * {
       margin: 0.5rem 1rem; }
+    .tool-drawer-scroll > section select {
+      background-color: #24272b;
+      border: none;
+      padding: 1rem;
+      margin: auto 0rem;
+      font-size: 1rem;
+      color: #9c9589;
+      outline: #5a544b;
+      line-height: 1.5rem; }
+      .tool-drawer-scroll > section select > * {
+        border: none;
+        outline: none;
+        font-size: 1.2rem; }
 
 section > label {
   color: #9c9589; }
