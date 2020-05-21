@@ -133,7 +133,7 @@ export function get_filter_inner($el, datatype, innername=null) {
 export function get_filter_id($el) {
 	let f = $el?.getAttributeNS(null, 'filter')
 	if (!f || f.length === 0) return null
-	return f.trim().match(/"?#(\d+)"?/)?.[1]
+	return f.trim().match(/"?#([^\)#]+)"?/)?.[1]
 }
 
 function unset_filter($el, fid) {

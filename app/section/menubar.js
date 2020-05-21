@@ -7,6 +7,7 @@ const tpl = `<section id="menu-bar">
 		<ul id="tool-menu" class="vertical-align">
 			<li id="tool-properties" data-panel="properties" class="tool-item tooltip" data-tooltip-text="Proprietăți generale ale paginii și obiectelor (text, imagine, etc)"><img src="/icon/properties.svg"></li>
 			<li id="tool-move" data-panel="move" class="tool-item tooltip" data-tooltip-text="Alinierea și mișcarea obiectelor (text, imagine, etc)"><img src="/icon/move.svg"></li>
+			<li id="tool-filter" data-panel="manage-filter" class="tool-item tooltip" data-tooltip-text="Adaugă filter"><img src="/icon/filter.svg"></li>
 			<li id="tool-element" data-panel="add-element" class="tool-item tooltip" data-tooltip-text="Adaugă elemente grafice"><img src="/icon/add-element.svg"></li>
 			<li id="tool-text" data-panel="add-text" class="tool-item tooltip" data-tooltip-text="Adaugă text"><img src="/icon/add-text.svg"></li>
 			<li id="tool-image" data-panel="add-image" class="tool-item tooltip" data-tooltip-text="Adaugă imagini"><img src="/icon/add-image.svg"></li>

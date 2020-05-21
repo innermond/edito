@@ -22,7 +22,7 @@ import {
 	$blur,
 	$sharpen,
 	$hue_rotate
-} from './user_action/filter.js'
+} from './section/filter.js'
 import {$save_svg, $send_svg} from './user_action/save.js'
 
 export {$media_width, $media_height, $bleed, $step,
