@@ -20,6 +20,13 @@ export let $selection = new class extends Set {
 		return $clicked.from($g)
 	}
 
+	as_ants() {
+		this.forEach($e => {
+			$clicked.from($e)
+			$clicked.over()
+		})
+	}
+
 	async forEachAsync(func) {
 		for (let e of this) {
 			await func(e)

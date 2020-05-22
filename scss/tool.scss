@@ -180,7 +180,7 @@ $title-height: 3rem;
 	}
 }
 
-section > label {
+section label {
 	color: $txt-color-darker;
 }
 
@@ -338,6 +338,12 @@ hr {
 	border-style: none;
 	height: 0.15rem;
 	background-color: $bk-color-silent;
+}
+
+.wrap-row {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
 }
 
 .icon-button-set {

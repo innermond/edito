@@ -1,10 +1,16 @@
 import {newtag_html} from './dom.js'
+import {tooltip} from './tooltip.js'
 
 export function ul_select($select, opt_func=($opt, $li)=>$opt.textContent, options={'class': 'folded', 'handle_select': true}) {
 	// create select like
-	const $ul = newtag_html('ul', options)
+	let html_options = Object.assign({}, options)
+	if ('handle_select' in options) {
+		delete html_options.handle_select
+	}
+	const $ul = newtag_html('ul', html_options)
 	$select.dataset.ul_id = $ul.id
 	Array.from($select.children).forEach($opt => {
+		if (!$opt.hasAttribute('value')) return
 		const $li = document.createElement('li')
 		$li.dataset.value = $opt.value
 		// add li with customised 
@@ -22,7 +28,7 @@ export function ul_select($select, opt_func=($opt, $li)=>$opt.textContent, optio
 		Array.from($ul.children).forEach($li =>
 			$li.addEventListener('click', evt => {
 				$select.value = $li.dataset.value
-				$select.dispatchEvent(new Event('change'));
+				$select.dispatchEvent(new Event('change'))
 			}))
 	}
 	// insert after replaced native select
@@ -88,4 +94,25 @@ export function initial_ul_select($sel) {
 			$ul_sel.prepend($e)
 		}
 	})
+}
+
+const tooltiping = (tooltiping_map, pos='bottom', adjx=0, adjy=0) => ($opt, $li) => {
+	$li.dataset.tooltipText = $opt.textContent
+	const attr = document.createAttribute(`data-tooltip-${pos}`)
+	$li.setAttributeNode(attr)
+	$li.classList.add('tooltip')
+	tooltip($li, adjx, adjy)
+	return `<img src="/icon/${tooltiping_map[$opt.value]}.svg">`
+}
+
+export function ul_select_iconset($select, val_svg_map) {
+	const $ul = ul_select($select, tooltiping(val_svg_map), {'class': 'icon-button-set', 'handle_select': false})
+	$ul.addEventListener('click', evt => {
+		if(evt.target === $ul) return
+		$ul.querySelectorAll('li[data-value][class~=active]').forEach($e => $e.classList.remove('active'))
+		evt.target.classList.toggle('active')
+	}, true) //The event propagation mode determines the order in which elements receive the event. 
+	// is intercepted in capturing phase
+
+	return $ul
 }

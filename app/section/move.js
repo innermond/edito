@@ -4,28 +4,34 @@ import {group, ungroup, ungroup_all} from '../user_action/group.js'
 import {front, back} from '../user_action/front_back.js'
 import {mirror_h, mirror_v} from '../user_action/mirror.js'
 import {aligning, referencing} from '../user_action/align.js'
-import {ul_select} from '../ul_select.js'
+import {ul_select, ul_select_iconset} from '../ul_select.js'
 import {tooltip} from '../tooltip.js'
 
 const tpl = `<section class="vertical-align">
 	<p id="group_repr"></p>
+	<div class="wrap-row">
+	<div>
 	<label>Grupare</label>
 	<select id="grouping" style="display:none">
 		<option value="g">Grupează - cel puțin 1 obiect</option>
 		<option value="h">Degrupează orizontal, adică pe un singur nivel, toate obiectele din selecție</option>
 		<option value="hv">Degrupează total, orizontal dar și vertical</option>
 	</select>
-	<hr/>
-	<label>Ordonare</label>
-	<ul id="ordering" class="icon-button-set">
-			<li data-value="f" class="tooltip" data-tooltip-text="Mai in față " data-tooltip-bottom><img src="/icon/front.svg"></li>
-			<li data-value="b" class="tooltip" data-tooltip-text="Mai in spate" data-tooltip-bottom><img src="/icon/back.svg"></li>
-	</ul>
-	<hr/>
+	</div>
+	<div>
+	<label>Mutare</label>
+	<select id="ordering" style="display:none">
+			<option value="f">Mută mai in față</option>
+			<option value="b">Mută mai in spate</option>
+	</select>
+	</div>
+	<div>
 	<label>Oglindire</label>
-	<ul id="flipping" class="icon-button-set">
-			<li data-value="h" class="tooltip" data-tooltip-text="Oglindire orizontală" data-tooltip-bottom><img src="/icon/flip-h.svg"></li>
-			<li data-value="v" class="tooltip" data-tooltip-text="Oglindire verticală" data-tooltip-bottom><img src="/icon/flip-v.svg"></li></ul>
+	<select id="flipping" style="display:none">
+			<option value="h">Oglindire orizontală</option>
+			<option value="v">Oglindire verticală</option>
+	</select>
+	</div>
 	<hr/>
 	<label>Aliniere</label>
 <select id="align" style="display:none">
@@ -50,6 +56,8 @@ export const $ui = wrap(ui_fragment(tpl), 'move', 'poziționare')
 
 export const $group_repr = $ui.querySelector('#group_repr')
 export const $grouping = $ui.querySelector('#grouping')
+const group_val_svg_map = {'g': 'group', 'h': 'ungroup', 'hv': 'ungroup_all'}
+const $grouping_ul = ul_select_iconset($grouping, group_val_svg_map, 0, -10)
 $grouping.addEventListener('change', evt => {
 	switch ($grouping.value) {
 		case 'g':
@@ -62,25 +70,14 @@ $grouping.addEventListener('change', evt => {
 			ungroup_all()
 		break;
 	}
-})
-const tooltiping_map = {'g': 'group', 'h': 'ungroup', 'hv': 'ungroup_all'}
-const tooltiping = ($opt, $li) => {
-	$li.dataset.tooltipText = $opt.textContent
-	const attr = document.createAttribute('data-tooltip-bottom')
-	$li.setAttributeNode(attr)
-	$li.classList.add('tooltip')
-	tooltip($li, 0, -10)
-	return `<img src="/icon/${tooltiping_map[$opt.value]}.svg">`
-}
-const $ul = ul_select($grouping, tooltiping, {'class': 'icon-button-set', 'handle_select': false})
-$ul.addEventListener('click', evt => {
-	$ul.querySelectorAll('li[data-value][class~=active]').forEach($e => $e.classList.remove('active'))
-	evt.target.classList.toggle('active')
+	$grouping_ul.querySelector('li[class~=active]').classList.remove('active')
 })
 
 export const $ordering = $ui.querySelector('#ordering')
-$ordering.addEventListener('click', evt => {
-	switch (evt.target.dataset.value) {
+const order_val_svg_map = {'f': 'front', 'b': 'back'}
+const $ordering_ul = ul_select_iconset($ordering, order_val_svg_map, 0, -10)
+$ordering.addEventListener('change', evt => {
+	switch ($ordering.value) {
 		case 'f':
 			front()
 		break;
@@ -88,11 +85,14 @@ $ordering.addEventListener('click', evt => {
 			back()
 		break;
 	}
+	$ordering_ul.querySelector('li[class~=active]').classList.remove('active')
 })
 
 export const $flipping = $ui.querySelector('#flipping')
-$flipping.addEventListener('click', evt => {
-	switch (evt.target.dataset.value) {
+const flip_val_svg_map = {'h': 'flip-h', 'v': 'flip-v'}
+const $flipping_ul = ul_select_iconset($flipping, flip_val_svg_map, 0, -10)
+$flipping.addEventListener('change', evt => {
+	switch ($flipping.value) {
 		case 'h':
 			mirror_h()
 		break;
@@ -100,6 +100,7 @@ $flipping.addEventListener('click', evt => {
 			mirror_v()
 		break;
 	}
+	$flipping_ul.querySelector('li[class~=active]').classList.remove('active')
 })
 
 export const $reference = $ui.querySelector('#reference')
@@ -107,5 +108,9 @@ $reference.addEventListener('change', evt => referencing($reference.value))
 ul_select($reference)
 
 export const $align = $ui.querySelector('#align')
-$align.addEventListener('change', evt => aligning($align.value, $reference.value))
-ul_select($align, $opt => `<img src="/icon/${$opt.value}.svg"> ${$opt.textContent}`)
+const align_val_svg_map = {'l': 'l', 'r': 'r', 'c': 'c', 't': 't', 'b': 'b', 'm': 'm'}
+const $align_ul = ul_select_iconset($align, align_val_svg_map, 0, -10)
+$align.addEventListener('change', evt => {
+	aligning($align.value, $reference.value)
+	$align_ul.querySelector('li[class~=active]').classList.remove('active')
+})

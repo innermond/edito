@@ -2,7 +2,7 @@ import {$svg, rectpage, px} from '../dom.js'
 import {outpoint, outpoints, centerpoint} from '../pos.js'
 import {m, m2e, appendm} from '../mtx.js'
 import {$clicked, $selection} from '../selection/index.js'
-import {$bleed, dragging_all_marks_reset} from '../ui.js'
+import {$bleed} from '../ui.js'
 
 export function aligning(val, refval) {
 	if ($clicked.is_zero()) return
@@ -13,8 +13,7 @@ export function aligning(val, refval) {
 	if ($selection.size > 1) $ee = Array.from($selection)
 
 	align_objects($ee, mode, $svg)
-	dragging_all_marks_reset()
-	$clicked.over()
+	$selection.as_ants()
 }
 
 const alignMap = {l: 'left', c: 'center', r: 'right', t: 'top', b: 'bottom', m: 'middle'}

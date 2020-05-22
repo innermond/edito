@@ -152,7 +152,7 @@ text {
         outline: none;
         font-size: 1.2rem; }
 
-section > label {
+section label {
   color: #9c9589; }
 
 .title {
@@ -290,6 +290,11 @@ hr {
   border-style: none;
   height: 0.15rem;
   background-color: #292c31; }
+
+.wrap-row {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between; }
 
 .icon-button-set {
   display: flex;
