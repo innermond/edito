@@ -11,6 +11,18 @@
 	z-index: 1;
 }
 
+#bottom-bar {
+    left: $tool-width;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    user-select: none;
+    justify-content: center;
+    display: flex;
+    flex-flow: row wrap;
+    background-color: $bk-color-loud;
+}
+
 .vertical-align {
 	display: flex;
 	flex-direction: column;
@@ -84,7 +96,7 @@ $top-tooltip: 24px*0.5+$space-tooltip;
 .tooltip-text::after {
   content: " ";
   position: absolute;
-	top: 50%;
+  top: 50%;
   right: 100%; /* To the left of the tooltip */
   margin-top: -1*$space-tooltip;
   border-width: 1*$space-tooltip;
@@ -116,6 +128,7 @@ $tool-drawer-width: 200px;
 	left: -1*$tool-drawer-width;
 	top: 0;
 	bottom: 0;
+    z-index: 1;
 	color: $txt-color;
 	user-select: none;
 	transition: all .2s ease-out;
@@ -186,7 +199,7 @@ section label {
 
 .title {
 	display: block;
-	font-size: 1.5rem;
+	font-size: 1.2rem;
 	padding: 0.5rem;
 	font-weight: 700;
 	text-align: center;
@@ -234,6 +247,7 @@ button, .file-upload {
 	color: $txt-color;
 	cursor: pointer;
 	border: none;
+    outline: none;
 	text-transform: uppercase;
 	&:hover {
 		background-color: lighten($bk-color-loud, 2%);

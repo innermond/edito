@@ -81,21 +81,22 @@ const loadfont = async text => {
 	
 	src =`url(data:application/font-woff;charset=utf-8;base64,${b64}) format('woff')` 
 	let fontcode = new FontFace(text, src)
-/*const fontcode = 
+const fontcode_str = 
 	`
 @font-face {
 font-display: swap;
 font-family: "${text}";
 src: url(data:application/font-woff;charset=utf-8;base64,${b64}) format('woff');
 }`   
-*/
+
 	const ff = await fontcode.load()
 	if (ff.status === 'error') return
 	ff.display = 'swap'
 	ff.family = text
 	
 	document.fonts.add(ff)
-	//$style.innerHTML += fontcode
+	// we need to add font to style to let canvas when saving to display custom fonts properly
+    $style.innerHTML += fontcode_str
 
 	loaded[url] = true
 }

@@ -1,7 +1,7 @@
 import './click.js'
 import './drag.js'
 import './ul_select.js'
-import {$section_menubar, $section_properties, $section_move, $section_add_shape, $section_text, $section_image, $section_filter, $section_mask_clip_path} from './section/index.js'
+import {$section_menubar, $section_properties, $section_move, $section_add_shape, $section_text, $section_image, $section_filter, $section_mask_clip_path, $section_bottombar} from './section/index.js'
 
 import {$svg} from './dom.js'
 
@@ -14,6 +14,7 @@ $ui.appendChild($section_mask_clip_path)
 $ui.appendChild($section_add_shape)
 $ui.appendChild($section_text)
 $ui.appendChild($section_image)
+$ui.appendChild($section_bottombar)
 
 document.querySelector('#editor').appendChild($ui)
 $svg.style.width = '100%'

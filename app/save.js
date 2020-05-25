@@ -3,7 +3,7 @@ import {$svg} from './dom.js'
 function toDataURL(url) {
 	return new Promise((resolve, reject) => {
 		let image = new Image()
-		//image.crossOrigin = 'anonymous'
+		image.crossOrigin = 'anonymous'
 		image.onload = () => {
 				let canvas = document.createElement('canvas')
 				canvas.width = image.naturalWidth
@@ -50,7 +50,7 @@ async function imagesAsUrldata($svgclone) {
 }
 
 export const render_image = async (k=1, bleed=0) => {
-	let $div = document.querySelector('#src')
+	let $div = document.querySelector('#canvas')
 	let $svgclone = $svg.cloneNode(true)
 	let svgsize = $svgclone.viewBox.baseVal
 	svgsize.x -= bleed

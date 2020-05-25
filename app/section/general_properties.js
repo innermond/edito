@@ -1,3 +1,4 @@
+import {$clicked, $selection} from '../selection/index.js'
 import {scale} from '../user_action/size.js'
 import {rotate} from '../user_action/rotate.js'
 import {fill_opacity} from '../user_action/opacity.js'
@@ -8,6 +9,7 @@ import {wrap} from '../drawer.js'
 import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
 import {handle_step} from '../user_action/step.js'
+import {skewx, skewy} from '../user_action/skew.js'
 
 const tpl = `<section class="vertical-align">
 	<h3>Pagină</h3>
@@ -30,6 +32,11 @@ const tpl = `<section class="vertical-align">
 	<input class="tooltip" data-tooltip-text="Modifică mărimea proporțional" data-tooltip-bottom  type="range" min="0.0001" max="2" value="1" step="0.0001" id="size">
 <label for="angle">Rotație</label>
 <input class="tooltip" data-tooltip-text="Rotește obiectul" data-tooltip-bottom   type="range" min="-180" max="180" value="0" step="0.0001" id="angle">
+	<hr/>
+    <label for="skewx">Deformare orizontală</label>
+    <input type="range" min="-180" max="180" value="0" step="0.0001" id="skewx">
+    <label for="skewy">Deformare verticală</label>
+    <input type="range" min="-180" max="180" value="0" step="0.0001" id="skewy">
 	<hr/>
 	<h3>Umplere</h3>
 	<label class="tooltip" data-tooltip-text="Alegi culoarea de umplere" data-tooltip-bottom for="fill">Culoare
@@ -103,6 +110,35 @@ $bkcolor_switch.addEventListener('change', evt => {
 
 export const $size = $ui.querySelector('#size')
 $size.addEventListener('input', evt => scale($size.value))
+
+export const $skewx = $ui.querySelector('#skewx')
+export const $skewy = $ui.querySelector('#skewy')
+$skewx.addEventListener('input', evt => {
+	$selection.forEach($el => {
+		let $ee = [$el]
+		if ($el.nodeName === 'g') {
+			$ee = Array.from($el.children)
+		}
+		$ee.forEach($e => {
+			skewx($e, $skewx.value)
+			$clicked.from($e)
+			$clicked.over()
+		})
+	})
+})
+$skewy.addEventListener('input', evt => {
+	$selection.forEach($el => {
+		let $ee = [$el]
+		if ($el.nodeName === 'g') {
+			$ee = Array.from($el.children)
+		}
+		$ee.forEach($e => {
+			skewy($e, $skewy.value)
+			$clicked.from($e)
+			$clicked.over()
+		})
+	})
+})
 
 export const $angle = $ui.querySelector('#angle')
 $angle.addEventListener('input', evt => rotate($angle.value))

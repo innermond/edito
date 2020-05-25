@@ -1,6 +1,7 @@
 #editor {
     background-color: black;
     display: flex;
+    flex-flow: row wrap;
     align-items: center;
     justify-content: center;
     position: absolute;

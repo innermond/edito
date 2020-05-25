@@ -2,10 +2,9 @@ import {$textname, $text_features, $font_size, $word_spacing, $letter_spacing, $
 import{$fonts} from './section/text.js'
 import{$fill} from './section/general_properties.js'
 import{$align, $reference} from './section/move.js'
-import{$delete_element, $undelete_element, $clone_element} from './user_action/del_undel_clone.js'
+import{$delete_element, $undelete_element, $clone_element} from './section/bottombar.js'
 import{$stroke_fill, $stroke_fill_switch, $stroke_width, $stroke_opacity, $fill_opacity, $fill_switch, 
-$size, $angle, $media_width, $media_height, $bleed, $step, $bkcolor} from './section/general_properties.js'
-import{$skewx, $skewy} from './user_action/skew.js'
+$size, $angle, $media_width, $media_height, $bleed, $step, $bkcolor, $skewx, $skewy} from './section/general_properties.js'
 import{$grouping, $group_repr, $ordering, $flipping} from './section/move.js'
 import {$add_rect, $add_circle, $add_line} from './section/add_shape.js'
 import {$url_image, $add_url_image, $file_image} from './section/image.js'
@@ -23,7 +22,7 @@ import {
 	$sharpen,
 	$hue_rotate
 } from './section/filter.js'
-import {$save_svg, $send_svg} from './user_action/save.js'
+import {$save_svg, $send_svg} from './section/bottombar.js'
 
 export {$media_width, $media_height, $bleed, $step,
 $fonts,
