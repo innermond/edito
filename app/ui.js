@@ -9,7 +9,7 @@ import{$skewx, $skewy} from './user_action/skew.js'
 import{$grouping, $group_repr, $ordering, $flipping} from './section/move.js'
 import {$add_rect, $add_circle, $add_line} from './section/add_shape.js'
 import {$url_image, $add_url_image, $file_image} from './section/image.js'
-import {$masking, $cliping, $pathing, $pathing_side} from './user_action/mask_clip_path.js'
+import {$masking, $cliping, $pathing, $pathing_side} from './section/mask_clip_path.js'
 import {
 	$shadow_blur,
 	$shadow_slope,
@@ -201,8 +201,9 @@ export function after_click_update_ui($el) {
 	for (let $e of $selection) group_repr += `${$e.nodeName}#${$e.id} `
 	$group_repr.innerHTML = `[ ${group_repr}]`
 
+	//TODO drop useThat approach????
 	// update ui to reflect clicked element
-	let clipid
+	/*let clipid
 	if (clipid = get_paren_id($el, 'clip-path')) {
 		let $clip = $svg.getElementById(clipid).children[0]
 		let $father = $clip.parentNode
@@ -212,9 +213,9 @@ export function after_click_update_ui($el) {
 			el: $clip
 		}
 		$father.appendChild($clip)
-	}
+	}*/
 
-	let maskid
+	/*let maskid
 	if (maskid = get_paren_id($el, 'mask')) {
 		let $mask = $svg.getElementById(maskid).children[0]
 		let $father = $mask.parentNode
@@ -224,7 +225,7 @@ export function after_click_update_ui($el) {
 			el: $mask
 		}
 		$father.appendChild($mask)
-	}
+	}*/
 
 	if ($el.querySelector(':scope > textPath')) {
 		$pathing.textContent = 'Detașează text'

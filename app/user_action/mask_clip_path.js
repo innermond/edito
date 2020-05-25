@@ -1,25 +1,9 @@
 import {$svg, $defs, ui_fragment, get_paren_id, newtag, path_text, set_xlink_href} from '../dom.js'
 import {setm, m, m2e} from '../mtx.js'
 import {$clicked, $selection} from '../selection/index.js'
-import {dragging_all_marks_reset} from '../ui.js'
+import {$masking, $pathing, $cliping, $pathing_side, dragging_all_marks_reset} from '../ui.js'
 
-const tpl = `<button id="masking">Maschează</button>
-<button id="cliping">Decupare formă</button>
-<button id="pathing">Atașează text</button>
-<button id="pathing_side">Schimbă partea</button>`
-const $ui = ui_fragment(tpl)
-
-export const $masking = $ui.querySelector('#masking')
-export const $cliping = $ui.querySelector('#cliping')
-export const $pathing = $ui.querySelector('#pathing')
-export const $pathing_side = $ui.querySelector('#pathing_side')
-
-$masking.addEventListener('click', masking)
-$cliping.addEventListener('click', clipping)
-$pathing.addEventListener('click', pathing)
-$pathing_side.addEventListener('click', pathing_side)
-
-function masking(evt) {
+export function masking(evt) {
 	if ($clicked.is_zero()) return
 
 	let maskid
@@ -51,7 +35,7 @@ function masking(evt) {
 
 }
 
-function clipping(evt) {
+export function clipping(evt) {
 	if ($clicked.is_zero()) return
 
 	let clipid
@@ -83,7 +67,7 @@ function clipping(evt) {
 
 }
 
-function pathing(evt) {
+export function pathing(evt) {
 	if ($clicked.is_zero()) return
 
 	let $path = path_text($clicked)
@@ -168,7 +152,7 @@ function pathing(evt) {
 }
 
 let path_fn
-async function pathing_side(evt) {
+export async function pathing_side(evt) {
 	if ($clicked.nodeName !== 'text') return
 	let $path = path_text($clicked)
 	if (!$path) return

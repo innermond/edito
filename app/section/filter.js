@@ -11,8 +11,9 @@ const tpl = `<section class="vertical-align">
     <input type="range" min="-50" max="50" value="0" step="0.01" id="shadow_dx">
     <label for="shadow_dy">Distanțare umbră pe inălțime </label>
     <input type="range" min="-50" max="50" value="0" step="0.01" id="shadow_dy">
-    <label for="shadow_color">Culoare umbră</label>
-    <input type="color" id="shadow_color" value="#000000">
+    <label for="shadow_color">Culoare umbră
+			<input type="color" id="shadow_color" value="#000000">
+		</label>
     <button id="add_shadow">Adaugă umbră</button>
     <button id="remove_shadow">Scoate umbra</button>
     <label for="grayscale">Ton de gri</label>

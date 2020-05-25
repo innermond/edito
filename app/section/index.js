@@ -5,5 +5,6 @@ import {$ui as $section_properties} from './general_properties.js'
 import {$ui as $section_move} from './move.js'
 import {$ui as $section_add_shape} from './add_shape.js'
 import {$ui as $section_filter} from './filter.js'
+import {$ui as $section_mask_clip_path} from './mask_clip_path.js'
 
-export {$section_menubar, $section_text, $section_add_shape, $section_image, $section_properties, $section_move, $section_filter}
+export {$section_menubar, $section_text, $section_add_shape, $section_image, $section_properties, $section_move, $section_filter, $section_mask_clip_path}

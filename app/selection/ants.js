@@ -24,7 +24,11 @@ import {setm, m2e, m, get_scale} from '../mtx.js'
 		let $el = this.$shape.$element
 		let bb = 'useThat' in $el ? $el.useThat.bbox : $el.getBBox()
 		attr(this.$shape, {x:bb.x, y:bb.y, width:bb.width, height:bb.height})
-		'useThat' in $el ? setm(this.$shape, m2e($el.useThat.el, $el)) : setm(this.$shape, m2e($el, this.$owner))
+		if ('useThat' in $el) {
+			setm(this.$shape, m2e($el.useThat.el, $el))
+		} else {
+			setm(this.$shape, m2e($el, this.$owner))
+		} 
 	}
 
 	reset() {
@@ -72,7 +76,7 @@ export class Circle extends Ants {
 		let $el = this.$shape.$element
 		let bb = 'useThat' in $el ? $el.useThat.bbox : $el.getBBox()
 		attr(this.$shape,{cx:bb.x, cy:bb.y+bb.height*0.5})
-		'useThat' in $el ? setm(this.$shape, m2e($el, $el.useThat.el)) : setm(this.$shape, m2e($el, this.$owner))
+		'useThat' in $el ? setm(this.$shape, m2e($el.useThat.el, $el)) : setm(this.$shape, m2e($el, this.$owner))
 
 		let mtx = m(this.$shape)
 		
