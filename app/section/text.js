@@ -105,5 +105,5 @@ $line_spacing.addEventListener('input', evt => {
 export const $fonts = $ui.querySelector('#fonts')
 $fonts.addEventListener('change', evt => load_font($fonts))
 
-ul_select($fonts)
+ul_select($fonts, ul_select.opt_fn, {'class': 'folded relative'})
 //ul_select($fonts, val => val.toUpperCase())

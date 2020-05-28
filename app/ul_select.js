@@ -1,7 +1,9 @@
 import {newtag_html} from './dom.js'
 import {tooltip} from './tooltip.js'
 
-export function ul_select($select, opt_func=($opt, $li)=>$opt.textContent, options={'class': 'folded', 'handle_select': true}) {
+export function ul_select($select, opt_func=ul_select.opt_fn, options=ul_select.opts) {
+	if (ul_select.opts !== options) options = Object.assign(Object.assign({}, ul_select.opts), options)
+	if (!opt_func) opt_func = ul_select.opt_fn
 	// create select like
 	let html_options = Object.assign({}, options)
 	if ('handle_select' in options) {
@@ -36,6 +38,8 @@ export function ul_select($select, opt_func=($opt, $li)=>$opt.textContent, optio
 
 	return $ul
 }
+ul_select.opt_fn = ($opt, $li)=>$opt.textContent
+ul_select.opts = {'class': 'folded', 'handle_select': true}
 
 function handle_ul_select($ul, func) {
 	const $ll = Array.from($ul.children)

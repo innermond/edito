@@ -7,15 +7,15 @@ import {aligning, referencing} from '../user_action/align.js'
 import {ul_select, ul_select_iconset} from '../ul_select.js'
 import {tooltip} from '../tooltip.js'
 
-const tpl = `<section class="vertical-align">
+const tpl = `<section class="movable" id="top-bar">
 	<p id="group_repr"></p>
 	<div class="wrap-row">
 	<div>
 	<label>Grupare</label>
 	<select id="grouping" style="display:none">
-		<option value="g">Grupează - cel puțin 1 obiect</option>
-		<option value="h">Degrupează orizontal, adică pe un singur nivel, toate obiectele din selecție</option>
-		<option value="hv">Degrupează total, orizontal dar și vertical</option>
+		<option value="g">Grupează</option>
+		<option value="h">Degrupează</option>
+		<option value="hv">Degrupează tot</option>
 	</select>
 	</div>
 	<div>
@@ -32,9 +32,9 @@ const tpl = `<section class="vertical-align">
 			<option value="v">Oglindire verticală</option>
 	</select>
 	</div>
-	<hr/>
+	<div>
 	<label>Aliniere</label>
-<select id="align" style="display:none">
+<select id="align" data-show_hide="#reference" style="display:none">
 		<option>Aliniază</option>
 		<option value="l">stanga</option>
 		<option value="r">dreapta</option>
@@ -43,6 +43,8 @@ const tpl = `<section class="vertical-align">
 		<option value="b">jos</option>
 		<option value="m">mijloc</option>
 </select>
+	</div>
+	<div>
 <select id="reference" style="display:none">
 		<option>aliniere la</option>
 		<option value="0">centru comun</option>
@@ -51,8 +53,9 @@ const tpl = `<section class="vertical-align">
 		<option value="3">pagina (cu bleed)</option>
 		<option value="4">pagina (siguranța text)</option>
 </select>
+	</div>
 </section>`
-export const $ui = wrap(ui_fragment(tpl), 'move', 'poziționare')
+export const $ui = ui_fragment(tpl)
 
 export const $group_repr = $ui.querySelector('#group_repr')
 export const $grouping = $ui.querySelector('#grouping')
@@ -105,7 +108,7 @@ $flipping.addEventListener('change', evt => {
 
 export const $reference = $ui.querySelector('#reference')
 $reference.addEventListener('change', evt => referencing($reference.value))
-ul_select($reference)
+ul_select($reference, null, null)
 
 export const $align = $ui.querySelector('#align')
 const align_val_svg_map = {'l': 'l', 'r': 'r', 'c': 'c', 't': 't', 'b': 'b', 'm': 'm'}

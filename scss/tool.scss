@@ -8,19 +8,31 @@
 	user-select: none;
 	display: flex;
 	flex-flow: column;
-	z-index: 1;
+	z-index: 2;
+}
+
+@mixin bar-position {
+	left: $tool-width;
+	right: 0;
+	position: absolute;
+	user-select: none;
+	justify-content: center;
+	display: flex;
+	flex-flow: row wrap;
+	background-color: $bk-color-loud;
 }
 
 #bottom-bar {
-    left: $tool-width;
-    bottom: 0;
-    right: 0;
-    position: absolute;
-    user-select: none;
-    justify-content: center;
-    display: flex;
-    flex-flow: row wrap;
-    background-color: $bk-color-loud;
+	bottom: 0;
+	@include bar-position;
+}
+
+#top-bar {
+	user-select: none;
+	justify-content: center;
+	display: flex;
+	flex-flow: row wrap;
+	background-color: $bk-color-loud;
 }
 
 .vertical-align {
@@ -128,7 +140,7 @@ $tool-drawer-width: 200px;
 	left: -1*$tool-drawer-width;
 	top: 0;
 	bottom: 0;
-    z-index: 1;
+	z-index: 1;
 	color: $txt-color;
 	user-select: none;
 	transition: all .2s ease-out;
@@ -357,7 +369,16 @@ hr {
 .wrap-row {
 	display: flex;
 	flex-flow: row wrap;
-	justify-content: space-between;
+	& label {
+		cursor: pointer;
+	}
+	& > div {
+		margin: 0.5rem;
+		& + div {
+			border-left: 2px solid $bk-color-silent;
+			padding-left: 1rem;
+		}
+	}
 }
 
 .icon-button-set {
@@ -428,4 +449,9 @@ hr {
 		background-color: $txt-color-darkest;
 		transition:  width .2s ease-out, top .2s ease-out, margin-left .2s ease-out;
 	}
+}
+
+.movable {
+	position: absolute;
+	cursor: move;
 }

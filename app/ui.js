@@ -1,11 +1,11 @@
 import {$textname, $text_features, $font_size, $word_spacing, $letter_spacing, $line_spacing} from './section/text.js'
 import{$fonts} from './section/text.js'
 import{$fill} from './section/general_properties.js'
-import{$align, $reference} from './section/move.js'
+import{$align, $reference} from './section/topbar.js'
 import{$delete_element, $undelete_element, $clone_element} from './section/bottombar.js'
 import{$stroke_fill, $stroke_fill_switch, $stroke_width, $stroke_opacity, $fill_opacity, $fill_switch, 
 $size, $angle, $media_width, $media_height, $bleed, $step, $bkcolor, $skewx, $skewy} from './section/general_properties.js'
-import{$grouping, $group_repr, $ordering, $flipping} from './section/move.js'
+import{$grouping, $group_repr, $ordering, $flipping} from './section/topbar.js'
 import {$add_rect, $add_circle, $add_line} from './section/add_shape.js'
 import {$url_image, $add_url_image, $file_image} from './section/image.js'
 import {$masking, $cliping, $pathing, $pathing_side} from './section/mask_clip_path.js'
