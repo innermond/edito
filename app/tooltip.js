@@ -31,6 +31,7 @@ export function tooltip($explained, adjx=0, adjy=0) {
 	})
 
 	$explained.addEventListener('mousemove', evt => {
+		if (evt.target !== $explained) return
 		if (move === false) return
 		const bb = evt.currentTarget.getBoundingClientRect()
 		const posx = evt.clientX // tooltip is appended directly to body

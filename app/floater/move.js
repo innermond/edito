@@ -11,48 +11,48 @@ const tpl = `<section class="movable" id="top-bar">
 	<p id="group_repr"></p>
 	<div class="wrap-row">
 	<div>
-	<label>Grupare</label>
 	<select id="grouping" style="display:none">
 		<option value="g">Grupează</option>
 		<option value="h">Degrupează</option>
 		<option value="hv">Degrupează tot</option>
 	</select>
+	<label>Grupare</label>
 	</div>
 	<div>
-	<label>Mutare</label>
 	<select id="ordering" style="display:none">
 			<option value="f">Mută mai in față</option>
 			<option value="b">Mută mai in spate</option>
 	</select>
+	<label>Mutare</label>
 	</div>
 	<div>
-	<label>Oglindire</label>
 	<select id="flipping" style="display:none">
 			<option value="h">Oglindire orizontală</option>
 			<option value="v">Oglindire verticală</option>
 	</select>
+	<label>Oglindire</label>
 	</div>
 	<div>
+	<select id="align" data-show_hide="#reference" style="display:none">
+			<option>Aliniază</option>
+			<option value="l">stanga</option>
+			<option value="r">dreapta</option>
+			<option value="c">centru</option>
+			<option value="t">sus</option>
+			<option value="b">jos</option>
+			<option value="m">mijloc</option>
+	</select>
 	<label>Aliniere</label>
-<select id="align" data-show_hide="#reference" style="display:none">
-		<option>Aliniază</option>
-		<option value="l">stanga</option>
-		<option value="r">dreapta</option>
-		<option value="c">centru</option>
-		<option value="t">sus</option>
-		<option value="b">jos</option>
-		<option value="m">mijloc</option>
-</select>
 	</div>
 	<div>
-<select id="reference" style="display:none">
-		<option>aliniere la</option>
-		<option value="0">centru comun</option>
-		<option value="1">ultimul selectat</option>
-		<option value="2">primul selectat</option>
-		<option value="3">pagina (cu bleed)</option>
-		<option value="4">pagina (siguranța text)</option>
-</select>
+	<select id="reference" style="display:none">
+			<option>aliniere la</option>
+			<option value="0">centru comun</option>
+			<option value="1">ultimul selectat</option>
+			<option value="2">primul selectat</option>
+			<option value="3">pagina (cu bleed)</option>
+			<option value="4">pagina (siguranța text)</option>
+	</select>
 	</div>
 </section>`
 export const $ui = ui_fragment(tpl)

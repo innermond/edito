@@ -27,14 +27,6 @@
 	@include bar-position;
 }
 
-#top-bar {
-	user-select: none;
-	justify-content: center;
-	display: flex;
-	flex-flow: row wrap;
-	background-color: $bk-color-loud;
-}
-
 .vertical-align {
 	display: flex;
 	flex-direction: column;
@@ -207,6 +199,7 @@ $title-height: 3rem;
 
 section label {
 	color: $txt-color-darker;
+	font-size: 0.9rem;
 }
 
 .title {
@@ -372,11 +365,23 @@ hr {
 	& label {
 		cursor: pointer;
 	}
+	& input[type=range] {
+		max-width: 3rem;
+	}
 	& > div {
 		margin: 0.5rem;
+		display: flex;
+		flex-flow: column wrap;
 		& + div {
 			border-left: 2px solid $bk-color-silent;
 			padding-left: 1rem;
+		}
+	}
+	&.vertical {
+		flex-flow: column wrap;
+		& > div + div {
+			border-left: none;
+			padding-left: initial;
 		}
 	}
 }
@@ -454,4 +459,9 @@ hr {
 .movable {
 	position: absolute;
 	cursor: move;
+	user-select: none;
+	justify-content: center;
+	display: flex;
+	flex-flow: row wrap;
+	background-color: $bk-color-loud;
 }

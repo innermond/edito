@@ -1,17 +1,17 @@
 export function dragElement($el) {
   let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0
-	$el.onmousedown = dragMouseDown
+	$el.addEventListener('mousedown', dragMouseDown)
 
 	function dragMouseDown(e) {
 		e = e || window.event
 		e.preventDefault()
 		pos3 = e.clientX
 		pos4 = e.clientY
-		document.onmouseup = closeDragElement
-		document.onmousemove = $elementDrag
+		$el.addEventListener('mouseup', closeDragElement)
+		$el.addEventListener('mousemove', elementDrag)
 	}
 
-	function $elementDrag(e) {
+	function elementDrag(e) {
 		e = e || window.event
 		e.preventDefault()
 		// calculate the new cursor position:
@@ -25,8 +25,8 @@ export function dragElement($el) {
 	}
 
 	function closeDragElement() {
-		document.onmouseup = null
-		document.onmousemove = null
+		$el.removeEventListener('mouseup', closeDragElement)
+		$el.removeEventListener('mousemove', elementDrag)
 	}
 }
 
