@@ -12,7 +12,6 @@ import {handle_step} from '../user_action/step.js'
 import {skewx, skewy} from '../user_action/skew.js'
 
 const tpl = `<section class="vertical-align">
-	<h3>Pagină</h3>
 	<label class="tooltip" data-tooltip-text="Schimbi lățimea documentului" data-tooltip-bottom for="media_width">Lățime</label>
 	<input type="number" id="media_width" value="210" />
 	<label class="tooltip" data-tooltip-text="Modifică mărimea dimensiunii verticale a paginii" data-tooltip-bottom for="media_height">Înălțime</label>
@@ -28,7 +27,7 @@ const tpl = `<section class="vertical-align">
 		<input type="color" id="bkcolor" value="#ffffff">
 	</label>
 </section>`
-export const $ui = wrap(ui_fragment(tpl), 'properties', 'proprietăți')
+export const $ui = wrap(ui_fragment(tpl), 'properties', 'pagină')
 
 export const $media_width = $ui.querySelector('#media_width')
 export const $media_height = $ui.querySelector('#media_height')
@@ -39,8 +38,8 @@ $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits
 
 const media_zoom_event = evt =>	media_zoom($media_width.value, $media_height.value)
 
-$media_width.addEventListener('change', media_zoom_event, true)
-$media_height.addEventListener('change', media_zoom_event, true)
+$media_width.addEventListener('input', media_zoom_event, true)
+$media_height.addEventListener('input', media_zoom_event, true)
 
 export const $bleed = $ui.querySelector('#bleed')
 

@@ -5,10 +5,8 @@ import {front, back} from '../user_action/front_back.js'
 import {mirror_h, mirror_v} from '../user_action/mirror.js'
 import {aligning, referencing} from '../user_action/align.js'
 import {ul_select, ul_select_iconset} from '../ul_select.js'
-import {tooltip} from '../tooltip.js'
 
 const tpl = `<section class="movable" id="top-bar">
-	<p id="group_repr"></p>
 	<div class="wrap-row">
 	<div>
 	<select id="grouping" style="display:none">
@@ -57,7 +55,6 @@ const tpl = `<section class="movable" id="top-bar">
 </section>`
 export const $ui = ui_fragment(tpl)
 
-export const $group_repr = $ui.querySelector('#group_repr')
 export const $grouping = $ui.querySelector('#grouping')
 const group_val_svg_map = {'g': 'group', 'h': 'ungroup', 'hv': 'ungroup_all'}
 const $grouping_ul = ul_select_iconset($grouping, group_val_svg_map, 0, -10)

@@ -2,17 +2,23 @@ import {ui_fragment, px} from '../dom.js'
 import {$bleed} from '../ui.js'
 import * as save from '../save.js'
 import {deleting, undeleting, cloning} from '../user_action/del_undel_clone.js'
+import {tooltip} from '../tooltip.js'
 
 const tpl = `<section id="bottom-bar">
-    <button id="delete_element">Sterge</button>
+		<p id="group_repr"></p>
+    <button id="delete_element" class="tooltip" data-tooltip-text="Șterge elementul" data-tooltip-bottom ><img src="/icon/delete.svg"></button>
     <button id="undelete_element">Anulează</button>
-    <button id="clone_element">Clonează obiect</button>
+    <button id="clone_element" class="tooltip" data-tooltip-text="Clonează elementul" data-tooltip-bottom ><img src="/icon/copy.svg"></button>
     <button id="save_svg">Preview</button>
     <button id="send_svg">Comandă</button>
 </section>`
 
 export const $ui = ui_fragment(tpl)
+$ui.querySelectorAll('[class~="tooltip"]').forEach($e => {
+	tooltip($e, 0, -10)
+})
 
+export const $group_repr = $ui.querySelector('#group_repr')
 export const $delete_element = $ui.querySelector('#delete_element')
 $delete_element.addEventListener('click', deleting)
 export const $undelete_element = $ui.querySelector('#undelete_element')

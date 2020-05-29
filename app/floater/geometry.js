@@ -32,16 +32,20 @@ const tpl = `<section class="movable">
 </div>
 <div>
 	<label class="tooltip" data-tooltip-text="Alegi culoarea de umplere" data-tooltip-bottom for="fill">Umplere
+	<div>
 	<input type="checkbox" class="switch" id="fill-switch">
 	<input type="color" id="fill" value="#000000">
+	</div>
 	</label>
 	<label for="fill-opacity">Opacitate</label>
 	<input class="tooltip" data-tooltip-text="Schimbă opacitatea umplerii" data-tooltip-bottom  type="range" min="0" max="1" value="1" step="0.01" id="fill-opacity">
 </div>
 <div>
 	<label class="tooltip" data-tooltip-text="Schimbă culoarea conturului" data-tooltip-bottom for="stroke-fill">Contur
+	<div>
 	<input type="checkbox" class="switch" id="stroke-fill-switch">
 	<input type="color" id="stroke-fill" value="#000000">
+	</div>
 	</label>
 	<label for="stroke-opacity">Opacitate</label>
 	<input class="tooltip" data-tooltip-text="Schimbă opacitatea conturului" data-tooltip-bottom type="range" min="0" max="1" value="1" step="0.01" id="stroke-opacity">

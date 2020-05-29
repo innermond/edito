@@ -3,7 +3,7 @@ import {newtag_html} from './dom.js'
 export function span_checkbox($ee) {
 	$ee.forEach($e => {
 		if ($e?.type !== 'checkbox') return
-
+		
 		const $span = newtag_html('span')		
 		$e.parentNode.insertBefore($span, $e.nextSibling)
 
