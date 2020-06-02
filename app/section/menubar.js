@@ -15,6 +15,7 @@ const tpl = `<section id="menu-bar">
 		<ul id="tool-menu-floaters" class="tool-menu vertical-align">
 			<li id="tool-geometry" data-panel="geometry" class="tool-item tooltip" data-tooltip-text="Ascunde/arată meniul flotant ce controlează proprietățile geometrice"><img src="/icon/move.svg"></li>
 			<li id="tool-color" data-panel="fill_stroke_color" class="tool-item tooltip" data-tooltip-text="Ascunde/arată meniul flotant ce controlează proprietățile de culoare"><img src="/icon/fill.svg"></li>
+			<li id="tool-color" data-panel="top-bar" class="tool-item tooltip" data-tooltip-text="Ascunde/arată meniul de grupare, aliniere, ordine"><img src="/icon/four.svg"></li>
 		</ul>
 	</div>
 </section>`
