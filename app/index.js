@@ -5,7 +5,7 @@ import {dragElement, show_hide} from './html_drag.js'
 import {$section_menubar, $section_properties, $section_add_shape, $section_text, $section_image, $section_filter, $section_mask_clip_path, 
 	$section_bottombar} from './section/index.js'
 
-import {$floater_move, $floater_geometry} from './floater/index.js'
+import {$floater_move, $floater_geometry, $floater_color} from './floater/index.js'
 
 import {$svg} from './dom.js'
 
@@ -21,6 +21,7 @@ $ui.appendChild($section_bottombar)
 
 $ui.appendChild($floater_move)
 $ui.appendChild($floater_geometry)
+$ui.appendChild($floater_color)
 
 document.querySelector('#editor').appendChild($ui)
 $svg.style.width = '100%'

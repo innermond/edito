@@ -6,9 +6,9 @@ import {tooltip} from '../tooltip.js'
 
 const tpl = `<section id="bottom-bar">
 		<p id="group_repr"></p>
-    <button id="delete_element" class="tooltip" data-tooltip-text="Șterge elementul" data-tooltip-bottom ><img src="/icon/delete.svg"></button>
-    <button id="undelete_element">Anulează</button>
-    <button id="clone_element" class="tooltip" data-tooltip-text="Clonează elementul" data-tooltip-bottom ><img src="/icon/copy.svg"></button>
+    <button id="delete_element"><img class="tooltip" data-tooltip-text="Șterge elementul" data-tooltip-bottom src="/icon/delete.svg"></button>
+    <button id="undelete_element"><img class="tooltip" data-tooltip-text="Anulează ultima ștergere" data-tooltip-bottom src="/icon/undelete.svg"></button>
+    <button id="clone_element"><img class="tooltip" data-tooltip-text="Clonează elementul" data-tooltip-bottom src="/icon/copy.svg"></button>
     <button id="save_svg">Preview</button>
     <button id="send_svg">Comandă</button>
 </section>`

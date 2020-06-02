@@ -38,7 +38,7 @@
 	justify-content: center;
 }
 
-#tool-menu {
+.tool-menu {
 	list-style: none;
 	list-style-image: none;
 	margin: 2rem 0rem 0rem;
@@ -371,7 +371,7 @@ hr {
 		cursor: pointer;
 	}
 	& input[type=range] {
-		max-width: 3rem;
+		max-width: 10rem;
 	}
 	& > div {
 		margin: 0.5rem;

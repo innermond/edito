@@ -21,7 +21,8 @@ import {
 import {$save_svg, $group_repr, $send_svg} from './section/bottombar.js'
 
 import{$align, $reference, $grouping, $ordering, $flipping} from './floater/move.js'
-import{$size, $angle, $skewx, $skewy, $fill, $stroke_fill, $stroke_fill_switch, $stroke_width, $stroke_opacity, $fill_opacity, $fill_switch} from './floater/geometry.js'
+import{$size, $angle, $skewx, $skewy} from './floater/geometry.js'
+import{$fill, $stroke_fill, $stroke_fill_switch, $stroke_width, $stroke_opacity, $fill_opacity, $fill_switch} from './floater/color.js'
 
 export {$media_width, $media_height, $bleed, $step,
 $fonts,

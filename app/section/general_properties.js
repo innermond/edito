@@ -17,9 +17,9 @@ const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Modifică mărimea dimensiunii verticale a paginii" data-tooltip-bottom for="media_height">Înălțime</label>
 	<input type="number" id="media_height" value="297" />
 	<hr/>
-	<label for="bleed">Bleed</label>
+		<label class="tooltip" data-tooltip-text="Mărimea bleedului, distanța cu care se extinde pagina peste dimensiunile finale" data-tooltip-bottom for="bleed">Bleed</label>
 	<input type="number" min="0.0" max="5.0" value="2" step="0.5" id="bleed">
-    <label for="step">Mărime pas</label>
+    <label class="tooltip" data-tooltip-text="Stabilește mărimea pasului cu care se mută obiectele cu tastele săgeți" data-tooltip-bottom for="step">Mărime pas</label>
     <input type="number" min="0.01" max="90" value="2" step="0.1" id="step">
 	<hr/>
 	<label class="tooltip" data-tooltip-text="Alegi culoarea fundalului" data-tooltip-bottom  for="bkcolor">Background

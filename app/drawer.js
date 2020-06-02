@@ -28,7 +28,7 @@ export const wrap = ($el, newid, title) => {
 
 	$ui.querySelectorAll('[class~="tooltip"]').forEach($e => {
 		tooltip($e, 0, -10)
-})
+	})
 	
 return $ui
 }

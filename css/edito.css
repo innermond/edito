@@ -45,28 +45,28 @@ text {
   flex-direction: column;
   justify-content: center; }
 
-#tool-menu {
+.tool-menu {
   list-style: none;
   list-style-image: none;
   margin: 2rem 0rem 0rem;
   padding: 0px;
   background: #292c31; }
-  #tool-menu > .tool-item {
+  .tool-menu > .tool-item {
     padding: 0.25rem 0.5rem;
     display: flex;
     justify-content: center;
     cursor: pointer;
     transition: all .2s ease-out; }
-    #tool-menu > .tool-item.active {
+    .tool-menu > .tool-item.active {
       background-color: #24272b; }
-      #tool-menu > .tool-item.active > img {
+      .tool-menu > .tool-item.active > img {
         opacity: 1; }
-    #tool-menu > .tool-item > img {
+    .tool-menu > .tool-item > img {
       pointer-events: none;
       opacity: 0.5; }
-    #tool-menu > .tool-item:hover:not(.active) > img {
+    .tool-menu > .tool-item:hover:not(.active) > img {
       opacity: 1; }
-    #tool-menu > .tool-item:hover {
+    .tool-menu > .tool-item:hover {
       background-color: #24272b; }
 
 .tooltip-text {
@@ -315,7 +315,7 @@ hr {
   .wrap-row label {
     cursor: pointer; }
   .wrap-row input[type=range] {
-    max-width: 3rem; }
+    max-width: 10rem; }
   .wrap-row > div {
     margin: 0.5rem;
     display: flex;
@@ -421,7 +421,6 @@ hr {
 ul.folded {
   margin: -0.5rem 0 0 0;
   padding: 0;
-  z-index: 2;
   position: absolute;
   width: max-content; }
   ul.folded.relative {

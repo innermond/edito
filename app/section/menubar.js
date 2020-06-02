@@ -4,19 +4,36 @@ import {tooltip} from '../tooltip.js'
 
 const tpl = `<section id="menu-bar">
 	<div>
-		<ul id="tool-menu" class="vertical-align">
-			<li id="tool-properties" data-panel="properties" class="tool-item tooltip" data-tooltip-text="Proprietăți generale ale paginii și obiectelor (text, imagine, etc)"><img src="/icon/properties.svg"></li>
+		<ul id="tool-menu-sections" class="tool-menu vertical-align">
+			<li id="tool-properties" data-panel="properties" class="tool-item tooltip" data-tooltip-text="Dimensiuni pagină, culoare fundal, mărime bleed, pas de mutare"><img src="/icon/properties.svg"></li>
 			<li id="tool-filter" data-panel="manage-filter" class="tool-item tooltip" data-tooltip-text="Adaugă filter"><img src="/icon/filter.svg"></li>
 			<li id="tool-combine" data-panel="mask-clip-path" class="tool-item tooltip" data-tooltip-text="Maschează, decupează, text pe curbă"><img src="/icon/effect.svg"></li>
 			<li id="tool-element" data-panel="add-element" class="tool-item tooltip" data-tooltip-text="Adaugă elemente grafice"><img src="/icon/add-element.svg"></li>
 			<li id="tool-text" data-panel="add-text" class="tool-item tooltip" data-tooltip-text="Adaugă text"><img src="/icon/add-text.svg"></li>
 			<li id="tool-image" data-panel="add-image" class="tool-item tooltip" data-tooltip-text="Adaugă imagini"><img src="/icon/add-image.svg"></li>
 		</ul>
+		<ul id="tool-menu-floaters" class="tool-menu vertical-align">
+			<li id="tool-geometry" data-panel="geometry" class="tool-item tooltip" data-tooltip-text="Ascunde/arată meniul flotant ce controlează proprietățile geometrice"><img src="/icon/move.svg"></li>
+			<li id="tool-color" data-panel="fill_stroke_color" class="tool-item tooltip" data-tooltip-text="Ascunde/arată meniul flotant ce controlează proprietățile de culoare"><img src="/icon/fill.svg"></li>
+		</ul>
 	</div>
 </section>`
 export const $ui = ui_fragment(tpl)
 
-const $tool_menu = $ui.querySelector('#tool-menu')
+const $tool_floater = $ui.querySelector('#tool-menu-floaters')
+
+$tool_floater.addEventListener('click', evt => {
+	const $me = evt.target
+	const fid = $me.dataset.panel
+	const $floater = document.getElementById(fid)
+	if (!$floater) return
+
+	const state = $floater.style.display
+	if (!('display' in $floater.dataset)) $floater.dataset.display = state
+	$floater.style.display = $floater.style.display === 'none' ? $floater.dataset.display : 'none'
+})
+
+const $tool_menu = $ui.querySelector('#tool-menu-sections')
 
 document.addEventListener('tool_menu:all_inactive', evt => {
 	toggle_all_inactive()
