@@ -310,6 +310,7 @@ hr {
   background-color: #292c31; }
 
 .wrap-row {
+  border: 1px solid black;
   display: flex;
   flex-flow: row wrap; }
   .wrap-row label {
@@ -410,14 +411,14 @@ hr {
 
 #canvas {
   display: flex;
-  max-width: 800px;
+  max-width: 700px;
   width: 100%;
-  max-height: 800px;
-  height: 100%;
+  max-height: 700px;
   background: url(/img/square-bg.png);
   margin: 0;
   padding: 0;
-  margin-left: 50px; }
+  margin-left: 50px;
+  overflow: auto; }
 
 ul.folded {
   margin: -0.5rem 0 0 0;

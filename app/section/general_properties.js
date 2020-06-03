@@ -1,15 +1,11 @@
 import {$clicked, $selection} from '../selection/index.js'
 import {scale} from '../user_action/size.js'
 import {rotate} from '../user_action/rotate.js'
-import {fill_opacity} from '../user_action/opacity.js'
-import {stroke_opacity, stroke_width} from '../user_action/stroke.js'
-import {colorize, uncolorize} from '../selection/colorize.js'
 import {ui_fragment, $svg, media_zoom} from '../dom.js'
 import {wrap} from '../drawer.js'
 import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
 import {handle_step} from '../user_action/step.js'
-import {skewx, skewy} from '../user_action/skew.js'
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Schimbi lățimea documentului" data-tooltip-bottom for="media_width">Lățime</label>
