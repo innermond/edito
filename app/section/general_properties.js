@@ -41,7 +41,6 @@ export const $bleed = $ui.querySelector('#bleed')
 
 export const $step = $ui.querySelector('#step')
 document.addEventListener('keyup', evt => handle_step($step.value, evt.key))      
-
 export const $bkcolor = $ui.querySelector('#bkcolor')
 // try to gues background color of page
 let bkcolor = $svg.getAttributeNS(null, 'viewport-fill')          

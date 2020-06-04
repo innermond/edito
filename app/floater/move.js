@@ -9,28 +9,29 @@ import {ul_select, ul_select_iconset} from '../ul_select.js'
 const tpl = `<section class="movable" id="top-bar">
 	<div class="wrap-row">
 	<div>
+	<label>Grupare</label>
 	<select id="grouping" style="display:none">
 		<option value="g">Grupează</option>
 		<option value="h">Degrupează</option>
 		<option value="hv">Degrupează tot</option>
 	</select>
-	<label>Grupare</label>
 	</div>
 	<div>
+	<label>Mutare</label>
 	<select id="ordering" style="display:none">
 			<option value="f">Mută mai in față</option>
 			<option value="b">Mută mai in spate</option>
 	</select>
-	<label>Mutare</label>
 	</div>
 	<div>
+	<label>Oglindire</label>
 	<select id="flipping" style="display:none">
 			<option value="h">Oglindire orizontală</option>
 			<option value="v">Oglindire verticală</option>
 	</select>
-	<label>Oglindire</label>
 	</div>
 	<div>
+	<label>Aliniere</label>
 	<select id="align" data-show_hide="#reference" style="display:none">
 			<option>Aliniază</option>
 			<option value="l">stanga</option>
@@ -40,7 +41,6 @@ const tpl = `<section class="movable" id="top-bar">
 			<option value="b">jos</option>
 			<option value="m">mijloc</option>
 	</select>
-	<label>Aliniere</label>
 	</div>
 	<div>
 	<select id="reference" style="display:none">
@@ -52,6 +52,7 @@ const tpl = `<section class="movable" id="top-bar">
 			<option value="4">pagina (siguranța text)</option>
 	</select>
 	</div>
+</div>
 </section>`
 export const $ui = ui_fragment(tpl)
 

@@ -278,4 +278,11 @@ export function nextSiblingNoAnts($el) {
 	return $el.nextElementSibling
 }
 
+export function display_none($el) {
+	if (!$el) return
+	const state = $el.style.display
+	if (!('display' in $el.dataset)) $el.dataset.display = state
+	$el.style.display = $el.style.display === 'none' ? $el.dataset.display : 'none'
+}
+
 export {attr, newtag, rnd, xmlns, nsattr, rectpage, px}

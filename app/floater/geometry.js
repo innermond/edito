@@ -1,7 +1,7 @@
 import {$clicked, $selection} from '../selection/index.js'
 import {scale} from '../user_action/size.js'
 import {rotate} from '../user_action/rotate.js'
-import {ui_fragment} from '../dom.js'
+import {ui_fragment, display_none} from '../dom.js'
 import {handle_step} from '../user_action/step.js'
 import {skewx, skewy} from '../user_action/skew.js'
 import {tooltip} from '../tooltip.js'
@@ -24,11 +24,20 @@ const tpl = `<section class="movable" id="geometry">
     <label for="skewy">Deformare Y</label>
     <input type="range" min="-180" max="180" value="0" step="0.0001" id="skewy">
 </div>
+<div>
+	<img src="/icon/close.svg" class="close" />
+</div>
+</div>
 </section>`
 export const $ui = ui_fragment(tpl)
 
 $ui.querySelectorAll('[class~="tooltip"]').forEach($e => {
 	tooltip($e)
+})
+
+$ui.querySelector('img[class~="close"]').addEventListener('click', evt => {
+	const $el = evt.target.closest('section')
+	if ($el) display_none($el)
 })
 
 $ui.querySelectorAll('input[type=range]').forEach($e => $e.addEventListener('mousedown', evt => evt.stopPropagation()))

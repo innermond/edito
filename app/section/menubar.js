@@ -1,4 +1,4 @@
-import {$svg, ui_fragment, newtag} from '../dom.js'
+import {$svg, ui_fragment, newtag, display_none} from '../dom.js'
 import {center} from '../pos.js'
 import {tooltip} from '../tooltip.js'
 
@@ -27,11 +27,7 @@ $tool_floater.addEventListener('click', evt => {
 	const $me = evt.target
 	const fid = $me.dataset.panel
 	const $floater = document.getElementById(fid)
-	if (!$floater) return
-
-	const state = $floater.style.display
-	if (!('display' in $floater.dataset)) $floater.dataset.display = state
-	$floater.style.display = $floater.style.display === 'none' ? $floater.dataset.display : 'none'
+	display_none($floater)
 })
 
 const $tool_menu = $ui.querySelector('#tool-menu-sections')

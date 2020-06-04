@@ -29,6 +29,6 @@ $svg.style.height = '100%'
 
 document.querySelectorAll('.movable').forEach($e => {
 	dragElement($e)
-	//$e.querySelectorAll('.wrap-row > div > label').forEach($el => show_hide($el))
+	$e.querySelectorAll('.wrap-row > div > label').forEach($el => show_hide($el))
 })
 document.querySelector('#canvas').style.opacity = 1

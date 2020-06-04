@@ -2,7 +2,7 @@ import {$clicked, $selection} from '../selection/index.js'
 import {fill_opacity} from '../user_action/opacity.js'
 import {stroke_opacity, stroke_width} from '../user_action/stroke.js'
 import {colorize, uncolorize} from '../selection/colorize.js'
-import {ui_fragment} from '../dom.js'
+import {ui_fragment, display_none} from '../dom.js'
 import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
 import {tooltip} from '../tooltip.js'
@@ -38,6 +38,9 @@ const tpl = `<section class="movable" id="fill_stroke_color">
 	<label for="stroke-width">Grosime</label>
 	<input class="tooltip" data-tooltip-text="Schimbă grosimea conturului" data-tooltip-bottom type="range" min="0.0" max="10" value="0" step="0.0001" id="stroke-width">
 </div>
+<div>
+	<img src="/icon/close.svg" class="close" />
+</div>
 </div>
 </section>`
 export const $ui = ui_fragment(tpl)
@@ -47,6 +50,11 @@ $ui.querySelectorAll('[class~="tooltip"]').forEach($e => {
 })
 
 $ui.querySelectorAll('input[type=range]').forEach($e => $e.addEventListener('mousedown', evt => evt.stopPropagation()))
+
+$ui.querySelector('img[class~="close"]').addEventListener('click', evt => {
+	const $el = evt.target.closest('section')
+	if ($el) display_none($el)
+})
 
 const $kk = $ui.querySelectorAll('input[type=checkbox][class~=switch]')
 span_checkbox($kk)
