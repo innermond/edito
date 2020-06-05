@@ -5,11 +5,12 @@ import {front, back} from '../user_action/front_back.js'
 import {mirror_h, mirror_v} from '../user_action/mirror.js'
 import {aligning, referencing} from '../user_action/align.js'
 import {ul_select, ul_select_iconset} from '../ul_select.js'
+import {tooltip} from '../tooltip.js'
 
 const tpl = `<section class="movable" id="top-bar">
 	<div class="wrap-row">
 	<div>
-	<label>Grupare</label>
+	<label class="tooltip" data-tooltip-text="Grupezi obiectele ca și cum ar fi un singur obiect" data-tooltip-bottom>Grupare</label>
 	<select id="grouping" style="display:none">
 		<option value="g">Grupează</option>
 		<option value="h">Degrupează</option>
@@ -17,21 +18,21 @@ const tpl = `<section class="movable" id="top-bar">
 	</select>
 	</div>
 	<div>
-	<label>Mutare</label>
+	<label class="tooltip" data-tooltip-text="Mută mai in față sau mai in spate obiectele " data-tooltip-bottom>Mutare</label>
 	<select id="ordering" style="display:none">
-			<option value="f">Mută mai in față</option>
-			<option value="b">Mută mai in spate</option>
+			<option value="f">in față</option>
+			<option value="b">in spate</option>
 	</select>
 	</div>
 	<div>
-	<label>Oglindire</label>
+	<label class="tooltip" data-tooltip-text="Inversează sensul afișării obiectelor" data-tooltip-bottom>Oglindire</label>
 	<select id="flipping" style="display:none">
-			<option value="h">Oglindire orizontală</option>
-			<option value="v">Oglindire verticală</option>
+			<option value="h">orizontală</option>
+			<option value="v">verticală</option>
 	</select>
 	</div>
 	<div>
-	<label>Aliniere</label>
+	<label class="tooltip" data-tooltip-text="Aliniază obiectele in raport cu ele sau cu pagina" data-tooltip-bottom>Aliniere</label>
 	<select id="align" data-show_hide="#reference" style="display:none">
 			<option>Aliniază</option>
 			<option value="l">stanga</option>
@@ -55,6 +56,10 @@ const tpl = `<section class="movable" id="top-bar">
 </div>
 </section>`
 export const $ui = ui_fragment(tpl)
+
+$ui.querySelectorAll('[class~="tooltip"]').forEach($e => {
+	tooltip($e)
+})
 
 export const $grouping = $ui.querySelector('#grouping')
 const group_val_svg_map = {'g': 'group', 'h': 'ungroup', 'hv': 'ungroup_all'}
