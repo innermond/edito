@@ -51,12 +51,13 @@ export function show_hide($el) {
 
 	const $wrap = $el.closest('.wrap-row')
 	$el.addEventListener('click', evt => {
-		let $sibling = $el.nextElementSibling
-		while ($sibling) {
-			if ($sibling !== $select) {
-				display_none($sibling)
+		evt.stopPropagation()
+		let $next = $el.nextElementSibling
+		while ($next) {
+			if ($next !== $select) {
+				display_none($next)
 			}
-			$sibling = $sibling.nextElementSibling
+			$next = $next.nextElementSibling
 		}
 		if (!$select) return
 		let selector = '' //'#' + $select.dataset.ul_id

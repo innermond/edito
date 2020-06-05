@@ -19,8 +19,8 @@ const tpl = `<section class="movable" id="fill_stroke_color">
 	</label>
 </div>
 <div>
-	<label for="fill-opacity">Opacitate</label>
-	<input class="tooltip" data-tooltip-text="Schimbă opacitatea umplerii" data-tooltip-bottom  type="range" min="0" max="1" value="1" step="0.01" id="fill-opacity">
+	<label class="tooltip" data-tooltip-text="Schimbă opacitatea umplerii" data-tooltip-bottom for="fill-opacity">Opacitate</label>
+	<input class="tooltip" data-tooltip-text="1" data-tooltip-bottom  type="range" min="0" max="1" value="1" step="0.01" id="fill-opacity">
 </div>
 <div>
 	<label class="tooltip" data-tooltip-text="Schimbă culoarea conturului" data-tooltip-bottom for="stroke-fill">Contur
@@ -31,12 +31,12 @@ const tpl = `<section class="movable" id="fill_stroke_color">
 	</label>
 </div>
 <div>
-	<label for="stroke-opacity">Opacitate</label>
-	<input class="tooltip" data-tooltip-text="Schimbă opacitatea conturului" data-tooltip-bottom type="range" min="0" max="1" value="1" step="0.01" id="stroke-opacity">
+	<label class="tooltip" data-tooltip-text="Schimbă opacitatea conturului" data-tooltip-bottom for="stroke-opacity">Opacitate</label>
+	<input class="tooltip" data-tooltip-text="1" data-tooltip-bottom type="range" min="0" max="1" value="1" step="0.01" id="stroke-opacity">
 </div>
 <div>
-	<label for="stroke-width">Grosime</label>
-	<input class="tooltip" data-tooltip-text="Schimbă grosimea conturului" data-tooltip-bottom type="range" min="0.0" max="10" value="0" step="0.0001" id="stroke-width">
+	<label class="tooltip" data-tooltip-text="Schimbă grosimea conturului" data-tooltip-bottom for="stroke-width">Grosime</label>
+	<input class="tooltip" data-tooltip-text="0" data-tooltip-bottom type="range" min="0.0" max="10" value="0" step="0.0001" id="stroke-width">
 </div>
 <div>
 	<img src="/icon/close.svg" class="close" />

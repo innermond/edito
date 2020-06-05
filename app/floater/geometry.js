@@ -9,20 +9,20 @@ import {tooltip} from '../tooltip.js'
 const tpl = `<section class="movable" id="geometry">
 <div class="wrap-row">
 <div>
-	<label for="size">Scalare</label>
-	<input class="tooltip" data-tooltip-text="Modifică mărimea proporțional" data-tooltip-bottom  type="range" min="0.0001" max="2" value="1" step="0.0001" id="size">
+	<label class="tooltip" data-tooltip-text="Modifică mărimea proporțional" data-tooltip-bottom for="size">Scalare</label>
+	<input class="tooltip" data-tooltip-text="1" data-tooltip-bottom  type="range" min="0.0001" max="2" value="1" step="0.0001" id="size">
 </div>
 <div>
-<label for="angle">Rotație</label>
-<input class="tooltip" data-tooltip-text="Rotește obiectul" data-tooltip-bottom   type="range" min="-180" max="180" value="0" step="0.0001" id="angle">
+<label class="tooltip" data-tooltip-text="Rotește obiectul" data-tooltip-bottom for="angle">Rotație</label>
+<input class="tooltip" data-tooltip-text="0" data-tooltip-bottom   type="range" min="-180" max="180" value="0" step="0.0001" id="angle">
 </div>
 <div>
-    <label for="skewx">Deformare X</label>
-    <input type="range" min="-180" max="180" value="0" step="0.0001" id="skewx">
+    <label class="tooltip" data-tooltip-text="Deformează obiectul pe orizontală" data-tooltip-bottom for="skewx">Deformare X</label>
+    <input class="tooltip" data-tooltip-text="0" data-tooltip data-tooltip-bottom type="range" min="-180" max="180" value="0" step="0.0001" id="skewx">
 </div>
 <div>
-    <label for="skewy">Deformare Y</label>
-    <input type="range" min="-180" max="180" value="0" step="0.0001" id="skewy">
+    <label class="tooltip" data-tooltip-text="Deformează obiectul pe verticală" data-tooltip data-tooltip-bottom for="skewy">Deformare Y</label>
+    <input class="tooltip" data-tooltip-text="0" data-tooltip data-tooltip-bottom type="range" min="-180" max="180" value="0" step="0.0001" id="skewy">
 </div>
 <div>
 	<img src="/icon/close.svg" class="close" />

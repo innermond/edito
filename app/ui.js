@@ -54,6 +54,7 @@ $save_svg, $send_svg
 }
 
 import {$svg, get_angle, scale_prevs, angle_prevs, get_paren_id, newtag, unit_conv} from './dom.js'
+import {skewx, skewy} from './user_action/skew.js' // TODO move it to dom.js
 import {$selection} from './selection/index.js'
 import {rgb_hex, valid_color} from './color.js'
 import {modeMap} from './user_action/font/align.js'
@@ -133,6 +134,9 @@ export function after_click_update_ui($el) {
 	const au = angle_prevs.get($el) ?? get_angle($el)
 	angle_prevs.set($el, au)
 	$angle.value = au
+
+	$skewx.value = skewx.prevs.get($el)
+	$skewy.value = skewy.prevs.get($el)
 	
 	const fill = $el.style.getPropertyValue('fill')
 	$fill.value = colorDefault	
