@@ -11,24 +11,22 @@ import {span_checkbox} from '../span_checkbox.js'
 const tpl = `<section class="movable" id="fill_stroke_color">
 <div class="wrap-row">
 <div>
-	<label class="tooltip" data-tooltip-text="Alegi culoarea de umplere" data-tooltip-bottom for="fill">Umplere
+	<label class="tooltip" data-tooltip-text="Alegi culoarea de umplere" data-tooltip-bottom for="fill">Umplere</label>
 	<div>
 	<input type="checkbox" class="switch" id="fill-switch">
 	<input type="color" id="fill" value="#000000">
 	</div>
-	</label>
 </div>
 <div>
 	<label class="tooltip" data-tooltip-text="Schimbă opacitatea umplerii" data-tooltip-bottom for="fill-opacity">Opacitate</label>
 	<input class="tooltip" data-tooltip-text="1" data-tooltip-bottom  type="range" min="0" max="1" value="1" step="0.01" id="fill-opacity">
 </div>
 <div>
-	<label class="tooltip" data-tooltip-text="Schimbă culoarea conturului" data-tooltip-bottom for="stroke-fill">Contur
+	<label class="tooltip" data-tooltip-text="Schimbă culoarea conturului" data-tooltip-bottom for="stroke-fill">Contur</label>
 	<div>
 	<input type="checkbox" class="switch" id="stroke-fill-switch">
 	<input type="color" id="stroke-fill" value="#000000">
 	</div>
-	</label>
 </div>
 <div>
 	<label class="tooltip" data-tooltip-text="Schimbă opacitatea conturului" data-tooltip-bottom for="stroke-opacity">Opacitate</label>
@@ -44,6 +42,12 @@ const tpl = `<section class="movable" id="fill_stroke_color">
 </div>
 </section>`
 export const $ui = ui_fragment(tpl)
+
+$ui.querySelectorAll('[for]').forEach($e => {
+	$e.addEventListener('click', evt => {
+		evt.preventDefault()
+	})
+})
 
 $ui.querySelectorAll('[class~="tooltip"]').forEach($e => {
 	tooltip($e)

@@ -298,7 +298,7 @@ label input[type=color] {
 	float: right;
 }
 
-label input[type=checkbox][class~=switch] {
+input[type=checkbox][class~=switch] {
 	width: 0;
 	height: 0;
 	visibility: hidden;
@@ -310,6 +310,12 @@ label input[type=checkbox][class~=switch] {
 		cursor: pointer;
 		float: right;
 		position: relative;
+		& + input[type=color] {
+			width: 1rem;
+			height: 1rem;
+			float: right;
+		}
+
 		&:after {
 			content: "";
 			position: absolute;

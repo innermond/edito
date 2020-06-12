@@ -251,11 +251,11 @@ label input[type=color] {
   height: 1rem;
   float: right; }
 
-label input[type=checkbox][class~=switch] {
+input[type=checkbox][class~=switch] {
   width: 0;
   height: 0;
   visibility: hidden; }
-  label input[type=checkbox][class~=switch] + span {
+  input[type=checkbox][class~=switch] + span {
     width: 2rem;
     height: 1rem;
     border: 0.1rem solid #5a544b;
@@ -263,7 +263,11 @@ label input[type=checkbox][class~=switch] {
     cursor: pointer;
     float: right;
     position: relative; }
-    label input[type=checkbox][class~=switch] + span:after {
+    input[type=checkbox][class~=switch] + span + input[type=color] {
+      width: 1rem;
+      height: 1rem;
+      float: right; }
+    input[type=checkbox][class~=switch] + span:after {
       content: "";
       position: absolute;
       top: 0.1rem;
@@ -274,11 +278,11 @@ label input[type=checkbox][class~=switch] {
       background: #9c9589;
       border-radius: 0.25rem;
       transition: left .3s, right .3s; }
-    label input[type=checkbox][class~=switch] + span:hover:after {
+    input[type=checkbox][class~=switch] + span:hover:after {
       background: #d6d3ce; }
-    label input[type=checkbox][class~=switch] + span[data-value="1"] {
+    input[type=checkbox][class~=switch] + span[data-value="1"] {
       background: black; }
-      label input[type=checkbox][class~=switch] + span[data-value="1"]:after {
+      input[type=checkbox][class~=switch] + span[data-value="1"]:after {
         background: #d6d3ce;
         left: 0.9rem;
         right: 0.1rem; }
