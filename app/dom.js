@@ -1,5 +1,5 @@
 import {$bleed} from './ui.js'
-import {m2e, get_u} from './mtx.js'
+import {m2e, m, setm, get_u} from './mtx.js'
 
 const ns = 'http://www.w3.org/2000/'
 const nsattr = 'http://www.w3.org/1999/'
@@ -215,31 +215,31 @@ export function angle($el, a) {
 }
 
 export const mirror = ($el, k) => {
-		if (!$el) return
-		if (k !== 1 &&  k !== -1) return false
+	if (!$el) return
+	if (k !== 1 &&  k !== -1) return false
 
-		let bb = $el.getBoundingClientRect()
-		let $p1 = $svg.createSVGPoint()
-		$p1.x = bb.x+bb.width/2
-		$p1.y = bb.y+bb.height/2
-		$p1 = $p1.matrixTransform($el.getScreenCTM().inverse())
-		let x = $p1.x
-		let y = $p1.y
-		let lst = $el.transform.baseVal
-		let xel = m2e($el, $svg)
-		let u = get_u(xel)
-		if (k === -1) {
-			let uc = -2*u
-			if (xel.b<0===xel.c<0) uc=-uc
-			xel = xel.translate(x,y).rotate(uc).translate(-x, -y)
-			xel = xel.flipY().translate(0, -2*y)
-		} else if (k === 1) {
-			let uc = -2*u
-			if (xel.b<0===xel.c<0) uc=-uc
-			xel = xel.translate(x,y).rotate(uc).translate(-x, -y)
-			xel = xel.flipX().translate(-2*x, 0)
-		}
-		lst.initialize($svg.createSVGTransformFromMatrix(xel))
+	// create a group from element
+	const $g = newtag('g')
+	const $father = $el.parentElement || $el.ownerSVGElement
+	const $next = $el?.nextElementSibling
+	$next
+	? $father.insertBefore($g, $next)
+	: $father.appendChild($g)
+	$g.appendChild($el)
+	let xg = m($g)
+	let bb = $g.getBBox()
+	let x = bb.x+bb.width/2
+	let y = bb.y+bb.height/2
+	if (k === -1) {
+		xg = xg.flipY().translate(0, -2*y)
+	} else if (k === 1) {
+		xg = xg.flipX().translate(-2*x, 0)
+	}
+	setm($g, xg)
+	const xel = m2e($el, $father)
+	$father.insertBefore($el, $g)
+	setm($el, xel)
+	$g.remove()
 }
 
 export function set_xlink_href($el, id) {

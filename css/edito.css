@@ -399,6 +399,9 @@ hr {
   flex-flow: row wrap;
   background-color: #24272b; }
 
+.humbled {
+  color: #5a544b; }
+
 #editor {
   background-color: black;
   display: flex;

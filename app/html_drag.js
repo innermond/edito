@@ -52,6 +52,7 @@ export function show_hide($el) {
 	const $wrap = $el.closest('.wrap-row')
 	$el.addEventListener('click', evt => {
 		evt.stopPropagation()
+		$el.classList.toggle('humbled')
 		let $next = $el.nextElementSibling
 		while ($next) {
 			if ($next !== $select) {
