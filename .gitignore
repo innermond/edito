@@ -119,3 +119,4 @@ dist
 lab
 *.svg
 !icon/*.svg
+stock-images*

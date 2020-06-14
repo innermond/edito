@@ -46,7 +46,7 @@ export function tooltip($explained, adjx=0, adjy=0) {
 		$e.style.top = bb.top + bb.height*0.5 + adjy + 'px'
 
 		// only inout like html elements has meaningful value
-		if (show_val && $explained?.type || $explained?.type) $e.textContent = $explained.value
+		if (show_val && $explained?.type && $explained.nodeName.toLowerCase() !== 'button' || $explained?.type && $explained.nodeName.toLowerCase() !== 'button') $e.textContent = $explained.value
 	})
 
 	return $e
