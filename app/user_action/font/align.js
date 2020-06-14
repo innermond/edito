@@ -17,7 +17,7 @@ export function aligning_text(align_mode) {
 				let has_textpath = $e.firstChild?.nodeName === 'textPath'
 				if (has_textpath) {
 					let $tp = $e.querySelector('textPath')
-					let offset = start_offset_map[$align_text.options[$align_text.selectedIndex].value] ?? null
+					let offset = start_offset_map[align_mode] ?? null
 					if (offset) $tp.setAttributeNS(null, 'startOffset', offset)
 				}
 				let bb = $e.getBBox()

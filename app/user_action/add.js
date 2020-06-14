@@ -45,20 +45,35 @@ export function add_line() {
 	line.dispatchEvent(event)
 }
 
-export function add_text(text='text nou') {
+export function add_text(text) {
+	const text_default = 'text nou'
+	let val = text_default
+	if (typeof text === 'object') {
+		if ('value' in text && text.value.length > 0) val = text.value
+	} else if (typeof text === 'string') {
+			val = text
+	}
+
 	let txt = newtag('text')
 	txt.style.textAlign = 'center'
 	txt.style.textAnchor = 'middle'
-	let tspan = newtag('tspan')
-	tspan.style.textAlign = 'inherit'
-	tspan.style.textAnchor = 'inherit'
-	tspan.style.fontSize = '20px'
-	tspan.innerHTML = text
-	tspan.setAttributeNS(null, 'x', 0)
-	txt.appendChild(tspan)
+
+	const lines = val.split("\n")
+	const fs = 20
+	lines.forEach( (line, inx) => {
+		let tspan = newtag('tspan')
+		tspan.style.textAlign = 'inherit'
+		tspan.style.textAnchor = 'inherit'
+		tspan.style.fontSize = fs+'px'
+		tspan.style.lineHeight = (fs*1.2)+'px'
+		tspan.innerHTML = line 
+		tspan.setAttributeNS(null, 'x', 0)
+		tspan.setAttributeNS(null, 'y', inx*fs*1.2)
+		txt.appendChild(tspan)
+	})
 	$svg.appendChild(txt)
 	// call center after apped to dom
 	center(txt)
 	let event = new CustomEvent('click', {bubbles: true})
-	tspan.dispatchEvent(event)
+	txt.dispatchEvent(event)
 }

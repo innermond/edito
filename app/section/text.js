@@ -55,7 +55,7 @@ export const $ui = wrap(ui_fragment(tpl), 'add-text', 'text')
 export const $textname = $ui.querySelector('#textname')
 const $add_text_btn = $ui.querySelector('#add-text-btn')
 
-$add_text_btn.addEventListener('click', evt => add_text())
+$add_text_btn.addEventListener('click', evt => add_text($textname))
 $textname.addEventListener('keyup', evt => keyup($textname))
 
 export const $text_features = $ui.querySelector('#text-features')
