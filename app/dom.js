@@ -161,6 +161,20 @@ export function media_zoom(w, h) {
 	$svg.viewBox.baseVal.height=$svg.height.baseVal.value
 }
 
+export function zoom(scale) {
+    const b = $svg.viewBox.baseVal
+    const cx = b.x + b.width*0.5
+    const cy = b.y + b.height*0.5
+    let dx = b.width
+    let dy = b.height
+    b.width /= scale
+    b.height /= scale
+    dx -= b.width
+    dy -=b.height
+    //b.x = dx
+    //b.y = dy
+}
+
 export const scale_prevs = new Map() 
 export const scaling = ($el, k = 0) => {
 	if (!$el) return

@@ -1,7 +1,7 @@
 import {$clicked, $selection} from '../selection/index.js'
 import {scale} from '../user_action/size.js'
 import {rotate} from '../user_action/rotate.js'
-import {ui_fragment, $svg, media_zoom} from '../dom.js'
+import {ui_fragment, $svg, media_zoom, zoom} from '../dom.js'
 import {wrap} from '../drawer.js'
 import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
@@ -12,6 +12,10 @@ const tpl = `<section class="vertical-align">
 	<input type="number" id="media_width" value="210" />
 	<label class="tooltip" data-tooltip-text="Modifică mărimea dimensiunii verticale a paginii" data-tooltip-bottom for="media_height">Înălțime</label>
 	<input type="number" id="media_height" value="297" />
+	<hr/>
+    <button id="zoom_in">Zoom +</button>
+    <button id="zoom_out">Zoom -</button>
+    <button id="zoom_reset">Reset</button>
 	<hr/>
 		<label class="tooltip" data-tooltip-text="Mărimea bleedului, distanța cu care se extinde pagina peste dimensiunile finale" data-tooltip-bottom for="bleed">Bleed</label>
 	<input type="number" min="0.0" max="5.0" value="2" step="0.5" id="bleed">
@@ -29,13 +33,33 @@ export const $media_width = $ui.querySelector('#media_width')
 export const $media_height = $ui.querySelector('#media_height')
 
 // get media dimensions 
-$media_width.value = $svg.width.baseVal.valueInSpecifiedUnits
-$media_height.value = $svg.height.baseVal.valueInSpecifiedUnits
+const mw = $media_width.value = $svg.width.baseVal.valueInSpecifiedUnits
+const mh = $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits
+const viewbox = $svg.viewBox
 
-const media_zoom_event = evt =>	media_zoom($media_width.value, $media_height.value)
-
+const media_zoom_event = evt => media_zoom($media_width.value, $media_height.value)
 $media_width.addEventListener('input', media_zoom_event, true)
 $media_height.addEventListener('input', media_zoom_event, true)
+
+const step = 1.2
+const $zoomin = $ui.querySelector('#zoom_in')
+$zoomin.addEventListener('click', evt => {
+    zoom(step)
+})
+
+const $zoomout = $ui.querySelector('#zoom_out')
+$zoomout.addEventListener('click', evt => {
+    zoom(1/step)
+})
+
+const $zoomreset = $ui.querySelector('#zoom_reset')
+$zoomreset.addEventListener('click', evt => {
+    media_zoom(mw, mh)
+    $svg.viewBox.baseVal.width = viewbox.baseVal.width
+    $svg.viewBox.baseVal.height = viewbox.baseVal.height
+    $svg.viewBox.baseVal.x = viewbox.baseVal.x
+    $svg.viewBox.baseVal.y = viewbox.baseVal.y
+})
 
 export const $bleed = $ui.querySelector('#bleed')
 
