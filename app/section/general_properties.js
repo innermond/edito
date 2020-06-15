@@ -35,36 +35,54 @@ export const $media_height = $ui.querySelector('#media_height')
 // get media dimensions 
 const mw = $media_width.value = $svg.width.baseVal.valueInSpecifiedUnits
 const mh = $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits
-const viewbox = {
-	x:$svg.viewBox.baseVal.x, 
-	y:$svg.viewBox.baseVal.y,
-	width:$svg.viewBox.baseVal.width,
-	height:$svg.viewBox.baseVal.height
+
+function copy_viewbox(viewBox) {
+	return {
+		x:viewBox.baseVal.x, 
+		y:viewBox.baseVal.y,
+		width:viewBox.baseVal.width,
+		height:viewBox.baseVal.height
+	}
 }
 
-const media_zoom_event = evt => media_zoom($media_width.value, $media_height.value)
+let viewbox = copy_viewbox($svg.viewBox)
+
+const media_zoom_event = evt => {
+	zoom_reset()
+	media_zoom($media_width.value, $media_height.value)
+	viewbox = copy_viewbox($svg.viewBox)
+}
 $media_width.addEventListener('input', media_zoom_event, true)
 $media_height.addEventListener('input', media_zoom_event, true)
 
-const step = 1.2
+const step = 1.01
+let pulse_id = null
+
 const $zoomin = $ui.querySelector('#zoom_in')
-$zoomin.addEventListener('click', evt => {
-    zoom(step)
+$zoomin.addEventListener('mousedown', evt => {
+		pulse_id = setInterval(()=>zoom(step), 5)
+})
+$zoomin.addEventListener('mouseup', evt => {
+	clearInterval(pulse_id) 
 })
 
 const $zoomout = $ui.querySelector('#zoom_out')
-$zoomout.addEventListener('click', evt => {
-    zoom(1/step)
+$zoomout.addEventListener('mousedown', evt => {
+		pulse_id = setInterval(()=>zoom(1/step), 5)
+})
+$zoomout.addEventListener('mouseup', evt => {
+	clearInterval(pulse_id) 
 })
 
-const $zoomreset = $ui.querySelector('#zoom_reset')
-$zoomreset.addEventListener('click', evt => {
-    media_zoom(mw, mh)
+const zoom_reset = () => {
+    //media_zoom(mw, mh)
     $svg.viewBox.baseVal.width = viewbox.width
     $svg.viewBox.baseVal.height = viewbox.height
     $svg.viewBox.baseVal.x = viewbox.x
     $svg.viewBox.baseVal.y = viewbox.y
-})
+}
+const $zoomreset = $ui.querySelector('#zoom_reset')
+$zoomreset.addEventListener('click', evt => zoom_reset())
 
 export const $bleed = $ui.querySelector('#bleed')
 
