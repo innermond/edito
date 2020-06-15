@@ -1,4 +1,4 @@
-import {ui_fragment, px} from '../dom.js'
+import {ui_fragment, px, zoom_reset} from '../dom.js'
 import {$bleed} from '../ui.js'
 import * as save from '../save.js'
 import {deleting, undeleting, cloning} from '../user_action/del_undel_clone.js'
@@ -29,5 +29,11 @@ $clone_element.addEventListener('click', cloning)
 export const $save_svg = $ui.querySelector('#save_svg')
 export const $send_svg = $ui.querySelector('#send_svg')
 
-$save_svg.addEventListener('click', evt => save.render_image())
-$send_svg.addEventListener('click', evt => save.render_image(2, px($bleed.value)))
+$save_svg.addEventListener('click', evt => {
+	zoom_reset()
+	save.render_image()
+})
+$send_svg.addEventListener('click', evt => {
+	zoom_reset()
+	save.render_image(2, px($bleed.value))
+})

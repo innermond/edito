@@ -1,7 +1,7 @@
 import {$clicked, $selection} from '../selection/index.js'
 import {scale} from '../user_action/size.js'
 import {rotate} from '../user_action/rotate.js'
-import {ui_fragment, $svg, media_zoom, zoom} from '../dom.js'
+import {ui_fragment, $svg, media_zoom, zoom, zoom_reset} from '../dom.js'
 import {wrap} from '../drawer.js'
 import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
@@ -33,8 +33,8 @@ export const $media_width = $ui.querySelector('#media_width')
 export const $media_height = $ui.querySelector('#media_height')
 
 // get media dimensions 
-const mw = $media_width.value = $svg.width.baseVal.valueInSpecifiedUnits
-const mh = $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits
+$media_width.value = $svg.width.baseVal.valueInSpecifiedUnits
+$media_height.value = $svg.height.baseVal.valueInSpecifiedUnits
 
 function copy_viewbox(viewBox) {
 	return {
@@ -45,12 +45,12 @@ function copy_viewbox(viewBox) {
 	}
 }
 
-let viewbox = copy_viewbox($svg.viewBox)
+zoom_reset.viewbox = copy_viewbox($svg.viewBox)
 
 const media_zoom_event = evt => {
 	zoom_reset()
 	media_zoom($media_width.value, $media_height.value)
-	viewbox = copy_viewbox($svg.viewBox)
+	zoom_reset.viewbox = copy_viewbox($svg.viewBox)
 }
 $media_width.addEventListener('input', media_zoom_event, true)
 $media_height.addEventListener('input', media_zoom_event, true)
@@ -74,13 +74,6 @@ $zoomout.addEventListener('mouseup', evt => {
 	clearInterval(pulse_id) 
 })
 
-const zoom_reset = () => {
-    //media_zoom(mw, mh)
-    $svg.viewBox.baseVal.width = viewbox.width
-    $svg.viewBox.baseVal.height = viewbox.height
-    $svg.viewBox.baseVal.x = viewbox.x
-    $svg.viewBox.baseVal.y = viewbox.y
-}
 const $zoomreset = $ui.querySelector('#zoom_reset')
 $zoomreset.addEventListener('click', evt => zoom_reset())
 

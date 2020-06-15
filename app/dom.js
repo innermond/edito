@@ -173,6 +173,13 @@ export function zoom(scale) {
     b.y += dy*0.5
 }
 
+export function zoom_reset() {
+    $svg.viewBox.baseVal.width = zoom_reset.viewbox.width
+    $svg.viewBox.baseVal.height =zoom_reset.viewbox.height
+    $svg.viewBox.baseVal.x = zoom_reset.viewbox.x
+    $svg.viewBox.baseVal.y = zoom_reset.viewbox.y
+}
+
 export const scale_prevs = new Map() 
 export const scaling = ($el, k = 0) => {
 	if (!$el) return
