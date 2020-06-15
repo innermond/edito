@@ -35,7 +35,12 @@ export const $media_height = $ui.querySelector('#media_height')
 // get media dimensions 
 const mw = $media_width.value = $svg.width.baseVal.valueInSpecifiedUnits
 const mh = $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits
-const viewbox = $svg.viewBox
+const viewbox = {
+	x:$svg.viewBox.baseVal.x, 
+	y:$svg.viewBox.baseVal.y,
+	width:$svg.viewBox.baseVal.width,
+	height:$svg.viewBox.baseVal.height
+}
 
 const media_zoom_event = evt => media_zoom($media_width.value, $media_height.value)
 $media_width.addEventListener('input', media_zoom_event, true)
@@ -55,10 +60,10 @@ $zoomout.addEventListener('click', evt => {
 const $zoomreset = $ui.querySelector('#zoom_reset')
 $zoomreset.addEventListener('click', evt => {
     media_zoom(mw, mh)
-    $svg.viewBox.baseVal.width = viewbox.baseVal.width
-    $svg.viewBox.baseVal.height = viewbox.baseVal.height
-    $svg.viewBox.baseVal.x = viewbox.baseVal.x
-    $svg.viewBox.baseVal.y = viewbox.baseVal.y
+    $svg.viewBox.baseVal.width = viewbox.width
+    $svg.viewBox.baseVal.height = viewbox.height
+    $svg.viewBox.baseVal.x = viewbox.x
+    $svg.viewBox.baseVal.y = viewbox.y
 })
 
 export const $bleed = $ui.querySelector('#bleed')
