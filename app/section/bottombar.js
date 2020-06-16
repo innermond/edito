@@ -9,8 +9,8 @@ const tpl = `<section id="bottom-bar">
     <button id="delete_element"><img class="tooltip" data-tooltip-text="Șterge elementul" data-tooltip-bottom src="/icon/delete.svg"></button>
     <button id="undelete_element"><img class="tooltip" data-tooltip-text="Anulează ultima ștergere" data-tooltip-bottom src="/icon/undelete.svg"></button>
     <button id="clone_element"><img class="tooltip" data-tooltip-text="Clonează elementul" data-tooltip-bottom src="/icon/copy.svg"></button>
-    <button id="save_svg">Preview</button>
-    <button id="send_svg">Comandă</button>
+    <button id="save_svg"><img class="tooltip" data-tooltip-text="Previzualizează documentul" data-tooltip-bottom src="/icon/preview.svg"></button>
+    <button id="send_svg"><img class="tooltip" data-tooltip-text="Comandă" data-tooltip-bottom src="/icon/order.svg"></button>
 </section>`
 
 export const $ui = ui_fragment(tpl)
@@ -31,10 +31,21 @@ export const $send_svg = $ui.querySelector('#send_svg')
 
 $save_svg.addEventListener('click', evt => {
 	//zoom_reset()
+    let $bkg = document.querySelector('#bkg_modal')
+    if (!$bkg) {
+        $bkg = document.createElement('div')
+        $bkg.id = 'bkg_modal'
+    }
+    $bkg.addEventListener('click', evt => {
+        $bkg.style.display = 'none'
+        document.querySelectorAll('div[class~=preview]').forEach($d => $d.remove())
+    })
+    $bkg.style.display = 'block'
+    document.querySelector('body').appendChild($bkg)
 	save.render_image()
 })
 $send_svg.addEventListener('click', evt => {
 	//zoom_reset()
-    const dpi_scale = 300/72
-	save.render_image(dpi_scale, $bleed.value)
+    const dpi_scale = 300/72 // scale rendered image suposedly produced native at 72 dpi as much as needed to be printed at 300 dpi
+	save.render_image(dpi_scale, $bleed.value, true)
 })

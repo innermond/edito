@@ -49,8 +49,8 @@ async function imagesAsUrldata($svgclone) {
 	})
 }
 
-export const render_image = async (k=1, bleed=0) => {
-	let $div = document.querySelector('#canvas')
+export const render_image = async (k=1, bleed=0, down=false) => {
+	let $div = document.querySelector('#bkg_modal')
 	let $svgclone = $svg.cloneNode(true)
 	let svgsize = $svgclone.viewBox.baseVal
 
@@ -84,14 +84,18 @@ export const render_image = async (k=1, bleed=0) => {
 
 		let $img = document.createElement('img')
 		$img.addEventListener('load', evt => {
-				ctx.drawImage($img, 0, 0)
-				let canvasdata = $canvas.toDataURL('image/png')
-				$div.insertAdjacentHTML('afterEnd', '<img src="' + canvasdata  + '">')
-				/*let a = document.createElement("a")
-				a.download = "download_img" + ".png"
-				a.href = canvasdata
-				document.body.appendChild(a)
-				a.click()*/
+            ctx.drawImage($img, 0, 0)
+            let canvasdata = $canvas.toDataURL('image/png')
+
+            if (down) {
+                let a = document.createElement("a")
+                a.download = "download" + ".png"
+                a.href = canvasdata
+                document.body.appendChild(a)
+                a.click()
+            } else {
+                $div.insertAdjacentHTML('afterEnd', '<div class="preview" ><img src="' + canvasdata  + '"></div>')
+            }
 		})
 		$img.setAttribute('src', 'data:image/svg+xml;base64,' + srcdata)
 	}, 100)
