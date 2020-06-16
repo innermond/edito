@@ -35,5 +35,6 @@ $save_svg.addEventListener('click', evt => {
 })
 $send_svg.addEventListener('click', evt => {
 	//zoom_reset()
-	save.render_image(2, $bleed.value)
+    const dpi_scale = 300/72
+	save.render_image(dpi_scale, $bleed.value)
 })
