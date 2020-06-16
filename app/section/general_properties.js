@@ -15,6 +15,7 @@ const tpl = `<section class="vertical-align">
 	<hr/>
     <button id="zoom_in">Zoom +</button>
     <button id="zoom_out">Zoom -</button>
+		<label class="tooltip" data-tooltip-text="Consideră zoomingul ca editare a obiectelor" data-tooltip-bottom ><input type="checkbox" class="switch" id="zoom_is_edit">editare</label>
     <button id="zoom_reset">Reset</button>
 	<hr/>
 		<label class="tooltip" data-tooltip-text="Mărimea bleedului, distanța cu care se extinde pagina peste dimensiunile finale" data-tooltip-bottom for="bleed">Bleed</label>
@@ -28,6 +29,8 @@ const tpl = `<section class="vertical-align">
 	</label>
 </section>`
 export const $ui = wrap(ui_fragment(tpl), 'properties', 'pagină')
+
+export const $zoom_is_edit = $ui.querySelector('#zoom_is_edit')
 
 export const $media_width = $ui.querySelector('#media_width')
 export const $media_height = $ui.querySelector('#media_height')

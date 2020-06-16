@@ -3,6 +3,7 @@ import {$bleed} from '../ui.js'
 import * as save from '../save.js'
 import {deleting, undeleting, cloning} from '../user_action/del_undel_clone.js'
 import {tooltip} from '../tooltip.js'
+import {$zoom_is_edit} from './general_properties.js'
 
 const tpl = `<section id="bottom-bar">
 		<p id="group_repr"></p>
@@ -30,22 +31,22 @@ export const $save_svg = $ui.querySelector('#save_svg')
 export const $send_svg = $ui.querySelector('#send_svg')
 
 $save_svg.addEventListener('click', evt => {
-	//zoom_reset()
-    let $bkg = document.querySelector('#bkg_modal')
-    if (!$bkg) {
-        $bkg = document.createElement('div')
-        $bkg.id = 'bkg_modal'
-    }
-    $bkg.addEventListener('click', evt => {
-        $bkg.style.display = 'none'
-        document.querySelectorAll('div[class~=preview]').forEach($d => $d.remove())
-    })
-    $bkg.style.display = 'block'
-    document.querySelector('body').appendChild($bkg)
+	if (!$zoom_is_edit.checked) zoom_reset()
+	let $bkg = document.querySelector('#bkg_modal')
+	if (!$bkg) {
+			$bkg = document.createElement('div')
+			$bkg.id = 'bkg_modal'
+	}
+	$bkg.addEventListener('click', evt => {
+			$bkg.style.display = 'none'
+			document.querySelectorAll('div[class~=preview]').forEach($d => $d.remove())
+	})
+	$bkg.style.display = 'block'
+	document.querySelector('body').appendChild($bkg)
 	save.render_image()
 })
 $send_svg.addEventListener('click', evt => {
-	//zoom_reset()
-    const dpi_scale = 300/72 // scale rendered image suposedly produced native at 72 dpi as much as needed to be printed at 300 dpi
+	if (!$zoom_is_edit.checked) zoom_reset()
+	const dpi_scale = 300/72 // scale rendered image suposedly produced native at 72 dpi as much as needed to be printed at 300 dpi
 	save.render_image(dpi_scale, $bleed.value, true)
 })
