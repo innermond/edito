@@ -53,25 +53,28 @@ export const render_image = async (k=1, bleed=0) => {
 	let $div = document.querySelector('#canvas')
 	let $svgclone = $svg.cloneNode(true)
 	let svgsize = $svgclone.viewBox.baseVal
+	//TODO how modified svgsize affects rendered image ?
 	svgsize.x -= bleed
 	svgsize.y -= bleed
 	svgsize.width += 2*bleed
 	svgsize.height += 2*bleed
 	$svgclone.width.baseVal.value += 2*bleed
 	$svgclone.height.baseVal.value += 2*bleed
+
 	await imagesAsUrldata($svgclone)
 
 	setTimeout( ()=>{
 		$svgclone.querySelectorAll('[data-ants=true]').forEach($ant => $ant.remove())
 
-		let svgdata = new XMLSerializer().serializeToString($svgclone)
-		let srcdata = btoa(unescape(encodeURIComponent(svgdata)))
-		
+		const svgdata = new XMLSerializer().serializeToString($svgclone)
+		const srcdata = btoa(unescape(encodeURIComponent(svgdata)))
+		const cw = $svgclone.width.baseVal.value
+		const ch = $svgclone.height.baseVal.value
 		$svgclone.remove()
 							
 		let $canvas = document.createElement('canvas')
-		$canvas.height = svgsize.height*k
-		$canvas.width = svgsize.width*k
+		$canvas.width = cw*k
+		$canvas.height = ch*k
 		$canvas.style.width = $canvas.width + 'px'
 		$canvas.style.height = $canvas.height + 'px'
 		let ctx = $canvas.getContext("2d")

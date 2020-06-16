@@ -30,10 +30,10 @@ export const $save_svg = $ui.querySelector('#save_svg')
 export const $send_svg = $ui.querySelector('#send_svg')
 
 $save_svg.addEventListener('click', evt => {
-	zoom_reset()
+	//zoom_reset()
 	save.render_image()
 })
 $send_svg.addEventListener('click', evt => {
-	zoom_reset()
-	save.render_image(2, px($bleed.value))
+	//zoom_reset()
+	save.render_image(2, $bleed.value)
 })
