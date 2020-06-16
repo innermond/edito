@@ -180,6 +180,22 @@ export function zoom_reset() {
     $svg.viewBox.baseVal.y = zoom_reset.viewbox.y
 }
 
+export function copy_viewbox(viewBox) {
+	return {
+		x:viewBox.baseVal.x, 
+		y:viewBox.baseVal.y,
+		width:viewBox.baseVal.width,
+		height:viewBox.baseVal.height
+	}
+}
+
+export function assign_viewbox($s, viewbox) {
+	$s.viewBox.baseVal.x = viewbox.x 
+	$s.viewBox.baseVal.y = viewbox.y
+	$s.viewBox.baseVal.width = viewbox.width
+	$s.viewBox.baseVal.height = viewbox.height
+}
+
 export const scale_prevs = new Map() 
 export const scaling = ($el, k = 0) => {
 	if (!$el) return

@@ -1,7 +1,7 @@
 import {$clicked, $selection} from '../selection/index.js'
 import {scale} from '../user_action/size.js'
 import {rotate} from '../user_action/rotate.js'
-import {ui_fragment, $svg, media_zoom, zoom, zoom_reset} from '../dom.js'
+import {ui_fragment, $svg, media_zoom, zoom, zoom_reset, copy_viewbox} from '../dom.js'
 import {wrap} from '../drawer.js'
 import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
@@ -38,15 +38,6 @@ export const $media_height = $ui.querySelector('#media_height')
 // get media dimensions 
 $media_width.value = $svg.width.baseVal.valueInSpecifiedUnits
 $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits
-
-function copy_viewbox(viewBox) {
-	return {
-		x:viewBox.baseVal.x, 
-		y:viewBox.baseVal.y,
-		width:viewBox.baseVal.width,
-		height:viewBox.baseVal.height
-	}
-}
 
 zoom_reset.viewbox = copy_viewbox($svg.viewBox)
 

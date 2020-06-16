@@ -49,13 +49,13 @@ async function imagesAsUrldata($svgclone) {
 	})
 }
 
-export const render_image = async (k=1, bleed=0, down=false) => {
+export const render_image = async (k=1, bleed=0, down=false, func=null) => {
 	let $div = document.querySelector('#bkg_modal')
 	let $svgclone = $svg.cloneNode(true)
 	let svgsize = $svgclone.viewBox.baseVal
 
-    const rx = svgsize.width/$svgclone.width.baseVal.valueInSpecifiedUnits 
-    const ry = svgsize.height/$svgclone.height.baseVal.valueInSpecifiedUnits 
+	const rx = svgsize.width/$svgclone.width.baseVal.valueInSpecifiedUnits 
+	const ry = svgsize.height/$svgclone.height.baseVal.valueInSpecifiedUnits 
 	$svgclone.width.baseVal.valueInSpecifiedUnits += 2*bleed
 	svgsize.x -= bleed*rx
 	svgsize.width += 2*bleed*rx
@@ -84,18 +84,22 @@ export const render_image = async (k=1, bleed=0, down=false) => {
 
 		let $img = document.createElement('img')
 		$img.addEventListener('load', evt => {
-            ctx.drawImage($img, 0, 0)
-            let canvasdata = $canvas.toDataURL('image/png')
+			ctx.drawImage($img, 0, 0)
+			let canvasdata = $canvas.toDataURL('image/png')
 
-            if (down) {
-                let a = document.createElement("a")
-                a.download = "download" + ".png"
-                a.href = canvasdata
-                document.body.appendChild(a)
-                a.click()
-            } else {
-                $div.insertAdjacentHTML('afterEnd', '<div class="preview" ><img src="' + canvasdata  + '"></div>')
-            }
+			if (down) {
+					let a = document.createElement("a")
+					a.download = "download" + ".png"
+					a.href = canvasdata
+					document.body.appendChild(a)
+					a.click()
+			} else {
+					$div.insertAdjacentHTML('afterEnd', '<div class="preview" ><img src="' + canvasdata  + '"></div>')
+			}
+			
+			if (func != null && func instanceof Function) {
+				func()
+			}
 		})
 		$img.setAttribute('src', 'data:image/svg+xml;base64,' + srcdata)
 	}, 100)
