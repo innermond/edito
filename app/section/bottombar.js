@@ -32,23 +32,26 @@ export const $send_svg = $ui.querySelector('#send_svg')
 
 $save_svg.addEventListener('click', evt => {
 	const current_viewbox = copy_viewbox($svg.viewBox)
-	if (!$zoom_is_edit.checked) zoom_reset()
+	let func = null
+	if (!$zoom_is_edit.checked) func = $svg_clone => zoom_reset($svg_clone)
 	let $bkg = document.querySelector('#bkg_modal')
 	if (!$bkg) {
 			$bkg = document.createElement('div')
 			$bkg.id = 'bkg_modal'
+			$bkg.classList.remove('on')
 			$bkg.addEventListener('click', evt => {
-					$bkg.style.display = 'none'
-					document.querySelectorAll('div[class~=preview]').forEach($d => $d.remove())
+				$bkg.classList.remove('on')
+				document.querySelectorAll('div[class~=preview]').forEach($d => $d.remove())
 			})
 	}
-	$bkg.style.display = 'block'
+	$bkg.classList.add('on')
 	document.querySelector('body').appendChild($bkg)
-	save.render_image(1, 0, false, () => assign_viewbox($svg, current_viewbox))
+	save.render_image(1, 0, false, func)
 })
 $send_svg.addEventListener('click', evt => {
 	const current_viewbox = copy_viewbox($svg.viewBox)
-	if (!$zoom_is_edit.checked) zoom_reset()
+	let func = null
+	if (!$zoom_is_edit.checked) func = $svg_clone => zoom_reset($svg_clone)
 	const dpi_scale = 300/72 // scale rendered image suposedly produced native at 72 dpi as much as needed to be printed at 300 dpi
-	save.render_image(dpi_scale, $bleed.value, true, () => assign_viewbox($svg, current_viewbox))
+	save.render_image(dpi_scale, $bleed.value, true, func)
 })

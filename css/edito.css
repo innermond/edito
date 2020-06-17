@@ -412,8 +412,12 @@ hr {
   top: 0;
   bottom: 0;
   right: 0;
-  opacity: 0.7;
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
   z-index: 1000; }
+  #bkg_modal.on {
+    display: block;
+    opacity: 0.9; }
 
 div.preview {
   display: flex;

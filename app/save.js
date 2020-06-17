@@ -68,11 +68,15 @@ export const render_image = async (k=1, bleed=0, down=false, func=null) => {
 	setTimeout( ()=>{
 		$svgclone.querySelectorAll('[data-ants=true]').forEach($ant => $ant.remove())
 
+		if (func != null && func instanceof Function) {
+			func($svgclone)
+		}
+		
 		const svgdata = new XMLSerializer().serializeToString($svgclone)
+		$svgclone.remove()
 		const srcdata = btoa(unescape(encodeURIComponent(svgdata)))
 		const cw = $svgclone.width.baseVal.value
 		const ch = $svgclone.height.baseVal.value
-		$svgclone.remove()
 							
 		let $canvas = document.createElement('canvas')
 		$canvas.width = cw*k
@@ -95,10 +99,6 @@ export const render_image = async (k=1, bleed=0, down=false, func=null) => {
 					a.click()
 			} else {
 					$div.insertAdjacentHTML('afterEnd', '<div class="preview" ><img src="' + canvasdata  + '"></div>')
-			}
-			
-			if (func != null && func instanceof Function) {
-				func()
 			}
 		})
 		$img.setAttribute('src', 'data:image/svg+xml;base64,' + srcdata)

@@ -173,11 +173,11 @@ export function zoom(scale) {
     b.y += dy*0.5
 }
 
-export function zoom_reset() {
-    $svg.viewBox.baseVal.width = zoom_reset.viewbox.width
-    $svg.viewBox.baseVal.height =zoom_reset.viewbox.height
-    $svg.viewBox.baseVal.x = zoom_reset.viewbox.x
-    $svg.viewBox.baseVal.y = zoom_reset.viewbox.y
+export function zoom_reset($other=$svg, viewbox=zoom_reset.viewbox) {
+    $other.viewBox.baseVal.width = viewbox.width
+    $other.viewBox.baseVal.height = viewbox.height
+    $other.viewBox.baseVal.x = viewbox.x
+    $other.viewBox.baseVal.y = viewbox.y
 }
 
 export function copy_viewbox(viewBox) {
