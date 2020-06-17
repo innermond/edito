@@ -1,4 +1,5 @@
-import {$svg, ui_fragment, px, zoom_reset, copy_viewbox, assign_viewbox} from '../dom.js'
+import {$svg, ui_fragment, px, copy_viewbox} from '../dom.js'
+import {zoom_reset} from '../zoom.js'
 import {$bleed} from '../ui.js'
 import * as save from '../save.js'
 import {deleting, undeleting, cloning} from '../user_action/del_undel_clone.js'

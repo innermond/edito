@@ -1,11 +1,13 @@
+import {ui_fragment, $svg, media_zoom, copy_viewbox} from '../dom.js'
+import {zoom, zoom_reset} from '../zoom.js'
 import {$clicked, $selection} from '../selection/index.js'
 import {scale} from '../user_action/size.js'
 import {rotate} from '../user_action/rotate.js'
-import {ui_fragment, $svg, media_zoom, zoom, zoom_reset, copy_viewbox} from '../dom.js'
 import {wrap} from '../drawer.js'
 import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
 import {handle_step} from '../user_action/step.js'
+import {ungroup_one} from '../user_action/group.js'
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Schimbi lățimea documentului" data-tooltip-bottom for="media_width">Lățime</label>
@@ -39,8 +41,6 @@ export const $media_height = $ui.querySelector('#media_height')
 $media_width.value = $svg.width.baseVal.valueInSpecifiedUnits
 $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits
 
-zoom_reset.viewbox = copy_viewbox($svg.viewBox)
-
 const media_zoom_event = evt => {
 	zoom_reset()
 	media_zoom($media_width.value, $media_height.value)
@@ -54,7 +54,13 @@ let pulse_id = null
 
 const $zoomin = $ui.querySelector('#zoom_in')
 $zoomin.addEventListener('mousedown', evt => {
-		pulse_id = setInterval(()=>zoom(step), 5)
+    let zoom_to = null
+    if ($selection.size) {
+        const $g = $selection.as_group()
+        zoom_to = $g.getBBox()
+        ungroup_one($g)
+    }
+    pulse_id = setInterval(()=>zoom(step, zoom_to), 5)
 })
 $zoomin.addEventListener('mouseup', evt => {
 	clearInterval(pulse_id) 

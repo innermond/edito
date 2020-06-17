@@ -18,7 +18,7 @@ export function ungroup_all() {
 }
 
 const selector = 'g:not([data-layer])' 
-function ungroup_one($el, deep=false) {
+export function ungroup_one($el, deep=false) {
 	const is_group = true === $el.matches(selector)
 	if (deep === false) {
 		if (!is_group) return
