@@ -42,7 +42,8 @@ function startDrag(evt) {
 	// in case of an embeded svg
 	let $othersvg = $clicked.closest('svg')
 	let $pt = $othersvg.createSVGPoint()
-	$pt = $pt.matrixTransform($svg.getScreenCTM().inverse())
+	// TODO: needed for an embeded svg???
+	//$pt = $pt.matrixTransform($svg.getScreenCTM().inverse())
 	$pt.x = evt.clientX
 	$pt.y = evt.clientY
 	mouseStart = $pt.matrixTransform($svg.getScreenCTM().inverse())

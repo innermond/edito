@@ -1,19 +1,26 @@
 import {$svg, copy_viewbox} from './dom.js'
 
-export function zoom(scale, bb=null) {
-    const b = $svg.viewBox.baseVal
-    let dx = b.width
-    let dy = b.height
-    b.width /= scale
-    b.height /= scale
-    dx -= b.width
-    dy -= b.height
-    b.x += dx*0.5
-    b.y += dy*0.5
-    if (bb) {
-        b.x += 1
-        b.y += 1
-    }
+export function zoom(scale, pt=null) {
+	const b = $svg.viewBox.baseVal
+	// svg center
+	const cx = b.x+b.width*0.5, cy = b.y+b.height*0.5
+	if (!pt) pt = {x: cx, y: cy}
+	const dx = pt.x - cx, dy = pt.y - cy
+	const sw = b.width/scale, sh = b.height/scale
+	const sx = dx/100+(b.width-sw)*0.5, sy = dy/100+(b.height-sh)*0.5
+
+	// scaled dimensions
+	b.x += sx, b.y += sy
+	b.width = sw
+	b.height = sh
+
+
+	/*let dx = b.width
+	let dy = b.height
+	dx -= b.width
+	dy -= b.height
+	b.x += dx*0.5
+	b.y += dy*0.5*/
 }
 
 export function zoom_reset($other=$svg, viewbox=zoom_reset.viewbox) {

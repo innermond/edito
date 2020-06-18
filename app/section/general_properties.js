@@ -8,6 +8,8 @@ import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
 import {handle_step} from '../user_action/step.js'
 import {ungroup_one} from '../user_action/group.js'
+import {centerpoint} from '../pos.js'
+import {add_panning, remove_panning} from '../pan.js'
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Schimbi lățimea documentului" data-tooltip-bottom for="media_width">Lățime</label>
@@ -19,6 +21,7 @@ const tpl = `<section class="vertical-align">
     <button id="zoom_out">Zoom -</button>
 		<label class="tooltip" data-tooltip-text="Consideră zoomingul ca editare a obiectelor" data-tooltip-bottom ><input type="checkbox" class="switch" id="zoom_is_edit">editare</label>
     <button id="zoom_reset">Reset</button>
+    <button id="pan">Pan</button>
 	<hr/>
 		<label class="tooltip" data-tooltip-text="Mărimea bleedului, distanța cu care se extinde pagina peste dimensiunile finale" data-tooltip-bottom for="bleed">Bleed</label>
 	<input type="number" min="0.0" max="5.0" value="2" step="0.5" id="bleed">
@@ -54,10 +57,11 @@ let pulse_id = null
 
 const $zoomin = $ui.querySelector('#zoom_in')
 $zoomin.addEventListener('mousedown', evt => {
+	console.log($selection.size)
     let zoom_to = null
     if ($selection.size) {
-        const $g = $selection.as_group()
-        zoom_to = $g.getBBox()
+        const $g = $selection.as_group(true)
+        zoom_to = centerpoint($g, $svg)
         ungroup_one($g)
     }
     pulse_id = setInterval(()=>zoom(step, zoom_to), 5)
@@ -68,7 +72,13 @@ $zoomin.addEventListener('mouseup', evt => {
 
 const $zoomout = $ui.querySelector('#zoom_out')
 $zoomout.addEventListener('mousedown', evt => {
-		pulse_id = setInterval(()=>zoom(1/step), 5)
+    let zoom_to = null
+    if ($selection.size) {
+        const $g = $selection.as_group(true)
+        zoom_to = centerpoint($g, $svg)
+        ungroup_one($g)
+    }
+		pulse_id = setInterval(()=>zoom(1/step, zoom_to), 5)
 })
 $zoomout.addEventListener('mouseup', evt => {
 	clearInterval(pulse_id) 
@@ -76,6 +86,16 @@ $zoomout.addEventListener('mouseup', evt => {
 
 const $zoomreset = $ui.querySelector('#zoom_reset')
 $zoomreset.addEventListener('click', evt => zoom_reset())
+
+const $pan = $ui.querySelector('#pan')
+const panning = () => {
+	let have_pan = false
+	return evt => {
+		have_pan ? remove_panning() : add_panning()
+		have_pan = !have_pan
+	}
+}
+$pan.addEventListener('click', panning())
 
 export const $bleed = $ui.querySelector('#bleed')
 
