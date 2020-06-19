@@ -1,4 +1,6 @@
 import {$svg} from './dom.js'
+import {click} from './click.js'
+import {add_dragging, remove_dragging} from './drag.js'
 
 let supportsPassive = false;
 try {
@@ -14,24 +16,33 @@ const opt = supportsPassive ? { passive: true } : false
 
 export function add_panning() {
 	// manage panging
-	$svg.addEventListener('mousedown', startPan, opt);
-	$svg.addEventListener('click', clickPan, Object.assign(opt, {capture: true}));
-	$svg.addEventListener('mouseup', endPan, opt);
+	$svg.addEventListener('mousedown', startPan);
+	
+	$svg.addEventListener('click', clickPan);
+	$svg.removeEventListener('click', click);
+	remove_dragging()
+	
+	$svg.addEventListener('mouseup', endPan);
 	$svg.addEventListener('mousemove', pan, opt);
-	$svg.addEventListener('mouseleave', endPan, opt);
-	$svg.addEventListener('touchstart', startPan, opt);
-	$svg.addEventListener('touchend', endPan, opt);
+	$svg.addEventListener('mouseleave', endPan);
+	$svg.addEventListener('touchstart', startPan);
+	$svg.addEventListener('touchend', endPan);
 	$svg.addEventListener('touchmove', pan, opt);
 }
 
 export function remove_panning() {
 	// manage panging
-	$svg.removeEventListener('mousedown', startPan, opt);
-	$svg.removeEventListener('click', clickPan, Object.assign(opt, {capture: true}));
-	$svg.removeEventListener('mouseup', endPan, opt);
+	$svg.removeEventListener('mousedown', startPan);
+
+	$svg.removeEventListener('click', clickPan);
+	$svg.addEventListener('click', click);
+	add_dragging()
+	
+	$svg.removeEventListener('mouseup', endPan);
 	$svg.removeEventListener('mousemove', pan, opt);
-	$svg.removeEventListener('mouseleave', endPan, opt);
-	$svg.removeEventListener('touchstart', startPan, opt);
+	$svg.removeEventListener('mouseleave', endPan);
+	$svg.removeEventListener('touchstart', startPan);
+	$svg.removeEventListener('touchend', endPan);
 	$svg.removeEventListener('touchmove', pan, opt);
 }
 
@@ -53,7 +64,7 @@ function pan(evt) {
 	let current = {x: evt.clientX, y: evt.clientY}
 	const dx = start.x - current.x
 	const dy = start.y - current.y
-	const ctm = $svg.getCTM()
+	const ctm = $svg.getScreenCTM()
 	$svg.viewBox.baseVal.x += dx/ctm.a
 	$svg.viewBox.baseVal.y += dy/ctm.d
 	start = current
