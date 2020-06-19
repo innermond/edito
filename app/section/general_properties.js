@@ -91,7 +91,13 @@ const $pan = $ui.querySelector('#pan')
 const panning = () => {
 	let have_pan = false
 	return evt => {
-		have_pan ? remove_panning() : add_panning()
+		if(have_pan) {
+			remove_panning() 
+			document.body.classList.remove('pan')
+		} else {
+			add_panning()
+			document.body.classList.add('pan')
+		}
 		have_pan = !have_pan
 	}
 }

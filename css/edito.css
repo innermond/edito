@@ -436,6 +436,12 @@ div.preview {
   div.preview > img {
     box-shadow: 0px 0px 60px 15px black; }
 
+body.pan.panning {
+  cursor: grabbing; }
+
+body.pan {
+  cursor: grab; }
+
 #editor {
   background-color: black;
   display: flex;

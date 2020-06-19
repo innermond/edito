@@ -48,6 +48,7 @@ export function remove_panning() {
 
 let start
 function startPan(evt) {
+	document.body.classList.add('panning')
 	start = {x: evt.clientX, y: evt.clientY}
 	evt.stopPropagation()
 }
@@ -55,6 +56,7 @@ function clickPan(evt) {
 	evt.stopPropagation()
 }
 function endPan(evt) {
+	document.body.classList.remove('panning')
 	start = null
 }
 

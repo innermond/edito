@@ -12,9 +12,8 @@ export let $selection = new class extends Set {
 		}
 		const $g = newtag('g', {dataGroup:true})
 		const arr = Array.from(this)
-		arr.reverse().forEach($el => $g.appendChild($el))
-		$next?.nextElementSibling
-		? $svg.insertBefore($g, $next.nextElementSibling)
+		$next
+		? $svg.insertBefore($g, $next)
 		: $svg.appendChild($g)
 		if (!temporary) this.clear()
 		return $clicked.from($g)

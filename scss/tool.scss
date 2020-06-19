@@ -512,3 +512,12 @@ div.preview {
         box-shadow: 0px 0px 60px 15px black;
     }
 }
+
+body{
+	&.pan.panning{
+		cursor: grabbing;
+	}	
+	&.pan{
+		cursor: grab;
+	}	
+}
