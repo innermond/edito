@@ -6,7 +6,17 @@ body {
 	flex: 1 1 100%;
 	height: 100%;
 }
-image, rect, line, path, textPath, circle, ellipse, tspan {cursor: pointer;}
+
+body:not(.pan){
+	image, rect, line, path, textPath, circle, ellipse, tspan {cursor: pointer;}
+}
+
+body.pan text {
+	cursor: grab;
+}
+body.pan.panning text {
+	cursor: grabbing;
+}
 text {
 	cursor: default;
 	user-select: none;
