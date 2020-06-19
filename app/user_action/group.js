@@ -32,7 +32,7 @@ export function ungroup_one($el, deep=false) {
 	let $f = get_filter($el)
 	// grouped elements
 	let $ee = $el.children
-	$ee = Array.from($ee).reverse()
+	$ee = Array.from($ee)
 	$ee.forEach(
 		$e => {
 			let $path = path_text($e)

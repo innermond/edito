@@ -11,9 +11,20 @@ export let $selection = new class extends Set {
 			$next = nextSiblingNoAnts($next.nextElementSibling)
 		}
 		const $g = newtag('g', {dataGroup:true})
-		const arr = Array.from(this)
+		let arr = Array.from(this)
+		// order as in source code
+		// marks elements for subsequent retrieval
+		arr.forEach($e => {
+			$e.setAttribute('data-source-order', '')
+		})
+		// get elements ordered as in source code
+		const $ordered = $svg.querySelectorAll('[data-source-order]')
+		arr = Array.from($ordered)
+
+		// do not append $next 
+		arr.forEach($e => {if ($next !== $e) $g.appendChild($e)})
 		$next
-		? $svg.insertBefore($g, $next)
+		? $svg.insertBefore($g, $next) && $g.appendChild($next)
 		: $svg.appendChild($g)
 		if (!temporary) this.clear()
 		return $clicked.from($g)
