@@ -1,7 +1,7 @@
 import {$textname, $text_features, $font_size, $word_spacing, $letter_spacing, $line_spacing} from './section/text.js'
 import{$fonts} from './section/text.js'
 import{$delete_element, $undelete_element, $clone_element} from './section/bottombar.js'
-import {$media_width, $media_height, $bleed, $step, $bkcolor} from './section/general_properties.js'
+import {$media_width, $media_height, $bleed, $step, $bkcolor} from './section/page.js'
 import {$add_rect, $add_circle, $add_line} from './section/add_shape.js'
 import {$url_image, $add_url_image, $file_image} from './section/image.js'
 import {$masking, $cliping, $pathing, $pathing_side} from './section/mask_clip_path.js'

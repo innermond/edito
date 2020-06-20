@@ -1,4 +1,4 @@
-import {ui_fragment, $svg, media_zoom, copy_viewbox} from '../dom.js'
+import {newtag, ui_fragment, $svg, media_zoom, copy_viewbox} from '../dom.js'
 import {zoom, zoom_reset} from '../zoom.js'
 import {$clicked, $selection} from '../selection/index.js'
 import {scale} from '../user_action/size.js'
@@ -61,8 +61,12 @@ $zoomin.addEventListener('mousedown', evt => {
     let zoom_to = null
     if ($selection.size) {
         const $g = $selection.as_group(true)
+			// centerpoint is wrong
         zoom_to = centerpoint($g, $svg)
         ungroup_one($g)
+
+			let mark = newtag('circle', {r:2, cx:zoom_to.x, cy:zoom_to.y, fill:'red'})
+			$svg.appendChild(mark)
     }
     pulse_id = setInterval(()=>zoom(step, zoom_to), 5)
 })
