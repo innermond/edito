@@ -24,6 +24,9 @@ const tpl = `<section class="vertical-align">
     <input type="range" min="0.0" max="1" value="0" step="0.001" id="sharpen">
     <label for="hue_rotate">Rotește culorile</label>
     <input type="range" min="0" max="360" value="0" step="0.001" id="hue_rotate">
+    <label for="shadow_color">Sticlos
+			<input type="checkbox" id="glass" class="switch" value="2">
+		</label>
 </section>`
 export const $ui = wrap(ui_fragment(tpl), 'manage-filter', 'Filter')
 
@@ -38,6 +41,7 @@ export const $grayscale = $ui.querySelector('#grayscale')
 export const $blur = $ui.querySelector('#blur')
 export const $sharpen = $ui.querySelector('#sharpen')
 export const $hue_rotate = $ui.querySelector('#hue_rotate')
+export const $glass = $ui.querySelector('#glass')
 
 $shadow_blur.addEventListener('input', filter.updating('shadow', 'feGaussianBlur', 'stdDeviation'))
 $shadow_slope.addEventListener('input', filter.updating('shadow', 'feFuncA', 'slope'))
@@ -50,4 +54,5 @@ $grayscale.addEventListener('input', filter.updating('grayscale', 'feColorMatrix
 $blur.addEventListener('input', filter.updating('blur', 'feGaussianBlur', 'stdDeviation'))
 $sharpen.addEventListener('input', filter.sharpening())
 $hue_rotate.addEventListener('input',filter.updating('hueRotate', 'feColorMatrix', 'values'))
+$glass.addEventListener('change',filter.updating('glass', 'feGaussianBlur', 'stdDeviation'))
 

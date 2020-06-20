@@ -2,7 +2,7 @@ import {$svg, newtag} from '../dom.js'
 import {$clicked} from '../selection/index.js'
 
 export function keyup($target) {
-	if ( ! $clicked || $clicked.nodeName !== 'text') return
+	if ( $clicked.is_zero() || $clicked.nodeName !== 'text') return
 	let $tt = $clicked.querySelectorAll('tspan')
 	let i = $tt.length - 1
 

@@ -1,7 +1,7 @@
 import {$clicked, $selection} from '../../selection/index.js'
 
 export function sizing_text(val) {
-	if ( ! $clicked) return
+	if ($clicked.is_zero()) return
 	$selection.forEach($el => {
 		let $ee =  $el.nodeName === 'g' ? $el.children : [$el]
 		for (let $e of $ee) {

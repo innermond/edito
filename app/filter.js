@@ -52,7 +52,8 @@ let filterFuncMap = {
 	'hueRotate':newhueRotate, 
 	'grayscale':newgrayscale,
 	'sharpen':newsharpen,
-	'blur':newblur
+	'blur':newblur,
+	'glass':newglass
 }
 
 export function updating(type, inner, prop, val=0) {
@@ -152,8 +153,8 @@ function set_filter($el, fid) {
 	$ee.forEach($e => $e.setAttributeNS(null, 'filter', val))
 }
 
-function newfilter_expanded() {
-return newtag('filter', {x:'-200%', y:'-200%', width:'500%', height:'500%'})
+function newfilter_expanded(x='-200%', y='-200%', width='500%', height='500%') {
+return newtag('filter', {x:x, y:y, width:width, height:height})
 }
 
 function newshadow(blur=5, color='#000000', dx=0, dy=0, slope=0.5, source="SourceGraphic") {
@@ -197,6 +198,73 @@ function newsharpen(val=0) {
 function newhueRotate(val=0) {
 	let flt = newfilter_expanded()
 	let inner = `<feColorMatrix data-type="hueRotate" type="hueRotate" values="${val}" result="CurrentGraphic" />`
+	flt.innerHTML = inner
+	return flt
+}
+
+function newglass(val=0) {
+	let flt = newfilter_expanded(0, 0, 1.5, 1.5)
+	let inner = `
+      <feBlend
+         in2="SourceGraphic"
+         result="result1"
+         mode="screen"
+         id="feBlend2390" />
+      <feGaussianBlur
+         stdDeviation="2"
+         result="result6"
+         id="feGaussianBlur2392" />
+      <feComposite
+         operator="xor"
+         in="result6"
+         in2="result1"
+         result="result7"
+         id="feComposite2394" />
+      <feComposite
+         result="result4"
+         in="result7"
+         operator="xor"
+         in2="result7"
+         id="feComposite2396" />
+      <feGaussianBlur
+         result="result3"
+         stdDeviation="4"
+         in="result4"
+         id="feGaussianBlur2398" />
+      <feSpecularLighting
+         result="result5"
+         specularExponent="55"
+         specularConstant="1.5"
+         surfaceScale="6"
+         in="result3"
+         id="feSpecularLighting2402">
+        <fePointLight
+           z="20000"
+           y="-8000"
+           x="-5000"
+           id="fePointLight2400" />
+      </feSpecularLighting>
+      <feComposite
+         in="result3"
+         k3="1"
+         k2="1.5"
+         operator="arithmetic"
+         in2="SourceGraphic"
+         result="result92"
+         id="feComposite2404"
+         k1="0"
+         k4="0" />
+      <feComposite
+         in="result5"
+         operator="atop"
+         in2="result92"
+         result="result93"
+         id="feComposite2406" />
+      <feBlend
+         mode="multiply"
+         in2="result93"
+         id="feBlend2408" />
+	`
 	flt.innerHTML = inner
 	return flt
 }
