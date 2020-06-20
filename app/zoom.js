@@ -7,7 +7,8 @@ export function zoom(scale, pt=null) {
 	if (!pt) pt = {x: cx, y: cy}
 	const dx = pt.x - cx, dy = pt.y - cy
 	const sw = b.width/scale, sh = b.height/scale
-	const sx = dx/100+(b.width-sw)*0.5, sy = dy/100+(b.height-sh)*0.5
+	const step = 10
+	const sx = dx/step+(b.width-sw)*0.5, sy = dy/step+(b.height-sh)*0.5
 
 	// scaled dimensions
 	b.x += sx, b.y += sy

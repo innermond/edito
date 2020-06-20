@@ -1,4 +1,4 @@
-import {newtag, ui_fragment, $svg, media_zoom, copy_viewbox} from '../dom.js'
+import {ui_fragment, $svg, media_zoom, copy_viewbox} from '../dom.js'
 import {zoom, zoom_reset} from '../zoom.js'
 import {$clicked, $selection} from '../selection/index.js'
 import {scale} from '../user_action/size.js'
@@ -52,30 +52,48 @@ const media_zoom_event = evt => {
 $media_width.addEventListener('input', media_zoom_event, true)
 $media_height.addEventListener('input', media_zoom_event, true)
 
+function addEventInterval($el, start_evt, start_func, pulse, end_evt, end_func) {
+	let pulse_id = null
+	
+	const start = evt => {
+		pulse_id = setInterval(start_func, pulse)
+	}
+	
+	const end = evt => {
+		clearInterval(pulse_id) 
+		end_func()
+	}
+
+	$el.addEventListener(start_evt,start)
+	$el.addEventListener(end_evt, end)
+}
+
 const step = 1.01
-let pulse_id = null
 
 const $zoomin = $ui.querySelector('#zoom_in')
-$zoomin.addEventListener('mousedown', evt => {
-	console.log($selection.size)
-    let zoom_to = null
-    if ($selection.size) {
-        const $g = $selection.as_group(true)
-			// centerpoint is wrong
-        zoom_to = centerpoint($g, $svg)
-        ungroup_one($g)
-
-			let mark = newtag('circle', {r:2, cx:zoom_to.x, cy:zoom_to.y, fill:'red'})
-			$svg.appendChild(mark)
-    }
-    pulse_id = setInterval(()=>zoom(step, zoom_to), 5)
-})
-$zoomin.addEventListener('mouseup', evt => {
-	clearInterval(pulse_id) 
-})
-
 const $zoomout = $ui.querySelector('#zoom_out')
-$zoomout.addEventListener('mousedown', evt => {
+
+let $g = null
+let to = null
+const start_func = scale => {
+	if ($selection.size) {
+		$g = $selection.as_group(true)
+		to = centerpoint($g, $svg)
+	}
+	zoom(scale, to)
+}
+const end_func = () => {
+	if ($g) {
+		ungroup_one($g)
+		$g = null
+		to = null
+	}
+}
+
+addEventInterval($zoomin, 'mousedown', () => start_func(step), 10, 'mouseup', end_func)
+addEventInterval($zoomout, 'mousedown', () => start_func(1/step), 10, 'mouseup', end_func)
+
+/*$zoomout.addEventListener('mousedown', evt => {
     let zoom_to = null
     if ($selection.size) {
         const $g = $selection.as_group(true)
@@ -86,7 +104,7 @@ $zoomout.addEventListener('mousedown', evt => {
 })
 $zoomout.addEventListener('mouseup', evt => {
 	clearInterval(pulse_id) 
-})
+})*/
 
 const $zoomreset = $ui.querySelector('#zoom_reset')
 $zoomreset.addEventListener('click', evt => zoom_reset())

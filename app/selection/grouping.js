@@ -14,19 +14,18 @@ export let $selection = new class extends Set {
 		let arr = Array.from(this)
 		// order as in source code
 		// marks elements for subsequent retrieval
-		arr.forEach($e => {
-			$e.setAttribute('data-source-order', '')
-		})
+		arr.forEach($e => $e.setAttribute('data-source-order', ''))
 		// get elements ordered as in source code
 		const $ordered = $svg.querySelectorAll('[data-source-order]')
 		arr = Array.from($ordered)
+		arr.forEach($e => $e.removeAttribute('data-source-order'))
 
 		// do not append $next 
 		arr.forEach($e => {if ($next !== $e) $g.appendChild($e)})
 		$next
-		? $svg.insertBefore($g, $next) && $g.appendChild($next)
+		? $svg.insertBefore($g, $next) && this.has($next) && $g.appendChild($next)
 		: $svg.appendChild($g)
-		if (!temporary) this.clear()
+		if (!temporary) this.clear() // TODO when clear all selection make ants dissapear too or is needed so much this clear() ?
 		return $clicked.from($g)
 	}
 
