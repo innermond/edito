@@ -49,6 +49,7 @@ export function ui(flt) {
 }
 
 let filterFuncMap = {
+	'shadow':newshadow,
 	'hueRotate':newhueRotate, 
 	'grayscale':newgrayscale,
 	'sharpen':newsharpen,
@@ -81,10 +82,9 @@ export function updating(type, inner, prop, val=0) {
 			if (!$mtx || !$mtx.length) {
 				let $flt = get_filter($el)
 				let $hostfilter = filterFuncMap[type]?.call(val)
-				for (let $primitive of $hostfilter.children) {
-					$flt.appendChild($primitive)
-				}
-				$mtx = $flt.querySelectorAll(inner)
+				Array.from($hostfilter.children).forEach($e => $flt.appendChild($e))
+				$mtx = get_filter_inner($flt, type, inner)
+				//$mtx = $flt.querySelectorAll(inner)
 				$mtx = Array.from($mtx)
 			}
 			$mtx = $mtx.pop()
@@ -122,7 +122,9 @@ export function get_filter($el) {
 }
 
 export function get_filter_inner($el, datatype, innername=null) {
-		let $f = get_filter($el)
+		let $f
+		if ($el?.nodeName === 'filter') $f = $el
+		else $f = get_filter($el)
 		if (!$f) return
 		let qry = `[data-type="${datatype}"]`
 		if (innername) qry = `${innername}${qry},${qry} ${innername}`
@@ -202,49 +204,50 @@ function newhueRotate(val=0) {
 	return flt
 }
 
-function newglass(val=0) {
-	let flt = newfilter_expanded(0, 0, 1.5, 1.5)
-	let inner = `
-      <feBlend
+function newglass() {
+	let flt = newfilter_expanded('-100%', '-100%', '250%', '250%')
+	let inner = `<feBlend data-type="glass" 
          in2="SourceGraphic"
          result="result1"
          mode="screen"
          id="feBlend2390" />
-      <feGaussianBlur
+      <feGaussianBlur data-type="glass" 
          stdDeviation="2"
          result="result6"
+				 one
          id="feGaussianBlur2392" />
-      <feComposite
+      <feComposite data-type="glass" 
          operator="xor"
          in="result6"
          in2="result1"
          result="result7"
          id="feComposite2394" />
-      <feComposite
+      <feComposite data-type="glass" 
          result="result4"
          in="result7"
          operator="xor"
          in2="result7"
          id="feComposite2396" />
-      <feGaussianBlur
+      <feGaussianBlur data-type="glass" 
          result="result3"
          stdDeviation="4"
          in="result4"
+				 two
          id="feGaussianBlur2398" />
-      <feSpecularLighting
+      <feSpecularLighting data-type="glass" 
          result="result5"
          specularExponent="55"
          specularConstant="1.5"
          surfaceScale="6"
          in="result3"
          id="feSpecularLighting2402">
-        <fePointLight
+        <fePointLight data-type="glass" 
            z="20000"
            y="-8000"
            x="-5000"
            id="fePointLight2400" />
       </feSpecularLighting>
-      <feComposite
+      <feComposite data-type="glass" 
          in="result3"
          k3="1"
          k2="1.5"
@@ -254,17 +257,16 @@ function newglass(val=0) {
          id="feComposite2404"
          k1="0"
          k4="0" />
-      <feComposite
+      <feComposite data-type="glass" 
          in="result5"
          operator="atop"
          in2="result92"
          result="result93"
          id="feComposite2406" />
-      <feBlend
+      <feBlend data-type="glass" 
          mode="multiply"
          in2="result93"
-         id="feBlend2408" />
-	`
+         id="feBlend2408" />`
 	flt.innerHTML = inner
 	return flt
 }
@@ -280,17 +282,20 @@ export const add_shadow = evt => {
 	let $shadow = newshadow(blur,color,dx,dy,slope, $flt ? 'CurrentGraphic' : 'SourceGraphic')
 	if ($flt) {
 		let $f
-		for($f of Array.from($shadow.children)) {
+		/*for($f of Array.from($shadow.children)) {
 			$flt.appendChild($f)
-		}
+		}*/
+		Array.from($shadow.children).forEach($f => $flt.appendChild($f))
 	} else {
 		$defs.appendChild($shadow)
 		set_filter($clicked, $shadow.id)
 	}
 }
 
-export const removing = evt => {
-	remove($clicked, 'shadow')
+export const removing = filter_name => evt => {
+	let is = filter_name in filterFuncMap
+	if (!is) return
+	remove($clicked, filter_name)
 }
 
 export const sharpening = function(){

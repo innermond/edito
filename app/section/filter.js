@@ -27,6 +27,10 @@ const tpl = `<section class="vertical-align">
     <label for="shadow_color">Sticlos
 			<input type="checkbox" id="glass" class="switch" value="2">
 		</label>
+    <label for="glass_one">Schimbă one</label>
+    <input type="range" min="0" max="5" value="2" step="0.001" id="glass_one">
+    <label for="glass_two">Schimbă two</label>
+    <input type="range" min="0" max="10" value="4" step="0.001" id="glass_two">
 </section>`
 export const $ui = wrap(ui_fragment(tpl), 'manage-filter', 'Filter')
 
@@ -42,6 +46,8 @@ export const $blur = $ui.querySelector('#blur')
 export const $sharpen = $ui.querySelector('#sharpen')
 export const $hue_rotate = $ui.querySelector('#hue_rotate')
 export const $glass = $ui.querySelector('#glass')
+export const $glass_one = $ui.querySelector('#glass_one')
+export const $glass_two = $ui.querySelector('#glass_two')
 
 $shadow_blur.addEventListener('input', filter.updating('shadow', 'feGaussianBlur', 'stdDeviation'))
 $shadow_slope.addEventListener('input', filter.updating('shadow', 'feFuncA', 'slope'))
@@ -49,10 +55,20 @@ $shadow_dx.addEventListener('input', filter.updating('shadow', 'feOffset', 'dx')
 $shadow_dy.addEventListener('input', filter.updating('shadow', 'feOffset', 'dy'))
 $shadow_color.addEventListener('input',filter.updating('shadow', 'feFlood', 'flood-color'))
 $add_shadow.addEventListener('click', filter.add_shadow)
-$remove_shadow.addEventListener('click', filter.removing)
+$remove_shadow.addEventListener('click', filter.removing('shadow'))
 $grayscale.addEventListener('input', filter.updating('grayscale', 'feColorMatrix', 'values', 1))
 $blur.addEventListener('input', filter.updating('blur', 'feGaussianBlur', 'stdDeviation'))
 $sharpen.addEventListener('input', filter.sharpening())
 $hue_rotate.addEventListener('input',filter.updating('hueRotate', 'feColorMatrix', 'values'))
-$glass.addEventListener('change',filter.updating('glass', 'feGaussianBlur', 'stdDeviation'))
+const glassing = filter.updating('glass', 'feGaussianBlur[one]', 'stdDeviation')
+const unglassing = filter.removing('glass')
+$glass.addEventListener('change',evt => {
+	if ($glass.checked) {
+		glassing(evt)
+	} else {
+		unglassing()
+	}
+})
+$glass_one.addEventListener('input', filter.updating('glass', 'feGaussianBlur[one]', 'stdDeviation'))
+$glass_two.addEventListener('input', filter.updating('glass', 'feGaussianBlur[two]', 'stdDeviation'))
 
