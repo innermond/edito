@@ -14,7 +14,7 @@ export function back(evt) {
 	if ($prev) {
 		$host.insertBefore($ui, $prev.previousElementSibling)
 	} else {
-		$host.prepend($ui)
+		$host.insertAdjacentElement('afterbegin', $ui)
 	}
 	if ($selection.size > 1) $clicked.remove()
 }

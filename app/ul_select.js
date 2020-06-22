@@ -53,7 +53,7 @@ function handle_ul_select($ul, func) {
 			if (!isClicked && !isFirst) {
 				$el.style.display=='list-item'?  $el.style.display='none':$el.style.display='list-item'
 			} else if (isClicked && !isFirst){
-				$ul.prepend($el)
+				$ul.insertAdjacentElement('afterbegin', $el)
 				//$first.style.display='none'
 				$el.style.display='list-item'
 				func($el)
@@ -82,7 +82,7 @@ export function present_ul_select($sel, prop) {
 		$e.style.display = 'none'
 		if ($e.dataset.value === prop) {
 			$e.style.display = 'list-item'
-			$ul_sel.prepend($e)
+			$ul_sel.insertAdjacentElement('afterbegin', $e)
 		}
 	})
 }
@@ -95,7 +95,7 @@ export function initial_ul_select($sel) {
 		$e.style.display = 'none'
 		if ('first' in $e.dataset) {
 			$e.style.display = 'list-item'
-			$ul_sel.prepend($e)
+			$ul_sel.insertAdjacentElement('afterbegin', $e)
 		}
 	})
 }
