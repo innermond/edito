@@ -11,7 +11,8 @@ import {
 	$grayscale,
 	$blur,
 	$sharpen,
-	$hue_rotate
+	$hue_rotate,
+	$glass, $glass_one, $glass_two
 } from './ui.js'
 
 export function ui(flt) {
@@ -28,6 +29,17 @@ export function ui(flt) {
 			$shadow_dy.value = dy
 			let slope = flt.querySelector('feFuncA')?.getAttributeNS(null, 'slope') || 0.5
 			$shadow_slope.value = slope
+		break
+		case 'glass':
+			$glass.checked = true
+			if ('proxy' in $glass.dataset) {
+				const $span = document.querySelector($glass.dataset.proxy)
+				$span.dataset.value = '1'
+			}
+			const one = flt.querySelector('feGaussianBlur[one]')?.getAttributeNS(null, 'stdDeviation') || 0.2
+			$glass_one.value = one
+			const two = flt.querySelector('feGaussianBlur[two]')?.getAttributeNS(null, 'stdDeviation') || 0.5
+			$glass_two.value = two
 		break
 		case 'grayscale':
 			val = flt.querySelector('feColorMatrix')?.getAttributeNS(null, 'values')
@@ -207,7 +219,7 @@ function newhueRotate(val=0) {
 
 function newglass() {
 	let flt = newfilter_expanded('-100%', '-100%', '250%', '250%')
-	let inner = `<feBlend data-type="glass" 
+	let inner = `<feBlend data-pos="start" data-type="glass" 
          in2="SourceGraphic"
          result="result1"
          mode="screen"
@@ -264,7 +276,7 @@ function newglass() {
          in2="result92"
          result="result93"
          id="feComposite2406" />
-      <feBlend data-type="glass" 
+      <feBlend data-pos="end" data-type="glass" 
          mode="multiply"
          in2="result93"
          id="feBlend2408" />`

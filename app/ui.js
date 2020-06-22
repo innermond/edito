@@ -16,7 +16,8 @@ import {
 	$grayscale,
 	$blur,
 	$sharpen,
-	$hue_rotate
+	$hue_rotate,
+	$glass, $glass_one, $glass_two
 } from './section/filter.js'
 import {$save_svg, $group_repr, $send_svg} from './section/bottombar.js'
 
@@ -50,6 +51,7 @@ $grayscale,
 $blur,
 $sharpen,
 $hue_rotate,
+$glass, $glass_one, $glass_two,
 $save_svg, $send_svg
 }
 
@@ -81,9 +83,17 @@ export function initial() {
 	$stroke_width.value = 0
 	$group_repr.innerHTML = ''
 	//$url_image.value = ''
+	$glass.checked = false
+	if ('proxy' in $glass.dataset) {
+		const $span = document.querySelector($glass.dataset.proxy)
+		$span.dataset.value = '0'
+	}
+	$glass_one.value = 0.2
+	$glass_two.value = 0.5
 }
 
 export function after_click_update_ui($el) {
+	initial()
 	if ($el.nodeName === 'text') {
 		let anchor = $el.style.getPropertyValue('text-anchor')
 		for (let key in modeMap) {

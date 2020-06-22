@@ -3,6 +3,8 @@ import {wrap} from '../drawer.js'
 import * as filter from '../filter.js'
 
 const tpl = `<section class="vertical-align">
+    <button id="add_shadow">Adaugă umbră</button>
+    <button id="remove_shadow">Scoate umbra</button>
     <label for="shadow_blur">Blur umbră</label>
     <input type="range" min="0" max="50" value="5" step="0.01" id="shadow_blur">
     <label for="shadow_slope">Intensitate umbră</label>
@@ -14,16 +16,19 @@ const tpl = `<section class="vertical-align">
     <label for="shadow_color">Culoare umbră
 			<input type="color" id="shadow_color" value="#000000">
 		</label>
-    <button id="add_shadow">Adaugă umbră</button>
-    <button id="remove_shadow">Scoate umbra</button>
+		<hr/>
     <label for="grayscale">Ton de gri</label>
     <input type="range" min="0" max="2" value="1" step="0.01" id="grayscale">
+		<hr/>
     <label for="blur">Blurează</label>
     <input type="range" min="0" max="20" value="0" step="0.001" id="blur">
+		<hr/>
     <label for="sharpen">Clarifică</label>
     <input type="range" min="0.0" max="1" value="0" step="0.001" id="sharpen">
+		<hr/>
     <label for="hue_rotate">Rotește culorile</label>
     <input type="range" min="0" max="360" value="0" step="0.001" id="hue_rotate">
+		<hr/>
     <label for="shadow_color">Sticlos
 			<input type="checkbox" id="glass" class="switch" value="2">
 		</label>
