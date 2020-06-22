@@ -302,6 +302,22 @@ export const add_shadow = evt => {
 		set_filter($clicked, $shadow.id)
 	}
 }
+export const add_glass = evt => {
+	let $flt = get_filter($clicked)
+	const glass = newglass()
+	if ($flt) {
+		// glass can be added only once
+		// if added already just return
+		const $inner = get_filter_inner($flt, 'glass')
+		if ($inner?.length) return
+
+		let $f
+		Array.from(glass.children).forEach($f => $flt.appendChild($f))
+	} else {
+		$defs.appendChild(glass)
+		set_filter($clicked, glass.id)
+	}
+}
 
 export const removing = filter_name => evt => {
 	let is = filter_name in filterFuncMap

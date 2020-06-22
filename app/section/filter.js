@@ -30,12 +30,13 @@ const tpl = `<section class="vertical-align">
     <input type="range" min="0" max="360" value="0" step="0.001" id="hue_rotate">
 		<hr/>
     <label for="shadow_color">Sticlos
-			<input type="checkbox" id="glass" class="switch" value="2">
+			<input type="checkbox" id="glass" class="switch" value="1">
 		</label>
     <label for="glass_one">Schimbă one</label>
     <input type="range" min="0" max="5" value="0.2" step="0.001" id="glass_one">
     <label for="glass_two">Schimbă two</label>
     <input type="range" min="0" max="10" value="0.5" step="0.001" id="glass_two">
+		<hr/>
 </section>`
 export const $ui = wrap(ui_fragment(tpl), 'manage-filter', 'Filter')
 
@@ -65,15 +66,16 @@ $grayscale.addEventListener('input', filter.updating('grayscale', 'feColorMatrix
 $blur.addEventListener('input', filter.updating('blur', 'feGaussianBlur', 'stdDeviation'))
 $sharpen.addEventListener('input', filter.sharpening())
 $hue_rotate.addEventListener('input',filter.updating('hueRotate', 'feColorMatrix', 'values'))
-const glassing = filter.updating('glass', 'feGaussianBlur[one]', 'stdDeviation')
 const unglassing = filter.removing('glass')
-$glass.addEventListener('change',evt => {
+$glass.addEventListener('change', evt => {
 	if ($glass.checked) {
-		glassing(evt)
+		filter.add_glass()
 	} else {
 		unglassing()
 	}
 })
-$glass_one.addEventListener('input', filter.updating('glass', 'feGaussianBlur[one]', 'stdDeviation'))
-$glass_two.addEventListener('input', filter.updating('glass', 'feGaussianBlur[two]', 'stdDeviation'))
+const glass_one = filter.updating('glass', 'feGaussianBlur[one]', 'stdDeviation', $glass_one.value)
+$glass_one.addEventListener('input', evt => $glass.checked && glass_one(evt))
+const glass_two = filter.updating('glass', 'feGaussianBlur[two]', 'stdDeviation', $glass_two.value)
+$glass_two.addEventListener('input', evt => $glass.checked && glass_two(evt))
 
