@@ -1,5 +1,5 @@
 import {ui_fragment, $svg, media_zoom, copy_viewbox} from '../dom.js'
-import {zoom, zoom_reset} from '../zoom.js'
+import {zoom_reset} from '../zoom.js'
 import {$clicked, $selection} from '../selection/index.js'
 import {scale} from '../user_action/size.js'
 import {rotate} from '../user_action/rotate.js'
@@ -7,21 +7,12 @@ import {wrap} from '../drawer.js'
 import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
 import {handle_step} from '../user_action/step.js'
-import {ungroup_one} from '../user_action/group.js'
-import {centerpoint} from '../pos.js'
-import {add_panning, remove_panning} from '../pan.js'
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Schimbi lățimea documentului" data-tooltip-bottom for="media_width">Lățime</label>
 	<input type="number" id="media_width" value="210" />
 	<label class="tooltip" data-tooltip-text="Modifică mărimea dimensiunii verticale a paginii" data-tooltip-bottom for="media_height">Înălțime</label>
 	<input type="number" id="media_height" value="297" />
-	<hr/>
-    <button id="zoom_in">Zoom +</button>
-    <button id="zoom_out">Zoom -</button>
-		<label class="tooltip" data-tooltip-text="Consideră zoomingul ca editare a obiectelor" data-tooltip-bottom ><input type="checkbox" class="switch" id="zoom_is_edit">editare</label>
-    <button id="zoom_reset">Reset</button>
-    <button id="pan">Pan</button>
 	<hr/>
 		<label class="tooltip" data-tooltip-text="Mărimea bleedului, distanța cu care se extinde pagina peste dimensiunile finale" data-tooltip-bottom for="bleed">Bleed</label>
 	<input type="number" min="0.0" max="5.0" value="2" step="0.5" id="bleed">
@@ -35,7 +26,6 @@ const tpl = `<section class="vertical-align">
 </section>`
 export const $ui = wrap(ui_fragment(tpl), 'properties', 'pagină')
 
-export const $zoom_is_edit = $ui.querySelector('#zoom_is_edit')
 
 export const $media_width = $ui.querySelector('#media_width')
 export const $media_height = $ui.querySelector('#media_height')
@@ -51,66 +41,6 @@ const media_zoom_event = evt => {
 }
 $media_width.addEventListener('input', media_zoom_event, true)
 $media_height.addEventListener('input', media_zoom_event, true)
-
-function addEventInterval($el, start_evt, start_func, pulse, end_evt, end_func) {
-	let pulse_id = null
-	
-	const start = evt => {
-		pulse_id = setInterval(start_func, pulse)
-	}
-	
-	const end = evt => {
-		clearInterval(pulse_id) 
-		end_func()
-	}
-
-	$el.addEventListener(start_evt,start)
-	$el.addEventListener(end_evt, end)
-}
-
-const step = 1.01
-
-const $zoomin = $ui.querySelector('#zoom_in')
-const $zoomout = $ui.querySelector('#zoom_out')
-
-let $g = null
-let to = null
-const start_func = scale => {
-	if ($selection.size) {
-		$g = $selection.as_group(true)
-		to = centerpoint($g, $svg)
-	}
-	zoom(scale, to)
-}
-const end_func = () => {
-	if ($g) {
-		ungroup_one($g)
-		$g = null
-		to = null
-	}
-}
-
-addEventInterval($zoomin, 'mousedown', () => start_func(step), 10, 'mouseup', end_func)
-addEventInterval($zoomout, 'mousedown', () => start_func(1/step), 10, 'mouseup', end_func)
-
-const $zoomreset = $ui.querySelector('#zoom_reset')
-$zoomreset.addEventListener('click', evt => zoom_reset())
-
-const $pan = $ui.querySelector('#pan')
-const panning = () => {
-	let have_pan = false
-	return evt => {
-		if(have_pan) {
-			remove_panning() 
-			document.body.classList.remove('pan')
-		} else {
-			add_panning()
-			document.body.classList.add('pan')
-		}
-		have_pan = !have_pan
-	}
-}
-$pan.addEventListener('click', panning())
 
 export const $bleed = $ui.querySelector('#bleed')
 

@@ -4,7 +4,7 @@ import {$bleed} from '../ui.js'
 import * as save from '../save.js'
 import {deleting, undeleting, cloning} from '../user_action/del_undel_clone.js'
 import {tooltip} from '../tooltip.js'
-import {$zoom_is_edit} from './page.js'
+import {$zoom_is_edit} from '../floater/zoom.js'
 
 const tpl = `<section id="bottom-bar">
 		<p id="group_repr"></p>
