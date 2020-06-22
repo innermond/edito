@@ -5,9 +5,8 @@ import {front, back} from '../user_action/front_back.js'
 import {mirror_h, mirror_v} from '../user_action/mirror.js'
 import {aligning, referencing} from '../user_action/align.js'
 import {ul_select, ul_select_iconset} from '../ul_select.js'
-import {tooltip} from '../tooltip.js'
 
-const tpl = `<section class="movable" id="top-bar">
+const tpl = `<section class="movable" id="order">
 	<div class="wrap-row">
 	<div>
 	<label class="tooltip" data-tooltip-text="Grupezi obiectele ca și cum ar fi un singur obiect" data-tooltip-bottom>Grupare</label>
@@ -56,10 +55,6 @@ const tpl = `<section class="movable" id="top-bar">
 </div>
 </section>`
 export const $ui = ui_fragment(tpl)
-
-$ui.querySelectorAll('[class~="tooltip"]').forEach($e => {
-	tooltip($e)
-})
 
 export const $grouping = $ui.querySelector('#grouping')
 const group_val_svg_map = {'g': 'group', 'h': 'ungroup', 'hv': 'ungroup_all'}

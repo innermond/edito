@@ -13,9 +13,10 @@ const tpl = `<section id="menu-bar">
 			<li id="tool-image" data-panel="add-image" class="tool-item tooltip" data-tooltip-text="Adaugă imagini"><img src="/icon/add-image.svg"></li>
 		</ul>
 		<ul id="tool-menu-floaters" class="tool-menu vertical-align">
+			<li id="tool-zoom" data-panel="zoom" class="tool-item tooltip" data-tooltip-text="Apropiere, depărtare, deplasare față de pagină"><img src="/icon/zoom.svg"></li>
 			<li id="tool-geometry" data-panel="geometry" class="tool-item tooltip" data-tooltip-text="Ascunde/arată meniul flotant ce controlează proprietățile geometrice"><img src="/icon/move.svg"></li>
 			<li id="tool-color" data-panel="fill_stroke_color" class="tool-item tooltip" data-tooltip-text="Ascunde/arată meniul flotant ce controlează proprietățile de culoare"><img src="/icon/fill.svg"></li>
-			<li id="tool-color" data-panel="top-bar" class="tool-item tooltip" data-tooltip-text="Ascunde/arată meniul de grupare, aliniere, ordine"><img src="/icon/four.svg"></li>
+			<li id="tool-order" data-panel="order" class="tool-item tooltip" data-tooltip-text="Ascunde/arată meniul de grupare, aliniere, ordine"><img src="/icon/four.svg"></li>
 		</ul>
 	</div>
 </section>`
@@ -28,6 +29,7 @@ $tool_floater.addEventListener('click', evt => {
 	const fid = $me.dataset.panel
 	const $floater = document.getElementById(fid)
 	display_none($floater)
+	toggle_active($me)
 })
 
 const $tool_menu = $ui.querySelector('#tool-menu-sections')

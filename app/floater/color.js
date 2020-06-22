@@ -2,11 +2,9 @@ import {$clicked, $selection} from '../selection/index.js'
 import {fill_opacity} from '../user_action/opacity.js'
 import {stroke_opacity, stroke_width} from '../user_action/stroke.js'
 import {colorize, uncolorize} from '../selection/colorize.js'
-import {ui_fragment, display_none} from '../dom.js'
+import {ui_fragment} from '../dom.js'
 import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
-import {tooltip} from '../tooltip.js'
-import {span_checkbox} from '../span_checkbox.js'
 
 const tpl = `<section class="movable" id="fill_stroke_color">
 <div class="wrap-row">
@@ -48,20 +46,6 @@ $ui.querySelectorAll('[for]').forEach($e => {
 		evt.preventDefault()
 	})
 })
-
-$ui.querySelectorAll('[class~="tooltip"]').forEach($e => {
-	tooltip($e)
-})
-
-$ui.querySelectorAll('input[type=range]').forEach($e => $e.addEventListener('mousedown', evt => evt.stopPropagation()))
-
-$ui.querySelector('img[class~="close"]').addEventListener('click', evt => {
-	const $el = evt.target.closest('section')
-	if ($el) display_none($el)
-})
-
-const $kk = $ui.querySelectorAll('input[type=checkbox][class~=switch]')
-span_checkbox($kk)
 
 export const $fill = $ui.querySelector('#fill')
 $fill.addEventListener('input', evt => {

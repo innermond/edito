@@ -296,7 +296,7 @@ export function nextSiblingNoAnts($el) {
 
 export function display_none($el) {
 	if (!$el) return
-	const state = $el.style.display
+	const state = window.getComputedStyle($el).display
 	if (!('display' in $el.dataset)) $el.dataset.display = state
 	$el.style.display = $el.style.display === 'none' ? $el.dataset.display : 'none'
 }

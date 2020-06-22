@@ -93,19 +93,6 @@ const end_func = () => {
 addEventInterval($zoomin, 'mousedown', () => start_func(step), 10, 'mouseup', end_func)
 addEventInterval($zoomout, 'mousedown', () => start_func(1/step), 10, 'mouseup', end_func)
 
-/*$zoomout.addEventListener('mousedown', evt => {
-    let zoom_to = null
-    if ($selection.size) {
-        const $g = $selection.as_group(true)
-        zoom_to = centerpoint($g, $svg)
-        ungroup_one($g)
-    }
-		pulse_id = setInterval(()=>zoom(1/step, zoom_to), 5)
-})
-$zoomout.addEventListener('mouseup', evt => {
-	clearInterval(pulse_id) 
-})*/
-
 const $zoomreset = $ui.querySelector('#zoom_reset')
 $zoomreset.addEventListener('click', evt => zoom_reset())
 

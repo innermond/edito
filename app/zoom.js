@@ -31,4 +31,3 @@ export function zoom_reset($other=$svg, viewbox=zoom_reset.viewbox) {
     $other.viewBox.baseVal.y = viewbox.y
 }
 zoom_reset.viewbox = copy_viewbox($svg.viewBox)
-
