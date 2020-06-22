@@ -13,6 +13,7 @@ export function aligning(val, refval) {
 	if ($selection.size > 1) $ee = Array.from($selection)
 
 	align_objects($ee, mode, $svg)
+	$selection.forEach($e => $e.classList.contains('is-reference') && $selection.delete($e))
 	$selection.as_ants()
 }
 
