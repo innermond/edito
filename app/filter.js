@@ -106,7 +106,7 @@ function remove($el, filtername) {
 		$flt = get_filter($el)
 		if ($flt.children.length === 0) {
 			unset_filter($el, $flt.id)
-			let $others = $svg.querySelectorAll('[filter="#'+$flt.id+'"]')
+			let $others = $svg.querySelectorAll('[filter="url(#'+$flt.id+')"]')
 			for (let $o of $others) {
 				unset_filter($o, $flt.id)
 			}
