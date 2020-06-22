@@ -41,26 +41,17 @@ export function ul_select($select, opt_func=ul_select.opt_fn, options=ul_select.
 ul_select.opt_fn = ($opt, $li)=>$opt.textContent
 ul_select.opts = {'class': 'folded', 'handle_select': true}
 
-function handle_ul_select($ul, func) {
+function handle_ul_select($ul, func, keep_first=false) {
 	const $ll = Array.from($ul.children)
-	let $first = $ul.querySelector('li:first-child')
-	const attr = document.createAttribute('data-first')
-	$first.setAttributeNode(attr)
 	return evt => {
 		$ll.forEach($el => {
-			let isFirst = ($el == $first)
 			let isClicked = $el == evt.target
-			if (!isClicked && !isFirst) {
+			if (!isClicked) {
 				$el.style.display=='list-item'?  $el.style.display='none':$el.style.display='list-item'
-			} else if (isClicked && !isFirst){
+			} else if (isClicked){
 				$ul.insertAdjacentElement('afterbegin', $el)
-				//$first.style.display='none'
 				$el.style.display='list-item'
 				func($el)
-			} else if (isClicked && isFirst) {
-				$first.style.display = 'list-item'
-			}else if (!isClicked && isFirst){
-				$first.style.display = 'none'
 			} 
 		})
 	}
