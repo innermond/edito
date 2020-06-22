@@ -71,6 +71,18 @@
 	}
 }
 
+section.movable, #bottom-bar {
+	& img {
+		opacity: 0.5;
+		&:hover {
+			opacity: 1;
+		}
+	}
+	&:hover {
+		background-color: $bk-color-loud;
+	}
+}
+
 $bk-tooltip: lighten($txt-color, 5%);
 $space-tooltip: 5px;
 // 24px height of image
@@ -477,6 +489,11 @@ hr {
 	display: flex;
 	flex-flow: row wrap;
 	background-color: $bk-color-loud;
+
+	& button {
+		margin: 0;
+		padding: 0.25rem;
+	}
 }
 
 .humbled {

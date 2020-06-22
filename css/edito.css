@@ -75,6 +75,14 @@ text {
     .tool-menu > .tool-item:hover {
       background-color: #24272b; }
 
+section.movable img, #bottom-bar img {
+  opacity: 0.5; }
+  section.movable img:hover, #bottom-bar img:hover {
+    opacity: 1; }
+
+section.movable:hover, #bottom-bar:hover {
+  background-color: #24272b; }
+
 .tooltip-text {
   background-color: #e2dfdc;
   visibility: hidden;
@@ -405,6 +413,9 @@ hr {
   display: flex;
   flex-flow: row wrap;
   background-color: #24272b; }
+  .movable button {
+    margin: 0;
+    padding: 0.25rem; }
 
 .humbled {
   color: #5a544b; }
