@@ -34,7 +34,7 @@ export function ul_select($select, opt_func=ul_select.opt_fn, options=ul_select.
 			}))
 	}
 	// insert after replaced native select
-	$select.parentNode.insertBefore($ul, $select.nextSibling)
+	$select.parentNode.insertBefore($ul, $select.nextElementSibling)
 
 	return $ul
 }

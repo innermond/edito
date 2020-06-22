@@ -81,8 +81,9 @@ export function updating(type, inner, prop, val=0) {
 			// no primitives found
 			if (!$mtx || !$mtx.length) {
 				let $flt = get_filter($el)
+				if (!$flt) return
 				let $hostfilter = filterFuncMap[type]?.call(val)
-				Array.from($hostfilter.children).forEach($e => $flt.appendChild($e))
+				 Array.from($hostfilter.children).forEach($e => $flt.appendChild($e))
 				$mtx = get_filter_inner($flt, type, inner)
 				//$mtx = $flt.querySelectorAll(inner)
 				$mtx = Array.from($mtx)
@@ -212,7 +213,7 @@ function newglass() {
          mode="screen"
          id="feBlend2390" />
       <feGaussianBlur data-type="glass" 
-         stdDeviation="2"
+         stdDeviation="0.2"
          result="result6"
 				 one
          id="feGaussianBlur2392" />
@@ -230,7 +231,7 @@ function newglass() {
          id="feComposite2396" />
       <feGaussianBlur data-type="glass" 
          result="result3"
-         stdDeviation="4"
+         stdDeviation="0.5"
          in="result4"
 				 two
          id="feGaussianBlur2398" />
@@ -279,13 +280,11 @@ export const add_shadow = evt => {
 	let slope = 0.5
 
 	let $flt = get_filter($clicked)
-	let $shadow = newshadow(blur,color,dx,dy,slope, $flt ? 'CurrentGraphic' : 'SourceGraphic')
+	//const $shadow = newshadow(blur,color,dx,dy,slope, $flt ? 'CurrentGraphic' : 'SourceGraphic')
+	const $shadow = newshadow(blur,color,dx,dy,slope, 'SourceGraphic')
 	if ($flt) {
 		let $f
-		/*for($f of Array.from($shadow.children)) {
-			$flt.appendChild($f)
-		}*/
-		Array.from($shadow.children).forEach($f => $flt.appendChild($f))
+		Array.from($shadow.children).reverse().forEach($f => $flt.insertBefore($f, $flt.firstElementChild))
 	} else {
 		$defs.appendChild($shadow)
 		set_filter($clicked, $shadow.id)

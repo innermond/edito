@@ -28,9 +28,9 @@ const tpl = `<section class="vertical-align">
 			<input type="checkbox" id="glass" class="switch" value="2">
 		</label>
     <label for="glass_one">Schimbă one</label>
-    <input type="range" min="0" max="5" value="2" step="0.001" id="glass_one">
+    <input type="range" min="0" max="5" value="0.2" step="0.001" id="glass_one">
     <label for="glass_two">Schimbă two</label>
-    <input type="range" min="0" max="10" value="4" step="0.001" id="glass_two">
+    <input type="range" min="0" max="10" value="0.5" step="0.001" id="glass_two">
 </section>`
 export const $ui = wrap(ui_fragment(tpl), 'manage-filter', 'Filter')
 

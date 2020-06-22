@@ -27,7 +27,7 @@ export function cloning(evt) {
 	$selection.forEach($el => {
 		let $el_cloned = $el.cloneNode(true)
 		change_id($el_cloned)
-		$el.parentNode.insertBefore($el_cloned, $el.nextSibling)
+		$el.parentNode.insertBefore($el_cloned, $el.nextElementSibling)
 		$el.ants.reset()
 		$el.square.reset()
 		$el.circle.reset()

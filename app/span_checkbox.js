@@ -5,7 +5,7 @@ export function span_checkbox($ee) {
 		if ($e?.type !== 'checkbox') return
 		
 		const $span = newtag_html('span')		
-		$e.parentNode.insertBefore($span, $e.nextSibling)
+		$e.parentNode.insertBefore($span, $e.nextElementSibling)
 
 		$e.dataset.proxy = '#'+$span.id
 		
