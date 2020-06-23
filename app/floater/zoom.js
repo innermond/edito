@@ -4,6 +4,7 @@ import {add_panning, remove_panning} from '../pan.js'
 import {zoom, zoom_reset} from '../zoom.js'
 import {centerpoint} from '../pos.js'
 import {ungroup_one} from '../user_action/group.js'
+import {addEventInterval} from '../event_interval.js'
 
 const tpl = `<section class="movable" id="zoom">
 <div class="wrap-row">
@@ -34,26 +35,6 @@ const tpl = `<section class="movable" id="zoom">
 </section>`
 export const $ui = ui_fragment(tpl)
 export const $zoom_is_edit = $ui.querySelector('#zoom_is_edit')
-
-function addEventInterval($el, start_evt, start_func, pulse, end_evt, end_func) {
-	let pulse_id = null
-	
-	const start = evt => {
-		if (pulse_id) clearInterval(pulse_id) 
-		pulse_id = setInterval(start_func, pulse)
-	}
-	
-	const end = evt => {
-		clearInterval(pulse_id) 
-		pulse_id = null
-		end_func()
-	}
-
-	$el.addEventListener(start_evt,start)
-	$el.addEventListener(end_evt, end)
-	// trap uncleared pulse by savage mouse movement when mouseup do not fire
-	$el.addEventListener('mouseleave', evt => {if (pulse_id) clearInterval(pulse_id)})
-}
 
 const step = 1.01
 

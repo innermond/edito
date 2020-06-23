@@ -53,11 +53,18 @@ document.querySelectorAll('.movable').forEach($e => {
 	const $kk = $e.querySelectorAll('input[type=checkbox][class~=switch]')
 	span_checkbox($kk)
 
-	$e.querySelectorAll('[class~="tooltip"]').forEach($e => {
+	$e.querySelectorAll('[class~="tooltip"]')?.forEach($e => {
 		tooltip($e)
 	})
 
-	$e.querySelectorAll('input[type=range]').forEach($e => $e.addEventListener('mousedown', evt => evt.stopPropagation()))
+	$e.querySelectorAll('input[type=range]')?.forEach($e => $e.addEventListener('mousedown', evt => evt.stopPropagation()))
 
+	const $buttons = $e.querySelectorAll('button[id]')
+	$buttons?.forEach($btn => $btn.addEventListener('mousedown', evt => {
+		$btn.classList.toggle('active')
+		$buttons.forEach($b => {
+			if ($b !== $btn && $b.id !== 'pan') $b.classList.remove('active')
+		})
+	}))
 })
 document.querySelector('#canvas').style.opacity = 1

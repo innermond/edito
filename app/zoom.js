@@ -14,14 +14,6 @@ export function zoom(scale, pt=null) {
 	b.x += sx, b.y += sy
 	b.width = sw
 	b.height = sh
-
-
-	/*let dx = b.width
-	let dy = b.height
-	dx -= b.width
-	dy -= b.height
-	b.x += dx*0.5
-	b.y += dy*0.5*/
 }
 
 export function zoom_reset($other=$svg, viewbox=zoom_reset.viewbox) {
