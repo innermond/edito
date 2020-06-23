@@ -15,7 +15,7 @@ try {
 const opt = supportsPassive ? { passive: true } : false
 
 export function add_panning() {
-	// manage panging
+	// manage panning
 	$svg.addEventListener('mousedown', startPan);
 	
 	$svg.addEventListener('click', clickPan);

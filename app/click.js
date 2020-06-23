@@ -2,8 +2,10 @@ import {initial, dragging_marks_reset, dragging_all_marks_reset, dragging_all_ma
 import {$svg, element_from} from './dom.js'
 import {$selection} from './selection/grouping.js'
 import {$clicked} from './selection/clicked.js'
+import {add_selecting, remove_selecting} from './select.js'
 
 $svg.addEventListener('click', click);
+add_selecting()
 
 export function click(evt) {
 	// deselect anything

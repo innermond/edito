@@ -26,7 +26,7 @@ export const center = tag => {
 }
 
 export function point_screen(evt){
-	let $pt = $svg.createSVGPoint()
+	const $pt = $svg.createSVGPoint()
 	$pt.x = evt.clientX
 	$pt.y = evt.clientY
 	return $pt.matrixTransform($svg.getScreenCTM().inverse())
