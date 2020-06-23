@@ -1,6 +1,7 @@
 import {$svg, $defs, $style, ui_fragment, newtag} from '../dom.js'
-import {$clicked} from '../selection/index.js'
+import {$clicked, $selection} from '../selection/index.js'
 import {center} from '../pos.js'
+import {dragging_all_marks_reset} from '../ui.js'
 
 const tpl = `<input id="url_image"><button id="add_url_imagine">Adaugă URL imagine</button>
 <input type="file" id="file_image">`
@@ -14,6 +15,9 @@ $add_url_image.addEventListener('click', addUrlImage)
 $file_image.addEventListener('change', addFileImage)
 
 async function addUrlImage(evt) {
+	dragging_all_marks_reset()
+	$selection.clear()
+
 	let tag = newtag('image')
 	if ($url_image.value.split('.')?.pop()?.toLowerCase() === 'svg') {
 		let resp = await fetch($url_image.value)

@@ -1,8 +1,9 @@
 import {$svg, $defs, $style, ui_fragment, newtag} from '../dom.js'
-import {$clicked} from '../selection/index.js'
+import {$clicked, $selection} from '../selection/index.js'
 import {center} from '../pos.js'
 import {ul_select} from '../ul_select.js'
 import {wrap} from '../drawer.js'
+import {dragging_all_marks_reset} from '../ui.js'
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de imagine" data-tooltip-bottom>Adresa de web</label>
@@ -22,22 +23,30 @@ $add_url_image.addEventListener('click', addUrlImage)
 $file_image.addEventListener('change', addFileImage)
 
 async function addUrlImage(evt) {
+	dragging_all_marks_reset()
+	$selection.clear()
+
 	let tag = newtag('image')
 	if ($url_image.value.split('.')?.pop()?.toLowerCase() === 'svg') {
-		let resp = await fetch($url_image.value)
-		if (resp.ok) {
-			let svg = await resp.text()
-			let p = new DOMParser()
-			let osvg = p.parseFromString(svg, 'image/svg+xml')
-			osvg.querySelectorAll('defs')?.children?.foreach($c => $defs.appendChild($c))
-			osvg.querySelectorAll('style')?.children?.foreach($c => $style.appendChild($c))
-			tag = newtag('g')
-			tag.classList.add('group')
-			tag.insertAdjacentHTML('beforeend', osvg.documentElement.innerHTML)
-			$svg.appendChild(tag)
-			$clicked.from(tag).over()
-		} else {
-			console.log(resp.status)
+		try {
+			const proxyurl = 'https://cors-anywhere.herokuapp.com/'
+			let resp = await fetch(proxyurl + $url_image.value)
+			if (resp.ok) {
+				let svg = await resp.text()
+				let p = new DOMParser()
+				let osvg = p.parseFromString(svg, 'image/svg+xml')
+				osvg.querySelectorAll('defs')?.children?.foreach($c => $defs.appendChild($c))
+				osvg.querySelectorAll('style')?.children?.foreach($c => $style.appendChild($c))
+				tag = newtag('g')
+				tag.classList.add('group')
+				tag.insertAdjacentHTML('beforeend', osvg.documentElement.innerHTML)
+				$svg.appendChild(tag)
+				$clicked.from(tag).over()
+			} else {
+				console.log(resp.status)
+			}
+		} catch(e) {
+			console.log(e)
 		}
 		return
 	}
@@ -52,6 +61,9 @@ async function addUrlImage(evt) {
 }
 
 function addFileImage(evt) {
+	dragging_all_marks_reset()
+	$selection.clear()
+
 	const file = $file_image.files[0] ?? null
 	if (!file) return
 	const reader = new FileReader()
