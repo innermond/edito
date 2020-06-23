@@ -12,8 +12,8 @@ export let $clicked
 
 // replace $clicked with other SVGElement
 // and reattach necesarry methos
-const from = $el => {
-	$el = element_from($el)
+const from = ($el, prefer_group=true) => {
+	$el = prefer_group ? element_from($el) : $el
 	if ($clicked === $el) return $clicked
 	if (is_clicked_element($el)) {
 		$clicked = $el

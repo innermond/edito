@@ -48,8 +48,9 @@ export function click(evt) {
 	if (evt.shiftKey) {
 		$clicked.over()
 	} else if (evt.ctrlKey) {
-		dragging_marks_reset($clicked)
-		$selection.delete($clicked)
+		const $target = element_from(evt.target)
+		dragging_marks_reset($target)
+		$selection.delete($target)
 		$clicked.from($selection.values().next().value)
 	} else {
 		dragging_all_marks_reset()

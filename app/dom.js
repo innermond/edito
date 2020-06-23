@@ -63,7 +63,7 @@ export function group_parent($el) {
 
 function el_furthest($el, selector, gap=true) {
     let $further = null
-    let $next = $el.parentElement
+    let $next = $el?.parentElement
     let fit
     // climbing to top
     while ($next) {
@@ -84,7 +84,7 @@ function el_furthest($el, selector, gap=true) {
 export function element_from($el) {
 	//$el = $el.closest('g[data-group=true]') ?? group_parent($el) ?? $el
 	$el = el_furthest($el, 'g') ?? $el
-	if (['textPath', 'tspan'].includes($el.nodeName)) $el = $el.closest('text') 
+	if ($el && ['textPath', 'tspan'].includes($el.nodeName)) $el = $el.closest('text') 
 	return $el
 }
 
