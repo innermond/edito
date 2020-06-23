@@ -79,9 +79,11 @@ const panning = () => {
 	}
 }
 $pan.addEventListener('click', panning())
+$pan.addEventListener('mousedown', evt => $pan.classList.toggle('active'))
 
 $ui.querySelectorAll('[for]').forEach($e => {
 	$e.addEventListener('click', evt => {
 		evt.preventDefault()
 	})
 })
+

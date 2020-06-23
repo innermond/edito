@@ -78,6 +78,9 @@ section.movable, #bottom-bar {
 			opacity: 1;
 		}
 	}
+	& button.active img {
+		opacity: 1;
+	}
 	&:hover {
 		background-color: $bk-color-loud;
 	}

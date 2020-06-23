@@ -80,6 +80,9 @@ section.movable img, #bottom-bar img {
   section.movable img:hover, #bottom-bar img:hover {
     opacity: 1; }
 
+section.movable button.active img, #bottom-bar button.active img {
+  opacity: 1; }
+
 section.movable:hover, #bottom-bar:hover {
   background-color: #24272b; }
 
