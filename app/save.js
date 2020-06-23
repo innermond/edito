@@ -18,7 +18,8 @@ function toDataURL(url) {
 				}
 		}
 		image.onerror = reject
-		image.src = url	
+		const proxyurl =  'http://localhost:3000/cors.php?url=' 
+		image.src = proxyurl + url	
 	})
 }
 

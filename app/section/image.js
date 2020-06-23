@@ -26,10 +26,11 @@ async function addUrlImage(evt) {
 	dragging_all_marks_reset()
 	$selection.clear()
 
+	const proxyurl =  'http://localhost:3000/cors.php?url=' 
+	//''https://cors-anywhere.herokuapp.com/'
 	let tag = newtag('image')
 	if ($url_image.value.split('.')?.pop()?.toLowerCase() === 'svg') {
 		try {
-			const proxyurl = 'https://cors-anywhere.herokuapp.com/'
 			let resp = await fetch(proxyurl + $url_image.value)
 			if (resp.ok) {
 				let svg = await resp.text()
@@ -54,8 +55,9 @@ async function addUrlImage(evt) {
 	tag.addEventListener('load', evt => {
 		center(tag)
 		$url_image.value = ''
+		console.log(tag)
 	})
-	tag.href.baseVal =  $url_image.value
+	tag.href.baseVal = $url_image.value
 	$svg.appendChild(tag)
 	$clicked.from(tag).over()
 }
