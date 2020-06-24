@@ -124,6 +124,22 @@ export class Clues {
 		return !this.dragging && !this.rotating && !this.sizing
 	}
 
+	operating() {
+		// whitelist properties
+		for (const clue of ['dragging', 'rotating', 'sizing']) {
+			if (!!this[clue]) return true
+		}
+		return false
+	}
+
+	operation() {
+		// whitelist properties
+		for (const clue of ['dragging', 'rotating', 'sizing']) {
+			if (!!this[clue]) return clue
+		}
+		return false
+	}
+
 	negate(cluename) {
 		// whitelist properties
 		['dragging', 'rotating', 'sizing'].forEach(clue => {

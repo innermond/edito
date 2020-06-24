@@ -8,7 +8,7 @@ import {dragElement, show_hide} from './html_drag.js'
 import {$section_menubar, $section_properties, $section_add_shape, $section_text, $section_image, $section_filter, $section_mask_clip_path, 
 	$section_bottombar} from './section/index.js'
 
-import {$floater_zoom, $floater_move, $floater_geometry, $floater_color} from './floater/index.js'
+import {$floater_select, $floater_zoom, $floater_move, $floater_geometry, $floater_color} from './floater/index.js'
 
 import {$svg, display_none} from './dom.js'
 
@@ -22,6 +22,7 @@ $ui.appendChild($section_text)
 $ui.appendChild($section_image)
 $ui.appendChild($section_bottombar)
 
+$ui.appendChild($floater_select)
 $ui.appendChild($floater_zoom)
 $ui.appendChild($floater_move)
 $ui.appendChild($floater_geometry)

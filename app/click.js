@@ -5,15 +5,20 @@ import {$clicked} from './selection/clicked.js'
 import {add_selecting, remove_selecting} from './select.js'
 
 $svg.addEventListener('click', click);
-add_selecting()
+//add_selecting()
 
 export function click(evt) {
 	// deselect anything
 	if (evt.target.nodeName === 'svg') {
+		if ($selection.size === 1 && $clicked.clues.operating()) {
+			dragging_marks_reset($clicked)
+			$clicked.over()
+			return
+		}
 			$clicked.zero()
 			$selection.clear()
 			dragging_all_marks_reset()
-			initial()
+			initial() //TODO update to drag select pan ui
 			return
 	}
 

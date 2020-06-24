@@ -2,6 +2,8 @@ import {$svg, ui_fragment, newtag, display_none} from '../dom.js'
 import {center} from '../pos.js'
 import {tooltip} from '../tooltip.js'
 
+import {add_selecting, remove_selecting} from '../select.js'
+
 const tpl = `<section id="menu-bar">
 	<div>
 		<ul id="tool-menu-sections" class="tool-menu vertical-align">
@@ -13,6 +15,7 @@ const tpl = `<section id="menu-bar">
 			<li id="tool-image" data-panel="add-image" class="tool-item tooltip" data-tooltip-text="Adaugă imagini"><img src="/icon/add-image.svg"></li>
 		</ul>
 		<ul id="tool-menu-floaters" class="tool-menu vertical-align">
+			<li id="tool-select" data-panel="select" class="tool-item tooltip" data-tooltip-text="Selectează, indică și opțiuni specifice"><img src="/icon/pointer.svg"></li>
 			<li id="tool-zoom" data-panel="zoom" class="tool-item tooltip" data-tooltip-text="Apropiere, depărtare, deplasare față de pagină"><img src="/icon/zoom.svg"></li>
 			<li id="tool-geometry" data-panel="geometry" class="tool-item tooltip" data-tooltip-text="Ascunde/arată meniul flotant ce controlează proprietățile geometrice"><img src="/icon/move.svg"></li>
 			<li id="tool-color" data-panel="fill_stroke_color" class="tool-item tooltip" data-tooltip-text="Ascunde/arată meniul flotant ce controlează proprietățile de culoare"><img src="/icon/fill.svg"></li>
@@ -30,6 +33,13 @@ $tool_floater.addEventListener('click', evt => {
 	const $floater = document.getElementById(fid)
 	display_none($floater)
 	toggle_active($me)
+})
+
+const $select = $ui.querySelector('#tool-select')
+let select_clicked = false
+$select.addEventListener('click', evt => {
+	select_clicked ? remove_selecting() : add_selecting()
+	select_clicked = !select_clicked
 })
 
 const $tool_menu = $ui.querySelector('#tool-menu-sections')
