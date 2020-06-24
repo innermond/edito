@@ -342,6 +342,8 @@ hr {
     margin: 0.5rem 0rem 0.5rem 1rem;
     display: flex;
     flex-flow: column wrap; }
+    .wrap-row > div > label + div {
+      display: flex; }
     .wrap-row > div + div {
       border-left: 2px solid #292c31;
       padding-left: 1rem; }

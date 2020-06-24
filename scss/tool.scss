@@ -399,6 +399,9 @@ hr {
 		margin: 0.5rem 0rem 0.5rem 1rem;
 		display: flex;
 		flex-flow: column wrap;
+		& > label + div {
+			display: flex;
+		}
 		& + div {
 			border-left: 2px solid $bk-color-silent;
 			padding-left: 1rem;

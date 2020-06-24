@@ -4,12 +4,17 @@ import {rotate} from '../user_action/rotate.js'
 import {ui_fragment} from '../dom.js'
 import {handle_step} from '../user_action/step.js'
 import {skewx, skewy} from '../user_action/skew.js'
+import {addEventInterval} from '../event_interval.js'
 
 const tpl = `<section class="movable" id="geometry">
 <div class="wrap-row">
 <div>
 	<label class="tooltip" data-tooltip-text="Modifică mărimea proporțional" data-tooltip-bottom for="size">Scalare</label>
 	<input class="tooltip" data-tooltip-text="1" data-tooltip-bottom  type="range" min="0.0001" max="2" value="1" step="0.0001" id="size">
+	<div>
+		<button id="scale_plus" data-tooltip-text="1" data-tooltip-bottom ><img src="/icon/plus.svg"></button>
+		<button id="scale_minus" data-tooltip-text="1" data-tooltip-bottom ><img src="/icon/minus.svg"></button>
+	</div>
 </div>
 <div>
 <label class="tooltip" data-tooltip-text="Rotește obiectul" data-tooltip-bottom for="angle">Rotație</label>
@@ -31,7 +36,23 @@ const tpl = `<section class="movable" id="geometry">
 export const $ui = ui_fragment(tpl)
 
 export const $size = $ui.querySelector('#size')
-$size.addEventListener('input', evt => scale($size.value))
+//$size.addEventListener('input', evt => scale($size.value))
+
+const $scale_plus = $ui.querySelector('#scale_plus')
+const $scale_minus = $ui.querySelector('#scale_minus')
+
+const step = 0.01
+let k = 1
+const start_func = way => {
+	k = k + way*step
+	if (way < 0 && k > 0 && k < 0.2 || k < 0) k = 0.2
+	scale(k)
+}
+const end_func = () => {
+
+}
+addEventInterval($scale_plus, 'mousedown', () => start_func(1), 10, 'mouseup', end_func)
+addEventInterval($scale_minus, 'mousedown', () => start_func(-1), 10, 'mouseup', end_func)
 
 export const $skewx = $ui.querySelector('#skewx')
 export const $skewy = $ui.querySelector('#skewy')
