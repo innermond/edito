@@ -24,9 +24,9 @@ export function add_selecting() {
 	// manage selecting
 	$svg.addEventListener('mousedown', startSelect);
 	
-	$svg.addEventListener('click', clickSelect);
+	$svg.addEventListener('click', clickSelect, false);
 	//$svg.removeEventListener('click', click);
-	remove_dragging()
+	//remove_dragging()
 	if (document.body.classList.contains('pan')) {
 		document.body.classList.remove('pan')
 		document.body.classList.add('pan-stopped')
@@ -47,9 +47,9 @@ export function remove_selecting() {
 	// manage selecting
 	$svg.removeEventListener('mousedown', startSelect);
 
-	$svg.removeEventListener('click', clickSelect);
+	$svg.removeEventListener('click', clickSelect, false);
 	//$svg.addEventListener('click', click);
-	add_dragging()
+	//add_dragging()
 	if (document.body.classList.contains('pan-stopped')) {
 		document.body.classList.remove('pan-stopped')
 		add_panning()
@@ -93,7 +93,7 @@ function clickSelect(evt) {
 }
 function endSelect(evt) {
 	start = null
-	if (!$selectangle) return
+	if (!$selectangle.ownerSVGElement) return
 
 	// objects inside rectangle
 	$selection.clear()

@@ -9,8 +9,8 @@ $svg.addEventListener('click', click);
 
 export function click(evt) {
 	// deselect anything
-	if (evt.target.nodeName === 'svg') {
-		if ($selection.size === 1 && $clicked.clues.operating()) {
+	if (evt.target === $svg) {
+		if ($selection.size && $clicked.clues.operating()) {
 			dragging_marks_reset($clicked)
 			$clicked.over()
 			return
