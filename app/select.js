@@ -91,11 +91,8 @@ function clickSelect(evt) {
 	evt.stopPropagation()
 	$svg.addEventListener('click', click)
 }
-function endSelect(evt) {
-	start = null
-	if (!$selectangle.ownerSVGElement) return
 
-	// objects inside rectangle
+function selection_ants(evt) {
 	if (!evt.shiftKey) $selection.clear()
 	const BB = $selectangle.getBoundingClientRect()
 	Array.from($svg.children).forEach($c => {
@@ -120,7 +117,13 @@ function endSelect(evt) {
 	})
 	dragging_all_marks_reset()
 	$selection.as_ants()
+}
 
+function endSelect(evt) {
+	start = null
+	if (!$selectangle.ownerSVGElement) return
+
+	selection_ants(evt)
 	$selectangle.remove()
 	//evt.stopPropagation()
 	//$svg.addEventListener('click', click)
@@ -159,4 +162,6 @@ function select(evt) {
 	if (newwidth >= 0 && newheight >= 0) attr($selectangle, {x:x, y:y, width: newwidth, height: newheight})
 
 	start = current
+	
+	selection_ants(evt)
 }

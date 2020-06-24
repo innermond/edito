@@ -486,9 +486,6 @@ body.pan {
   padding: 0;
   margin-left: 50px;
   overflow: auto; }
-  #canvas rect.selected {
-    fill: #c89632;
-    fill-opacity: 0.2; }
 
 ul.folded {
   margin: -0.5rem 0 0 0;
