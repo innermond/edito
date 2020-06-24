@@ -40,6 +40,11 @@ const is_zero = () => $clicked === $zero
 const over = () => {
 	// no-op when zero
 	if ($clicked.is_zero()) return
+    if (
+        $clicked.classList.contains('is-reference') && 
+        $clicked.classList.contains('rectpage')
+    ) 
+        return
 
 	if (!$clicked.ants){
 		$clicked.ants = new Ants()
