@@ -6,7 +6,7 @@ import {click} from './click.js'
 import {add_dragging, remove_dragging} from './drag.js'
 import {add_panning, remove_panning} from './pan.js'
 import {$clicked, $selection} from './selection/index.js'
-import {is_selectable} from './floater/select.js'
+import {is_selectable, $select_inside} from './floater/select.js'
 
 let supportsPassive = false;
 try {
@@ -96,17 +96,24 @@ function endSelect(evt) {
 	if (!$selectangle.ownerSVGElement) return
 
 	// objects inside rectangle
-	$selection.clear()
+	if (!evt.shiftKey) $selection.clear()
 	const BB = $selectangle.getBoundingClientRect()
 	Array.from($svg.children).forEach($c => {
 		if (!is_selectable($c)) return
 
 		const bb = $c.getBoundingClientRect()
 		if (
+			(!$select_inside.checked &&
 			bb.top+bb.height > BB.top &&
 			bb.left+bb.width > BB.left &&
 			bb.bottom-bb.height < BB.bottom &&
-			bb.right-bb.width < BB.right
+			bb.right-bb.width < BB.right)
+			||
+			($select_inside.checked &&
+			bb.top > BB.top &&
+			bb.left > BB.left &&
+			bb.bottom < BB.bottom &&
+			bb.right < BB.right)
 		) {
 			$selection.add($c)
 		}

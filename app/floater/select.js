@@ -12,6 +12,10 @@ const tpl = `<section class="movable" id="select">
 	<button id="select_inverse"><img src="/icon/inverse.svg"></button>
 </div>
 <div>
+	<label class="tooltip" data-tooltip-text="Selecția trebuie să cuprindă in totalitate obiectele" data-tooltip-bottom >Cuprinzător</label>
+	<input type="checkbox" class="switch" id="select_inside">
+</div>
+<div>
 	<img src="/icon/close.svg" class="close" />
 </div>
 </div>
@@ -19,6 +23,7 @@ const tpl = `<section class="movable" id="select">
 export const $ui = ui_fragment(tpl)
 export const $select_all = $ui.querySelector('#select_all')
 export const $select_inverse = $ui.querySelector('#select_inverse')
+export const $select_inside = $ui.querySelector('#select_inside')
 
 export const is_selectable = $e => {
 	if (
