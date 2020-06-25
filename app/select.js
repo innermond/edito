@@ -121,7 +121,7 @@ function selection_ants(evt) {
 
 function endSelect(evt) {
 	start = null
-	if (!$selectangle.ownerSVGElement) return
+	if (!$selectangle?.ownerSVGElement) return
 
 	selection_ants(evt)
 	$selectangle.remove()
