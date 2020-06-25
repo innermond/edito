@@ -25,9 +25,11 @@ export function click(evt) {
 			initial() //TODO update to drag select pan ui
 			return
 	}
+	
+	dragging_all_marks_relax()
 
-    //if ($selection.size > 1 && $selection.has($clicked)) return
-
+	const belongs = ($selection.size > 1 && $selection.has($clicked))
+	$clicked.over()
 	// dragging marks clicked
 	if (!!evt.target.dataset.ants) {
 		switch (true) {
@@ -37,13 +39,13 @@ export function click(evt) {
 				$clicked.square.$shape.style.color = 'white'
 			break
 			case !!evt.target.dataset.circle:
-				$clicked.from(event.target.$element)
+				$clicked.from(evt.target.$element)
 				$clicked.clues.negate('rotating')
-				event.target.style.fill = $clicked.clues.rotating ?'red':'white'
+				evt.target.style.fill = $clicked.clues.rotating ?'red':'white'
 				$clicked.square.$shape.style.fill = 'white'
 			break
 			case !!evt.target.dataset.square:
-				$clicked.from(event.target.$element)
+				$clicked.from(evt.target.$element)
 				$clicked.clues.negate('sizing')
 				evt.target.style.fill = $clicked.clues.sizing ?'red':'white'
 				$clicked.circle.$shape.style.fill = 'white'
@@ -51,8 +53,6 @@ export function click(evt) {
 		}
 		return
 	}
-	
-	dragging_all_marks_relax()
 
 	let $el = element_from(evt.target) 
 	$clicked.from($el)
@@ -65,7 +65,7 @@ export function click(evt) {
 		dragging_marks_reset($target)
 		$selection.delete($target)
 		$clicked.from($selection.values().next().value)
-	} else {
+	} else if (!belongs){
 		dragging_all_marks_reset()
 		$selection.clear()
 		$clicked.over()

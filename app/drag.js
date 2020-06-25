@@ -44,17 +44,18 @@ export function remove_dragging() {
 add_dragging()
 
 let mouseStart
-let moved
+let moved = null
 // is startDrag ~= click event?
 function startDrag(evt) {
-    moved = false
-	if (evt.target.nodeName === 'svg') return
-	
+	if (moved !== null) return
+	if (evt.target === $svg) return
+
+	moved = false
+
 	// avoid ants elements
 	if (!!!evt.target.dataset.ants) {
 		if (!evt.shiftKey && !evt.ctrlKey && $selection.size === 1) dragging_all_marks_reset()
 		$clicked.from(element_from(evt.target))
-		$clicked.clues.dragging = true
 	}
 	// posibly a click on an embeded svg into a svg
 	// TODO check if point_screen will work
@@ -66,16 +67,20 @@ function startDrag(evt) {
 	$pt.x = evt.clientX
 	$pt.y = evt.clientY
 	mouseStart = $pt.matrixTransform($svg.getScreenCTM().inverse())
-	$clicked.over()
 }
 
 function endDrag(evt) {
 	$clicked.clues.dragging = false
-    disable.click = moved
+	disable.click = moved
+	moved = null
 }
 
 function drag(evt) {
-    moved = true
+	if (moved === null) return
+	//if (evt.target === $svg && !$selection.size) return
+
+	moved = true
+	$clicked.clues.dragging = true
 	switch (true) {
 		case !$clicked:
 			return
@@ -90,11 +95,22 @@ function drag(evt) {
 	let $pt = $othersvg.createSVGPoint()
 	$pt = $pt.matrixTransform($svg.getScreenCTM().inverse())
 	let current = point_screen(evt)
+	//if ($selection.size) $selection.clear()
+	if (!$clicked.ants.$shape.isConnected) {
+		$selection.clear()
+		$clicked.over()
+	}
     const $original = $clicked
-    const pause = $original.clues.operation() !== 'dragging'
+	const aa = []
+	$selection.forEach($x => {
+		$clicked.from($x)
+		if ($clicked.clues.rotating || $clicked.clues.sizing) {
+			aa.push($x)
+		}
+	})
     $selection.forEach($x => {
-        if (pause && $original != $x) return
         $clicked.from($x)
+				if (aa.length > 0 && !aa.includes($clicked)) return
         let $pta = point_in($clicked, current.x, current.y)
         let $ptz = point_in($clicked, mouseStart.x, mouseStart.y)
         $pt.x = $pta.x-$ptz.x
@@ -151,9 +167,9 @@ function drag(evt) {
             // the transformations made to $clicked path in its own coordinates system
             setm($clicked.textPath.path, $clicked.textPath.text.getCTM().inverse().multiply($clicked.getCTM()))
         }
-
+				$clicked.over()
         $clicked.follow()
     })
 	mouseStart = current
-    $clicked.from($original)
+	$clicked.from($original)
 }

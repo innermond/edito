@@ -69,9 +69,11 @@ export function remove_selecting() {
 let $selectangle
 const style =  'pointer-events:none;vector-effect:non-scaling-stroke;stroke-width:1;fill:none;stroke:#000000;stroke-opacity:1;stroke-miterlimit:2;stroke-dasharray:3,3;stroke-dashoffset:2'
 let start = null
-let moved
+let moved = null
 function startSelect(evt) {
-    moved = false
+	if (moved !== null) return
+
+	moved = false
 	if (start !== null) return
 	if (evt.target !== $svg) return
 	if ($clicked.clues.operating()) return
@@ -130,14 +132,17 @@ function endSelect(evt) {
 	//$svg.addEventListener('click', click)
 	//$svg.removeEventListener('click', clickSelect);
 	//add_dragging()
-    disable.click = moved
+	disable.click = moved
+	moved = null
 }
 
 // top right
 let tr = null
 let br = null
 function select(evt) {
-    moved = true
+	if (moved === null) return
+	moved = true
+	if (moved === null) return
 	if (start === null) return
 	//if (evt.target !== $svg) return
 	//evt.stopPropagation()

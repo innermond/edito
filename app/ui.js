@@ -289,8 +289,27 @@ export function dragging_all_marks_reset() {
 	})
 }
 
+export function dragging_all_marks_reset_except(...ee) {
+	$svg.querySelectorAll('[data-ants="true"]').forEach($e => {
+		if (ee.includes($e)) return
+		// all marks paint in white - inactive color
+		if (!$e.dataset.rect) $e.style.fill = 'white'
+		$e.$element.clues.reset()
+		$e.remove()
+	})
+}
+
 export function dragging_all_marks_relax() {
 	$svg.querySelectorAll('[data-ants="true"]').forEach($e => {
+		// all marks paint in white - inactive color
+		if (!$e.dataset.rect) $e.style.fill = 'white'
+		$e.$element.clues.reset()
+	})
+}
+
+export function dragging_all_marks_relax_except(...ee) {
+	$svg.querySelectorAll('[data-ants="true"]').forEach($e => {
+		if (ee.includes($e)) return
 		// all marks paint in white - inactive color
 		if (!$e.dataset.rect) $e.style.fill = 'white'
 		$e.$element.clues.reset()
