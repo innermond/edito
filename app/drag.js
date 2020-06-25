@@ -3,6 +3,7 @@ import {$svg, element_from} from './dom.js'
 import {point_screen, point_in, outpoint} from './pos.js'
 import {m, setm} from './mtx.js'
 import {$clicked} from './selection/index.js'
+import {disable} from './click.js'
 
 let supportsPassive = false;
 try {
@@ -43,8 +44,10 @@ export function remove_dragging() {
 add_dragging()
 
 let mouseStart
+let moved
 // is startDrag ~= click event?
 function startDrag(evt) {
+    moved = false
 	if (evt.target.nodeName === 'svg') return
 	
 	// avoid ants elements
@@ -68,9 +71,11 @@ function startDrag(evt) {
 
 function endDrag(evt) {
 	$clicked.clues.dragging = false
+    disable.click = moved
 }
 
 function drag(evt) {
+    moved = true
 	switch (true) {
 		case !$clicked:
 			return

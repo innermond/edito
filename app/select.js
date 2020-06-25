@@ -2,7 +2,7 @@ import {dragging_all_marks_reset} from './ui.js'
 import {$svg, attr, newtag} from './dom.js'
 import {point_screen} from './pos.js'
 import {setm, m2e, m} from './mtx.js'
-import {click} from './click.js'
+import {disable} from './click.js'
 import {add_dragging, remove_dragging} from './drag.js'
 import {add_panning, remove_panning} from './pan.js'
 import {$clicked, $selection} from './selection/index.js'
@@ -24,7 +24,7 @@ export function add_selecting() {
 	// manage selecting
 	$svg.addEventListener('mousedown', startSelect);
 	
-	$svg.addEventListener('click', clickSelect, false);
+	//$svg.addEventListener('click', clickSelect, false);
 	//$svg.removeEventListener('click', click);
 	//remove_dragging()
 	if (document.body.classList.contains('pan')) {
@@ -47,7 +47,7 @@ export function remove_selecting() {
 	// manage selecting
 	$svg.removeEventListener('mousedown', startSelect);
 
-	$svg.removeEventListener('click', clickSelect, false);
+	//$svg.removeEventListener('click', clickSelect, false);
 	//$svg.addEventListener('click', click);
 	//add_dragging()
 	if (document.body.classList.contains('pan-stopped')) {
@@ -69,8 +69,9 @@ export function remove_selecting() {
 let $selectangle
 const style =  'pointer-events:none;vector-effect:non-scaling-stroke;stroke-width:1;fill:none;stroke:#000000;stroke-opacity:1;stroke-miterlimit:2;stroke-dasharray:3,3;stroke-dashoffset:2'
 let start = null
-
+let moved
 function startSelect(evt) {
+    moved = false
 	if (start !== null) return
 	if (evt.target !== $svg) return
 	if ($clicked.clues.operating()) return
@@ -83,14 +84,14 @@ function startSelect(evt) {
 	attr($selectangle, {x:start.x, y:start.y, width:1, height:1})
 	$svg.appendChild($selectangle)
 	//setm($selectangle, m2e($selectangle, $svg))
-	$svg.removeEventListener('click', click);
+	//$svg.removeEventListener('click', click);
 	//$svg.addEventListener('click', clickSelect);
 	//remove_dragging()
 }
-function clickSelect(evt) {
+/*function clickSelect(evt) {
 	evt.stopPropagation()
 	$svg.addEventListener('click', click)
-}
+}*/
 
 function selection_ants(evt) {
 	if (!evt.shiftKey) $selection.clear()
@@ -129,12 +130,14 @@ function endSelect(evt) {
 	//$svg.addEventListener('click', click)
 	//$svg.removeEventListener('click', clickSelect);
 	//add_dragging()
+    disable.click = moved
 }
 
 // top right
 let tr = null
 let br = null
 function select(evt) {
+    moved = true
 	if (start === null) return
 	//if (evt.target !== $svg) return
 	//evt.stopPropagation()

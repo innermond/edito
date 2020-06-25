@@ -4,10 +4,14 @@ import {$selection} from './selection/grouping.js'
 import {$clicked} from './selection/clicked.js'
 import {add_selecting, remove_selecting} from './select.js'
 
+export const disable = {click: false}
+
 $svg.addEventListener('click', click);
 //add_selecting()
 
 export function click(evt) {
+    if (disable.click) return
+
 	// deselect anything
 	if (evt.target === $svg) {
 		if ($selection.size && $clicked.clues.operating()) {
@@ -21,6 +25,8 @@ export function click(evt) {
 			initial() //TODO update to drag select pan ui
 			return
 	}
+
+    //if ($selection.size > 1 && $selection.has($clicked)) return
 
 	// dragging marks clicked
 	if (!!evt.target.dataset.ants) {
