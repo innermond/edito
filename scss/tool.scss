@@ -98,11 +98,12 @@ $top-tooltip: 24px*0.5+$space-tooltip;
   text-align: center;
   padding: $space-tooltip;
   border-radius: 6px;
-	min-width: 4rem;
+	min-width: 1rem;
 	max-width: 8rem;
+	width: min-content;
 	cursor: default;
 
-	display: inline-block;
+	display: flex;
   position: absolute;
   z-index: 1;
 	transform: translateX(1rem) translateY(-50%);

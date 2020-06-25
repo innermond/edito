@@ -6,6 +6,7 @@ export function tooltip($explained, adjx=0, adjy=0) {
 	$e.textContent = $explained.dataset.tooltipText
 	// tooltip above everything
 	$e.style.zIndex = 9999
+	$e.style.display = 'none'
 	document.body.appendChild($e)
 
 	const bb_thumb = $e.getBoundingClientRect()
@@ -16,6 +17,7 @@ export function tooltip($explained, adjx=0, adjy=0) {
 			move = false
 			return
 		}
+		$e.style.display = 'initial'
 		move = true
 		$e.classList.add('active')
 	})
@@ -28,6 +30,7 @@ export function tooltip($explained, adjx=0, adjy=0) {
 		move = false
 		show_val = false
 		$e.classList.remove('active')
+		$e.style.display = 'none'
 	})
 
 	$explained.addEventListener('mousemove', evt => {
