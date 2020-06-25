@@ -301,4 +301,18 @@ export function display_none($el) {
 	$el.style.display = $el.style.display === 'none' ? $el.dataset.display : 'none'
 }
 
+const MAX_Z = 4
+let PREV_Z = null, PREV_ID
+
+export function cycle_zindex($el) {
+	if ($el.id === PREV_ID) return
+	if (PREV_ID && PREV_Z != null) {
+		const $prev = document.getElementById(PREV_ID)
+		if ($prev) $prev.style.zIndex = PREV_Z
+	}
+	PREV_Z = $el.style.zIndex
+	PREV_ID = $el.id
+	$el.style.zIndex = MAX_Z
+}
+
 export {attr, newtag, rnd, xmlns, nsattr, rectpage, px}

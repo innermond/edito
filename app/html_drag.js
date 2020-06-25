@@ -1,18 +1,4 @@
-import {display_none} from './dom.js'
-
-const MAX_Z = 4
-let PREV_Z = null, PREV_ID
-
-export function cycle_zindex($el) {
-	if ($el.id === PREV_ID) return
-	if (PREV_ID && PREV_Z != null) {
-		const $prev = document.getElementById(PREV_ID)
-		if ($prev) $prev.style.zIndex = PREV_Z
-	}
-	PREV_Z = $el.style.zIndex
-	PREV_ID = $el.id
-	$el.style.zIndex = MAX_Z
-}
+import {display_none, cycle_zindex} from './dom.js'
 
 export function dragElement($el) {
   let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0

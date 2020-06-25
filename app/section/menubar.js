@@ -1,7 +1,6 @@
-import {$svg, ui_fragment, newtag, display_none} from '../dom.js'
+import {$svg, ui_fragment, newtag, display_none, cycle_zindex} from '../dom.js'
 import {center} from '../pos.js'
 import {tooltip} from '../tooltip.js'
-import {cycle_zindex} from '../html_drag.js'
 
 import {add_selecting, remove_selecting} from '../select.js'
 
