@@ -23,7 +23,9 @@ import {$save_svg, $group_repr, $send_svg} from './section/bottombar.js'
 
 import{$align, $reference, $grouping, $ordering, $flipping} from './floater/move.js'
 import{$angle, $skewx, $skewy} from './floater/geometry.js'
-import{$fill, $stroke_fill, $stroke_fill_switch, $stroke_width, $stroke_opacity, $fill_opacity, $fill_switch} from './floater/color.js'
+import{$fill, $stroke_fill, $stroke_fill_switch, $stroke_opacity, $fill_opacity, $fill_switch} from './floater/color.js'
+
+import {set_k} from './floater/color.js'
 
 export {$media_width, $media_height, $bleed, $step,
 $fonts,
@@ -33,7 +35,7 @@ $delete_element, $undelete_element,
 $angle, 
 $flipping,
 $fill, 
-$stroke_fill, $stroke_width, $stroke_opacity, 
+$stroke_fill, $stroke_opacity, 
 $bkcolor, $fill_opacity, $fill_switch,
 $skewx, $skewy, 
 $grouping, $group_repr, $ordering,
@@ -79,7 +81,8 @@ export function initial() {
 	$stroke_fill.value = colorDefault
 	$stroke_fill.style.backgroundColor = colorDefault
 	$stroke_opacity.value = 1
-	$stroke_width.value = 0
+	//$stroke_width.value = 0
+    set_k(0.1)
 	$group_repr.innerHTML = ''
 	//$url_image.value = ''
 	$glass.checked = false
@@ -157,8 +160,8 @@ export function after_click_update_ui($el) {
 	$fill_opacity.value = 1
 	if (opacity!='') $fill_opacity.value = opacity    
 
-	let stroke_width = $el.style.getPropertyValue('stroke-width')
-	if (stroke_width!='') $stroke_width.value = parseFloat(stroke_width)
+	let stroke_width = $el.dataset.prevStroke || '0.1'
+	if (stroke_width!='') set_k(parseFloat(stroke_width))
 
 	let stroke_opacity = $el.style.getPropertyValue('stroke-opacity')
 	$stroke_opacity.value = 1

@@ -5,6 +5,7 @@ import {colorize, uncolorize} from '../selection/colorize.js'
 import {ui_fragment} from '../dom.js'
 import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
+import {addEventInterval} from '../event_interval.js'
 
 const tpl = `<section class="movable" id="fill_stroke_color">
 <div class="wrap-row">
@@ -32,7 +33,10 @@ const tpl = `<section class="movable" id="fill_stroke_color">
 </div>
 <div>
 	<label class="tooltip" data-tooltip-text="Schimbă grosimea conturului" data-tooltip-bottom for="stroke-width">Grosime</label>
-	<input class="tooltip" data-tooltip-text="0" data-tooltip-bottom type="range" min="0.0" max="10" value="0" step="0.0001" id="stroke-width">
+	<div>
+		<button id="stroke_plus" data-tooltip-text="1" data-tooltip-bottom ><img src="/icon/plus.svg"></button>
+		<button id="stroke_minus" data-tooltip-text="1" data-tooltip-bottom ><img src="/icon/minus.svg"></button>
+	</div>
 </div>
 <div>
 	<img src="/icon/close.svg" class="close" />
@@ -87,14 +91,37 @@ $stroke_fill_switch.addEventListener('change', evt => {
 		//FIXME stroke color always create a visible contour 
 		//even there is no width set
 		$stroke_fill.style.display = 'block'
+        $selection.forEach($e => $e.style.paintOrder = 'stroke')
 	} else {
 		uncolorize('stroke')
 		$stroke_fill.style.display = 'none'
+        $selection.forEach($e => $e.style.paintOrder = 'inherit')
 	}
 })
 
-export const $stroke_width = $ui.querySelector('#stroke-width')
+//export const $stroke_width = $ui.querySelector('#stroke-width')
 export const $stroke_opacity = $ui.querySelector('#stroke-opacity')
 
-$stroke_width.addEventListener('input', evt => stroke_width($stroke_width.value))
+const $stroke_plus = $ui.querySelector('#stroke_plus')
+const $stroke_minus = $ui.querySelector('#stroke_minus')
+
+const step = 0.01
+export let k = 0.1
+export const set_k = v => k = v
+const stop = 0
+const start_func = way => {
+	k = k + way*step
+
+	if (way < 0 && k < stop) {
+        k = stop
+        stroke_width(k)
+        return
+    }
+	stroke_width(k)
+}
+const end_func = () => {}
+addEventInterval($stroke_plus, 'mousedown', () => start_func(1), 10, 'mouseup', end_func)
+addEventInterval($stroke_minus, 'mousedown', () => start_func(-1), 10, 'mouseup', end_func)
+
+//$stroke_width.addEventListener('input', evt => stroke_width($stroke_width.value))
 $stroke_opacity.addEventListener('input', evt => stroke_opacity($stroke_opacity.value))    

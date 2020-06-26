@@ -3,9 +3,11 @@ import {computed_color} from '../color.js'
 import {px} from '../dom.js'
 
 export function stroke_width(val) {
+    const val_units = val
 	// receive val units, apply to selection as pixels
 	val = px(val)
 	$selection.forEach($el => {
+        $el.dataset.prevStroke = val_units
 		let $ee = [$el]
 		if ($el.nodeName === 'g') {
 			$ee = Array.from($el.children)
