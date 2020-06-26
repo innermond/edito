@@ -22,13 +22,13 @@ import {
 import {$save_svg, $group_repr, $send_svg} from './section/bottombar.js'
 
 import{$align, $reference, $grouping, $ordering, $flipping} from './floater/move.js'
-import{$size, $angle, $skewx, $skewy} from './floater/geometry.js'
+import{$angle, $skewx, $skewy} from './floater/geometry.js'
 import{$fill, $stroke_fill, $stroke_fill_switch, $stroke_width, $stroke_opacity, $fill_opacity, $fill_switch} from './floater/color.js'
 
 export {$media_width, $media_height, $bleed, $step,
 $fonts,
 $text_features,
-$align, $reference, $size,
+$align, $reference,
 $delete_element, $undelete_element,
 $angle, 
 $flipping,
@@ -70,7 +70,6 @@ export function initial() {
 	initial_ul_select($fonts)
 	$font_size.value = 10
 	$text_features.querySelectorAll('li[class~=active]').forEach($e => $e.classList.remove('active'))
-	$size.value = 1
 	$angle.value = 0
 	$textname.value = ''
 	$textname.setAttribute('rows', 1)
@@ -133,13 +132,12 @@ export function after_click_update_ui($el) {
 		$textname.setAttribute('rows', 1)
 		$font_size.value = 10
 		$text_features.querySelectorAll('li[class~=active]').forEach($e => $e.classList.remove('active'))
-		$size.value = 1
 		$angle.value = 0
 		$textname.value = ''
 		$textname.setAttribute('rows', 1)
 	}
 	
-	$size.value = scale_prevs.get($el) ?? 1
+	//$size.value = scale_prevs.get($el) ?? 1
 
 	const au = angle_prevs.get($el) ?? get_angle($el)
 	angle_prevs.set($el, au)

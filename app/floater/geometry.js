@@ -10,7 +10,6 @@ const tpl = `<section class="movable" id="geometry">
 <div class="wrap-row">
 <div>
 	<label class="tooltip" data-tooltip-text="Modifică mărimea proporțional" data-tooltip-bottom for="size">Scalare</label>
-	<input class="tooltip" data-tooltip-text="1" data-tooltip-bottom  type="range" min="0.0001" max="2" value="1" step="0.0001" id="size">
 	<div>
 		<button id="scale_plus" data-tooltip-text="1" data-tooltip-bottom ><img src="/icon/plus.svg"></button>
 		<button id="scale_minus" data-tooltip-text="1" data-tooltip-bottom ><img src="/icon/minus.svg"></button>
@@ -34,9 +33,6 @@ const tpl = `<section class="movable" id="geometry">
 </div>
 </section>`
 export const $ui = ui_fragment(tpl)
-
-export const $size = $ui.querySelector('#size')
-//$size.addEventListener('input', evt => scale($size.value))
 
 const $scale_plus = $ui.querySelector('#scale_plus')
 const $scale_minus = $ui.querySelector('#scale_minus')

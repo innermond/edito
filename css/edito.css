@@ -522,8 +522,7 @@ ul.folded {
 
 [type='range'] {
   -webkit-appearance: none;
-  background: transparent;
-  margin: 10px 0; }
+  background: transparent; }
   [type='range']::-moz-focus-outer {
     border: 0; }
   [type='range']:focus {
