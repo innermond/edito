@@ -74,9 +74,9 @@ export class Circle extends Ants {
 	
 	follow() {
 		let $el = this.$shape.$element
-		let bb = 'useThat' in $el ? $el.useThat.bbox : $el.getBBox()
+		let bb = $el && 'useThat' in $el ? $el.useThat.bbox : $el.getBBox()
 		attr(this.$shape,{cx:bb.x, cy:bb.y+bb.height*0.5})
-		'useThat' in $el ? setm(this.$shape, m2e($el.useThat.el, $el)) : setm(this.$shape, m2e($el, this.$owner))
+		$el && 'useThat' in $el ? setm(this.$shape, m2e($el.useThat.el, $el)) : setm(this.$shape, m2e($el, this.$owner))
 
 		let mtx = m(this.$shape)
 		
