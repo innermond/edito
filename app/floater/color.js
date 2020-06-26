@@ -34,8 +34,8 @@ const tpl = `<section class="movable" id="fill_stroke_color">
 <div>
 	<label class="tooltip" data-tooltip-text="Schimbă grosimea conturului" data-tooltip-bottom for="stroke-width">Grosime</label>
 	<div>
-		<button id="stroke_plus" data-tooltip-text="1" data-tooltip-bottom ><img src="/icon/plus.svg"></button>
-		<button id="stroke_minus" data-tooltip-text="1" data-tooltip-bottom ><img src="/icon/minus.svg"></button>
+		<button id="stroke_plus" class="tooltip" data-tooltip-text="Mărește" data-tooltip-bottom ><img src="/icon/plus.svg"></button>
+		<button id="stroke_minus" class="tooltip" data-tooltip-text="Micsorează" data-tooltip-bottom ><img src="/icon/minus.svg"></button>
 	</div>
 </div>
 <div>
@@ -105,9 +105,25 @@ export const $stroke_opacity = $ui.querySelector('#stroke-opacity')
 const $stroke_plus = $ui.querySelector('#stroke_plus')
 const $stroke_minus = $ui.querySelector('#stroke_minus')
 
+const update_stroke_elements = v => {
+    $stroke_plus.value = $stroke_minus.value = k
+    if ($stroke_plus.dataset.tooltipId) {
+        const $tooltip = document.getElementById($stroke_plus.dataset.tooltipId)
+        if ($tooltip) $tooltip.textContent = k.toFixed(3)
+    }
+    if ($stroke_minus.dataset.tooltipId) {
+        const $tooltip = document.getElementById($stroke_minus.dataset.tooltipId)
+        if ($tooltip) $tooltip.textContent = k.toFixed(3)
+    }
+}
+
 const step = 0.01
 export let k = 0.1
-export const set_k = v => k = v
+export const set_k = v => {
+    k = v
+    update_stroke_elements(k)
+}
+
 const stop = 0
 const start_func = way => {
 	k = k + way*step
@@ -118,6 +134,7 @@ const start_func = way => {
         return
     }
 	stroke_width(k)
+    update_stroke_elements(k)
 }
 const end_func = () => {}
 addEventInterval($stroke_plus, 'mousedown', () => start_func(1), 10, 'mouseup', end_func)

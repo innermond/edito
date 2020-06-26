@@ -25,7 +25,8 @@ import{$align, $reference, $grouping, $ordering, $flipping} from './floater/move
 import{$angle, $skewx, $skewy} from './floater/geometry.js'
 import{$fill, $stroke_fill, $stroke_fill_switch, $stroke_opacity, $fill_opacity, $fill_switch} from './floater/color.js'
 
-import {set_k} from './floater/color.js'
+import {set_k as set_stroke} from './floater/color.js'
+import {set_k as set_scale} from './floater/geometry.js'
 
 export {$media_width, $media_height, $bleed, $step,
 $fonts,
@@ -82,7 +83,8 @@ export function initial() {
 	$stroke_fill.style.backgroundColor = colorDefault
 	$stroke_opacity.value = 1
 	//$stroke_width.value = 0
-    set_k(0.1)
+    set_stroke(0.1)
+    set_scale(1)
 	$group_repr.innerHTML = ''
 	//$url_image.value = ''
 	$glass.checked = false
@@ -140,7 +142,7 @@ export function after_click_update_ui($el) {
 		$textname.setAttribute('rows', 1)
 	}
 	
-	//$size.value = scale_prevs.get($el) ?? 1
+	set_scale(scale_prevs.get($el) ?? 1)
 
 	const au = angle_prevs.get($el) ?? get_angle($el)
 	angle_prevs.set($el, au)
@@ -161,7 +163,7 @@ export function after_click_update_ui($el) {
 	if (opacity!='') $fill_opacity.value = opacity    
 
 	let stroke_width = $el.dataset.prevStroke || '0.1'
-	if (stroke_width!='') set_k(parseFloat(stroke_width))
+	if (stroke_width!='') set_stroke(parseFloat(stroke_width))
 
 	let stroke_opacity = $el.style.getPropertyValue('stroke-opacity')
 	$stroke_opacity.value = 1

@@ -11,8 +11,8 @@ const tpl = `<section class="movable" id="geometry">
 <div>
 	<label class="tooltip" data-tooltip-text="Modifică mărimea proporțional" data-tooltip-bottom for="size">Scalare</label>
 	<div>
-		<button id="scale_plus" data-tooltip-text="1" data-tooltip-bottom ><img src="/icon/plus.svg"></button>
-		<button id="scale_minus" data-tooltip-text="1" data-tooltip-bottom ><img src="/icon/minus.svg"></button>
+		<button id="scale_plus" class="tooltip" data-tooltip-text="Mărește" data-tooltip-bottom ><img src="/icon/plus.svg"></button>
+		<button id="scale_minus" class="tooltip" data-tooltip-text="Micșorează" data-tooltip-bottom ><img src="/icon/minus.svg"></button>
 	</div>
 </div>
 <div>
@@ -37,21 +37,34 @@ export const $ui = ui_fragment(tpl)
 const $scale_plus = $ui.querySelector('#scale_plus')
 const $scale_minus = $ui.querySelector('#scale_minus')
 
+const update_scale_elements = v => {
+    $scale_plus.value = $scale_minus.value = k
+    if ($scale_plus.dataset.tooltipId) {
+        const $tooltip = document.getElementById($scale_plus.dataset.tooltipId)
+        if ($tooltip) $tooltip.textContent = k.toFixed(3)
+    }
+    if ($scale_minus.dataset.tooltipId) {
+        const $tooltip = document.getElementById($scale_minus.dataset.tooltipId)
+        if ($tooltip) $tooltip.textContent = k.toFixed(3)
+    }
+}
+
 const step = 0.01
 let k = 1
+export const set_k = v => {
+    k = v
+    update_scale_elements(k)
+}
 const stop = 0.01
 const start_func = way => {
 	k = k + way*step
-
 	if (way < 0 && k < stop) {
         k = stop
-        return
     }
 	scale(k)
+    update_scale_elements(k)
 }
-const end_func = () => {
-
-}
+const end_func = () => {}
 addEventInterval($scale_plus, 'mousedown', () => start_func(1), 10, 'mouseup', end_func)
 addEventInterval($scale_minus, 'mousedown', () => start_func(-1), 10, 'mouseup', end_func)
 

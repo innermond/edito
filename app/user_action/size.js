@@ -8,6 +8,8 @@ export function scale(val) {
 		$el.square.reset()
 		$el.circle.reset()
 
+        $el.dataset.prevScale = val
+
 		$clicked.from($el).over()
 	})
 }

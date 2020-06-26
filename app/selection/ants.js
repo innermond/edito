@@ -22,9 +22,9 @@ import {setm, m2e, m, get_scale} from '../mtx.js'
 
 	follow() {
 		let $el = this.$shape.$element
-		let bb = 'useThat' in $el ? $el.useThat.bbox : $el.getBBox()
+		let bb = $el && 'useThat' in $el ? $el.useThat.bbox : $el.getBBox()
 		attr(this.$shape, {x:bb.x, y:bb.y, width:bb.width, height:bb.height})
-		if ('useThat' in $el) {
+		if ($el && 'useThat' in $el) {
 			setm(this.$shape, m2e($el.useThat.el, $el))
 		} else {
 			setm(this.$shape, m2e($el, this.$owner))

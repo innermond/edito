@@ -9,6 +9,8 @@ export function tooltip($explained, adjx=0, adjy=0) {
 	$e.style.display = 'none'
 	document.body.appendChild($e)
 
+    $explained.dataset.tooltipId = $e.id
+
 	const bb_thumb = $e.getBoundingClientRect()
 
 	let move = false
@@ -25,6 +27,21 @@ export function tooltip($explained, adjx=0, adjy=0) {
 	$explained.addEventListener('mousedown', evt => {
 		move = true
 		show_val = true
+		
+        if (evt.target !== $explained) return
+		const bb = evt.currentTarget.getBoundingClientRect()
+		const posx = evt.clientX // tooltip is appended directly to body
+		// cease moving when exceeded x bounds of element
+		if (posx < bb.left || posx > bb.left + bb.width ) {
+			move = false
+			return
+		}
+		// position
+		const bb_tooltip = $e.getBoundingClientRect()
+		$e.style.left = posx+ adjx + 'px'
+		$e.style.top = bb.top + bb.height*0.5 + adjy + 'px'
+
+		if (show_val && $explained?.type && 'value' in $explained) $e.textContent = $explained.value
 	})
 	$explained.addEventListener('mouseout', evt => {
 		move = false
@@ -48,8 +65,7 @@ export function tooltip($explained, adjx=0, adjy=0) {
 		$e.style.left = posx+ adjx + 'px'
 		$e.style.top = bb.top + bb.height*0.5 + adjy + 'px'
 
-		// only inout like html elements has meaningful value
-		if (show_val && $explained?.type && $explained.nodeName.toLowerCase() !== 'button' || $explained?.type && $explained.nodeName.toLowerCase() !== 'button') $e.textContent = $explained.value
+		if (show_val && $explained?.type && 'value' in $explained) $e.textContent = $explained.value
 	})
 
 	return $e

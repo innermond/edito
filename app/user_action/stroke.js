@@ -32,6 +32,6 @@ export function stroke_opacity(color) {
 			$ee = Array.from($el.children)
 			$el.style.strokeOpacity = val
 		}
-		$ee.forEach($e =>	$e.style.strokeOpacity = val)
+		$ee.forEach($e => $e.style.strokeOpacity = val)
 	}) 
 }
