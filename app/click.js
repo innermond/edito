@@ -1,4 +1,4 @@
-import {initial, dragging_marks_reset, dragging_all_marks_reset, dragging_all_marks_relax, after_click_update_ui} from './ui.js'
+import {initial, dragging_marks_reset, dragging_all_marks_reset, dragging_all_marks_relax, dragging_all_marks_relax_except, after_click_update_ui} from './ui.js'
 import {$svg, element_from} from './dom.js'
 import {$selection} from './selection/grouping.js'
 import {$clicked} from './selection/clicked.js'
@@ -26,33 +26,39 @@ export function click(evt) {
 			return
 	}
 	
-	dragging_all_marks_relax()
 
 	const belongs = ($selection.size > 1 && $selection.has($clicked))
-	$clicked.over()
 	// dragging marks clicked
 	if (!!evt.target.dataset.ants) {
+		const $el = evt.target.$element
+		const $ee = []
 		switch (true) {
 			case !!evt.target.dataset.rect:
 				$clicked.clues.negate('dragging')
 				$clicked.circle.$shape.style.color = 'white'
 				$clicked.square.$shape.style.color = 'white'
+				//$ee.push($clicked.circle.$shape, $clicked.square.$shape)
 			break
 			case !!evt.target.dataset.circle:
-				$clicked.from(evt.target.$element)
-				$clicked.clues.negate('rotating')
-				evt.target.style.fill = $clicked.clues.rotating ?'red':'white'
-				$clicked.square.$shape.style.fill = 'white'
+				$el.clues.negate('rotating')
+				evt.target.style.fill = $el.clues.rotating ?'red':'white'
+				$ee.push($el)
+				$el.square.$shape.style.fill = 'white'
 			break
 			case !!evt.target.dataset.square:
-				$clicked.from(evt.target.$element)
-				$clicked.clues.negate('sizing')
-				evt.target.style.fill = $clicked.clues.sizing ?'red':'white'
-				$clicked.circle.$shape.style.fill = 'white'
+				//$clicked.from(evt.target.$element)
+				$el.clues.negate('sizing')
+				evt.target.style.fill = $el.clues.sizing ?'red':'white'
+				$ee.push($el)
+				$el.circle.$shape.style.fill = 'white'
 			break
 		}
+		$ee.length > 0 && dragging_all_marks_relax_except(...$ee)
 		return
 	}
+
+	$clicked.over()
+	dragging_all_marks_relax()
 
 	let $el = element_from(evt.target) 
 	$clicked.from($el)

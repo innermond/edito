@@ -72,6 +72,7 @@ let start = null
 let moved = null
 function startSelect(evt) {
 	if (moved !== null) return
+	if (evt.target !== $svg) return
 
 	moved = false
 	if (start !== null) return

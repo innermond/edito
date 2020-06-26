@@ -53,7 +53,7 @@ function startDrag(evt) {
 	moved = false
 
 	// avoid ants elements
-	if (!!!evt.target.dataset.ants) {
+	if (!('ants' in evt.target.dataset)) {
 		if (!evt.shiftKey && !evt.ctrlKey && $selection.size === 1) dragging_all_marks_reset()
 		$clicked.from(element_from(evt.target))
 	}

@@ -6,7 +6,7 @@ import {$selection} from './grouping.js'
 // as we cant instanciate directly a SVGElement
 // we create a dummy SVGElement
 // which is zero value for $clicked
-const $zero = document.createElementNS(xmlns, 'rect')
+let $zero = document.createElementNS(xmlns, 'rect')
 
 export let $clicked
 
