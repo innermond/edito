@@ -36,6 +36,14 @@ $tool_floater.addEventListener('click', evt => {
 	toggle_active($me)
 })
 
+$tool_floater.addEventListener('mouseover', evt => {
+	const $me = evt.target
+    if (!$me.classList.contains('active')) return
+	const fid = $me.dataset.panel
+	const $floater = document.getElementById(fid)
+    if ($floater.style.display !== 'none') cycle_zindex($floater)
+})
+
 const $select = $ui.querySelector('#tool-select')
 let select_clicked = false
 $select.addEventListener('click', evt => {

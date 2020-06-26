@@ -43,9 +43,14 @@ const $scale_minus = $ui.querySelector('#scale_minus')
 
 const step = 0.01
 let k = 1
+const stop = 0.01
 const start_func = way => {
 	k = k + way*step
-	if (way < 0 && k > 0 && k < 0.2 || k < 0) k = 0.2
+
+	if (way < 0 && k < stop) {
+        k = stop
+        return
+    }
 	scale(k)
 }
 const end_func = () => {
