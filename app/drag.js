@@ -54,7 +54,7 @@ function startDrag(evt) {
 
 	// avoid ants elements
 	if (!('ants' in evt.target.dataset)) {
-		if (!evt.shiftKey && !evt.ctrlKey && $selection.size === 1) dragging_all_marks_reset()
+		if (!evt.shiftKey && !evt.ctrlKey && !$selection.has(evt.target)) dragging_all_marks_reset()
 		$clicked.from(element_from(evt.target))
 	}
 	// posibly a click on an embeded svg into a svg
@@ -100,7 +100,7 @@ function drag(evt) {
 		$selection.clear()
 		$clicked.over()
 	}
-    const $original = $clicked
+	const $original = $clicked
 	const aa = []
 	$selection.forEach($x => {
 		$clicked.from($x)

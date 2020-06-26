@@ -125,6 +125,8 @@ function selection_ants(evt) {
 
 function endSelect(evt) {
 	start = null
+	disable.click = moved
+	moved = null
 	if (!$selectangle?.ownerSVGElement) return
 
 	selection_ants(evt)
@@ -133,8 +135,6 @@ function endSelect(evt) {
 	//$svg.addEventListener('click', click)
 	//$svg.removeEventListener('click', clickSelect);
 	//add_dragging()
-	disable.click = moved
-	moved = null
 }
 
 // top right
