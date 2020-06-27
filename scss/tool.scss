@@ -119,6 +119,10 @@ $top-tooltip: 24px*0.5+$space-tooltip;
 	transform: translateX(-50%) translateY(-100%);
 }
 
+.tooltip-top.tooltip-text {
+	transform: translateX(-50%) translateY(0%);
+}
+
 .tooltip-text::after {
   content: " ";
   position: absolute;
@@ -136,6 +140,13 @@ $top-tooltip: 24px*0.5+$space-tooltip;
 	margin-top: 0px;
 	margin-left: -1*$space-tooltip;
   border-color: $bk-tooltip transparent transparent transparent;
+}
+
+.tooltip-top.tooltip-text::after {
+	top: -1*$space-tooltip;
+  left: 50%;
+	margin-left: -1*$space-tooltip;
+  border-color: transparent transparent $bk-tooltip transparent;
 }
 
 .tooltip:not(.active):hover .tooltip-text,

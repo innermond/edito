@@ -9,7 +9,7 @@ export function tooltip($explained, adjx=0, adjy=0) {
 	$e.style.display = 'none'
 	document.body.appendChild($e)
 
-    $explained.dataset.tooltipId = $e.id
+	$explained.dataset.tooltipId = $e.id
 
 	const bb_thumb = $e.getBoundingClientRect()
 
@@ -20,6 +20,8 @@ export function tooltip($explained, adjx=0, adjy=0) {
 			return
 		}
 		$e.style.display = 'initial'
+		$e.style.width = 'min-content'
+		$e.style.maxWidth = '8rem'
 		move = true
 		$e.classList.add('active')
 	})
@@ -28,7 +30,7 @@ export function tooltip($explained, adjx=0, adjy=0) {
 		move = true
 		show_val = true
 		
-        if (evt.target !== $explained) return
+		if (evt.target !== $explained) return
 		const bb = evt.currentTarget.getBoundingClientRect()
 		const posx = evt.clientX // tooltip is appended directly to body
 		// cease moving when exceeded x bounds of element
@@ -48,6 +50,7 @@ export function tooltip($explained, adjx=0, adjy=0) {
 		show_val = false
 		$e.classList.remove('active')
 		$e.style.display = 'none'
+		$e.setAttribute('class', classes)
 	})
 
 	$explained.addEventListener('mousemove', evt => {
@@ -61,7 +64,25 @@ export function tooltip($explained, adjx=0, adjy=0) {
 			return
 		}
 		// position
-		const bb_tooltip = $e.getBoundingClientRect()
+		let bb_tooltip = $e.getBoundingClientRect()
+		let inx = 0, peak = 30
+		let top_overflow = (bb_tooltip.top < 0) 
+		let checked = top_overflow
+		while (top_overflow) {
+			$e.style.width = (bb_tooltip.width + 1) + 'px'	
+			bb_tooltip = $e.getBoundingClientRect()
+			inx++
+			if (inx > peak) break
+			top_overflow = bb_tooltip.top < 0 
+		}
+		if (checked) {
+			$e.style.maxWidth = 'none'
+			if (top_overflow && (inx > peak)) {
+				$e.style.width = 'initial'  
+				$e.style.maxWidth = 'initial'
+				$e.classList.replace('tooltip-bottom', 'tooltip-top')
+			}
+		}
 		$e.style.left = posx+ adjx + 'px'
 		$e.style.top = bb.top + bb.height*0.5 + adjy + 'px'
 

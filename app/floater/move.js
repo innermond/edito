@@ -19,8 +19,8 @@ const tpl = `<section class="movable" id="order">
 	<div>
 	<label class="tooltip" data-tooltip-text="Mută mai in față sau mai in spate obiectele " data-tooltip-bottom>Mutare</label>
 	<select id="ordering" style="display:none">
-			<option value="f">in față</option>
-			<option value="b">in spate</option>
+			<option value="f">față</option>
+			<option value="b">spate</option>
 	</select>
 	</div>
 	<div>

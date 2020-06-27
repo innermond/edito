@@ -110,6 +110,9 @@ section.movable:hover, #bottom-bar:hover {
 .tooltip-bottom.tooltip-text {
   transform: translateX(-50%) translateY(-100%); }
 
+.tooltip-top.tooltip-text {
+  transform: translateX(-50%) translateY(0%); }
+
 .tooltip-text::after {
   content: " ";
   position: absolute;
@@ -128,6 +131,12 @@ section.movable:hover, #bottom-bar:hover {
   margin-top: 0px;
   margin-left: -5px;
   border-color: #e2dfdc transparent transparent transparent; }
+
+.tooltip-top.tooltip-text::after {
+  top: -5px;
+  left: 50%;
+  margin-left: -5px;
+  border-color: transparent transparent #e2dfdc transparent; }
 
 .tooltip:not(.active):hover .tooltip-text,
 .tooltip-text.active {
