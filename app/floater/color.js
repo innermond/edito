@@ -106,15 +106,16 @@ const $stroke_plus = $ui.querySelector('#stroke_plus')
 const $stroke_minus = $ui.querySelector('#stroke_minus')
 
 const update_stroke_elements = v => {
-    $stroke_plus.value = $stroke_minus.value = k
-    if ($stroke_plus.dataset.tooltipId) {
-        const $tooltip = document.getElementById($stroke_plus.dataset.tooltipId)
-        if ($tooltip) $tooltip.textContent = k.toFixed(3)
-    }
-    if ($stroke_minus.dataset.tooltipId) {
-        const $tooltip = document.getElementById($stroke_minus.dataset.tooltipId)
-        if ($tooltip) $tooltip.textContent = k.toFixed(3)
-    }
+	v = v.toFixed(3)
+	$stroke_plus.value = $stroke_minus.value = v
+	if ($stroke_plus.dataset.tooltipId) {
+			const $tooltip = document.getElementById($stroke_plus.dataset.tooltipId)
+			if ($tooltip) $tooltip.textContent = v
+	}
+	if ($stroke_minus.dataset.tooltipId) {
+			const $tooltip = document.getElementById($stroke_minus.dataset.tooltipId)
+			if ($tooltip) $tooltip.textContent = v
+	}
 }
 
 const step = 0.01

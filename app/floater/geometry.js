@@ -38,14 +38,15 @@ const $scale_plus = $ui.querySelector('#scale_plus')
 const $scale_minus = $ui.querySelector('#scale_minus')
 
 const update_scale_elements = v => {
-    $scale_plus.value = $scale_minus.value = k
-    if ($scale_plus.dataset.tooltipId) {
-        const $tooltip = document.getElementById($scale_plus.dataset.tooltipId)
-        if ($tooltip) $tooltip.textContent = k.toFixed(3)
-    }
-    if ($scale_minus.dataset.tooltipId) {
-        const $tooltip = document.getElementById($scale_minus.dataset.tooltipId)
-        if ($tooltip) $tooltip.textContent = k.toFixed(3)
+	v = v.toFixed(3)
+	$scale_plus.value = $scale_minus.value = v
+	if ($scale_plus.dataset.tooltipId) {
+			const $tooltip = document.getElementById($scale_plus.dataset.tooltipId)
+			if ($tooltip) $tooltip.textContent = v
+	}
+	if ($scale_minus.dataset.tooltipId) {
+			const $tooltip = document.getElementById($scale_minus.dataset.tooltipId)
+			if ($tooltip) $tooltip.textContent = v
     }
 }
 
@@ -62,7 +63,7 @@ const start_func = way => {
         k = stop
     }
 	scale(k)
-    update_scale_elements(k)
+	update_scale_elements(k)
 }
 const end_func = () => {}
 addEventInterval($scale_plus, 'mousedown', () => start_func(1), 10, 'mouseup', end_func)
