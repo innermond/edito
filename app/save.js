@@ -23,6 +23,14 @@ function toDataURL(url) {
 	})
 }
 
+function load_image_url_data(image, data) {
+	return new Promise((resolve, reject) => {
+        image.onload = () => resolve(image)
+        image.onerror = reject
+        image.href.baseVal = data
+    })
+}
+
 function isDataURL(s) {
     return !!s.match(isDataURL.regex)
 }
@@ -30,7 +38,8 @@ function isDataURL(s) {
 isDataURL.regex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i
 
 async function imagesAsUrldata($svgclone) {
-	await $svgclone.querySelectorAll('image').forEach(async $img => {
+    const $ii = $svgclone.querySelectorAll('image')
+    for (const $img of $ii) {
 			try {
 				let data 
 				if (isDataURL($img.href.baseVal)) {
@@ -41,13 +50,13 @@ async function imagesAsUrldata($svgclone) {
 				let $clone = $img.cloneNode(true)
 				$clone.id += '-cloned'
 				$clone.setAttributeNS(null, 'data-href', $clone.href.baseVal)
-				$clone.href.baseVal = data
+				await load_image_url_data($clone, data)
 				$img.parentNode.insertBefore($clone, $img)
 				$img.remove()
 			} catch (e) {
 				console.log(e)
 			}
-	})
+	}
 }
 
 export const render_image = async (k=1, bleed=0, down=false, func=null) => {
@@ -66,44 +75,42 @@ export const render_image = async (k=1, bleed=0, down=false, func=null) => {
 
 	await imagesAsUrldata($svgclone)
 
-	setTimeout( ()=>{
-		$svgclone.querySelectorAll('[data-ants=true]').forEach($ant => $ant.remove())
+    $svgclone.querySelectorAll('[data-ants=true]').forEach($ant => $ant.remove())
 
-		if (func != null && func instanceof Function) {
-			func($svgclone)
-		}
-		
-		const svgdata = new XMLSerializer().serializeToString($svgclone)
-		$svgclone.remove()
-		const srcdata = btoa(unescape(encodeURIComponent(svgdata)))
-		const cw = $svgclone.width.baseVal.value
-		const ch = $svgclone.height.baseVal.value
-							
-		let $canvas = document.createElement('canvas')
-		$canvas.width = cw*k
-		$canvas.height = ch*k
-		$canvas.style.width = $canvas.width + 'px'
-		$canvas.style.height = $canvas.height + 'px'
-		let ctx = $canvas.getContext("2d")
-		ctx.scale(k,k)
+    if (func != null && func instanceof Function) {
+        func($svgclone)
+    }
+    
+    const svgdata = new XMLSerializer().serializeToString($svgclone)
+    $svgclone.remove()
+    const srcdata = btoa(unescape(encodeURIComponent(svgdata)))
+    const cw = $svgclone.width.baseVal.value
+    const ch = $svgclone.height.baseVal.value
+                        
+    let $canvas = document.createElement('canvas')
+    $canvas.width = cw*k
+    $canvas.height = ch*k
+    $canvas.style.width = $canvas.width + 'px'
+    $canvas.style.height = $canvas.height + 'px'
+    let ctx = $canvas.getContext("2d")
+    ctx.scale(k,k)
 
-		let $img = document.createElement('img')
-		$img.addEventListener('load', evt => {
-			ctx.drawImage($img, 0, 0)
-			let canvasdata = $canvas.toDataURL('image/png')
+    let $img = document.createElement('img')
+    $img.addEventListener('load', evt => {
+        ctx.drawImage($img, 0, 0)
+        let canvasdata = $canvas.toDataURL('image/png')
 
-			if (down) {
-					let a = document.createElement("a")
-					a.download = "download" + ".png"
-					a.href = canvasdata
-					document.body.appendChild(a)
-					a.click()
-			} else {
-					$div.insertAdjacentHTML('afterEnd', '<div class="preview" ><img src="' + canvasdata  + '"></div>')
-			}
-		})
-		$img.setAttribute('src', 'data:image/svg+xml;base64,' + srcdata)
-	}, 100)
+        if (down) {
+                let a = document.createElement("a")
+                a.download = "download" + ".png"
+                a.href = canvasdata
+                document.body.appendChild(a)
+                a.click()
+        } else {
+                $div.insertAdjacentHTML('afterEnd', '<div class="preview" ><img src="' + canvasdata  + '"></div>')
+        }
+    })
+    $img.setAttribute('src', 'data:image/svg+xml;base64,' + srcdata)
 }
 
 
