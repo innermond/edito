@@ -180,6 +180,7 @@ export function assign_viewbox($s, viewbox) {
 export const scale_prevs = new Map() 
 export const scaling = ($el, k = 0) => {
 	if (!$el) return
+	const direction = k
 	let prev = scale_prevs.get($el) ?? 1
 	scale_prevs.set($el,  k)
 	k = k / prev
@@ -190,7 +191,7 @@ export const scaling = ($el, k = 0) => {
 	y *= (1-k)
 
 	let tsf = $svg.createSVGTransform()
-	switch (k) {
+	switch (direction) {
 	case 1:
 			tsf.setScale(k,-k)
 			break

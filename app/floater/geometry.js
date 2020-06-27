@@ -58,10 +58,10 @@ export const set_k = v => {
 }
 const stop = 0.01
 const start_func = way => {
-	k = k + way*step
+	k += way*step
 	if (way < 0 && k < stop) {
-        k = stop
-    }
+			k = stop
+	}
 	scale(k)
 	update_scale_elements(k)
 }

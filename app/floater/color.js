@@ -127,7 +127,7 @@ export const set_k = v => {
 
 const stop = 0
 const start_func = way => {
-	k = k + way*step
+	k += way*step
 
 	if (way < 0 && k < stop) {
         k = stop
@@ -135,7 +135,7 @@ const start_func = way => {
         return
     }
 	stroke_width(k)
-    update_stroke_elements(k)
+	update_stroke_elements(k)
 }
 const end_func = () => {}
 addEventInterval($stroke_plus, 'mousedown', () => start_func(1), 10, 'mouseup', end_func)

@@ -75,10 +75,10 @@ text {
     .tool-menu > .tool-item:hover {
       background-color: #24272b; }
 
-section.movable img, #bottom-bar img {
+section.movable button > img, #bottom-bar button > img {
   pointer-events: none;
   opacity: 0.5; }
-  section.movable img:hover, #bottom-bar img:hover {
+  section.movable button > img:hover, #bottom-bar button > img:hover {
     opacity: 1; }
 
 section.movable button.active img, #bottom-bar button.active img {
