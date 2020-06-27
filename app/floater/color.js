@@ -12,8 +12,8 @@ const tpl = `<section class="movable" id="fill_stroke_color">
 <div>
 	<label class="tooltip" data-tooltip-text="Alegi culoarea de umplere" data-tooltip-bottom for="fill">Umplere</label>
 	<div>
-	<input type="checkbox" class="switch" id="fill-switch">
 	<input type="color" id="fill" value="#000000">
+	<input type="checkbox" class="switch" id="fill-switch">
 	</div>
 </div>
 <div>

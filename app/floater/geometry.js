@@ -5,6 +5,8 @@ import {ui_fragment} from '../dom.js'
 import {handle_step} from '../user_action/step.js'
 import {skewx, skewy} from '../user_action/skew.js'
 import {addEventInterval} from '../event_interval.js'
+import {ul_select_iconset} from '../ul_select.js'
+import {mirror_h, mirror_v} from '../user_action/mirror.js'
 
 const tpl = `<section class="movable" id="geometry">
 <div class="wrap-row">
@@ -19,6 +21,13 @@ const tpl = `<section class="movable" id="geometry">
 <label class="tooltip" data-tooltip-text="Rotește obiectul" data-tooltip-bottom for="angle">Rotație</label>
 <input class="tooltip" data-tooltip-text="0" data-tooltip-bottom   type="range" min="-180" max="180" value="0" step="0.0001" id="angle">
 </div>
+<div>
+	<label class="tooltip" data-tooltip-text="Inversează sensul afișării obiectelor" data-tooltip-bottom>Oglindire</label>
+	<select id="flipping" style="display:none">
+			<option value="h">orizontală</option>
+			<option value="v">verticală</option>
+	</select>
+	</div>
 <div>
     <label class="tooltip" data-tooltip-text="Deformează obiectul pe orizontală" data-tooltip-bottom for="skewx">Deformare X</label>
     <input class="tooltip" data-tooltip-text="0" data-tooltip data-tooltip-bottom type="range" min="-180" max="180" value="0" step="0.0001" id="skewx">
@@ -100,3 +109,18 @@ $skewy.addEventListener('input', evt => {
 
 export const $angle = $ui.querySelector('#angle')
 $angle.addEventListener('input', evt => rotate($angle.value))
+
+export const $flipping = $ui.querySelector('#flipping')
+const flip_val_svg_map = {'h': 'flip-h', 'v': 'flip-v'}
+const $flipping_ul = ul_select_iconset($flipping, flip_val_svg_map, 0, -10)
+$flipping.addEventListener('change', evt => {
+	switch ($flipping.value) {
+		case 'h':
+			mirror_h()
+		break;
+		case 'v':
+			mirror_v()
+		break;
+	}
+	$flipping_ul.querySelector('li[class~=active]').classList.remove('active')
+})

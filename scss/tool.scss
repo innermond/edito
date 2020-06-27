@@ -310,9 +310,12 @@ input[type=color] {
 }
 
 label input[type=color] {
+	float: right;
+}
+
+input[type=color] {
 	width: 1rem;
 	height: 1rem;
-	float: right;
 }
 
 input[type=checkbox][class~=switch] {
@@ -327,11 +330,6 @@ input[type=checkbox][class~=switch] {
 		cursor: pointer;
 		float: right;
 		position: relative;
-		& + input[type=color] {
-			width: 1rem;
-			height: 1rem;
-			float: right;
-		}
 
 		&:after {
 			content: "";

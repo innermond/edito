@@ -266,9 +266,11 @@ input[type=color] {
     border: none; }
 
 label input[type=color] {
-  width: 1rem;
-  height: 1rem;
   float: right; }
+
+input[type=color] {
+  width: 1rem;
+  height: 1rem; }
 
 input[type=checkbox][class~=switch] {
   width: 0;
@@ -282,10 +284,6 @@ input[type=checkbox][class~=switch] {
     cursor: pointer;
     float: right;
     position: relative; }
-    input[type=checkbox][class~=switch] + span + input[type=color] {
-      width: 1rem;
-      height: 1rem;
-      float: right; }
     input[type=checkbox][class~=switch] + span:after {
       content: "";
       position: absolute;
