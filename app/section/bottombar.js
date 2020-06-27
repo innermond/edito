@@ -1,7 +1,7 @@
 import {$svg, ui_fragment, px, copy_viewbox} from '../dom.js'
 import {zoom_reset} from '../zoom.js'
 import {$bleed} from '../ui.js'
-import * as save from '../save.js'
+import {render_image} from '../save.js'
 import {deleting, undeleting, cloning} from '../user_action/del_undel_clone.js'
 import {tooltip} from '../tooltip.js'
 import {$zoom_is_edit} from '../floater/zoom.js'
@@ -31,7 +31,7 @@ $clone_element.addEventListener('click', cloning)
 export const $save_svg = $ui.querySelector('#save_svg')
 export const $send_svg = $ui.querySelector('#send_svg')
 
-$save_svg.addEventListener('click', evt => {
+$save_svg.addEventListener('click', async evt => {
 	const current_viewbox = copy_viewbox($svg.viewBox)
 	let func = null
 	if (!$zoom_is_edit.checked) func = $svg_clone => zoom_reset($svg_clone)
@@ -47,12 +47,12 @@ $save_svg.addEventListener('click', evt => {
 	}
 	$bkg.classList.add('on')
 	document.querySelector('body').appendChild($bkg)
-	save.render_image(1, 0, false, func)
+	await render_image(1, 0, false, func)
 })
-$send_svg.addEventListener('click', evt => {
+$send_svg.addEventListener('click', async evt => {
 	const current_viewbox = copy_viewbox($svg.viewBox)
 	let func = null
 	if (!$zoom_is_edit.checked) func = $svg_clone => zoom_reset($svg_clone)
 	const dpi_scale = 300/72 // scale rendered image suposedly produced native at 72 dpi as much as needed to be printed at 300 dpi
-	save.render_image(dpi_scale, $bleed.value, true, func)
+	await render_image(dpi_scale, $bleed.value, true, func)
 })

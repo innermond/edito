@@ -55,7 +55,6 @@ async function addUrlImage(evt) {
 	tag.addEventListener('load', evt => {
 		center(tag)
 		$url_image.value = ''
-		console.log(tag)
 	})
 	tag.href.baseVal = $url_image.value
 	$svg.appendChild(tag)

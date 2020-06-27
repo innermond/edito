@@ -339,7 +339,7 @@ hr {
   .wrap-row label {
     cursor: pointer; }
   .wrap-row input[type=range] {
-    max-width: 10rem; }
+    max-width: 5rem; }
   .wrap-row > div {
     margin: 0.5rem 0rem 0.5rem 1rem;
     display: flex;
