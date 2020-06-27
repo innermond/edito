@@ -9,6 +9,7 @@ window.addEventListener('keydown', evt => {if (evt.key === 'Delete') deleting()}
 export function  deleting() {
 	$selection.forEach($el => {
 		grave.push([$el, $el.parentNode])
+		$selection.delete($el)
 		$el.remove()
 	})
 	dragging_all_marks_reset()

@@ -63,7 +63,7 @@ $select_inverse.addEventListener('click', evt => {
 			if (!is_selectable($c)) return
 			$selection.has($c) ? $clicked.from($c).unover() : $selection.add($c)
 		})
-		if ($selection.size) {
+		if ($selection.size > 0) {
 			$selection.as_ants()
 		}
 })
