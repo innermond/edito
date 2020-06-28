@@ -28,6 +28,14 @@ export function tooltip($explained, adjx=0, adjy=0) {
 			inx++
 			if (inx > peak) break
 		}
+		// try to cope with right viewport overflowing
+		/*const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+		const right_overflow = bb_tooltip.right - vw
+			if (right_overflow > 0) {
+			bb_tooltip = $e.getBoundingClientRect()
+			$e.style.left = posx + adjx - right_overflow + 'px'
+			console.log($e.style.left)
+		}*/
 		if (checked) {
 			$e.style.maxWidth = 'none'
 			if (top_overflow && (inx > peak)) {

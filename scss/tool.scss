@@ -115,6 +115,10 @@ $top-tooltip: 24px*0.5+$space-tooltip;
   transition: opacity 0.5s linear;
 }
 
+.tooltip-right.tooltip-text {
+	transform: translateX(-100%) translateY(-50%);
+}
+
 .tooltip-bottom.tooltip-text {
 	transform: translateX(-50%) translateY(-100%);
 }
@@ -132,6 +136,15 @@ $top-tooltip: 24px*0.5+$space-tooltip;
   border-width: 1*$space-tooltip;
   border-style: solid;
   border-color: transparent $bk-tooltip transparent transparent;
+}
+
+.tooltip-right.tooltip-text::after {
+	top: 50%; /* At the bottom of the tooltip */
+  left: 100%;
+	right: 0%;
+  margin-top: -1*$space-tooltip;
+	margin-left: 0px;
+  border-color: transparent transparent transparent $bk-tooltip;
 }
 
 .tooltip-bottom.tooltip-text::after {

@@ -107,6 +107,9 @@ section.movable:hover, #bottom-bar:hover {
   opacity: 0.6;
   transition: opacity 0.5s linear; }
 
+.tooltip-right.tooltip-text {
+  transform: translateX(-100%) translateY(-50%); }
+
 .tooltip-bottom.tooltip-text {
   transform: translateX(-50%) translateY(-100%); }
 
@@ -123,6 +126,15 @@ section.movable:hover, #bottom-bar:hover {
   border-width: 5px;
   border-style: solid;
   border-color: transparent #e2dfdc transparent transparent; }
+
+.tooltip-right.tooltip-text::after {
+  top: 50%;
+  /* At the bottom of the tooltip */
+  left: 100%;
+  right: 0%;
+  margin-top: -5px;
+  margin-left: 0px;
+  border-color: transparent transparent transparent #e2dfdc; }
 
 .tooltip-bottom.tooltip-text::after {
   top: 100%;
@@ -472,6 +484,9 @@ body.pan.panning {
 
 body.pan {
   cursor: grab; }
+
+body {
+  overflow: hidden; }
 
 #editor {
   background-color: black;
