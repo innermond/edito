@@ -126,7 +126,7 @@ export function tooltip($explained, adjx=0, adjy=0) {
 		// position
 		position(posx, bb)
 		
-		if (show_val && $explained?.type && 'value' in $explained) $e.textContent = $explained.value
+		if (show_val && $explained?.type && 'value' in $explained && $explained.value.length) $e.textContent = $explained.value
 	})
 
 	$explained.addEventListener('mouseout', evt => {
@@ -148,7 +148,7 @@ export function tooltip($explained, adjx=0, adjy=0) {
 			return
 		}
 		position(posx, bb)
-		if (show_val && $explained?.type && 'value' in $explained) $e.textContent = $explained.value
+		if (show_val && $explained?.type && 'value' in $explained && $explained.value.length) $e.textContent = $explained.value
 	})
 
 	return $e

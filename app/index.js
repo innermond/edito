@@ -51,7 +51,7 @@ document.querySelectorAll('.movable').forEach($e => {
 		}
 	})
 
-	const $kk = $e.querySelectorAll('input[type=checkbox][class~=switch]')
+	const $kk = $e.querySelectorAll('[type=checkbox][class~=switch]')
 	span_checkbox($kk)
 
 	$e.querySelectorAll('[class~="tooltip"]')?.forEach($e => {

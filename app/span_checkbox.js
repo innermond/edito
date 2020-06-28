@@ -1,5 +1,4 @@
 import {newtag_html} from './dom.js'
-import {tooltip} from './tooltip.js'
 
 export function span_checkbox($ee) {
 	$ee.forEach($e => {
@@ -19,7 +18,6 @@ export function span_checkbox($ee) {
 				const attr = document.createAttribute(`data-tooltip-top`)
 				$span.setAttributeNode(attr)
 			}
-			tooltip($span)
 		}
 		$e.parentNode.insertBefore($span, $e.nextElementSibling)
 

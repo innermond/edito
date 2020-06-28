@@ -10,23 +10,23 @@ const tpl = `<section class="movable" id="zoom">
 <div class="wrap-row">
 <div>
 	<label class="tooltip" data-tooltip-text="Apropiază pagina" data-tooltip-bottom for="zoom_in">Mărește</label>
-	<button id="zoom_in"><img src="/icon/zoom-plus.svg"></button>
+	<button class="tooltip" data-tooltip-text="apasă continuu" data-tooltip-bottom id="zoom_in"><img src="/icon/zoom-plus.svg"></button>
 </div>
 <div>
 	<label class="tooltip" data-tooltip-text="Depărtează pagina" data-tooltip-bottom for="zoom_out">Micșorează</label>
-	<button id="zoom_out"><img src="/icon/zoom-minus.svg"></button>
+	<button class="tooltip" data-tooltip-text="apasă continuu" data-tooltip-bottom id="zoom_out"><img src="/icon/zoom-minus.svg"></button>
 </div>
 <div>
-	<label class="tooltip" data-tooltip-text="Consideră zoomingul ca editare a obiectelor" data-tooltip-bottom >Modificare</label>
-	<input type="checkbox" class="switch" id="zoom_is_edit">
+	<label class="tooltip" data-tooltip-text="Deplasezi punctul de vedere in pagină" data-tooltip-bottom for="pan">Deplasare</label>
+	<button class="tooltip" data-tooltip-text="activezi/deactivezi glisarea" data-tooltip-bottom id="pan"><img src="/icon/pan.svg"></button>
 </div>
 <div>
 	<label class="tooltip" data-tooltip-text="Distanța de vedere inițială" data-tooltip-bottom for="zoom_reset">Inițial</label>
 	<button id="zoom_reset"><img src="/icon/reset.svg"></button>
 </div>
 <div>
-	<label class="tooltip" data-tooltip-text="Deplasezi punctul de vedere" data-tooltip-bottom for="pan">Deplasare</label>
-	<button id="pan"><img src="/icon/pan.svg"></button>
+	<label class="tooltip" data-tooltip-text="Consideră apropierea / depărtarea ca editare reală a obiectelor. Se va printa așa cum se vede" data-tooltip-bottom >Modificare</label>
+	<input data-tooltip-text="cum se vede" data-tooltip-bottom type="checkbox" class="switch tooltip" id="zoom_is_edit">
 </div>
 <div>
 	<img src="/icon/close.svg" class="close" />

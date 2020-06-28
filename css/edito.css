@@ -442,6 +442,8 @@ hr {
   .movable button {
     margin: 0;
     padding: 0.25rem; }
+    .movable button:hover > img {
+      opacity: 1; }
 
 .humbled {
   color: #5a544b; }
