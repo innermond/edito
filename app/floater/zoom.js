@@ -1,6 +1,6 @@
 import {$clicked, $selection} from '../selection/index.js'
 import {$svg, ui_fragment, display_none} from '../dom.js'
-import {add_panning, remove_panning} from '../pan.js'
+import {add_diving, remove_diving} from '../dive.js'
 import {zoom, zoom_reset} from '../zoom.js'
 import {centerpoint} from '../pos.js'
 import {ungroup_one} from '../user_action/group.js'
@@ -8,6 +8,10 @@ import {addEventInterval} from '../event_interval.js'
 
 const tpl = `<section class="movable" id="zoom">
 <div class="wrap-row">
+<div>
+	<label class="tooltip" data-tooltip-text="Indică regiunea in care se va face zoom" data-tooltip-bottom for="zoom_area">Regiune</label>
+	<button class="tooltip" data-tooltip-text="desenează zona de zoom" data-tooltip-bottom id="zoom_area"><img src="/icon/zoom.svg"></button>
+</div>
 <div>
 	<label class="tooltip" data-tooltip-text="Apropiază pagina" data-tooltip-bottom for="zoom_in">Mărește</label>
 	<button class="tooltip" data-tooltip-text="apasă continuu" data-tooltip-bottom id="zoom_in"><img src="/icon/zoom-plus.svg"></button>
@@ -35,6 +39,23 @@ const tpl = `<section class="movable" id="zoom">
 </section>`
 export const $ui = ui_fragment(tpl)
 export const $zoom_is_edit = $ui.querySelector('#zoom_is_edit')
+
+const $area = $ui.querySelector('#zoom_area')
+const diving = () => {
+	let have_area = false
+	return evt => {
+		if(have_area) {
+			remove_diving() 
+			document.body.classList.remove('area')
+		} else {
+			add_diving()
+			document.body.classList.add('area')
+		}
+		have_area = !have_area
+	}
+}
+$area.addEventListener('click', diving())
+$area.addEventListener('mousedown', evt => $area.classList.toggle('active'))
 
 const step = 1.01
 
