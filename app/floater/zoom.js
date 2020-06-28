@@ -1,10 +1,14 @@
 import {$clicked, $selection} from '../selection/index.js'
 import {$svg, ui_fragment, display_none} from '../dom.js'
 import {add_diving, remove_diving} from '../dive.js'
+import {add_panning, remove_panning} from '../pan.js'
+import {add_selecting, remove_selecting} from '../select.js'
+import {add_dragging, remove_dragging} from '../drag.js'
 import {zoom, zoom_reset} from '../zoom.js'
 import {centerpoint} from '../pos.js'
 import {ungroup_one} from '../user_action/group.js'
 import {addEventInterval} from '../event_interval.js'
+import {disable} from '../click.js'
 
 const tpl = `<section class="movable" id="zoom">
 <div class="wrap-row">
@@ -45,10 +49,17 @@ const diving = () => {
 	let have_area = false
 	return evt => {
 		if(have_area) {
+			disable.click = false
+			add_dragging()
+			add_selecting()
 			remove_diving() 
 			document.body.classList.remove('area')
 		} else {
+			disable.click = true
 			add_diving()
+			remove_panning()
+			remove_selecting()
+			remove_dragging()
 			document.body.classList.add('area')
 		}
 		have_area = !have_area
@@ -90,10 +101,17 @@ const panning = () => {
 	let have_pan = false
 	return evt => {
 		if(have_pan) {
+			disable.click = false
+			add_dragging()
+			add_selecting()
 			remove_panning() 
 			document.body.classList.remove('pan')
 		} else {
+			disable.click = true
 			add_panning()
+			remove_selecting()
+			remove_diving() 
+			remove_dragging() 
 			document.body.classList.add('pan')
 		}
 		have_pan = !have_pan

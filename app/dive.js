@@ -29,13 +29,13 @@ export function add_diving() {
 	
 	//$svg.addEventListener('click', clickSelect, false);
 	//$svg.removeEventListener('click', click);
-	disable.click = true
-	remove_dragging()
-	if (document.body.classList.contains('pan')) {
+	//disable.click = true
+	//remove_dragging()
+	/*if (document.body.classList.contains('pan')) {
 		document.body.classList.remove('pan')
 		document.body.classList.add('pan-stopped')
 		remove_panning()
-	}
+	}*/
 	
 	$svg.addEventListener('mouseup', endSelect);
 	//$svg.addEventListener('mouseleave', endSelect);
@@ -53,13 +53,13 @@ export function remove_diving() {
 
 	//$svg.removeEventListener('click', clickSelect, false);
 	//$svg.addEventListener('click', click);
-	disable.click = false
-	add_dragging()
-	if (document.body.classList.contains('pan-stopped')) {
+	//disable.click = false
+	//add_dragging()
+	/*if (document.body.classList.contains('pan-stopped')) {
 		document.body.classList.remove('pan-stopped')
 		add_panning()
 		document.body.classList.add('pan')
-	}
+	}*/
 
 	$svg.removeEventListener('mouseup', endSelect);
 	//$svg.removeEventListener('mouseleave', endSelect);
@@ -114,8 +114,10 @@ function endSelect(evt) {
 	const $pt = centerpoint($selectangle, $svg)
 	let scale = 2
 	const W = $svg.getBoundingClientRect().width
-	const w = $selectangle.getBoundingClientRect().width
+	let w = $selectangle.getBoundingClientRect().width
 	scale = W/w
+	// is just a click?
+	if (w < 10) evt.ctrlKey ? scale = 0.5 : scale = 2
 	dive(scale, $pt, 1)
 	$selectangle.remove()
 	//evt.stopPropagation()

@@ -3,6 +3,8 @@ import {center} from '../pos.js'
 import {tooltip} from '../tooltip.js'
 
 import {add_selecting, remove_selecting} from '../select.js'
+import {add_diving, remove_diving} from '../dive.js'
+import {add_panning, remove_panning} from '../pan.js'
 
 const tpl = `<section id="menu-bar">
 	<div>
@@ -47,7 +49,13 @@ $tool_floater.addEventListener('mouseover', evt => {
 const $select = $ui.querySelector('#tool-select')
 let select_clicked = false
 $select.addEventListener('click', evt => {
-	select_clicked ? remove_selecting() : add_selecting()
+	if (select_clicked) {
+		remove_selecting() 
+	} else {
+		add_selecting()
+		remove_panning()
+		remove_diving() 
+	}
 	select_clicked = !select_clicked
 })
 

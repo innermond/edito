@@ -27,11 +27,11 @@ export function add_selecting() {
 	//$svg.addEventListener('click', clickSelect, false);
 	//$svg.removeEventListener('click', click);
 	//remove_dragging()
-	if (document.body.classList.contains('pan')) {
+	/*if (document.body.classList.contains('pan')) {
 		document.body.classList.remove('pan')
 		document.body.classList.add('pan-stopped')
 		remove_panning()
-	}
+	}*/
 	
 	$svg.addEventListener('mouseup', endSelect);
 	//$svg.addEventListener('mouseleave', endSelect);
@@ -50,11 +50,11 @@ export function remove_selecting() {
 	//$svg.removeEventListener('click', clickSelect, false);
 	//$svg.addEventListener('click', click);
 	//add_dragging()
-	if (document.body.classList.contains('pan-stopped')) {
+	/*if (document.body.classList.contains('pan-stopped')) {
 		document.body.classList.remove('pan-stopped')
 		add_panning()
 		document.body.classList.add('pan')
-	}
+	}*/
 
 	$svg.removeEventListener('mouseup', endSelect);
 	//$svg.removeEventListener('mouseleave', endSelect);

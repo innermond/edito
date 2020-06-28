@@ -1,5 +1,5 @@
 import {$svg} from './dom.js'
-import {click} from './click.js'
+import {disable, click} from './click.js'
 import {add_dragging, remove_dragging} from './drag.js'
 
 let supportsPassive = false;
@@ -19,9 +19,6 @@ export function add_panning() {
 	$svg.addEventListener('mousedown', startPan);
 	
 	$svg.addEventListener('click', clickPan);
-	$svg.removeEventListener('click', click);
-	remove_dragging()
-	
 	$svg.addEventListener('mouseup', endPan);
 	$svg.addEventListener('mousemove', pan, opt);
 	$svg.addEventListener('mouseleave', endPan);
@@ -35,9 +32,6 @@ export function remove_panning() {
 	$svg.removeEventListener('mousedown', startPan);
 
 	$svg.removeEventListener('click', clickPan);
-	$svg.addEventListener('click', click);
-	add_dragging()
-	
 	$svg.removeEventListener('mouseup', endPan);
 	$svg.removeEventListener('mousemove', pan, opt);
 	$svg.removeEventListener('mouseleave', endPan);
