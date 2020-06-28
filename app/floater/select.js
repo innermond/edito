@@ -5,15 +5,15 @@ const tpl = `<section class="movable" id="select">
 <div class="wrap-row">
 <div>
 	<label class="tooltip" data-tooltip-text="Selectează toate obiectele vizibile" data-tooltip-bottom >Tot</label>
-	<input type="checkbox" class="switch" id="select_all">
+	<input data-tooltip-text="selectezi tot" data-tooltip-bottom type="checkbox" class="switch tooltip" id="select_all">
 </div>
 <div>
 	<label class="tooltip" data-tooltip-text="Inversează selecția curentă - ce nu e selectat devine selecție" data-tooltip-bottom >Invers</label>
-	<button id="select_inverse"><img src="/icon/inverse.svg"></button>
+	<button class="tooltip" data-tooltip-text="Inversezi selecția" data-tooltip-bottom id="select_inverse"><img src="/icon/inverse.svg"></button>
 </div>
 <div>
 	<label class="tooltip" data-tooltip-text="Selecția trebuie să cuprindă in totalitate obiectele" data-tooltip-bottom >Cuprinzător</label>
-	<input type="checkbox" class="switch" id="select_inside">
+	<input type="checkbox" data-tooltip-text="mod selectare" data-tooltip-bottom class="switch tooltip" id="select_inside">
 </div>
 <div>
 	<img src="/icon/close.svg" class="close" />

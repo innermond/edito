@@ -1,10 +1,26 @@
 import {newtag_html} from './dom.js'
+import {tooltip} from './tooltip.js'
 
 export function span_checkbox($ee) {
 	$ee.forEach($e => {
 		if ($e?.type !== 'checkbox') return
 		
 		const $span = newtag_html('span')		
+		if ($e.classList.contains('tooltip')) {
+			$e.classList.toggle('tooltip')
+			$span.classList.add('tooltip')
+			if ('tooltipText' in $e.dataset) {
+				$span.setAttribute('data-tooltip-text', $e.dataset.tooltipText)
+			}
+			if ('tooltipBottom' in $e.dataset) {
+				const attr = document.createAttribute(`data-tooltip-bottom`)
+				$span.setAttributeNode(attr)
+			} else if ('tooltipTop' in $e.dataset) {
+				const attr = document.createAttribute(`data-tooltip-top`)
+				$span.setAttributeNode(attr)
+			}
+			tooltip($span)
+		}
 		$e.parentNode.insertBefore($span, $e.nextElementSibling)
 
 		$e.dataset.proxy = '#'+$span.id

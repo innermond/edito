@@ -86,6 +86,17 @@ export function tooltip($explained, adjx=0, adjy=0) {
 		return next_overflow
 	}
 
+	const position = (posx, bb) => {
+		// position
+		let next = position_top(posx, bb)
+		if (next === 'right') {
+			next = position_right(posx, bb)
+		}
+		if (next === 'left') {
+			next = position_left(posx, bb)
+		}
+	}
+
 	let move = false
 	$explained.addEventListener('mouseenter', evt => {
 		if ($explained.classList.contains('active')) {
@@ -99,6 +110,7 @@ export function tooltip($explained, adjx=0, adjy=0) {
 		$e.classList.add('active')
 	})
 	let show_val = false
+
 	$explained.addEventListener('mousedown', evt => {
 		move = true
 		show_val = true
@@ -112,12 +124,11 @@ export function tooltip($explained, adjx=0, adjy=0) {
 			return
 		}
 		// position
-		let next = position_top(posx, bb)
-		if (next === 'right') {
-			next = position_right(posx)
-		}
+		position(posx, bb)
+		
 		if (show_val && $explained?.type && 'value' in $explained) $e.textContent = $explained.value
 	})
+
 	$explained.addEventListener('mouseout', evt => {
 		move = false
 		show_val = false
@@ -136,14 +147,7 @@ export function tooltip($explained, adjx=0, adjy=0) {
 			move = false
 			return
 		}
-		// position
-		let next = position_top(posx, bb)
-		if (next === 'right') {
-			next = position_right(posx, bb)
-		}
-		if (next === 'left') {
-			next = position_left(posx, bb)
-		}
+		position(posx, bb)
 		if (show_val && $explained?.type && 'value' in $explained) $e.textContent = $explained.value
 	})
 
