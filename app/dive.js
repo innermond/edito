@@ -9,6 +9,7 @@ import {$clicked, $selection} from './selection/index.js'
 import {is_selectable, $select_inside} from './floater/select.js'
 import {centerpoint} from './pos.js'
 import {zoom} from './zoom.js'
+import {click} from './click.js'
 
 let supportsPassive = false;
 try {
@@ -28,6 +29,7 @@ export function add_diving() {
 	
 	//$svg.addEventListener('click', clickSelect, false);
 	//$svg.removeEventListener('click', click);
+	disable.click = true
 	remove_dragging()
 	if (document.body.classList.contains('pan')) {
 		document.body.classList.remove('pan')
@@ -51,6 +53,7 @@ export function remove_diving() {
 
 	//$svg.removeEventListener('click', clickSelect, false);
 	//$svg.addEventListener('click', click);
+	disable.click = false
 	add_dragging()
 	if (document.body.classList.contains('pan-stopped')) {
 		document.body.classList.remove('pan-stopped')
@@ -74,11 +77,11 @@ let start = null
 let moved = null
 function startSelect(evt) {
 	if (moved !== null) return
-	if (evt.target !== $svg) return
+	//if (evt.target !== $svg) return
 
 	moved = false
 	if (start !== null) return
-	if (evt.target !== $svg) return
+	//if (evt.target !== $svg) return
 	if ($clicked.clues.operating()) return
 
 	start = point_screen(evt)
@@ -89,7 +92,7 @@ function startSelect(evt) {
 	attr($selectangle, {x:start.x, y:start.y, width:1, height:1})
 	$svg.appendChild($selectangle)
 	//setm($selectangle, m2e($selectangle, $svg))
-	//$svg.removeEventListener('click', click);
+	$svg.removeEventListener('click', click);
 	//$svg.addEventListener('click', clickSelect);
 	//remove_dragging()
 }
@@ -109,13 +112,17 @@ function endSelect(evt) {
 	if (!$selectangle?.ownerSVGElement) return
 
 	const $pt = centerpoint($selectangle, $svg)
-	const scale = 2
-	dive(2, $pt, 1)
+	let scale = 2
+	const W = $svg.getBoundingClientRect().width
+	const w = $selectangle.getBoundingClientRect().width
+	scale = W/w
+	dive(scale, $pt, 1)
 	$selectangle.remove()
 	//evt.stopPropagation()
 	//$svg.addEventListener('click', click)
 	//$svg.removeEventListener('click', clickSelect);
 	//add_dragging()
+	disable.click = false
 }
 
 // top right
@@ -128,6 +135,7 @@ function select(evt) {
 	if (start === null) return
 	//if (evt.target !== $svg) return
 	//evt.stopPropagation()
+	disable.click = true
 
 	const current = point_screen(evt)
 	const dx = start.x - current.x
