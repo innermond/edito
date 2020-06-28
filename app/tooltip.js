@@ -13,7 +13,9 @@ export function tooltip($explained, adjx=0, adjy=0) {
 
 	const bb_thumb = $e.getBoundingClientRect()
 	
-	const position = (posx, bb) => {
+	const position_top = (posx, bb) => {
+		$e.style.left = posx + adjx + 'px'
+		$e.style.top = bb.top + bb.height*0.5 + adjy + 'px'
 		let bb_tooltip = $e.getBoundingClientRect()
 		let inx = 0, peak = 30
 		let top_overflow = (bb_tooltip.top < 0) 
@@ -29,24 +31,59 @@ export function tooltip($explained, adjx=0, adjy=0) {
 			if (inx > peak) break
 		}
 		// try to cope with right viewport overflowing
-		/*const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-		const right_overflow = bb_tooltip.right - vw
-			if (right_overflow > 0) {
-			bb_tooltip = $e.getBoundingClientRect()
-			$e.style.left = posx + adjx - right_overflow + 'px'
-			console.log($e.style.left)
-		}*/
+		const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+		let next_overflow = false
+		if (bb_tooltip.right > vw) {
+			next_overflow = 'right'
+		} if (bb_tooltip.left < 0) {
+			next_overflow = 'left'
+		}
 		if (checked) {
-			$e.style.maxWidth = 'none'
 			if (top_overflow && (inx > peak)) {
 				$e.style.width = 'initial'  
 				$e.style.maxWidth = 'initial'
 				$e.classList.replace('tooltip-bottom', 'tooltip-top')
 			}
-		} else {
-			$e.style.left = posx + adjx + 'px'
-			$e.style.top = bb.top + bb.height*0.5 + adjy + 'px'
+		} 
+		return next_overflow
+	}
+
+	const position_right = (posx, bb) => {
+		let bb_tooltip = $e.getBoundingClientRect()
+		const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+		let overflow = bb_tooltip.right - vw
+		let inx = 0, peak = 30
+		while (overflow > 0) {
+			$e.style.left = posx + adjx - overflow + 'px'
+			bb_tooltip = $e.getBoundingClientRect()
+			overflow = bb_tooltip.right - vw
+			inx++
+			if (inx > peak) break
 		}
+		let next_overflow = false
+		if (bb_tooltip.left < 0) {
+			next_overflow = 'left'
+		}
+		return next_overflow
+	}
+
+	const position_left = (posx, bb) => {
+		let bb_tooltip = $e.getBoundingClientRect()
+		const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+		let overflow = bb_tooltip.left < 0 ? -1*bb_tooltip.left : 0
+		let inx = 0, peak = 30
+		while (overflow > 0) {
+			$e.style.left = posx + adjx + overflow + 'px'
+			bb_tooltip = $e.getBoundingClientRect()
+			overflow = bb_tooltip.left < 0 ? -1*bb_tooltip.left : 0
+			inx++
+			if (inx > peak) break
+		}
+		let next_overflow = false
+		if (bb_tooltip.left < 0) {
+			next_overflow = 'left'
+		}
+		return next_overflow
 	}
 
 	let move = false
@@ -75,7 +112,10 @@ export function tooltip($explained, adjx=0, adjy=0) {
 			return
 		}
 		// position
-		position(posx, bb)
+		let next = position_top(posx, bb)
+		if (next === 'right') {
+			next = position_right(posx)
+		}
 		if (show_val && $explained?.type && 'value' in $explained) $e.textContent = $explained.value
 	})
 	$explained.addEventListener('mouseout', evt => {
@@ -97,7 +137,13 @@ export function tooltip($explained, adjx=0, adjy=0) {
 			return
 		}
 		// position
-		position(posx, bb)
+		let next = position_top(posx, bb)
+		if (next === 'right') {
+			next = position_right(posx, bb)
+		}
+		if (next === 'left') {
+			next = position_left(posx, bb)
+		}
 		if (show_val && $explained?.type && 'value' in $explained) $e.textContent = $explained.value
 	})
 
