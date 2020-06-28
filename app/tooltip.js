@@ -12,6 +12,34 @@ export function tooltip($explained, adjx=0, adjy=0) {
 	$explained.dataset.tooltipId = $e.id
 
 	const bb_thumb = $e.getBoundingClientRect()
+	
+	const position = (posx, bb) => {
+		let bb_tooltip = $e.getBoundingClientRect()
+		let inx = 0, peak = 30
+		let top_overflow = (bb_tooltip.top < 0) 
+		let checked = top_overflow
+		while (top_overflow) {
+			$e.style.width = (bb_tooltip.width + 1) + 'px'	
+			$e.style.maxWidth = $e.style.width
+			$e.style.left = posx + adjx + 'px'
+			$e.style.top = bb.top + bb.height*0.5 + adjy + 'px'
+			bb_tooltip = $e.getBoundingClientRect()
+			top_overflow = bb_tooltip.top < 0 
+			inx++
+			if (inx > peak) break
+		}
+		if (checked) {
+			$e.style.maxWidth = 'none'
+			if (top_overflow && (inx > peak)) {
+				$e.style.width = 'initial'  
+				$e.style.maxWidth = 'initial'
+				$e.classList.replace('tooltip-bottom', 'tooltip-top')
+			}
+		} else {
+			$e.style.left = posx + adjx + 'px'
+			$e.style.top = bb.top + bb.height*0.5 + adjy + 'px'
+		}
+	}
 
 	let move = false
 	$explained.addEventListener('mouseenter', evt => {
@@ -39,10 +67,7 @@ export function tooltip($explained, adjx=0, adjy=0) {
 			return
 		}
 		// position
-		const bb_tooltip = $e.getBoundingClientRect()
-		$e.style.left = posx+ adjx + 'px'
-		$e.style.top = bb.top + bb.height*0.5 + adjy + 'px'
-
+		position(posx, bb)
 		if (show_val && $explained?.type && 'value' in $explained) $e.textContent = $explained.value
 	})
 	$explained.addEventListener('mouseout', evt => {
@@ -64,28 +89,7 @@ export function tooltip($explained, adjx=0, adjy=0) {
 			return
 		}
 		// position
-		let bb_tooltip = $e.getBoundingClientRect()
-		let inx = 0, peak = 30
-		let top_overflow = (bb_tooltip.top < 0) 
-		let checked = top_overflow
-		while (top_overflow) {
-			$e.style.width = (bb_tooltip.width + 1) + 'px'	
-			bb_tooltip = $e.getBoundingClientRect()
-			inx++
-			if (inx > peak) break
-			top_overflow = bb_tooltip.top < 0 
-		}
-		if (checked) {
-			$e.style.maxWidth = 'none'
-			if (top_overflow && (inx > peak)) {
-				$e.style.width = 'initial'  
-				$e.style.maxWidth = 'initial'
-				$e.classList.replace('tooltip-bottom', 'tooltip-top')
-			}
-		}
-		$e.style.left = posx+ adjx + 'px'
-		$e.style.top = bb.top + bb.height*0.5 + adjy + 'px'
-
+		position(posx, bb)
 		if (show_val && $explained?.type && 'value' in $explained) $e.textContent = $explained.value
 	})
 
