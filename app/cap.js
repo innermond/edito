@@ -3,10 +3,11 @@ import {add_panning, remove_panning} from './pan.js'
 import {add_selecting, remove_selecting} from './select.js'
 import {add_dragging, remove_dragging} from './drag.js'
 import {disable} from './click.js'
-import {watch} from './dom.js'
+//import {watch} from './dom.js'
 
 const activated_default = {drag: true, select: false, pan: false, dive: false}
-const activated = watch(Object.assign({}, activated_default))
+const activated = Object.assign({}, activated_default)
+//const activated = watch(Object.assign({}, activated_default))
 
 const movement = {drag: {}, pan: {}, dive: {}, select: {}}
 

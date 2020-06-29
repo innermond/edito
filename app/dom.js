@@ -136,9 +136,13 @@ export function unit_conv(unit_src, u_dst) {
 	// assume unit is epressed as last 2 chars
 	div.style.width = unit_val+u_src
 	document.body.appendChild(div)
-	let unit_px = u_src !== 'px' ? 
-		1*window.getComputedStyle(div).width :
-		unit_val
+	let unit_px
+    if (u_src !== 'px') {
+        const ss = window.getComputedStyle(div)
+        unit_px = parseFloat(ss.width) 
+    } else {
+        unit_px = unit_val
+    }
 	div.style.width = unit_val+u_dst
 	let k = window.getComputedStyle(div).width
 	k = unit_px/parseFloat(k)
