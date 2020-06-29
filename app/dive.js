@@ -24,22 +24,9 @@ try {
 const opt = supportsPassive ? { passive: true } : false
 
 export function add_diving() {
-	// manage selecting
 	$svg.addEventListener('mousedown', startSelect);
-	
-	//$svg.addEventListener('click', clickSelect, false);
-	//$svg.removeEventListener('click', click);
-	//disable.click = true
-	//remove_dragging()
-	/*if (document.body.classList.contains('pan')) {
-		document.body.classList.remove('pan')
-		document.body.classList.add('pan-stopped')
-		remove_panning()
-	}*/
-	
 	$svg.addEventListener('mouseup', endSelect);
 	//$svg.addEventListener('mouseleave', endSelect);
-
 	$svg.addEventListener('mousemove', select, opt);
 	
 	$svg.addEventListener('touchstart', startSelect);
@@ -48,22 +35,9 @@ export function add_diving() {
 }
 
 export function remove_diving() {
-	// manage selecting
 	$svg.removeEventListener('mousedown', startSelect);
-
-	//$svg.removeEventListener('click', clickSelect, false);
-	//$svg.addEventListener('click', click);
-	//disable.click = false
-	//add_dragging()
-	/*if (document.body.classList.contains('pan-stopped')) {
-		document.body.classList.remove('pan-stopped')
-		add_panning()
-		document.body.classList.add('pan')
-	}*/
-
 	$svg.removeEventListener('mouseup', endSelect);
 	//$svg.removeEventListener('mouseleave', endSelect);
-
 	$svg.removeEventListener('mousemove', select, opt);
 	
 	$svg.removeEventListener('touchstart', startSelect);
@@ -85,16 +59,11 @@ function startSelect(evt) {
 	if ($clicked.clues.operating()) return
 
 	start = point_screen(evt)
-	//evt.stopPropagation()
 
 	$selectangle = newtag('rect', {style: style})
 	$selectangle.dataset.selectangle = 'true'
 	attr($selectangle, {x:start.x, y:start.y, width:1, height:1})
 	$svg.appendChild($selectangle)
-	//setm($selectangle, m2e($selectangle, $svg))
-	$svg.removeEventListener('click', click);
-	//$svg.addEventListener('click', clickSelect);
-	//remove_dragging()
 }
 /*function clickSelect(evt) {
 	evt.stopPropagation()
@@ -107,7 +76,7 @@ function dive(scale, pt, step) {
 
 function endSelect(evt) {
 	start = null
-	disable.click = moved
+	//disable.click = moved
 	moved = null
 	if (!$selectangle?.ownerSVGElement) return
 
@@ -117,14 +86,9 @@ function endSelect(evt) {
 	let w = $selectangle.getBoundingClientRect().width
 	scale = W/w
 	// is just a click?
-	if (w < 10) evt.ctrlKey ? scale = 0.5 : scale = 2
+	if ($selectangle.width.baseVal.valueInSpecifiedUnits <= 1) evt.ctrlKey ? scale = 0.5 : scale = 2
 	dive(scale, $pt, 1)
 	$selectangle.remove()
-	//evt.stopPropagation()
-	//$svg.addEventListener('click', click)
-	//$svg.removeEventListener('click', clickSelect);
-	//add_dragging()
-	disable.click = false
 }
 
 // top right
@@ -137,7 +101,7 @@ function select(evt) {
 	if (start === null) return
 	//if (evt.target !== $svg) return
 	//evt.stopPropagation()
-	disable.click = true
+	//disable.click = true
 
 	const current = point_screen(evt)
 	const dx = start.x - current.x

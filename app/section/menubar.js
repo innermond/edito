@@ -5,6 +5,7 @@ import {tooltip} from '../tooltip.js'
 import {add_selecting, remove_selecting} from '../select.js'
 import {add_diving, remove_diving} from '../dive.js'
 import {add_panning, remove_panning} from '../pan.js'
+import movement from '../cap.js'
 
 const tpl = `<section id="menu-bar">
 	<div>
@@ -50,11 +51,9 @@ const $select = $ui.querySelector('#tool-select')
 let select_clicked = false
 $select.addEventListener('click', evt => {
 	if (select_clicked) {
-		remove_selecting() 
+		movement.select.off()
 	} else {
-		add_selecting()
-		remove_panning()
-		remove_diving() 
+		movement.select.on()
 	}
 	select_clicked = !select_clicked
 })

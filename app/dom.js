@@ -316,4 +316,25 @@ export function cycle_zindex($el) {
 	$el.style.zIndex = MAX_Z
 }
 
+export const watch = object => {
+	const handler = {
+		get(target, property, receiver) {
+			try {
+				return new Proxy(target[property], handler)
+			} catch (err) {
+				return Reflect.get(target, property, receiver)
+			}
+		},
+		defineProperty(target, property, descriptor) {
+			console.log(target, property, descriptor.value)
+			return Reflect.defineProperty(target, property, descriptor)
+		},
+		deleteProperty(target, property) {
+			return Reflect.deleteProperty(target, property)
+		}
+	}
+
+	return new Proxy(object, handler)
+}
+
 export {attr, newtag, rnd, xmlns, nsattr, rectpage, px}

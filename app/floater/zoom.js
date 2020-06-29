@@ -9,6 +9,7 @@ import {centerpoint} from '../pos.js'
 import {ungroup_one} from '../user_action/group.js'
 import {addEventInterval} from '../event_interval.js'
 import {disable} from '../click.js'
+import movement from '../cap.js'
 
 const tpl = `<section class="movable" id="zoom">
 <div class="wrap-row">
@@ -49,17 +50,10 @@ const diving = () => {
 	let have_area = false
 	return evt => {
 		if(have_area) {
-			disable.click = false
-			add_dragging()
-			add_selecting()
-			remove_diving() 
+			movement.dive.off()
 			document.body.classList.remove('area')
 		} else {
-			disable.click = true
-			add_diving()
-			remove_panning()
-			remove_selecting()
-			remove_dragging()
+			movement.dive.on()
 			document.body.classList.add('area')
 		}
 		have_area = !have_area
@@ -101,17 +95,10 @@ const panning = () => {
 	let have_pan = false
 	return evt => {
 		if(have_pan) {
-			disable.click = false
-			add_dragging()
-			add_selecting()
-			remove_panning() 
+			movement.pan.off()
 			document.body.classList.remove('pan')
 		} else {
-			disable.click = true
-			add_panning()
-			remove_selecting()
-			remove_diving() 
-			remove_dragging() 
+			movement.pan.on()
 			document.body.classList.add('pan')
 		}
 		have_pan = !have_pan

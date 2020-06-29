@@ -3,8 +3,9 @@ import {$svg, element_from} from './dom.js'
 import {$selection} from './selection/grouping.js'
 import {$clicked} from './selection/clicked.js'
 import {add_selecting, remove_selecting} from './select.js'
+import {watch} from './dom.js'
 
-export const disable = {click: false}
+export const disable = watch({click: false})
 
 $svg.addEventListener('click', click);
 //add_selecting()

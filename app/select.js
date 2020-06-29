@@ -23,16 +23,6 @@ const opt = supportsPassive ? { passive: true } : false
 export function add_selecting() {
 	// manage selecting
 	$svg.addEventListener('mousedown', startSelect);
-	
-	//$svg.addEventListener('click', clickSelect, false);
-	//$svg.removeEventListener('click', click);
-	//remove_dragging()
-	/*if (document.body.classList.contains('pan')) {
-		document.body.classList.remove('pan')
-		document.body.classList.add('pan-stopped')
-		remove_panning()
-	}*/
-	
 	$svg.addEventListener('mouseup', endSelect);
 	//$svg.addEventListener('mouseleave', endSelect);
 
@@ -44,18 +34,7 @@ export function add_selecting() {
 }
 
 export function remove_selecting() {
-	// manage selecting
 	$svg.removeEventListener('mousedown', startSelect);
-
-	//$svg.removeEventListener('click', clickSelect, false);
-	//$svg.addEventListener('click', click);
-	//add_dragging()
-	/*if (document.body.classList.contains('pan-stopped')) {
-		document.body.classList.remove('pan-stopped')
-		add_panning()
-		document.body.classList.add('pan')
-	}*/
-
 	$svg.removeEventListener('mouseup', endSelect);
 	//$svg.removeEventListener('mouseleave', endSelect);
 
@@ -80,21 +59,13 @@ function startSelect(evt) {
 	if ($clicked.clues.operating()) return
 
 	start = point_screen(evt)
-	//evt.stopPropagation()
 
 	$selectangle = newtag('rect', {style: style})
 	$selectangle.dataset.selectangle = 'true'
 	attr($selectangle, {x:start.x, y:start.y, width:1, height:1})
 	$svg.appendChild($selectangle)
-	//setm($selectangle, m2e($selectangle, $svg))
-	//$svg.removeEventListener('click', click);
-	//$svg.addEventListener('click', clickSelect);
-	//remove_dragging()
+	disable.click = true
 }
-/*function clickSelect(evt) {
-	evt.stopPropagation()
-	$svg.addEventListener('click', click)
-}*/
 
 function selection_ants(evt) {
 	if (!evt.shiftKey) $selection.clear()
@@ -131,10 +102,6 @@ function endSelect(evt) {
 
 	selection_ants(evt)
 	$selectangle.remove()
-	//evt.stopPropagation()
-	//$svg.addEventListener('click', click)
-	//$svg.removeEventListener('click', clickSelect);
-	//add_dragging()
 }
 
 // top right

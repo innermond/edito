@@ -6,7 +6,7 @@ body {
   flex: 1 1 100%;
   height: 100%; }
 
-body:not(.pan) image, body:not(.pan) rect, body:not(.pan) line, body:not(.pan) path, body:not(.pan) textPath, body:not(.pan) circle, body:not(.pan) ellipse, body:not(.pan) tspan {
+body:not(.pan):not(.area) image, body:not(.pan):not(.area) rect, body:not(.pan):not(.area) line, body:not(.pan):not(.area) path, body:not(.pan):not(.area) textPath, body:not(.pan):not(.area) circle, body:not(.pan):not(.area) ellipse, body:not(.pan):not(.area) text, body:not(.pan):not(.area) tspan {
   cursor: pointer; }
 
 body.pan text {
@@ -16,7 +16,6 @@ body.pan.panning text {
   cursor: grabbing; }
 
 text {
-  cursor: default;
   user-select: none; }
 
 #menu-bar {
@@ -486,6 +485,9 @@ body.pan.panning {
 
 body.pan {
   cursor: grab; }
+
+body.area {
+  cursor: crosshair; }
 
 #editor {
   background-color: black;

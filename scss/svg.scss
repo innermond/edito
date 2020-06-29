@@ -7,8 +7,8 @@ body {
 	height: 100%;
 }
 
-body:not(.pan){
-	image, rect, line, path, textPath, circle, ellipse, tspan {cursor: pointer;}
+body:not(.pan):not(.area){
+	image, rect, line, path, textPath, circle, ellipse, text, tspan {cursor: pointer;}
 }
 
 body.pan text {
@@ -18,6 +18,5 @@ body.pan.panning text {
 	cursor: grabbing;
 }
 text {
-	cursor: default;
 	user-select: none;
 }
