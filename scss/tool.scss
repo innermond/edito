@@ -173,7 +173,7 @@ $tool-drawer-width: 200px;
 	position: absolute;
 	justify-content: space-between;
 	box-sizing: border-box;
-	background-color: $bk-color-loud;
+	background-color: $bk-color;
 	width: $tool-drawer-width;
 	left: -1*$tool-drawer-width;
 	top: 0;
@@ -187,6 +187,8 @@ $tool-drawer-width: 200px;
 	}
 	&.active {
 		left: $tool-width;
+		border-left: 0.1rem solid black;
+		box-shadow: 0.1rem 0rem 0.25rem 0.1rem #0000005c;
 	}
 	&.close {
     right: 11px;
@@ -250,15 +252,13 @@ section label {
 
 .title {
 	display: block;
-	font-size: 1.2rem;
+	font-size: 1rem;
 	padding: 0.5rem;
-	font-weight: 700;
 	text-align: center;
 	text-transform: capitalize;
-	width: $tool-drawer-width;
 	height: $title-height;
 	background-color: $bk-color-loud;
-	border-bottom: 0.25rem solid $bk-color-silent;
+	border-bottom: 0.25rem solid $txt-color-border;
 }
 
 .close {
@@ -278,7 +278,6 @@ section label {
 }
 
 .cancel {
-	width: $tool-drawer-width;
 	height: $title-height;
 	z-index: 1;
 	margin: 0;
@@ -294,7 +293,7 @@ button, .file-upload {
 	margin: 1rem 0rem;
 	font-size: 0.75rem;
 	padding: 0.75rem;
-	background-color: $bk-color;
+	background-color: $bk-color-loud;
 	color: $txt-color;
 	cursor: pointer;
 	border: none;
@@ -386,9 +385,10 @@ input[type=checkbox][class~=switch] {
 	padding: 0.25rem;
 	//margin-top: 0.25rem;
 	color: $txt-color;
-	font-size: 1.25rem;
+	font-size: 0.9rem;
 	transition: all .15s linear;
-	border: $bk-color;
+	border: 0.1rem solid $txt-color-border;
+	border-radius: 0.2rem;
 	background-color: black;
 }
 

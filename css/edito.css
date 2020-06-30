@@ -158,7 +158,7 @@ section.movable:hover, #bottom-bar:hover {
   position: absolute;
   justify-content: space-between;
   box-sizing: border-box;
-  background-color: #24272b;
+  background-color: #292c31;
   width: 200px;
   left: -200px;
   top: 0;
@@ -170,7 +170,9 @@ section.movable:hover, #bottom-bar:hover {
   .tool-drawer > * {
     box-sizing: border-box; }
   .tool-drawer.active {
-    left: 50px; }
+    left: 50px;
+    border-left: 0.1rem solid black;
+    box-shadow: 0.1rem 0rem 0.25rem 0.1rem #0000005c; }
   .tool-drawer.close {
     right: 11px;
     top: 11px; }
@@ -213,15 +215,13 @@ section label {
 
 .title {
   display: block;
-  font-size: 1.2rem;
+  font-size: 1rem;
   padding: 0.5rem;
-  font-weight: 700;
   text-align: center;
   text-transform: capitalize;
-  width: 200px;
   height: 3rem;
   background-color: #24272b;
-  border-bottom: 0.25rem solid #292c31; }
+  border-bottom: 0.25rem solid #40454d; }
 
 .close {
   position: absolute;
@@ -238,7 +238,6 @@ section label {
     background-color: black; }
 
 .cancel {
-  width: 200px;
   height: 3rem;
   z-index: 1;
   margin: 0;
@@ -253,7 +252,7 @@ button, .file-upload {
   margin: 1rem 0rem;
   font-size: 0.75rem;
   padding: 0.75rem;
-  background-color: #292c31;
+  background-color: #24272b;
   color: #d6d3ce;
   cursor: pointer;
   border: none;
@@ -330,18 +329,20 @@ textarea {
   font-family: Arial Narrow,Arial,sans-serif;
   padding: 0.25rem;
   color: #d6d3ce;
-  font-size: 1.25rem;
+  font-size: 0.9rem;
   transition: all .15s linear;
-  border: #292c31;
+  border: 0.1rem solid #40454d;
+  border-radius: 0.2rem;
   background-color: black; }
 
 input {
   font-family: Arial Narrow,Arial,sans-serif;
   padding: 0.25rem;
   color: #d6d3ce;
-  font-size: 1.25rem;
+  font-size: 0.9rem;
   transition: all .15s linear;
-  border: #292c31;
+  border: 0.1rem solid #40454d;
+  border-radius: 0.2rem;
   background-color: black; }
 
 hr {
@@ -546,7 +547,8 @@ ul.folded {
 
 [type='range'] {
   -webkit-appearance: none;
-  background: transparent; }
+  background: transparent;
+  border: none; }
   [type='range']::-moz-focus-outer {
     border: 0; }
   [type='range']:focus {
