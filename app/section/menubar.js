@@ -6,6 +6,7 @@ import {add_selecting, remove_selecting} from '../select.js'
 import {add_diving, remove_diving} from '../dive.js'
 import {add_panning, remove_panning} from '../pan.js'
 import movement from '../cap.js'
+import {$zoom_area} from '../ui.js'
 
 const tpl = `<section id="menu-bar">
 	<div>
@@ -57,6 +58,24 @@ $select.addEventListener('click', evt => {
 	}
 	select_clicked = !select_clicked
 })
+
+const $area = $ui.querySelector('#tool-zoom')
+const diving = () => {
+	let have_area = false
+	return evt => {
+		if(have_area) {
+			movement.dive.off()
+			document.body.classList.remove('area')
+			$zoom_area.classList.remove('active')
+		} else {
+			movement.dive.on()
+			document.body.classList.add('area')
+			$zoom_area.classList.add('active')
+		}
+		have_area = !have_area
+	}
+}
+$area.addEventListener('click', diving())
 
 const $tool_menu = $ui.querySelector('#tool-menu-sections')
 

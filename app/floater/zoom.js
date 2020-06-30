@@ -15,7 +15,7 @@ const tpl = `<section class="movable" id="zoom">
 <div class="wrap-row">
 <div>
 	<label class="tooltip" data-tooltip-text="Indică regiunea in care se va face zoom" data-tooltip-bottom for="zoom_area">Regiune</label>
-	<button class="tooltip" data-tooltip-text="desenează zona de zoom" data-tooltip-bottom id="zoom_area"><img src="/icon/zoom.svg"></button>
+	<button class="tooltip" data-tooltip-text="deactivează / activează zoom-ul prin indicarea zonei" data-tooltip-bottom id="zoom_area"><img src="/icon/zoom-region.svg"></button>
 </div>
 <div>
 	<label class="tooltip" data-tooltip-text="Apropiază pagina" data-tooltip-bottom for="zoom_in">Mărește</label>
@@ -45,22 +45,22 @@ const tpl = `<section class="movable" id="zoom">
 export const $ui = ui_fragment(tpl)
 export const $zoom_is_edit = $ui.querySelector('#zoom_is_edit')
 
-const $area = $ui.querySelector('#zoom_area')
+export const $zoom_area = $ui.querySelector('#zoom_area')
 const diving = () => {
-	let have_area = false
 	return evt => {
-		if(have_area) {
+		if(movement.activated.dive) {
 			movement.dive.off()
 			document.body.classList.remove('area')
+			$zoom_area.classList.remove('active')
 		} else {
 			movement.dive.on()
 			document.body.classList.add('area')
+			$zoom_area.classList.add('active')
 		}
-		have_area = !have_area
 	}
 }
-$area.addEventListener('click', diving())
-$area.addEventListener('mousedown', evt => $area.classList.toggle('active'))
+$zoom_area.addEventListener('click', diving())
+$zoom_area.addEventListener('mousedown', evt => $zoom_area.classList.toggle('active'))
 
 const step = 1.01
 
