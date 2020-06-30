@@ -7,7 +7,7 @@ export function stroke_width(val) {
 	// receive val units, apply to selection as pixels
 	val = px(val)
 	$selection.forEach($el => {
-        $el.dataset.prevStroke = val_units
+		$el.dataset.prevStroke = val_units
 		let $ee = [$el]
 		if ($el.nodeName === 'g') {
 			$ee = Array.from($el.children)
@@ -20,6 +20,7 @@ export function stroke_width(val) {
 				$tt = $e.querySelectorAll(':scope > tspan[style]')
 				$tt.forEach($t => $t.style.strokeWidth = 'inherit')
 			}	
+			$e.follow()
 		}
 	})
 }

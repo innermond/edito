@@ -10,7 +10,8 @@ import {$section_menubar, $section_properties, $section_add_shape, $section_text
 
 import {$floater_select, $floater_zoom, $floater_move, $floater_geometry, $floater_color} from './floater/index.js'
 
-import {$svg, display_none} from './dom.js'
+import {$svg, display_none, copy_viewbox} from './dom.js'
+import {zoom_reset} from './zoom.js'
 
 const $ui = new DocumentFragment()
 $ui.appendChild($section_menubar)
@@ -62,3 +63,9 @@ document.querySelectorAll('.movable').forEach($e => {
 
 })
 document.querySelector('#canvas').style.opacity = 1
+
+// assure viewbox is ok
+const vbox = $svg.viewBox.baseVal
+if (vbox.width === 0) vbox.width = $svg.width.baseVal.value
+if (vbox.height === 0) vbox.height = $svg.height.baseVal.value
+zoom_reset.viewbox = copy_viewbox($svg.viewBox)

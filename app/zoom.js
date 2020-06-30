@@ -1,4 +1,4 @@
-import {$svg, copy_viewbox} from './dom.js'
+import {$svg} from './dom.js'
 
 export function zoom(scale, pt=null, step=10) {
 	const b = $svg.viewBox.baseVal
@@ -21,4 +21,3 @@ export function zoom_reset($other=$svg, viewbox=zoom_reset.viewbox) {
     $other.viewBox.baseVal.x = viewbox.x
     $other.viewBox.baseVal.y = viewbox.y
 }
-zoom_reset.viewbox = copy_viewbox($svg.viewBox)
