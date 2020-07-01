@@ -16,10 +16,10 @@ export function div_scroller($ss) {
 					}
 				})
 				// hide scroller when leave scrollee
-				$scrollee.addEventListener('mouseleave', evt => {
-					move = false
-					$e.style.opacity = 0.0
-				})
+				//$scrollee.addEventListener('mouseleave', evt => {
+					//move = false
+					//$e.style.opacity = 0.0
+				//})
 
 				// terminate
 				$scrollee.addEventListener('mouseup', evt => {
@@ -43,7 +43,7 @@ export function div_scroller($ss) {
 					if (adj < 0) adj = 0
 				})
 				// terminate
-				$e.addEventListener('mouseup', evt => {
+				document.addEventListener('mouseup', evt => {
 					move = false
 					$e.classList.remove('active')
 				})
@@ -51,7 +51,7 @@ export function div_scroller($ss) {
 					mouse_pos(evt)
 				})
 				// move the thumb
-				$scrollee.addEventListener('mousemove', evt => {
+				document.addEventListener('mousemove', evt => {
 					if (move === false) return
 					mouse_pos(evt)
 				})

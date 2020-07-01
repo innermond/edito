@@ -18,7 +18,7 @@ ul.folded {
 		background-color: $bk-color;
 		transition: all .2s ease-out;
 		&:hover {
-			background-color: black;
+			background-color: $black-soft;
 			color: $txt-color;
 		}
 		&:first-child {

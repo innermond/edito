@@ -41,8 +41,9 @@
 .tool-menu {
 	list-style: none;
 	list-style-image: none;
-	margin: 2rem 0rem 0rem;
-	padding: 0px;
+	margin: 0;
+	border-top: 0.1rem solid $black-soft;
+	padding: 0.5rem 0rem;
 	background: $bk-color;
 	& > .tool-item {
 		padding: 0.25rem 0.5rem;
@@ -95,13 +96,14 @@ $top-tooltip: 24px*0.5+$space-tooltip;
 .tooltip-text {
 	background-color: $bk-tooltip;
   visibility: hidden;
+	font-size: 0.9rem;
   color: $bk-color;
   text-align: center;
   padding: $space-tooltip;
   border-radius: 6px;
 	min-width: 1rem;
 	max-width: 8rem;
-	width: min-content;
+	//width: 100%;
 	cursor: default;
 
 	display: flex;
@@ -187,7 +189,7 @@ $tool-drawer-width: 200px;
 	}
 	&.active {
 		left: $tool-width;
-		border-left: 0.1rem solid black;
+		border-left: 0.1rem solid $black-soft;
 		box-shadow: 0.1rem 0rem 0.25rem 0.1rem #0000005c;
 	}
 	&.close {
@@ -273,7 +275,7 @@ section label {
 	border-radius: 50%;
 	transition: all .2s ease-out;
 	&:hover {
-		background-color: black;
+		background-color: $black-soft;
 	}
 }
 
@@ -389,7 +391,7 @@ input[type=checkbox][class~=switch] {
 	transition: all .15s linear;
 	border: 0.1rem solid $txt-color-border;
 	border-radius: 0.2rem;
-	background-color: black;
+	background-color: $black-soft;
 }
 
 textarea {
@@ -410,7 +412,7 @@ hr {
 }
 
 .wrap-row {
-	border: 1px solid black;
+	border: 1px solid $txt-color-border;
 	display: flex;
 	flex-flow: row wrap;
 	& label {
