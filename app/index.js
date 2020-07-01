@@ -69,3 +69,50 @@ const vbox = $svg.viewBox.baseVal
 if (vbox.width === 0) vbox.width = $svg.width.baseVal.value
 if (vbox.height === 0) vbox.height = $svg.height.baseVal.value
 zoom_reset.viewbox = copy_viewbox($svg.viewBox)
+
+// history
+const is_ant = $e => {
+	const is = $e.dataset.ants === "true" || 
+	$e.dataset.rect === "true" ||
+	$e.dataset.selectangle === "true"
+
+	return is
+}
+let MM = []
+const historic = new MutationObserver(mm => {
+	MM = mm
+})
+
+document.addEventListener('mouseup', evt => {
+	//console.log(MM)
+	MM.forEach(m => {
+		if (!m) return
+		if (is_ant(m.target)) return
+		console.log(m.type)
+		switch (m.type) {
+			case 'childList':
+				m.addedNodes.forEach($e => {
+					if (is_ant($e)) return
+					console.log('added', m)
+				})
+				m.removedNodes.forEach($e => {
+					if (is_ant($e)) return
+					console.log('removed', m)
+				})
+			break
+			case 'attributes':
+				if (is_ant(m.target)) break
+				console.log(m.target, m.oldValue)
+			break
+		}
+	})
+})
+
+historic.observe($svg, {
+  attributes: true,
+  characterData: true,
+  childList: true,
+  subtree: true,
+  attributeOldValue: true,
+  characterDataOldValue: true
+})
