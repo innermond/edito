@@ -102,7 +102,7 @@ document.addEventListener('mouseup', evt => {
 			break
 			case 'attributes':
 				if (is_ant(m.target)) break
-				console.log(m.target, m.oldValue)
+				console.log(m, m.target, m.oldValue)
 			break
 		}
 	})
