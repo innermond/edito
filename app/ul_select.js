@@ -81,14 +81,17 @@ export function present_ul_select($sel, prop) {
 export function initial_ul_select($sel) {
 	$sel.options[0].selected = true
 	const $ul_sel = document.querySelector('#'+$sel.dataset.ul_id)
-
-	$ul_sel?.querySelectorAll(`li[data-value]`).forEach($e => {
-		$e.style.display = 'none'
-		if ('first' in $e.dataset) {
-			$e.style.display = 'list-item'
-			$ul_sel.insertAdjacentElement('afterbegin', $e)
-		}
-	})
+    const $first = $ul_sel.querySelector('li[data-first]')
+    $ul_sel.querySelectorAll(`li:not([data-first])`).forEach($e => $e.style.display = 'none')
+    if ($first) {
+        $first.style.display = 'list-item'
+        $ul_sel.insertAdjacentElement('afterbegin', $first)
+    } else {
+        $ul_sel.querySelectorAll(`li[data-value]:nth-child(1)`).forEach($e => {
+            $e.style.display = 'list-item'
+            $ul_sel.insertAdjacentElement('afterbegin', $e)
+        })
+    }
 }
 
 const tooltiping = (tooltiping_map, pos='bottom', adjx=0, adjy=0) => ($opt, $li) => {

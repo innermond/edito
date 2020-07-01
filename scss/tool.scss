@@ -347,6 +347,7 @@ input[type=checkbox][class~=switch] {
 	width: 0;
 	height: 0;
 	visibility: hidden;
+    display: none;
 	& + span {
 		width: 2rem;
 		height: 1rem;
