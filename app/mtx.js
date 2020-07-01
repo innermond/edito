@@ -6,7 +6,8 @@ const appendm = (e, m) => e.transform.baseVal.appendItem(e.ownerSVGElement?.crea
 
 const m2e = (a,e) => {
 	if (!e) e = a.ownerSVGElement
-	return e.getScreenCTM().inverse().multiply(a.getScreenCTM())
+    const mtxa = a.getScreenCTM()
+	return e.getScreenCTM().inverse().multiply(mtxa)
 }
 
 const m = e => e.transform.baseVal.consolidate()?.matrix

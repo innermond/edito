@@ -295,7 +295,8 @@ input[type=color] {
 input[type=checkbox][class~=switch] {
   width: 0;
   height: 0;
-  visibility: hidden; }
+  visibility: hidden;
+  display: none; }
   input[type=checkbox][class~=switch] + span {
     width: 2rem;
     height: 1rem;

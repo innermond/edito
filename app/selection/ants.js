@@ -144,9 +144,9 @@ import {point_in} from '../pos.js'
 		//FIXME unperformant contour routine if object have many points
 		//let bb = this.bbox_contour($el) 
 		// has stroke
-		let d = $el.style.strokeWidth
+		let d = $el.style.strokeWidth || '0'
 		d = parseFloat(d)*0.5
-        if ($el.style.stroke === 'none') d = 0
+        if ($el.style.stroke === 'none' || $el.style.stroke === '') d = 0
 		attr(this.$shape, {x:bb.x-d, y:bb.y-d, width:bb.width+2*d, height:bb.height+2*d})
 		if ($el && 'useThat' in $el) {
 			setm(this.$shape, m2e($el.useThat.el, $el))

@@ -45,6 +45,7 @@ const over = () => {
         $clicked.classList.contains('rectpage')
     ) 
         return
+    if (!$clicked.ownerSVGElement) return
 
 	if (!$clicked.ants){
 		$clicked.ants = new Ants()

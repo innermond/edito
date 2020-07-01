@@ -30,7 +30,7 @@ import {set_k as set_stroke} from './floater/color.js'
 import {set_k as set_scale} from './floater/geometry.js'
 
 export {$media_width, $media_height, $bleed, $step,
-$fonts,
+$fonts, $font_size, 
 $text_features,
 $zoom_area,
 $align, $reference,

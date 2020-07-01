@@ -23,8 +23,8 @@ const tpl = `<section class="movable" id="fill_stroke_color">
 <div>
 	<label class="tooltip" data-tooltip-text="Schimbă culoarea conturului" data-tooltip-bottom for="stroke-fill">Contur</label>
 	<div>
-	<input type="checkbox" class="switch" id="stroke-fill-switch">
 	<input type="color" id="stroke-fill" value="#000000">
+	<input type="checkbox" class="switch" id="stroke-fill-switch">
 	</div>
 </div>
 <div>

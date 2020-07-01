@@ -1,6 +1,6 @@
 import {$svg, newtag} from '../dom.js'
 import {center} from '../pos.js'
-import {colorDefault} from '../ui.js'
+import {colorDefault, $fonts, $font_size} from '../ui.js'
 
 export function add_rect() {
 	let bb = $svg.getBBox()
@@ -64,7 +64,8 @@ export function add_text(text) {
 		let tspan = newtag('tspan')
 		tspan.style.textAlign = 'inherit'
 		tspan.style.textAnchor = 'inherit'
-		tspan.style.fontSize = fs+'px'
+		tspan.style.fontSize = ($font_size.value || fs) + 'px'
+		tspan.style.fontFamily = $fonts.value
 		tspan.style.lineHeight = (fs*1.2)+'px'
 		tspan.innerHTML = line 
 		tspan.setAttributeNS(null, 'x', 0)

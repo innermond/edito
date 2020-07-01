@@ -11,9 +11,8 @@ export function div_scroller($ss) {
 					const $s = $e.parentNode
 					// there is hidden content in need to show ?
 					const d = $s.scrollHeight - $s.clientHeight
-					if (d > 0) {
-						$e.style.opacity = 1.0
-					}
+                    $e.style.opacity = 0.0
+					if (d > 0) $e.style.opacity = 1.0
 				})
 				// hide scroller when leave scrollee
 				//$scrollee.addEventListener('mouseleave', evt => {
