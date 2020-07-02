@@ -33,14 +33,19 @@ text {
 #bottom-bar {
   bottom: 0;
   color: #d6d3ce;
-  left: 50px;
-  right: 0;
+  opacity: 0.4;
+  transition: opacity .2s ease-out;
+  margin-left: 50px;
   position: absolute;
   user-select: none;
   justify-content: center;
   display: flex;
   flex-flow: row wrap;
   background-color: #24272b; }
+  #bottom-bar:hover {
+    opacity: 1; }
+  #bottom-bar > button {
+    margin: 0; }
 
 #group_repr {
   padding: 0.5rem; }
@@ -499,6 +504,9 @@ body.pan {
 body.area {
   cursor: crosshair; }
 
+body {
+  overflow: hidden; }
+
 #editor {
   background-color: black;
   display: flex;
@@ -516,14 +524,12 @@ body.area {
 
 #canvas {
   display: flex;
-  max-width: 700px;
+  max-width: 900px;
   width: 100%;
-  max-height: 700px;
   background: url(/img/square-bg.png);
   margin: 0;
   padding: 0;
-  margin-left: 50px;
-  overflow: auto; }
+  margin-left: 50px; }
 
 ul.folded {
   margin: -0.5rem 0 0 0;

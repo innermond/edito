@@ -12,8 +12,8 @@
 }
 
 @mixin bar-position {
-	left: $tool-width;
-	right: 0;
+	margin-left: $tool-width;
+	//right: 0;
 	position: absolute;
 	user-select: none;
 	justify-content: center;
@@ -25,7 +25,15 @@
 #bottom-bar {
 	bottom: 0;
 	color: $txt-color;
+	opacity: 0.4;
+	transition: opacity .2s ease-out;
+	&:hover {
+		opacity: 1;
+	}
 	@include bar-position;
+	& > button {
+		margin: 0;
+	}
 }
 
 #group_repr {

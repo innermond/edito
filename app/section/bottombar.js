@@ -9,12 +9,12 @@ import {history, historic, connect} from '../history.js'
 
 const tpl = `<section id="bottom-bar">
 		<p id="group_repr"></p>
-    <button class="tooltip" data-tooltip-text="Renunță la modificări" id="undo"><img src="/icon/undo.svg"></button>
-    <button id="delete_element"><img class="tooltip" data-tooltip-text="Șterge elementul" data-tooltip-bottom src="/icon/delete.svg"></button>
-    <button id="undelete_element"><img class="tooltip" data-tooltip-text="Anulează ultima ștergere" data-tooltip-bottom src="/icon/undelete.svg"></button>
-    <button id="clone_element"><img class="tooltip" data-tooltip-text="Clonează elementul" data-tooltip-bottom src="/icon/copy.svg"></button>
-    <button id="save_svg"><img class="tooltip" data-tooltip-text="Previzualizează documentul" data-tooltip-bottom src="/icon/preview.svg"></button>
-    <button id="send_svg"><img class="tooltip" data-tooltip-text="Comandă" data-tooltip-bottom src="/icon/order.svg"></button>
+    <button class="tooltip" data-tooltip-text="Renunță la modificări" data-tooltip-bottom id="undo"><img src="/icon/undo.svg"></button>
+    <button id="delete_element" class="tooltip" data-tooltip-text="Șterge elementul" data-tooltip-bottom><img src="/icon/delete.svg"></button>
+    <button id="undelete_element" class="tooltip" data-tooltip-text="Anulează ultima ștergere" data-tooltip-bottom><img src="/icon/undelete.svg"></button>
+    <button id="clone_element" class="tooltip" data-tooltip-text="Clonează elementul" data-tooltip-bottom><img src="/icon/copy.svg"></button>
+    <button id="save_svg" class="tooltip" data-tooltip-text="Previzualizează documentul" data-tooltip-bottom><img src="/icon/preview.svg"></button>
+    <button id="send_svg" class="tooltip" data-tooltip-text="Comandă" data-tooltip-bottom><img src="/icon/order.svg"></button>
 </section>`
 
 export const $ui = ui_fragment(tpl)

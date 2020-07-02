@@ -1,3 +1,5 @@
+body {overflow: hidden;}
+
 #editor {
 	background-color: black;
 	display: flex;
@@ -17,13 +19,13 @@
 }
 #canvas {
 	display: flex;
-	max-width: 700px;
+	max-width: 900px;
 	width: 100%;
-	max-height: 700px;
+	//max-height: 700px;
 	background: url(/img/square-bg.png);
 	margin: 0;
 	padding: 0;
 	margin-left: $tool-width;
-	overflow: auto;
+	//overflow: auto;
 }
 

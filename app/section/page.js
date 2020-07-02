@@ -13,6 +13,10 @@ const tpl = `<section class="vertical-align">
 	<input type="number" id="media_width" value="210" />
 	<label class="tooltip" data-tooltip-text="Modifică mărimea dimensiunii verticale a paginii" data-tooltip-bottom for="media_height">Înălțime</label>
 	<input type="number" id="media_height" value="297" />
+	<label class="tooltip" data-tooltip-text="Arată pagina in intregime" data-tooltip-bottom for="all_visible">
+	Pagină intreagă
+		<input type="checkbox" class="switch" id="all_visible">
+	</label>
 	<hr/>
 		<label class="tooltip" data-tooltip-text="Mărimea bleedului, distanța cu care se extinde pagina peste dimensiunile finale" data-tooltip-bottom for="bleed">Bleed</label>
 	<input type="number" min="0.0" max="5.0" value="2" step="0.5" id="bleed">
@@ -28,18 +32,44 @@ export const $ui = wrap(ui_fragment(tpl), 'properties', 'pagină')
 
 export const $media_width = $ui.querySelector('#media_width')
 export const $media_height = $ui.querySelector('#media_height')
+const $all_visible = $ui.querySelector('#all_visible')
 
 // get media dimensions 
 $media_width.value = $svg.width.baseVal.valueInSpecifiedUnits
 $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits
 
 const media_zoom_event = evt => {
+	const $canvas = document.querySelector('#canvas')
+	$canvas.style.width = '100%'
+
 	zoom_reset()
 	media_zoom($media_width.value, $media_height.value)
 	zoom_reset.viewbox = copy_viewbox($svg.viewBox)
+
+	// fit?
+	if (!$all_visible.checked) return
+	const $bottom = document.querySelector('#bottom-bar')
+	let canvas_box = $canvas.getBoundingClientRect()
+	let bottom_box = $bottom.getBoundingClientRect()
+	let d = canvas_box.bottom - bottom_box.top
+	let adj = 10
+	while (d >= 0) {
+		if (d < adj) {
+			d = adj
+		}
+		const k = canvas_box.width/canvas_box.height
+		if (canvas_box.width <= 0 || canvas_box.height <= 0) break
+		let newh = canvas_box.height - d
+		let neww = newh * k
+		$canvas.style.width = neww + 'px'
+		canvas_box = $canvas.getBoundingClientRect()
+		bottom_box = $bottom.getBoundingClientRect()
+		d = canvas_box.bottom - bottom_box.top
+	}
 }
 $media_width.addEventListener('input', media_zoom_event, true)
 $media_height.addEventListener('input', media_zoom_event, true)
+$all_visible.addEventListener('change', media_zoom_event)
 
 export const $bleed = $ui.querySelector('#bleed')
 
