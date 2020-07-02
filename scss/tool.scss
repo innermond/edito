@@ -395,7 +395,6 @@ input[type=checkbox][class~=switch] {
 	background-color: $black-soft;
 	&:focus {
 		outline: none;
-    border: 0.1rem solid $txt-color-border;
     box-shadow: 0px 0px 20px 1px $black-soft;
 	}
 }

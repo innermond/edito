@@ -339,7 +339,6 @@ textarea {
   background-color: #171717; }
   textarea:focus {
     outline: none;
-    border: 0.1rem solid #40454d;
     box-shadow: 0px 0px 20px 1px #171717; }
 
 input {
@@ -353,7 +352,6 @@ input {
   background-color: #171717; }
   input:focus {
     outline: none;
-    border: 0.1rem solid #40454d;
     box-shadow: 0px 0px 20px 1px #171717; }
 
 hr {

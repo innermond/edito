@@ -1,5 +1,6 @@
 import './click.js'
 import './drag.js'
+import './history.js'
 import './ul_select.js'
 import {tooltip} from './tooltip.js'
 import {span_checkbox} from './span_checkbox.js'
@@ -63,56 +64,8 @@ document.querySelectorAll('.movable').forEach($e => {
 
 })
 document.querySelector('#canvas').style.opacity = 1
-
 // assure viewbox is ok
 const vbox = $svg.viewBox.baseVal
 if (vbox.width === 0) vbox.width = $svg.width.baseVal.value
 if (vbox.height === 0) vbox.height = $svg.height.baseVal.value
 zoom_reset.viewbox = copy_viewbox($svg.viewBox)
-
-// history
-const is_ant = $e => {
-	const is = $e.dataset.ants === "true" || 
-	$e.dataset.rect === "true" ||
-	$e.dataset.selectangle === "true"
-
-	return is
-}
-let MM = []
-const historic = new MutationObserver(mm => {
-	MM = mm
-})
-
-$svg.addEventListener('mouseup', evt => {
-	//console.log(MM)
-	MM.forEach(m => {
-		if (!m) return
-		if (is_ant(m.target)) return
-		console.log(m.type)
-		switch (m.type) {
-			case 'childList':
-				m.addedNodes.forEach($e => {
-					if (is_ant($e)) return
-					console.log('added', m)
-				})
-				m.removedNodes.forEach($e => {
-					if (is_ant($e)) return
-					console.log('removed', m)
-				})
-			break
-			case 'attributes':
-				if (is_ant(m.target)) break
-				console.log(m, m.target, m.oldValue)
-			break
-		}
-	})
-})
-
-historic.observe($svg, {
-  attributes: true,
-  characterData: true,
-  childList: true,
-  subtree: true,
-  attributeOldValue: true,
-  characterDataOldValue: true
-})

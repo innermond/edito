@@ -5,9 +5,11 @@ import {render_image} from '../save.js'
 import {deleting, undeleting, cloning} from '../user_action/del_undel_clone.js'
 import {tooltip} from '../tooltip.js'
 import {$zoom_is_edit} from '../floater/zoom.js'
+import {history, historic, connect} from '../history.js'
 
 const tpl = `<section id="bottom-bar">
 		<p id="group_repr"></p>
+    <button class="tooltip" data-tooltip-text="Renunță la modificări" id="undo"><img src="/icon/undo.svg"></button>
     <button id="delete_element"><img class="tooltip" data-tooltip-text="Șterge elementul" data-tooltip-bottom src="/icon/delete.svg"></button>
     <button id="undelete_element"><img class="tooltip" data-tooltip-text="Anulează ultima ștergere" data-tooltip-bottom src="/icon/undelete.svg"></button>
     <button id="clone_element"><img class="tooltip" data-tooltip-text="Clonează elementul" data-tooltip-bottom src="/icon/copy.svg"></button>
@@ -16,9 +18,10 @@ const tpl = `<section id="bottom-bar">
 </section>`
 
 export const $ui = ui_fragment(tpl)
-$ui.querySelectorAll('[class~="tooltip"]').forEach($e => {
-	tooltip($e, 0, -10)
-})
+
+	$ui.querySelectorAll('[class~="tooltip"]')?.forEach($e => {
+		tooltip($e)
+	})
 
 export const $group_repr = $ui.querySelector('#group_repr')
 export const $delete_element = $ui.querySelector('#delete_element')
@@ -55,4 +58,15 @@ $send_svg.addEventListener('click', async evt => {
 	if (!$zoom_is_edit.checked) func = $svg_clone => zoom_reset($svg_clone)
 	const dpi_scale = 300/72 // scale rendered image suposedly produced native at 72 dpi as much as needed to be printed at 300 dpi
 	await render_image(dpi_scale, $bleed.value, true, func)
+})
+
+const $undo = $ui.querySelector('#undo')
+$undo.addEventListener('click', evt => {
+	if (history.length === 0) return
+	historic.disconnect()
+	const batch = history.pop()
+	batch.reverse().forEach(m => {
+		console.log(m)
+	})
+	connect()
 })
