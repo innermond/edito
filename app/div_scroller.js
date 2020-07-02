@@ -15,10 +15,11 @@ export function div_scroller($ss) {
 					if (d > 0) $e.style.opacity = 1.0
 				})
 				// hide scroller when leave scrollee
-				//$scrollee.addEventListener('mouseleave', evt => {
-					//move = false
-					//$e.style.opacity = 0.0
-				//})
+				$scrollee.addEventListener('mouseleave', evt => {
+					if (move === false) {
+						$e.style.opacity = 0.0
+					}
+				})
 
 				// terminate
 				$scrollee.addEventListener('mouseup', evt => {
@@ -43,8 +44,10 @@ export function div_scroller($ss) {
 				})
 				// terminate
 				document.addEventListener('mouseup', evt => {
+					if (move === false) return
 					move = false
 					$e.classList.remove('active')
+					$e.style.opacity = 0.0
 				})
 				$e.addEventListener('click', evt => {
 					mouse_pos(evt)

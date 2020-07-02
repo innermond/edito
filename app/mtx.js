@@ -2,8 +2,6 @@
 
 const setm = (e, m) => {
 	e.transform.baseVal.initialize(e.ownerSVGElement?.createSVGTransformFromMatrix(m))
-	// set transform attribute to trigger a DOM change to be observed by undo
-	e.setAttribute('transform', window.getComputedStyle(e).transform)
 }
 
 const appendm = (e, m) => e.transform.baseVal.appendItem(e.ownerSVGElement?.createSVGTransformFromMatrix(m))

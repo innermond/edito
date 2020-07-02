@@ -83,7 +83,7 @@ const historic = new MutationObserver(mm => {
 	MM = mm
 })
 
-document.addEventListener('mouseup', evt => {
+$svg.addEventListener('mouseup', evt => {
 	//console.log(MM)
 	MM.forEach(m => {
 		if (!m) return
