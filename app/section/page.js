@@ -26,7 +26,6 @@ const tpl = `<section class="vertical-align">
 </section>`
 export const $ui = wrap(ui_fragment(tpl), 'properties', 'pagină')
 
-
 export const $media_width = $ui.querySelector('#media_width')
 export const $media_height = $ui.querySelector('#media_height')
 

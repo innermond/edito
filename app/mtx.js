@@ -14,7 +14,6 @@ const m2e = (a,e) => {
 
 const m = e => e.transform.baseVal.consolidate()?.matrix
 	|| e.ownerSVGElement?.createSVGMatrix() 
-	|| e.createSVGMatrix()
 	//|| {a:1, b:0, c:0, d:1, e:0, f:0}
 	
 

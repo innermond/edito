@@ -1,6 +1,5 @@
 import './click.js'
 import './drag.js'
-import './history.js'
 import './ul_select.js'
 import {tooltip} from './tooltip.js'
 import {span_checkbox} from './span_checkbox.js'

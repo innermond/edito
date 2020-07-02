@@ -43,7 +43,10 @@ $svg.addEventListener('mouseup', evt => {
 			break
 		}
 	})
-	if (batch.length) history.push(batch)
+	
+	if (batch.length === 0) return 
+	
+	history.push(batch)
 	const d = history.length - history_capacity
 	if (d > 0) history.splice(0, d)
 	//console.log(history)
@@ -57,5 +60,3 @@ export const connect = () => historic.observe($svg, {
   attributeOldValue: true,
   characterDataOldValue: true
 })
-
-connect()

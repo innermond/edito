@@ -259,6 +259,7 @@ export const mirror = ($el, k) => {
 	setm($g, xg)
 	const xel = m2e($el, $father)
 	$father.insertBefore($el, $g)
+	$father.insertBefore($el, $next)
 	setm($el, xel)
 	$g.remove()
 }

@@ -62,11 +62,4 @@ $send_svg.addEventListener('click', async evt => {
 
 const $undo = $ui.querySelector('#undo')
 $undo.addEventListener('click', evt => {
-	if (history.length === 0) return
-	historic.disconnect()
-	const batch = history.pop()
-	batch.reverse().forEach(m => {
-		console.log(m)
-	})
-	connect()
 })

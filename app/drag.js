@@ -70,6 +70,7 @@ function startDrag(evt) {
 }
 
 function endDrag(evt) {
+if (moved === null) return
 	$clicked.clues.dragging = false
 	disable.click = moved
 	moved = null
@@ -77,7 +78,6 @@ function endDrag(evt) {
 
 function drag(evt) {
 	if (moved === null) return
-	//if (evt.target === $svg && !$selection.size) return
 
 	moved = true
 	$clicked.clues.dragging = true
@@ -95,7 +95,6 @@ function drag(evt) {
 	let $pt = $othersvg.createSVGPoint()
 	$pt = $pt.matrixTransform($svg.getScreenCTM().inverse())
 	let current = point_screen(evt)
-	//if ($selection.size) $selection.clear()
 	if (!$clicked.ants.$shape.isConnected) {
 		$selection.clear()
 		$clicked.over()

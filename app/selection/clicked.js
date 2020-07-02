@@ -73,7 +73,7 @@ const follow = () => {
 	$clicked.square?.follow($clicked)
 	$clicked.circle?.follow($clicked)
 	// set transform attribute to trigger a DOM change to be observed by undo
-	$clicked.setAttribute('transform', window.getComputedStyle($clicked).transform)
+	//$clicked.setAttribute('transform', window.getComputedStyle($clicked).transform)
 }
 
 const methods = [from, zero, is_zero, over, unover, follow]
