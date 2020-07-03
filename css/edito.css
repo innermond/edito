@@ -81,16 +81,16 @@ text {
     .tool-menu > .tool-item:hover {
       background-color: #24272b; }
 
-section.movable button > img, #bottom-bar button > img {
+section.movable button > img, section.tool-drawer button > img, #bottom-bar button > img {
   pointer-events: none;
   opacity: 0.5; }
-  section.movable button > img:hover, #bottom-bar button > img:hover {
+  section.movable button > img:hover, section.tool-drawer button > img:hover, #bottom-bar button > img:hover {
     opacity: 1; }
 
-section.movable button.active img, #bottom-bar button.active img {
+section.movable button.active img, section.tool-drawer button.active img, #bottom-bar button.active img {
   opacity: 1; }
 
-section.movable:hover, #bottom-bar:hover {
+section.movable:hover, section.tool-drawer:hover, #bottom-bar:hover {
   background-color: #24272b; }
 
 .tooltip-text {
@@ -185,7 +185,6 @@ section.movable:hover, #bottom-bar:hover {
     right: 11px;
     top: 11px; }
   .tool-drawer label {
-    display: block;
     margin-bottom: 0.5rem; }
 
 .tool-drawer-scroll {
@@ -219,7 +218,13 @@ section.movable:hover, #bottom-bar:hover {
 
 section label {
   color: #9c9589;
-  font-size: 0.9rem; }
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; }
+  section label > button {
+    margin: 0;
+    padding: 0; }
 
 .title {
   display: block;

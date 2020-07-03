@@ -7,6 +7,7 @@ import {wrap} from '../drawer.js'
 import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
 import {handle_step} from '../user_action/step.js'
+import {addEventInterval} from '../event_interval.js'
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Schimbi lățimea documentului" data-tooltip-bottom for="media_width">Lățime</label>
@@ -20,6 +21,10 @@ const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Arată pagina la dimensiunile de printare / reale" data-tooltip-bottom for="real">
 	Dimensiuni reale
 		<input type="checkbox" class="switch" id="real">
+	</label>
+	<label class="tooltip" data-tooltip-text="Modifică mărimea proporțional" data-tooltip-bottom>Scalare
+		<button id="canvas_plus" class="tooltip" data-tooltip-text="Mărește" data-tooltip-bottom ><img src="/icon/plus.svg"></button>
+		<button id="canvas_minus" class="tooltip" data-tooltip-text="Micșorează" data-tooltip-bottom ><img src="/icon/minus.svg"></button>
 	</label>
 	<hr/>
 	<label class="tooltip" data-tooltip-text="Alegi culoarea fundalului" data-tooltip-bottom  for="bkcolor">Background
@@ -134,3 +139,36 @@ $bkcolor_switch.addEventListener('change', evt => {
 		$bkcolor.style.display = 'none'
 	}
 })
+
+const $canvas_plus = $ui.querySelector('#canvas_plus')
+const $canvas_minus = $ui.querySelector('#canvas_minus')
+
+const update_canvas_elements = v => {
+	v = v.toFixed(3)
+	$canvas_plus.value = $canvas_minus.value = v
+	if ($canvas_plus.dataset.tooltipId) {
+			const $tooltip = document.getElementById($canvas_plus.dataset.tooltipId)
+			if ($tooltip) $tooltip.textContent = v
+	}
+	if ($canvas_minus.dataset.tooltipId) {
+			const $tooltip = document.getElementById($canvas_minus.dataset.tooltipId)
+			if ($tooltip) $tooltip.textContent = v
+    }
+}
+
+const step = 10
+const stop = 200 
+let k = 0
+const start_func = way => {
+	k = way*step
+	const $canvas = document.querySelector('#canvas')
+	let v = $canvas.getBoundingClientRect().width
+	v	+= k
+	if (v < stop) v = stop
+	//const v = parseFloat(window.getComputedStyle($canvas).width) + k
+	$canvas.style.width = v + 'px'
+	update_canvas_elements(v)
+}
+const end_func = () => {}
+addEventInterval($canvas_plus, 'mousedown', () => start_func(1), 10, 'mouseup', end_func)
+addEventInterval($canvas_minus, 'mousedown', () => start_func(-1), 10, 'mouseup', end_func)

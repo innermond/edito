@@ -87,9 +87,9 @@
 	}
 }
 
-section.movable, #bottom-bar {
+section.movable, section.tool-drawer, #bottom-bar {
 	& button > img {
-        pointer-events: none;
+		pointer-events: none;
 		opacity: 0.5;
 		&:hover {
 			opacity: 1;
@@ -213,7 +213,6 @@ $tool-drawer-width: 200px;
 	}
 
 	& label {
-		display: block;
 		margin-bottom: 0.5rem;
 	}
 }
@@ -265,6 +264,13 @@ $title-height: 3rem;
 section label {
 	color: $txt-color-darker;
 	font-size: 0.9rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	& > button {
+		margin: 0;
+		padding: 0;
+	}
 }
 
 .title {

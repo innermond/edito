@@ -11,7 +11,7 @@ import {mirror_h, mirror_v} from '../user_action/mirror.js'
 const tpl = `<section class="movable" id="geometry">
 <div class="wrap-row">
 <div>
-	<label class="tooltip" data-tooltip-text="Modifică mărimea proporțional" data-tooltip-bottom for="size">Scalare</label>
+	<label class="tooltip" data-tooltip-text="Modifică mărimea proporțional" data-tooltip-bottom>Scalare</label>
 	<div>
 		<button id="scale_plus" class="tooltip" data-tooltip-text="Mărește" data-tooltip-bottom ><img src="/icon/plus.svg"></button>
 		<button id="scale_minus" class="tooltip" data-tooltip-text="Micșorează" data-tooltip-bottom ><img src="/icon/minus.svg"></button>
