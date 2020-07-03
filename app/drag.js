@@ -70,7 +70,10 @@ function startDrag(evt) {
 }
 
 function endDrag(evt) {
-if (moved === null) return
+	if (moved === null) {
+		disable.click = false
+		return
+	}
 	$clicked.clues.dragging = false
 	disable.click = moved
 	moved = null
