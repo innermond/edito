@@ -1,18 +1,12 @@
-#menu-bar {
-	top: 0;
-	left: 0;
-	bottom: 0;
-	width: $tool-width;
-	position: absolute;
-	background-color: $bk-color;
-	user-select: none;
-	display: flex;
-	flex-flow: column;
-	z-index: 2;
+@mixin opacity {
+	opacity: 0.4;
+	transition: opacity .2s ease-out;
+	&:hover {
+		opacity: 1;
+	}
 }
-
 @mixin bar-position {
-	margin-left: $tool-width;
+	margin-left: $tool-width*0.5;
 	//right: 0;
 	position: absolute;
 	user-select: none;
@@ -22,14 +16,28 @@
 	background-color: $bk-color-loud;
 }
 
+#menu-bar {
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: $tool-width;
+	position: absolute;
+	background-color: black;
+	user-select: none;
+	display: flex;
+	flex-flow: column;
+	z-index: 2;
+	border-right: 0.1rem solid $black-soft;
+	transition: background-color .5s ease-out;
+	&:hover {
+		background-color: $bk-color;
+	}
+}
+
 #bottom-bar {
 	bottom: 0;
 	color: $txt-color;
-	opacity: 0.4;
-	transition: opacity .2s ease-out;
-	&:hover {
-		opacity: 1;
-	}
+	@include opacity;
 	@include bar-position;
 	& > button {
 		margin: 0;
@@ -52,7 +60,6 @@
 	margin: 0;
 	border-top: 0.1rem solid $black-soft;
 	padding: 0.5rem 0rem;
-	background: $bk-color;
 	& > .tool-item {
 		padding: 0.25rem 0.5rem;
 		display: flex;
@@ -61,7 +68,7 @@
     transition: all .2s ease-out;
 
 		&.active {
-			background-color: $bk-color-loud;
+			//background-color: $bk-color-loud;
 			& > img {
 				opacity: 1;
 			}
@@ -421,7 +428,7 @@ hr {
 	width: 100%;
 	border-style: none;
 	height: 0.15rem;
-	background-color: $bk-color-silent;
+	background-color: $bk-color-loud;
 }
 
 .wrap-row {
@@ -582,7 +589,7 @@ body{
 	&.pan.panning{
 		cursor: grabbing;
 	}	
-	&.pan{
+	&.pan, &.pan.area{
 		cursor: grab;
 	}	
 	&.area {

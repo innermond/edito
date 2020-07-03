@@ -17,37 +17,64 @@ const tpl = `<section class="vertical-align">
 	Pagină intreagă
 		<input type="checkbox" class="switch" id="all_visible">
 	</label>
-	<hr/>
-		<label class="tooltip" data-tooltip-text="Mărimea bleedului, distanța cu care se extinde pagina peste dimensiunile finale" data-tooltip-bottom for="bleed">Bleed</label>
-	<input type="number" min="0.0" max="5.0" value="2" step="0.5" id="bleed">
-    <label class="tooltip" data-tooltip-text="Stabilește mărimea pasului cu care se mută obiectele cu tastele săgeți" data-tooltip-bottom for="step">Mărime pas</label>
-    <input type="number" min="0.01" max="90" value="2" step="0.1" id="step">
+	<label class="tooltip" data-tooltip-text="Arată pagina la dimensiunile de printare / reale" data-tooltip-bottom for="real">
+	Dimensiuni reale
+		<input type="checkbox" class="switch" id="real">
+	</label>
 	<hr/>
 	<label class="tooltip" data-tooltip-text="Alegi culoarea fundalului" data-tooltip-bottom  for="bkcolor">Background
 		<input type="checkbox" class="switch" id="bkcolor-switch">
 		<input type="color" id="bkcolor" value="#ffffff">
 	</label>
+	<hr/>
+		<label class="tooltip" data-tooltip-text="Mărimea bleedului, distanța cu care se extinde pagina peste dimensiunile finale" data-tooltip-bottom for="bleed">Bleed</label>
+	<input type="number" min="0.0" max="5.0" value="2" step="0.5" id="bleed">
+    <label class="tooltip" data-tooltip-text="Stabilește mărimea pasului cu care se mută obiectele cu tastele săgeți" data-tooltip-bottom for="step">Mărime pas</label>
+    <input type="number" min="0.01" max="90" value="2" step="0.1" id="step">
 </section>`
 export const $ui = wrap(ui_fragment(tpl), 'properties', 'pagină')
 
 export const $media_width = $ui.querySelector('#media_width')
 export const $media_height = $ui.querySelector('#media_height')
 const $all_visible = $ui.querySelector('#all_visible')
+const $real = $ui.querySelector('#real')
 
 // get media dimensions 
 $media_width.value = $svg.width.baseVal.valueInSpecifiedUnits
 $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits
 
-const media_zoom_event = evt => {
+let current_canvas_width = '100%'
+const show_at_real_dimensions = () => {
+	const $canvas = document.querySelector('#canvas')
+	if ($real.checked) {
+		$canvas.style.width = 'auto'
+	} else {
+		if(!$all_visible.checked) {
+		 $canvas.style.width = '100%'
+		} else {
+		 //$canvas.style.width = current_canvas_width
+			media_zoom_event()
+		}
+	}
+}
+const media_zoom_event = () => {
 	const $canvas = document.querySelector('#canvas')
 	$canvas.style.width = '100%'
+	current_canvas_width = $canvas.style.width
 
 	zoom_reset()
 	media_zoom($media_width.value, $media_height.value)
 	zoom_reset.viewbox = copy_viewbox($svg.viewBox)
 
 	// fit?
-	if (!$all_visible.checked) return
+	if (!$all_visible.checked) {
+		if ($real.checked) show_at_real_dimensions()
+		return
+	}
+	if ($real.checked) {
+		show_at_real_dimensions()
+		return
+	}
 	const $bottom = document.querySelector('#bottom-bar')
 	let canvas_box = $canvas.getBoundingClientRect()
 	let bottom_box = $bottom.getBoundingClientRect()
@@ -66,10 +93,14 @@ const media_zoom_event = evt => {
 		bottom_box = $bottom.getBoundingClientRect()
 		d = canvas_box.bottom - bottom_box.top
 	}
+	current_canvas_width = $canvas.style.width
 }
 $media_width.addEventListener('input', media_zoom_event, true)
 $media_height.addEventListener('input', media_zoom_event, true)
 $all_visible.addEventListener('change', media_zoom_event)
+$real.addEventListener('change', evt => {
+	show_at_real_dimensions()
+})
 
 export const $bleed = $ui.querySelector('#bleed')
 
