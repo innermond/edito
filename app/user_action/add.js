@@ -3,7 +3,7 @@ import {center} from '../pos.js'
 import {colorDefault, $fonts, $font_size} from '../ui.js'
 
 export function add_rect() {
-	let bb = $svg.getBBox()
+	let bb = {width: $svg.width.baseVal.value, height: $svg.height.baseVal.value}
 	let rect = newtag('rect')
 	rect.setAttributeNS(null, 'width', bb.width*0.25)
 	rect.setAttributeNS(null, 'height', bb.height*0.25)
@@ -16,11 +16,11 @@ export function add_rect() {
 }
 
 export function add_circle() {
-	let bb = $svg.getBBox()
+	let bb = {width: $svg.width.baseVal.value, height: $svg.height.baseVal.value}
 	let circle = newtag('circle')
 	circle.setAttributeNS(null, 'cx', bb.width*0.5)
 	circle.setAttributeNS(null, 'cy', bb.height*0.5)
-	circle.setAttributeNS(null, 'r', bb.height*0.1)
+	circle.setAttributeNS(null, 'r', bb.height*0.25)
 	circle.setAttributeNS(null, 'fill', colorDefault)
 	$svg.appendChild(circle)
 	// call center after apped to dom
