@@ -4,18 +4,9 @@ import {point_screen, point_in, outpoint} from './pos.js'
 import {m, setm} from './mtx.js'
 import {$clicked, $selection} from './selection/index.js'
 import {disable} from './click.js'
+import feature from './feature.js'
 
-let supportsPassive = false;
-try {
-  let opts = Object.defineProperty({}, 'passive', {
-    get: function() {
-      supportsPassive = true;
-    }
-  });
-  window.addEventListener("testPassive", null, opts);
-  window.removeEventListener("testPassive", null, opts);
-} catch (e) {}
-const opt = supportsPassive ? { passive: true } : false
+const opt = feature.supportsPassive ? { passive: true } : false
 // manage dragging
 export function add_dragging() {
 	$svg.addEventListener('mousedown', startDrag);

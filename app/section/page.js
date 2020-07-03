@@ -27,9 +27,9 @@ const tpl = `<section class="vertical-align">
 		<button id="canvas_minus" class="tooltip" data-tooltip-text="Micșorează" data-tooltip-bottom ><img src="/icon/minus.svg"></button>
 	</label>
 	<hr/>
-	<label class="tooltip" data-tooltip-text="Alegi culoarea fundalului" data-tooltip-bottom  for="bkcolor">Background
+	<label class="tooltip" data-tooltip-text="Activezi / dezactivezi culoarea de fundal" data-tooltip-bottom  for="bkcolor">Background
+		<input class="tooltip" data-tooltip-text="alege culoare" data-tooltip-bottom type="color" id="bkcolor" value="#ffffff">
 		<input type="checkbox" class="switch" id="bkcolor-switch">
-		<input type="color" id="bkcolor" value="#ffffff">
 	</label>
 	<hr/>
 		<label class="tooltip" data-tooltip-text="Mărimea bleedului, distanța cu care se extinde pagina peste dimensiunile finale" data-tooltip-bottom for="bleed">Bleed</label>

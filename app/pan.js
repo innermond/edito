@@ -1,18 +1,9 @@
 import {$svg} from './dom.js'
 import {disable, click} from './click.js'
 import {add_dragging, remove_dragging} from './drag.js'
+import feature from './feature.js'
 
-let supportsPassive = false;
-try {
-  let opts = Object.defineProperty({}, 'passive', {
-    get: function() {
-      supportsPassive = true;
-    }
-  });
-  window.addEventListener("testPassive", null, opts);
-  window.removeEventListener("testPassive", null, opts);
-} catch (e) {}
-const opt = supportsPassive ? { passive: true } : false
+const opt = feature.supportsPassive ? { passive: true } : false
 
 export function add_panning() {
 	// manage panning

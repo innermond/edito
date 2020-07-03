@@ -10,18 +10,9 @@ import {is_selectable, $select_inside} from './floater/select.js'
 import {centerpoint} from './pos.js'
 import {zoom} from './zoom.js'
 import {click} from './click.js'
+import feature from './feature.js'
 
-let supportsPassive = false;
-try {
-  let opts = Object.defineProperty({}, 'passive', {
-    get: function() {
-      supportsPassive = true;
-    }
-  });
-  window.addEventListener("testPassive", null, opts);
-  window.removeEventListener("testPassive", null, opts);
-} catch (e) {}
-const opt = supportsPassive ? { passive: true } : false
+const opt = feature.supportsPassive ? { passive: true } : false
 
 export function add_diving() {
 	$svg.addEventListener('mousedown', startSelect);

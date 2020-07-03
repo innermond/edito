@@ -7,18 +7,9 @@ import {add_dragging, remove_dragging} from './drag.js'
 import {add_panning, remove_panning} from './pan.js'
 import {$clicked, $selection} from './selection/index.js'
 import {is_selectable, $select_inside} from './floater/select.js'
+import feature from './feature.js'
 
-let supportsPassive = false;
-try {
-  let opts = Object.defineProperty({}, 'passive', {
-    get: function() {
-      supportsPassive = true;
-    }
-  });
-  window.addEventListener("testPassive", null, opts);
-  window.removeEventListener("testPassive", null, opts);
-} catch (e) {}
-const opt = supportsPassive ? { passive: true } : false
+const opt = feature.supportsPassive ? { passive: true } : false
 
 export function add_selecting() {
 	// manage selecting

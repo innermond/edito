@@ -1,3 +1,4 @@
+import './feature.js'
 import './click.js'
 import './drag.js'
 import './ul_select.js'
