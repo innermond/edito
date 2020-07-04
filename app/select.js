@@ -15,14 +15,14 @@ const opt = feature.supportsPassive ? { passive: true } : false
 function cycle_start(stage) {
 	return evt => {
 		const on_svg = element_from(evt.target) === $svg
-		if ($selection.has($clicked) && !on_svg) return
+		if (!on_svg) return
 		if (!stage(evt)) return
 		disable.click = true
 	}
 }
 function cycle_end(stage) {
 	return evt => {
-		disable.click = moved
+		if (!disable.click) disable.click = moved
 		if (!stage(evt)) return
 	}	
 }
@@ -38,59 +38,11 @@ export function add_selecting() {
 	cycle.end = cycle_end
 	cycle.step = cycle_step
 	add_rectangling()
-	return
-	// manage selecting
-	$svg.addEventListener('mousedown', cycle.start);
-	//$svg.addEventListener('mousedown', startSelect);
-	$svg.addEventListener('mouseup', cycle.end);
-	//$svg.addEventListener('mouseup', endSelect);
-
-	$svg.addEventListener('mousemove', cycle.step, opt);
-	//$svg.addEventListener('mousemove', select, opt);
-	
-	//$svg.addEventListener('touchstart', startSelect);
-	//$svg.addEventListener('touchend', endSelect);
-	//$svg.addEventListener('touchmove', select, opt);
 }
 
 export function remove_selecting() {
 	remove_rectangling()
-	return
-	$svg.removeEventListener('mousedown', cycle.start);
-	//$svg.removeEventListener('mousedown', startSelect);
-	$svg.removeEventListener('mouseup', cycle.end);
-	//$svg.removeEventListener('mouseup', endSelect);
-	//$svg.removeEventListener('mouseleave', endSelect);
-
-	$svg.removeEventListener('mousemove', cycle.step, opt);
-	//$svg.removeEventListener('mousemove', select, opt);
-	
-	//$svg.removeEventListener('touchstart', startSelect);
-	//$svg.removeEventListener('touchend', endSelect);
-	//$svg.removeEventListener('touchmove', select, opt);
 }
-
-/*let $selectangle
-const style =  'pointer-events:none;vector-effect:non-scaling-stroke;stroke-width:1;fill:none;stroke:#000000;stroke-opacity:1;stroke-miterlimit:2;stroke-dasharray:3,3;stroke-dashoffset:2'
-let start = null
-let moved = null
-function startSelect(evt) {
-	if (moved !== null) return
-	if (evt.target !== $svg) return
-
-	moved = false
-	if (start !== null) return
-	if (evt.target !== $svg) return
-	if ($clicked.clues.operating()) return
-
-	start = point_screen(evt)
-
-	$selectangle = newtag('rect', {style: style})
-	$selectangle.dataset.selectangle = 'true'
-	attr($selectangle, {x:start.x, y:start.y, width:1, height:1})
-	$svg.appendChild($selectangle)
-	disable.click = true
-}*/
 
 function selection_ants(evt) {
 	if (!evt.shiftKey && !evt.ctrlKey) $selection.clear()
@@ -119,49 +71,3 @@ function selection_ants(evt) {
 	dragging_all_marks_reset()
 	$selection.as_ants()
 }
-
-/*function endSelect(evt) {
-	start = null
-	disable.click = moved
-	moved = null
-	if (!$selectangle?.ownerSVGElement) return
-
-	selection_ants(evt)
-	$selectangle.remove()
-}
-
-// top right
-let tr = null
-let br = null
-function select(evt) {
-	if (moved === null) return
-	moved = true
-	if (moved === null) return
-	if (start === null) return
-
-	const current = point_screen(evt)
-	const dx = start.x - current.x
-	const dy = start.y - current.y
-	const bb = $selectangle.getBBox()
-	
-	let newwidth = bb.width + dx
-	let newheight = bb.height + dy
-	let x = start.x, y = start.y
-	tr = newwidth <= 0 && (dx < 0 && tr === null) || tr
-	if (tr) {
-		newwidth = bb.width - dx
-		x = start.x - newwidth
-		if (newwidth <= 0) tr = null
-	}
-	br = newheight <= 0 && (dy < 0 && br === null) || br
-	if (br) {
-		newheight = bb.height - dy
-		y = start.y - newheight
-		if (newheight <= 0) br = null
-	}
-	if (newwidth >= 0 && newheight >= 0) attr($selectangle, {x:x, y:y, width: newwidth, height: newheight})
-
-	start = current
-	
-	selection_ants(evt)
-}*/

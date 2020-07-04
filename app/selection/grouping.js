@@ -55,5 +55,10 @@ export let $selection = new class extends Set {
 			$ee.forEach($e => func($e))
 		})
 	}
+
+	get_active_element() {
+		const $found = Array.from(this).filter($el => $el.clues?.operating())
+		return $found.length ? $found.pop() : null
+	}
 		
 }() 

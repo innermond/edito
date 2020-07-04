@@ -5,7 +5,6 @@ import {render_image} from '../save.js'
 import {deleting, undeleting, cloning} from '../user_action/del_undel_clone.js'
 import {tooltip} from '../tooltip.js'
 import {$zoom_is_edit} from '../floater/zoom.js'
-import {history, historic, connect} from '../history.js'
 
 const tpl = `<section id="bottom-bar">
 		<p id="group_repr"></p>

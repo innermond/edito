@@ -16,9 +16,10 @@ export function click(evt) {
 
 	// deselect anything
 	if (evt.target === $svg) {
-		if ($selection.size && $clicked.clues.operating()) {
-			dragging_marks_reset($clicked)
-			$clicked.over()
+		const $active = $selection.get_active_element()
+		if ($selection.size && $active) {
+			dragging_marks_reset($active)
+			$active.over()
 			return
 		}
 			$clicked.zero()
