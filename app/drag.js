@@ -13,11 +13,6 @@ export function add_dragging() {
 	$svg.addEventListener('mouseup', endDrag);
 	$svg.addEventListener('mousemove', drag);
 	$svg.addEventListener('mouseleave', endDrag);
-	$svg.addEventListener('touchstart', startDrag, opt);
-	$svg.addEventListener('touchmove', drag, opt);
-	$svg.addEventListener('touchend', endDrag);
-	$svg.addEventListener('touchleave', endDrag);
-	$svg.addEventListener('touchcancel', endDrag);
 }
 
 export function remove_dragging() {
@@ -25,11 +20,6 @@ export function remove_dragging() {
 	$svg.removeEventListener('mouseup', endDrag);
 	$svg.removeEventListener('mousemove', drag);
 	$svg.removeEventListener('mouseleave', endDrag);
-	$svg.removeEventListener('touchstart', startDrag, opt);
-	$svg.removeEventListener('touchmove', drag, opt);
-	$svg.removeEventListener('touchend', endDrag);
-	$svg.removeEventListener('touchleave', endDrag);
-	$svg.removeEventListener('touchcancel', endDrag);
 }
 
 add_dragging()

@@ -35,12 +35,13 @@ movement.pan.off = () => {
 
 movement.pan.on = () => {
 	activated.pan = true
-	add_panning()
 	
 	disable.click = true
 	remove_selecting()
 	remove_diving() 
 	remove_dragging() 
+	
+	add_panning()
 }
 
 movement.dive.off = () => {
@@ -56,13 +57,13 @@ movement.dive.off = () => {
 movement.dive.on = () => {
 	activated.dive = true
 	if (activated.pan) return
-
-	add_diving()
 	
 	disable.click = true
 	remove_panning()
 	remove_selecting()
 	remove_dragging() 
+
+	add_diving()
 }
 
 movement.select.off = () => {
@@ -77,11 +78,12 @@ movement.select.off = () => {
 
 movement.select.on = () => {
 	activated.select = true
-	add_selecting()
 	
 	disable.click = true
 	remove_panning()
 	remove_diving() 
+	
+	add_selecting()
 }
 
 export default movement

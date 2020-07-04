@@ -21,7 +21,6 @@ import {
 } from './section/filter.js'
 import {$save_svg, $group_repr, $send_svg} from './section/bottombar.js'
 
-import{$zoom_area} from './floater/zoom.js'
 import{$align, $reference, $grouping, $ordering} from './floater/move.js'
 import{$angle, $skewx, $skewy, $flipping} from './floater/geometry.js'
 import{$fill, $stroke_fill, $stroke_fill_switch, $stroke_opacity, $fill_opacity, $fill_switch} from './floater/color.js'
@@ -32,7 +31,6 @@ import {set_k as set_scale} from './floater/geometry.js'
 export {$media_width, $media_height, $bleed, $step,
 $fonts, $font_size, 
 $text_features,
-$zoom_area,
 $align, $reference,
 $delete_element, $undelete_element,
 $angle, 

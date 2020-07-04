@@ -14,10 +14,6 @@ import movement from '../cap.js'
 const tpl = `<section class="movable" id="zoom">
 <div class="wrap-row">
 <div>
-	<label class="tooltip" data-tooltip-text="Indică regiunea in care se va face zoom" data-tooltip-bottom for="zoom_area">Regiune</label>
-	<button class="tooltip" data-tooltip-text="deactivează / activează zoom-ul prin indicarea zonei" data-tooltip-bottom id="zoom_area"><img src="/icon/zoom-region.svg"></button>
-</div>
-<div>
 	<label class="tooltip" data-tooltip-text="Apropiază pagina" data-tooltip-bottom for="zoom_in">Mărește</label>
 	<button class="tooltip" data-tooltip-text="apasă continuu" data-tooltip-bottom id="zoom_in"><img src="/icon/zoom-plus.svg"></button>
 </div>
@@ -44,23 +40,6 @@ const tpl = `<section class="movable" id="zoom">
 </section>`
 export const $ui = ui_fragment(tpl)
 export const $zoom_is_edit = $ui.querySelector('#zoom_is_edit')
-
-export const $zoom_area = $ui.querySelector('#zoom_area')
-const diving = () => {
-	return evt => {
-		if(movement.activated.dive) {
-			movement.dive.off()
-			document.body.classList.remove('area')
-			$zoom_area.classList.remove('active')
-		} else {
-			movement.dive.on()
-			document.body.classList.add('area')
-			$zoom_area.classList.add('active')
-		}
-	}
-}
-$zoom_area.addEventListener('click', diving())
-$zoom_area.addEventListener('mousedown', evt => $zoom_area.classList.toggle('active'))
 
 const step = 1.01
 

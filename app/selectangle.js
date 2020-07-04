@@ -4,37 +4,34 @@ import {$clicked, $selection} from './selection/index.js'
 import feature from './feature.js'
 
 export const cycle = {
-	start: stage => stage,
-	end: stage => stage,
-	step: stage => stage,
+	start: null,
+	end: null,
+	step: null,
 }
 
 const opt = feature.supportsPassive ? { passive: true } : false
 const cycle_consolidated = {start: null, end: null, step: null}
 export function add_rectangling() {
+	// clean up posible former functions
+	cycle_consolidated.start = null 
+	cycle_consolidated.end = null
+	cycle_consolidated.step = null
+
 	// here are dynamic added functions to handle events
 	// they must be named functions to be found by removeEventListener
-	cycle_consolidated.start = cycle.start(startRectangle)
-	cycle_consolidated.end = cycle.end(endRectangle)
-	cycle_consolidated.step = cycle.step(stepRectangle)
+	cycle_consolidated.start =  cycle.start?.call ? cycle.start(startRectangle) : startRectangle
+	cycle_consolidated.end = cycle.end?.call ? cycle.end(endRectangle) : endRectangle
+	cycle_consolidated.step = cycle.step?.call ? cycle.step(stepRectangle) : stepRectangle
 
 	$svg.addEventListener('mousedown', cycle_consolidated.start)
 	$svg.addEventListener('mouseup', cycle_consolidated.end)
 	$svg.addEventListener('mousemove', cycle_consolidated.step, opt)
-	
-	//$svg.addEventListener('touchstart', startRectangle)
-	//$svg.addEventListener('touchend', endRectangle)
-	//$svg.addEventListener('touchmove', stepRectangle, opt)
 }
 
 export function remove_rectangling() {
 	$svg.removeEventListener('mousedown', cycle_consolidated.start)
 	$svg.removeEventListener('mouseup', cycle_consolidated.end)
 	$svg.removeEventListener('mousemove', cycle_consolidated.step, opt)
-	
-	//$svg.removeEventListener('touchstart', startRectangle)
-	//$svg.removeEventListener('touchend', endRectangle)
-	//$svg.removeEventListener('touchmove', stepRectangle, opt)
 }
 
 export let $selectangle

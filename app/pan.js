@@ -13,9 +13,6 @@ export function add_panning() {
 	$svg.addEventListener('mouseup', endPan);
 	$svg.addEventListener('mousemove', pan, opt);
 	$svg.addEventListener('mouseleave', endPan);
-	$svg.addEventListener('touchstart', startPan);
-	$svg.addEventListener('touchend', endPan);
-	$svg.addEventListener('touchmove', pan, opt);
 }
 
 export function remove_panning() {
@@ -26,9 +23,6 @@ export function remove_panning() {
 	$svg.removeEventListener('mouseup', endPan);
 	$svg.removeEventListener('mousemove', pan, opt);
 	$svg.removeEventListener('mouseleave', endPan);
-	$svg.removeEventListener('touchstart', startPan);
-	$svg.removeEventListener('touchend', endPan);
-	$svg.removeEventListener('touchmove', pan, opt);
 }
 
 let start
