@@ -1,5 +1,5 @@
 import {dragging_all_marks_reset} from './ui.js'
-import {$svg, attr, newtag} from './dom.js'
+import {$svg, attr, newtag, element_from} from './dom.js'
 import {point_screen} from './pos.js'
 import {setm, m2e, m} from './mtx.js'
 import {disable} from './click.js'
@@ -7,36 +7,70 @@ import {add_dragging, remove_dragging} from './drag.js'
 import {add_panning, remove_panning} from './pan.js'
 import {$clicked, $selection} from './selection/index.js'
 import {is_selectable, $select_inside} from './floater/select.js'
+import {cycle, moved, add_rectangling, remove_rectangling, $selectangle} from './selectangle.js'
 import feature from './feature.js'
 
 const opt = feature.supportsPassive ? { passive: true } : false
 
-export function add_selecting() {
-	// manage selecting
-	$svg.addEventListener('mousedown', startSelect);
-	$svg.addEventListener('mouseup', endSelect);
-	//$svg.addEventListener('mouseleave', endSelect);
+function cycle_start(stage) {
+	return evt => {
+		const on_svg = element_from(evt.target) === $svg
+		if ($selection.has($clicked) && !on_svg) return
+		if (!stage(evt)) return
+		disable.click = true
+	}
+}
+function cycle_end(stage) {
+	return evt => {
+		disable.click = moved
+		if (!stage(evt)) return
+	}	
+}
+function cycle_step(stage) {
+	return evt => {
+		if (!stage(evt)) return
+		selection_ants(evt)
+	}
+}
 
-	$svg.addEventListener('mousemove', select, opt);
+export function add_selecting() {
+	cycle.start = cycle_start
+	cycle.end = cycle_end
+	cycle.step = cycle_step
+	add_rectangling()
+	return
+	// manage selecting
+	$svg.addEventListener('mousedown', cycle.start);
+	//$svg.addEventListener('mousedown', startSelect);
+	$svg.addEventListener('mouseup', cycle.end);
+	//$svg.addEventListener('mouseup', endSelect);
+
+	$svg.addEventListener('mousemove', cycle.step, opt);
+	//$svg.addEventListener('mousemove', select, opt);
 	
-	$svg.addEventListener('touchstart', startSelect);
-	$svg.addEventListener('touchend', endSelect);
-	$svg.addEventListener('touchmove', select, opt);
+	//$svg.addEventListener('touchstart', startSelect);
+	//$svg.addEventListener('touchend', endSelect);
+	//$svg.addEventListener('touchmove', select, opt);
 }
 
 export function remove_selecting() {
-	$svg.removeEventListener('mousedown', startSelect);
-	$svg.removeEventListener('mouseup', endSelect);
+	remove_rectangling()
+	return
+	$svg.removeEventListener('mousedown', cycle.start);
+	//$svg.removeEventListener('mousedown', startSelect);
+	$svg.removeEventListener('mouseup', cycle.end);
+	//$svg.removeEventListener('mouseup', endSelect);
 	//$svg.removeEventListener('mouseleave', endSelect);
 
-	$svg.removeEventListener('mousemove', select, opt);
+	$svg.removeEventListener('mousemove', cycle.step, opt);
+	//$svg.removeEventListener('mousemove', select, opt);
 	
-	$svg.removeEventListener('touchstart', startSelect);
-	$svg.removeEventListener('touchend', endSelect);
-	$svg.removeEventListener('touchmove', select, opt);
+	//$svg.removeEventListener('touchstart', startSelect);
+	//$svg.removeEventListener('touchend', endSelect);
+	//$svg.removeEventListener('touchmove', select, opt);
 }
 
-let $selectangle
+/*let $selectangle
 const style =  'pointer-events:none;vector-effect:non-scaling-stroke;stroke-width:1;fill:none;stroke:#000000;stroke-opacity:1;stroke-miterlimit:2;stroke-dasharray:3,3;stroke-dashoffset:2'
 let start = null
 let moved = null
@@ -56,13 +90,14 @@ function startSelect(evt) {
 	attr($selectangle, {x:start.x, y:start.y, width:1, height:1})
 	$svg.appendChild($selectangle)
 	disable.click = true
-}
+}*/
 
 function selection_ants(evt) {
-	if (!evt.shiftKey) $selection.clear()
+	if (!evt.shiftKey && !evt.ctrlKey) $selection.clear()
 	const BB = $selectangle.getBoundingClientRect()
 	Array.from($svg.children).forEach($c => {
 		if (!is_selectable($c)) return
+		if ($selection.has($c) && !evt.ctrlKey) return
 
 		const bb = $c.getBoundingClientRect()
 		if (
@@ -78,14 +113,14 @@ function selection_ants(evt) {
 			bb.bottom < BB.bottom &&
 			bb.right < BB.right)
 		) {
-			$selection.add($c)
+			evt.ctrlKey ? $selection.delete($c) : $selection.add($c)
 		}
 	})
 	dragging_all_marks_reset()
 	$selection.as_ants()
 }
 
-function endSelect(evt) {
+/*function endSelect(evt) {
 	start = null
 	disable.click = moved
 	moved = null
@@ -129,4 +164,4 @@ function select(evt) {
 	start = current
 	
 	selection_ants(evt)
-}
+}*/

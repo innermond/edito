@@ -71,4 +71,4 @@ if (vbox.width === 0) vbox.width = $svg.width.baseVal.value
 if (vbox.height === 0) vbox.height = $svg.height.baseVal.value
 zoom_reset.viewbox = copy_viewbox($svg.viewBox)
 
-add_rectangling()
+//add_rectangling()
