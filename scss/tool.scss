@@ -1,6 +1,6 @@
 @mixin opacity {
 	opacity: 0.4;
-	transition: opacity .2s ease-out;
+	transition: opacity .5s ease-out;
 	&:hover {
 		opacity: 1;
 	}
@@ -16,22 +16,27 @@
 	background-color: $bk-color-loud;
 }
 
+@mixin background-color {
+	background-color: black;
+	transition: background-color .5s ease-out;
+	&:hover {
+		background-color: $bk-color;
+		border-right: none;
+	}
+}
+
 #menu-bar {
 	top: 0;
 	left: 0;
 	bottom: 0;
 	width: $tool-width;
 	position: absolute;
-	background-color: black;
 	user-select: none;
 	display: flex;
 	flex-flow: column;
 	z-index: 2;
 	border-right: 0.1rem solid $black-soft;
-	transition: background-color .5s ease-out;
-	&:hover {
-		background-color: $bk-color;
-	}
+	@include background-color;
 }
 
 #bottom-bar {
@@ -433,8 +438,8 @@ input {
 hr {
 	width: 100%;
 	border-style: none;
-	height: 0.15rem;
-	background-color: $bk-color-loud;
+	height: 0.05rem;
+	background-color: $black-soft;
 }
 
 .wrap-row {

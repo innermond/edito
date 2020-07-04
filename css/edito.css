@@ -24,21 +24,22 @@ text {
   bottom: 0;
   width: 50px;
   position: absolute;
-  background-color: black;
   user-select: none;
   display: flex;
   flex-flow: column;
   z-index: 2;
   border-right: 0.1rem solid #171717;
+  background-color: black;
   transition: background-color .5s ease-out; }
   #menu-bar:hover {
-    background-color: #292c31; }
+    background-color: #292c31;
+    border-right: none; }
 
 #bottom-bar {
   bottom: 0;
   color: #d6d3ce;
   opacity: 0.4;
-  transition: opacity .2s ease-out;
+  transition: opacity .5s ease-out;
   margin-left: 25px;
   position: absolute;
   user-select: none;
@@ -368,8 +369,8 @@ input {
 hr {
   width: 100%;
   border-style: none;
-  height: 0.15rem;
-  background-color: #24272b; }
+  height: 0.05rem;
+  background-color: #171717; }
 
 .wrap-row {
   border: 1px solid #40454d;

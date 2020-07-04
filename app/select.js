@@ -103,8 +103,6 @@ function select(evt) {
 	moved = true
 	if (moved === null) return
 	if (start === null) return
-	//if (evt.target !== $svg) return
-	//evt.stopPropagation()
 
 	const current = point_screen(evt)
 	const dx = start.x - current.x
