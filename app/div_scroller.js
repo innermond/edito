@@ -50,15 +50,32 @@ export function div_scroller($ss) {
 					$e.style.opacity = 0.0
 				})
 				$e.addEventListener('click', evt => {
-					mouse_pos(evt)
+					mouse_pos(evt.clientY)
 				})
 				// move the thumb
 				document.addEventListener('mousemove', evt => {
 					if (move === false) return
-					mouse_pos(evt)
+					mouse_pos(evt.clientY)
 				})
-				function mouse_pos(evt) {
-					let posy = evt.clientY - bb.top
+
+				$scrollee.addEventListener('wheel', evt => {
+					$e.classList.add('active')
+					move = true
+					let step = evt.deltaY > 0 ? 1 : evt.deltaY === 0 ? 0 : -1
+					const $s = $e.parentNode
+					// step could be an arbitrary number 
+					// or calculated related la how much is the invisible part 
+					// related to the visible one
+					//const d = ($s.scrollHeight - $s.clientHeight)/$s.clientHeight
+					//step *= Math.ceil(d)
+					step *= 20
+					const y = $thumb.getBoundingClientRect().top + step
+					mouse_pos(y)
+					move = false
+				})
+
+				function mouse_pos(y) {
+					let posy = y - bb.top
 					// define a sensitive spot area on scrollee
 					// closser to scroller
 					// that allow to scroll even position is outside of scroller
@@ -74,7 +91,7 @@ export function div_scroller($ss) {
 					if (posy < 0) posy = 0
 					if (posy > H - h) posy = H - h 
 					$thumb.style.top = posy + 'px'
-					adj = evt.clientY - $thumb.getBoundingClientRect().top
+					adj = y - $thumb.getBoundingClientRect().top
 					if (adj > h) adj = h
 					if (adj < 0) adj = 0
 					// move scrollee proportionally with thumb movement
