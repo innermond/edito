@@ -47,20 +47,23 @@ $tool_floater.addEventListener('mouseover', evt => {
     if ($floater.style.display !== 'none') cycle_zindex($floater)
 })
 
+let have_area = false
+
 const $select = $ui.querySelector('#tool-select')
 let select_clicked = false
 $select.addEventListener('click', evt => {
 	if (select_clicked) {
 		movement.select.off()
+		if (have_area) document.body.classList.add('area')
 	} else {
 		movement.select.on()
+		if (have_area) document.body.classList.remove('area')
 	}
 	select_clicked = !select_clicked
 })
 
 const $area = $ui.querySelector('#tool-zoom')
 const diving = () => {
-	let have_area = false
 	return evt => {
 		if(have_area) {
 			movement.dive.off()

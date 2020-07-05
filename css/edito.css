@@ -509,7 +509,9 @@ body.pan, body.pan.area {
   cursor: grab; }
 
 body.area {
-  cursor: crosshair; }
+  cursor: zoom-in; }
+  body.area.out {
+    cursor: zoom-out; }
 
 body {
   overflow: hidden; }
