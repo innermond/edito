@@ -108,6 +108,38 @@ section.movable, section.tool-drawer, #bottom-bar {
 	}
 }
 
+#add-image button.category-image {
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-flow: column wrap;
+	align-items: center;
+	justify-content: center;
+	& > .category-image-text {
+		color: white;
+		padding: 0.5rem;
+		font-size: 1.5.5.5.5.5rem;
+		position: absolute;
+		flex: 100%;
+		transition: background-color 0.5s linear;
+		&:hover {
+			background-color: $black-soft;
+		}
+	}
+	& > img:hover + .category-image-text {
+		background-color: $txt-color-border;
+	}
+	& > img:not([src$=svg]) {
+		width: 100%;
+		pointer-events: auto;
+		transition: all 0.25s linear;
+		&:hover {
+			opacity: 1;
+			filter: saturate(4);
+		}
+	}
+} 
+
 $bk-tooltip: lighten($txt-color, 5%);
 $space-tooltip: 5px;
 // 24px height of image

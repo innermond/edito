@@ -77,6 +77,38 @@ const diving = () => {
 }
 $area.addEventListener('click', diving())
 
+const $add_image = $ui.querySelector('#tool-image')
+const load_colections_images = (() => {
+	let already_loaded = false
+	return async evt => {
+		if (already_loaded) {
+			$add_image.removeEventListener('click', load_colections_images)
+			return
+		}
+		try {
+			let resp = await fetch('/app/data/image-category.js')
+			if (!resp.ok) {
+				throw new Error('response not ok')
+			}
+			resp = await resp.json()
+			const $mark = document.getElementById('categories-images-mark')
+			// add categories images to panel
+			// assume just append
+			let categories = ''
+			Object.keys(resp).forEach(k => {
+				categories += `<button class="category-image" id="category-${k}"><img src="/${resp[k]}"><div class="category-image-text">${k}</div></button>`
+			})
+			if (categories.length > 0) {
+				$mark.insertAdjacentHTML('afterend', categories.repeat(100))
+				already_loaded = true
+			}
+		} catch (e) {
+			console.log(e)
+		}
+	}
+})()
+$add_image.addEventListener('click', load_colections_images)
+
 const $tool_menu = $ui.querySelector('#tool-menu-sections')
 
 document.addEventListener('tool_menu:all_inactive', evt => {

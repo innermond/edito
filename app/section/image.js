@@ -12,7 +12,8 @@ const tpl = `<section class="vertical-align">
 	<label for="file_image" class="file-upload tooltip" data-tooltip-text="Alegeți o imagine de pe calculatorul dvs." data-tooltip-bottom>Fișier local</label>
 	<input type="file" id="file_image">
 	<hr/>
-	<button id="images" class="tooltip" data-tooltip-text="Alege din imaginile deja incărcate" data-tooltip-bottom>Librărie</button>
+	<label class="tooltip" data-tooltip-text="Alegeți o colecție de imagini" data-tooltip-bottom>Librărie</label>
+	<a id="categories-images-mark"/>
 </section>`
 export const $ui = wrap(ui_fragment(tpl), 'add-image', 'imagini')
 
