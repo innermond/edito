@@ -604,6 +604,9 @@ body{
 		cursor: grab;
 	}	
 	&.area {
-		cursor: crosshair;
+		cursor: zoom-in;
+		&.out {
+			cursor: zoom-out;
+		}
 	}
 }
