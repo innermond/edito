@@ -50,7 +50,18 @@ export function div_scroller($ss) {
 					$e.style.opacity = 0.0
 				})
 				$e.addEventListener('click', evt => {
-					mouse_pos(evt.clientY)
+					const tbb = $thumb.getBoundingClientRect()
+					let y = evt.clientY
+					if (evt.clientY >= tbb.bottom) {
+						y += tbb.height*0.5
+					} else if (evt.clientY <= tbb.top) {
+						y -= tbb.height*0.5
+					} else if (evt.clientY > tbb.top && evt.clientY < tbb.top + tbb.height*0.5) {
+						y -= tbb.top + tbb.height*0.5 - evt.clientY
+					} else if (evt.clientY < tbb.bottom && evt.clientY > tbb.bottom - tbb.height*0.5) {
+						y += evt.clientY - (tbb.bottom - tbb.height*0.5) 
+					}
+					mouse_pos(y)
 				})
 				// move the thumb
 				document.addEventListener('mousemove', evt => {
@@ -72,7 +83,7 @@ export function div_scroller($ss) {
 					const y = $thumb.getBoundingClientRect().top + step
 					mouse_pos(y)
 					move = false
-				})
+				}, {'passive': true})
 
 				function mouse_pos(y) {
 					let posy = y - bb.top

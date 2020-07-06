@@ -101,6 +101,11 @@ const load_colections_images = (() => {
 			if (categories.length > 0) {
 				$mark.insertAdjacentHTML('afterend', categories.repeat(100))
 				already_loaded = true
+				$mark.parentNode.querySelectorAll('button[class=category-image]').forEach($btn => {
+					$btn.addEventListener('click', evt => {
+						console.log(evt.target, evt.currentTarget)
+					})
+				})
 			}
 		} catch (e) {
 			console.log(e)
