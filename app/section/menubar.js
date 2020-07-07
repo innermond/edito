@@ -102,8 +102,16 @@ const load_colections_images = (() => {
 				$mark.insertAdjacentHTML('afterend', categories.repeat(100))
 				already_loaded = true
 				$mark.parentNode.querySelectorAll('button[class=category-image]').forEach($btn => {
-					$btn.addEventListener('click', evt => {
+					$btn.addEventListener('click', async evt => {
+						let $el = document.querySelector('#category-image')
+						if (!$el) {
+							let {$ui} = await import('./category_image.js')	
+							$el = $ui.firstChild
+							console.log($ui, $el)
+							document.querySelector('#editor').appendChild($ui)
+						}
 						console.log(evt.target, evt.currentTarget)
+						$el.dispatchEvent(new CustomEvent('panel:toggle', {bubbles: true, detail: {panel_id: $el.id}}))
 					})
 				})
 			}

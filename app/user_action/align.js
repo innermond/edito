@@ -13,7 +13,7 @@ export function aligning(val, refval) {
 	if ($selection.size > 1) $ee = Array.from($selection)
 
 	align_objects($ee, mode, $svg)
-	$selection.forEach($e => $e.classList.contains('is-reference') && $selection.delete($e))
+	$selection.forEach($e => $e.classList.contains('rectpage') && $selection.delete($e))
 	$selection.as_ants()
 }
 
@@ -114,7 +114,13 @@ const align_objects = (oo, mode='left', owner=null) => {
 }
 
 function set_reference(to) {
-	$selection.forEach($e => !$e.classList.contains('rectpage') && $e.classList.remove('is-reference'))
+	$selection.forEach($e => {
+		if (!$e.classList.contains('rectpage')) {
+			$e.classList.remove('is-reference')
+		} else {
+			$selection.delete($e)
+		} 
+	})
 	switch (to) {
 		case '1':
 	  if ($selection.size < 2) break 

@@ -29,7 +29,9 @@ export const is_selectable = $e => {
 	if (
 		$e.dataset.ants === "true" || 
 		$e.dataset.rect === "true" ||
-		$e.dataset.selectangle === "true"
+		$e.dataset.selectangle === "true" ||
+		$e.classList.contains('rectpage') ||
+		$e.id === 'rectpage'
 	) return false
 	const style = window.getComputedStyle($e)
 	if (style.display === 'none' || style.visibility === 'hidden') return false
