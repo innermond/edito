@@ -6,6 +6,7 @@ import {add_selecting, remove_selecting} from '../select.js'
 import {add_diving, remove_diving} from '../dive.js'
 import {add_panning, remove_panning} from '../pan.js'
 import movement from '../cap.js'
+import {scrollable} from '../div_scroller.js'
 
 const tpl = `<section id="menu-bar">
 	<div>
@@ -106,11 +107,16 @@ const load_colections_images = (() => {
 						let $el = document.querySelector('#category-image')
 						if (!$el) {
 							let {$ui} = await import('./category_image.js')	
+							const $element = $ui.querySelector('.tool-drawer-scroll')
 							$el = $ui.firstChild
-							console.log($ui, $el)
 							document.querySelector('#editor').appendChild($ui)
+							scrollable($element)
+
+							const $s = document.createElement('script')
+							$s.setAttribute('src', '/xobserver.js')
+							$s.onload = () => console.log('loaded')
+							document.head.appendChild($s)
 						}
-						console.log(evt.target, evt.currentTarget)
 						$el.dispatchEvent(new CustomEvent('panel:toggle', {bubbles: true, detail: {panel_id: $el.id}}))
 					})
 				})

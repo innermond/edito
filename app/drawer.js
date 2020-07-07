@@ -13,7 +13,7 @@ const tpl = `<section data-closeable class="tool-drawer vertical-align">
 
 	<button id="add-text-cancel" class="cancel">Închide</button>
 </section>`
-export const wrap = ($el, newid, title) => {
+export const wrap = ($el, newid, title, add_scrollable_now=false) => {
 	const $ui = ui_fragment(tpl)
 	$ui.firstElementChild.id = newid
 	$ui.querySelector('[class="title"]').firstChild.textContent = title
@@ -22,7 +22,7 @@ export const wrap = ($el, newid, title) => {
 	$ui.querySelectorAll('[class~=close], [class~=cancel]').forEach($e => $e.addEventListener('click', x_cancel_operation))
 
 	const $ss = $ui.querySelectorAll('.tool-drawer-scroll')
-	div_scroller($ss)
+	div_scroller($ss, add_scrollable_now)
 	const $kk = $ui.querySelectorAll('input[type=checkbox][class~=switch]')
 	span_checkbox($kk)
 
