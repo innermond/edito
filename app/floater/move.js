@@ -29,9 +29,9 @@ const tpl = `<section class="movable" id="order">
 			<option>Aliniază</option>
 			<option value="l">stanga</option>
 			<option value="r">dreapta</option>
-			<option value="c">centru</option>
 			<option value="t">sus</option>
 			<option value="b">jos</option>
+			<option value="c">centru</option>
 			<option value="m">mijloc</option>
 	</select>
 	</div>
