@@ -7,7 +7,7 @@ const tpl = `<style>
 	}
 
 	#box {
-		background-color: rgba(40, 40, 190, 255);
+		background-color: transparent;
 		transition: background-color 1s, border 1s;
 		width: 100%;
 		max-width: 400px;
@@ -26,14 +26,14 @@ const tpl = `<style>
 		height: 150px;
 		max-height: 150px;
 		flex: 0 1 auto;
-		filter: blur(5px) brightness(50%);
+		filter: grayscale(100%) blur(10px) brightness(50%);
 		transition: filter 1s ease;
 	}
 	img.late.loaded {
-		filter: blur(0px) brightness(100%) drop-shadow(0px 0px 0px black);
+		filter: grayscale(100%) blur(0px) brightness(100%) drop-shadow(0px 0px 0px white);
 	}
 	img.late.loaded:hover {
-		filter: blur(0px)  brightness(150%) drop-shadow(0px 0px 10px black);
+		filter: grayscale(0%) blur(0px)  brightness(150%) drop-shadow(0px 0px 20px white);
 	}
 
 	img[activating=true]{

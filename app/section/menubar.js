@@ -114,7 +114,7 @@ const load_colections_images = (() => {
 
 							const $s = document.createElement('script')
 							$s.setAttribute('src', '/xobserver.js')
-							$s.onload = () => console.log('loaded')
+							//$s.onload = () => {}
 							document.head.appendChild($s)
 						}
 						$el.dispatchEvent(new CustomEvent('panel:toggle', {bubbles: true, detail: {panel_id: $el.id}}))

@@ -79,7 +79,7 @@ let nextnum = 1
 	let category_image = document.querySelector('#category-image > .tool-drawer-scroll')
 	let options = {
 		root: category_image.parentNode,
-		rootMargin:'-50px 0px',
+		rootMargin:'0px 0px',
 		threshold: 0
 	}
 	let observer = new IntersectionObserver(callback, options)

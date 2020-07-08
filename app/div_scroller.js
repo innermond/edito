@@ -1,9 +1,15 @@
 const tpl = '<div class="scroller"><div class="thumb"></div></div>'
 // needs $scrollee connected to dom
 export const scrollable = $scrollee => {
+	 // element to be scrollable, usually a div
+	// that is fixed and an inner element will resize and trigger
+	const $resizeables = Array.from($scrollee.children)
 		$scrollee.insertAdjacentHTML('beforeend', tpl)
+		// scroller stripe
 		const $e = $scrollee.lastChild
+		// scroller thumb
 		const $thumb = $e.firstChild
+
 		$scrollee.addEventListener('mouseenter', evt => {
 			const $s = $e.parentNode
 			// there is hidden content in need to show ?
@@ -110,15 +116,22 @@ export const scrollable = $scrollee => {
 		}
 		const ro = new ResizeObserver( ee => {
 			for (const e of ee) {
-				const $s = e.target
+				const $s = $scrollee
 				const d = $s.scrollHeight - $s.clientHeight
+				if (d === 0) return
 				const percent_scroll = $s.scrollTop / d
 				$thumb.style.top = percent_scroll*(H - h) + 'px'
 			}
 		});
 
 		// react to scrollee resising
-		ro.observe($scrollee)
+	$resizeables.forEach($r => {
+		// is this element capable of resizing?
+		// has geometrical features
+		const bb = $r.getBoundingClientRect()
+		if (bb.width === 0 || bb.heigth || $r.style.display === 'none') return
+		ro.observe($r)
+	})
 }
 
 export function div_scroller($ss, add_scrollable_now=false) {
