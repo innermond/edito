@@ -31,11 +31,12 @@ const tpl = `<style>
 	}
 	img.late.loaded {
 		filter: grayscale(100%) blur(0px) brightness(100%);
-		box-shadow: 0px 0px 0px white;
+		box-shadow: 0px 0px 0px white, 0px 0px 0px white;
 	}
 	img.late.loaded:hover {
 		filter: grayscale(0%) blur(0px)  brightness(150%);
-		box-shadow: 0px -10px 20px white;
+		box-shadow: 0px -10px 75px white, 0px 10px 75px white;
+		z-index: 2;
 	}
 
 	img[activating=true]{

@@ -261,6 +261,7 @@ section label {
   text-align: center;
   text-transform: capitalize;
   height: 3rem;
+  flex: 0 0 auto;
   background-color: #24272b;
   border-bottom: 0.1rem solid #171717; }
 
@@ -280,7 +281,7 @@ section label {
 
 .cancel {
   height: 3rem;
-  flex: 1 0 auto;
+  flex: 0 0 auto;
   z-index: 1;
   margin: 0;
   margin-bottom: 0;

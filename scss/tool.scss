@@ -318,6 +318,7 @@ section label {
 	text-align: center;
 	text-transform: capitalize;
 	height: $title-height;
+	flex: 0 0 auto; // to keep height intact
 	background-color: $bk-color-loud;
 	border-bottom: 0.1rem solid $black-soft;
 }
@@ -340,7 +341,7 @@ section label {
 
 .cancel {
 	height: $title-height;
-	flex: 1 0 auto; // to keep height intact
+	flex: 0 0 auto; // to keep height intact
 	z-index: 1;
 	margin: 0;
 	margin-bottom: 0;
