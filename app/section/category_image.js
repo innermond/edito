@@ -27,13 +27,15 @@ const tpl = `<style>
 		max-height: 150px;
 		flex: 0 1 auto;
 		filter: grayscale(100%) blur(10px) brightness(50%);
-		transition: filter 1s ease;
+		transition: filter 1s ease, box-shadow 1s ease;
 	}
 	img.late.loaded {
-		filter: grayscale(100%) blur(0px) brightness(100%) drop-shadow(0px 0px 0px white);
+		filter: grayscale(100%) blur(0px) brightness(100%);
+		box-shadow: 0px 0px 0px white;
 	}
 	img.late.loaded:hover {
-		filter: grayscale(0%) blur(0px)  brightness(150%) drop-shadow(0px 0px 20px white);
+		filter: grayscale(0%) blur(0px)  brightness(150%);
+		box-shadow: 0px -10px 20px white;
 	}
 
 	img[activating=true]{

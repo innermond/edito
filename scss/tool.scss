@@ -340,6 +340,7 @@ section label {
 
 .cancel {
 	height: $title-height;
+	flex: 1 0 auto; // to keep height intact
 	z-index: 1;
 	margin: 0;
 	margin-bottom: 0;
