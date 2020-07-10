@@ -1,6 +1,7 @@
 <?php
 $body = trim(file_get_contents('php://input'));
 $post = json_decode($body, true);
+$key = $post['q'];
 $a = $post['a'] ?? 0;
 $z = $post['z'] ?? 5;
 if ($z < $a) {
@@ -9,12 +10,11 @@ if ($z < $a) {
 $z *= 1;
 $a *= 1;
 
-$f = fopen('data.js', 'r');
+$src = 'app/data/' . $key . '.js';
+$f = fopen($src, 'r');
 if ($f) {
-	fgets($f);
 	$json = fgets($f);
-	$eq = strpos($json, '=');
-	$str = str_replace('\'', '"', substr($json, ++$eq));
+	$str = str_replace('\'', '"', $json);
 	$data = json_decode($str);
 	$slice = array_slice($data, $a, $z - $a);
 	header('Content-Type: application/json');

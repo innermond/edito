@@ -7,7 +7,7 @@ function nth(el) {
 	return i
 }
 
-export default function(nextnum=1) {
+export default function(nextnum=1, q='') {
 	const blankimg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
 	const loadimg = (observer, $box, a, z, nextnum=1) => {
 	 fetch('noscript.php', {
@@ -15,7 +15,7 @@ export default function(nextnum=1) {
 		 mode: "same-origin",
 		 credentials: "same-origin",
 		 headers: {'Content-Type': 'application/json'},
-		 body: JSON.stringify({a, z})
+		 body: JSON.stringify({a, z, q})
 	 })
 		.then(response => response.json())
 		.then(json => {
