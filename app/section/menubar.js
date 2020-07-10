@@ -97,13 +97,14 @@ const load_colections_images = (() => {
 			// assume just append
 			let categories = ''
 			Object.keys(resp).forEach(k => {
-				categories += `<button class="category-image" id="category-${k}"><img src="/${resp[k]}"><div class="category-image-text">${k}</div></button>`
+				categories += `<button class="category-image" id="category-${k}" value="${k}"><img src="/${resp[k]}"><div class="category-image-text">${k}</div></button>`
 			})
 			if (categories.length > 0) {
 				$mark.insertAdjacentHTML('afterend', categories.repeat(100))
 				already_loaded = true
 				$mark.parentNode.querySelectorAll('button[class=category-image]').forEach($btn => {
 					$btn.addEventListener('click', async evt => {
+						console.log($btn.value)
 						let $el = document.querySelector('#category-image')
 						if (!$el) {
 							let {$ui} = await import('./category_image.js')	
@@ -113,7 +114,7 @@ const load_colections_images = (() => {
 							scrollable($element)
 							try {
 								const {default: fn} = await import('../xobserver.js')
-								const [loadimg, callback] = fn(1) 
+								const [loadimg, callback] = fn(1, $btn.value) 
 								const box = document.querySelector('#box')
 								box.addEventListener('click', evt => {
 									if (evt.target.nodeName.toLowerCase() !== 'img') return

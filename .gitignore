@@ -121,3 +121,4 @@ go.mod
 *.svg
 !icon/*.svg
 stock-images*
+app/data
