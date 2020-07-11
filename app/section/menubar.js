@@ -104,6 +104,7 @@ const load_colections_images = (() => {
 				already_loaded = true
 				$mark.parentNode.querySelectorAll('button[class=category-image]').forEach($btn => {
 					$btn.addEventListener('click', async evt => {
+						console.log($btn.value)
 						let $el = document.querySelector('#category-image')
 						let box
 						if (!$el) {
@@ -112,6 +113,7 @@ const load_colections_images = (() => {
 							$el = $ui.firstChild
 							document.querySelector('#editor').appendChild($ui)
 							scrollable($element)
+
 							box = document.querySelector('#box')
 							box.addEventListener('click', evt => {
 								if (evt.target.nodeName.toLowerCase() !== 'img') return
