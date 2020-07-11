@@ -43,5 +43,12 @@ document.addEventListener('panel:toggle', evt => {
 	document.querySelectorAll('section.active').forEach($el => {
 		if ($el.id !== panel_id) $el.classList.remove('active')
 	})
-	document.getElementById(panel_id)?.classList.toggle('active')
+	const $panel = document.getElementById(panel_id)
+	if ($panel) {
+		$panel.classList.toggle('active')
+		if (evt.target.dataset.panel !== panel_id) return
+		const $actives = evt.target.parentNode.querySelectorAll('.tool-item.active')
+		$actives.forEach($e => {if ($e !== evt.target) $e.classList.remove('active')})
+		$panel.classList.contains('active') ? evt.target.classList.add('active') : evt.target.classList.remove('active')
+	}
 })

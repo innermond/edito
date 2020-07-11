@@ -159,7 +159,7 @@ document.addEventListener('tool_menu:all_inactive', evt => {
 
 $tool_menu.addEventListener('click', evt => {
 	const $me = evt.target
-	toggle_active($me)
+	//toggle_active($me)
 	toggle_panel($me)
 })
 
@@ -171,9 +171,13 @@ function toggle_all_inactive() {
 	$tool_menu.querySelectorAll('.tool-item.active').forEach($e => $e.classList.remove('active'))
 }
 
-function toggle_active($me) {
+function toggle_active($me, state=null) {
 	$tool_menu.querySelectorAll('.tool-item.active').forEach($e => {if ($e !== $me) $e.classList.remove('active')})
-	$me.classList.toggle('active')
+	if (state === null) {
+		$me.classList.toggle('active')
+	} else {
+		$me.classList[state].call('active')
+	}
 }
 
 function toggle_panel($el) {
