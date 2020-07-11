@@ -105,35 +105,38 @@ const load_colections_images = (() => {
 				$mark.parentNode.querySelectorAll('button[class=category-image]').forEach($btn => {
 					$btn.addEventListener('click', async evt => {
 						let $el = document.querySelector('#category-image')
+						let box
 						if (!$el) {
 							let {$ui} = await import('./category_image.js')	
 							const $element = $ui.querySelector('.tool-drawer-scroll')
 							$el = $ui.firstChild
 							document.querySelector('#editor').appendChild($ui)
 							scrollable($element)
-							try {
-								const {default: fn} = await import('../xobserver.js')
-								const [loadimg, callback] = fn(1, $btn.value) 
-								const box = document.querySelector('#box')
-								box.addEventListener('click', evt => {
-									if (evt.target.nodeName.toLowerCase() !== 'img') return
-									for (let cls of ['late', 'loaded']) {
-										if (evt.target.classList.contains(cls)) continue
-										return
-									}
-									console.log(evt.target.dataset.src)
-								})
-								const category_image = document.querySelector('#category-image > .tool-drawer-scroll')
-								const options = {
-									root: category_image.parentNode,
-									rootMargin:'0px 0px',
-									threshold: 0
+							box = document.querySelector('#box')
+							box.addEventListener('click', evt => {
+								if (evt.target.nodeName.toLowerCase() !== 'img') return
+								for (let cls of ['late', 'loaded']) {
+									if (evt.target.classList.contains(cls)) continue
+									return
 								}
-								const observer = new IntersectionObserver(callback, options)
-								loadimg(observer, box, 0, 1)
-							} catch (e) {
-								console.log(e)
+								console.log(evt.target.dataset.src)
+							})
+						}
+						if (!box) box = document.querySelector('#box')
+						box.innerHTML = ''
+						try {
+							const {default: fn} = await import('../xobserver.js')
+							const [loadimg, callback] = fn(1, $btn.value) 
+							const category_image = document.querySelector('#category-image > .tool-drawer-scroll')
+							const options = {
+								root: category_image.parentNode,
+								rootMargin:'0px 0px',
+								threshold: 0
 							}
+							const observer = new IntersectionObserver(callback, options)
+							loadimg(observer, box, 0, 1)
+						} catch (e) {
+							console.log(e)
 						}
 						$el.dispatchEvent(new CustomEvent('panel:toggle', {bubbles: true, detail: {panel_id: $el.id}}))
 					})

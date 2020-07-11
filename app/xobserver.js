@@ -7,16 +7,18 @@ function nth(el) {
 	return i
 }
 
+const blankimg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
+
 export default function(nextnum=1, q='') {
-	const blankimg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
 	const loadimg = (observer, $box, a, z, nextnum=1) => {
-	 fetch('noscript.php', {
-		 method: 'POST', 
-		 mode: "same-origin",
-		 credentials: "same-origin",
-		 headers: {'Content-Type': 'application/json'},
-		 body: JSON.stringify({a, z, q})
-	 })
+		const opt = {
+			 method: 'POST', 
+			 mode: "same-origin",
+			 credentials: "same-origin",
+			 headers: {'Content-Type': 'application/json'},
+			 body: JSON.stringify({a, z, q})
+	 }
+	 fetch('noscript.php', opt)
 		.then(response => response.json())
 		.then(json => {
 			let url, img
