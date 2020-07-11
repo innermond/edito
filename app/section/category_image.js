@@ -21,26 +21,22 @@ const tpl = `<style>
 		padding:0;
 	}
 	
-	img.late {
+	img.late, body[class~=div-scroller-active] img.late.loaded:not(:hover) {
+		width: 200px;
 		max-width: 100%;
-		height: 150px;
-		max-height: 150px;
+		height: 100%;
 		flex: 0 1 auto;
-		filter: grayscale(100%) blur(10px) brightness(50%);
-		transition: filter 1s ease, box-shadow 1s ease;
+		filter: grayscale(100%) brightness(150%);
+		transition: filter 0.5s ease, box-shadow 0.5s ease;
 	}
 	img.late.loaded {
-		filter: grayscale(100%) blur(0px) brightness(100%);
+		filter: grayscale(100%) brightness(100%);
 		box-shadow: 0px 0px 0px white, 0px 0px 0px white;
 	}
 	img.late.loaded:hover {
-		filter: grayscale(0%) blur(0px)  brightness(150%);
+		filter: grayscale(0%)  brightness(150%);
 		box-shadow: 0px -10px 75px white, 0px 10px 75px white;
 		z-index: 2;
-	}
-
-	img[activating=true]{
-		border: 1px solid red;
 	}
 </style>
 

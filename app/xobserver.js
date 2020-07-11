@@ -12,7 +12,7 @@ const blankimg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAf
 export default function(nextnum=1, q='') {
 	let fetching = false
 
-	const loadimg = async (observer, $box, a, z, nextnum=1) => {
+	const loadimg = async (observer, $box, a, z) => {
 		const opt = {
 		 method: 'POST', 
 		 mode: "same-origin",
@@ -29,7 +29,7 @@ export default function(nextnum=1, q='') {
 				img = new Image()
 				img.classList.add('late')
 				img.dataset.src = location.protocol + '//' + location.host + '/img/' + url
-				img.dataset.placeholder = blankimg
+				//img.dataset.placeholder = blankimg
 				img.src = blankimg
 				img.width = inf[1]
 				img.height = inf[2]
@@ -47,6 +47,7 @@ export default function(nextnum=1, q='') {
 	}
 
 	const callback = (xx, obs) => {
+		console.log(xx)
 		xx.forEach(x => {
 			// threshold is crucial in the following reasoning
 			// x leaves when it's (1-threshold)*height is outside the root
@@ -55,27 +56,25 @@ export default function(nextnum=1, q='') {
 			const xname = x.target.dataset.src.substring(x.target.dataset.src.lastIndexOf('/')+1)
 			const loaded = (x.target.src === x.target.dataset.src)
 			if (x.isIntersecting && !loaded) {
-				window.requestAnimationFrame(()=>{
+				//window.requestAnimationFrame(()=>{
 					x.target.onload = () => {
 						if (x.target.src !== x.target.dataset.src) return
 						x.target.classList.add('loaded')
 					}
 					x.target.src = x.target.dataset.src
-						// enter-up
-						if (! yup && 'callnext' in x.target){ 
-							x.target.callnext(nextnum)
-							delete(x.target.callnext)
-						}
-				})	
+					// enter-up
+					if (! yup && 'callnext' in x.target){ 
+						x.target.callnext(nextnum)
+						delete(x.target.callnext)
+					}
+				//})	
 			} else if (loaded) {
-				window.requestAnimationFrame(()=>{
-					x.target.src = x.target.dataset.placeholder
+				//window.requestAnimationFrame(()=>{
+					x.target.src = blankimg
 					x.target.onload = null
-					x.target.classList.remove('loaded')
-					// leave-down
-					//console.log( !yup && !x.target.pristine)
-				})
-			}		
+					//x.target.classList.remove('loaded')
+				//})
+			} 
 		}) 
 	}
 

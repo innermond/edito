@@ -28,6 +28,7 @@ export const scrollable = $scrollee => {
 		$scrollee.addEventListener('mouseup', evt => {
 			move = false
 			$e.classList.remove('active')
+			document.body.classList.remove('div-scroller-active')
 		})
 
 		const bb = $e.getBoundingClientRect()
@@ -40,6 +41,7 @@ export const scrollable = $scrollee => {
 		// initiale
 		$e.addEventListener('mousedown', evt => {
 			$e.classList.add('active')
+			document.body.classList.add('div-scroller-active')
 			move = true
 			adj = evt.clientY - $thumb.getBoundingClientRect().top
 			if (adj > h) adj = h
@@ -50,6 +52,7 @@ export const scrollable = $scrollee => {
 			if (move === false) return
 			move = false
 			$e.classList.remove('active')
+			document.body.classList.remove('div-scroller-active')
 			$e.style.opacity = 0.0
 		})
 		$e.addEventListener('click', evt => {

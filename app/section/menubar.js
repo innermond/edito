@@ -128,15 +128,15 @@ const load_colections_images = (() => {
 						box.innerHTML = ''
 						try {
 							const {default: fn} = await import('../xobserver.js')
-							const [loadimg, callback] = fn(1, $btn.value) 
-							const category_image = document.querySelector('#category-image > .tool-drawer-scroll')
+							const [loadimg, callback] = fn(3, $btn.value) 
+							const $category_image = document.querySelector('#category-image > .tool-drawer-scroll')
 							const options = {
-								root: category_image.parentNode,
-								rootMargin:'0px 0px',
+								root: $category_image,
+								rootMargin: '0px',
 								threshold: 0
 							}
 							const observer = new IntersectionObserver(callback, options)
-							loadimg(observer, box, 0, 1)
+							loadimg(observer, box, 0, 3)
 						} catch (e) {
 							console.log(e)
 						}
