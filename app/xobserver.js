@@ -28,8 +28,8 @@ export default function(nextnum=1, q='') {
 				url = inf[0]
 				img = new Image()
 				img.classList.add('late')
+				img.classList.add('watched')
 				img.dataset.src = location.protocol + '//' + location.host + '/img/' + url
-				//img.dataset.placeholder = blankimg
 				img.src = blankimg
 				img.width = inf[1]
 				img.height = inf[2]
@@ -47,33 +47,41 @@ export default function(nextnum=1, q='') {
 	}
 
 	const callback = (xx, obs) => {
-		console.log(xx)
 		xx.forEach(x => {
 			// threshold is crucial in the following reasoning
 			// x leaves when it's (1-threshold)*height is outside the root
 			// x enters when it's threshold*height is inside the root
 			const yup = x.boundingClientRect.y < x.rootBounds.y;
-			const xname = x.target.dataset.src.substring(x.target.dataset.src.lastIndexOf('/')+1)
 			const loaded = (x.target.src === x.target.dataset.src)
-			if (x.isIntersecting && !loaded) {
-				//window.requestAnimationFrame(()=>{
-					x.target.onload = () => {
-						if (x.target.src !== x.target.dataset.src) return
-						x.target.classList.add('loaded')
+			if (x.isIntersecting) {
+				window.requestAnimationFrame(()=>{
+				// enters from bellow as blank image
+					if (!yup && !loaded) {
+						x.target.onload = () => {
+							if (x.target.src !== x.target.dataset.src) return
+							x.target.classList.add('loaded')
+						}
+						x.target.src = x.target.dataset.src
+						// enter-up
+						if ('callnext' in x.target){ 
+							x.target.callnext(nextnum)
+							delete(x.target.callnext)
+						}
+					// enters from above as blank image
+					} else if (yup && !loaded) {
+						x.target.src = x.target.dataset.src
 					}
-					x.target.src = x.target.dataset.src
-					// enter-up
-					if (! yup && 'callnext' in x.target){ 
-						x.target.callnext(nextnum)
-						delete(x.target.callnext)
-					}
-				//})	
-			} else if (loaded) {
-				//window.requestAnimationFrame(()=>{
+				})	
+			// leave to above
+			} else if (yup) {
+				window.requestAnimationFrame(()=>{
+					const {width:w, height:h} = x.target
+					x.target.style.width = w + 'px'
+					x.target.style.height = h + 'px'
 					x.target.src = blankimg
 					x.target.onload = null
-					//x.target.classList.remove('loaded')
-				//})
+					x.target.classList.remove('loaded')
+				})
 			} 
 		}) 
 	}
