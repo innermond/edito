@@ -6,6 +6,7 @@ import {ui_fragment} from '../dom.js'
 import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
 import {addEventInterval} from '../event_interval.js'
+import {ul_select} from '../ul_select.js'
 
 const tpl = `<section class="movable" id="fill_stroke_color">
 <div class="wrap-row">
@@ -15,6 +16,27 @@ const tpl = `<section class="movable" id="fill_stroke_color">
 	<input type="color" id="fill" value="#000000">
 	<input type="checkbox" class="switch" id="fill-switch">
 	</div>
+</div>
+<div>
+<label class="tooltip" data-tooltip-text="Modul amestecare al culorii" data-tooltip-bottom>Amestec</label>
+<select id="blend" style="display:none">
+    <option value="0">normal</option>
+    <option value="1">multiply</option>
+    <option value="2">screen</option>
+    <option value="3">overlay</option>
+    <option value="4">darken</option>
+    <option value="5">lighten</option>
+    <option value="6">color-dodge</option>
+    <option value="7">color-burn</option>
+    <option value="8">hard-light</option>
+    <option value="9">soft-light</option>
+    <option value="10">difference</option>
+    <option value="11">exclusion</option>
+    <option value="12">hue</option>
+    <option value="13">saturation</option>
+    <option value="14">color</option>
+    <option value="15">luminosity</option>
+</select>
 </div>
 <div>
 	<label class="tooltip" data-tooltip-text="Schimbă opacitatea umplerii" data-tooltip-bottom for="fill-opacity">Opacitate</label>
@@ -70,6 +92,15 @@ $fill_switch.addEventListener('change', evt => {
 		uncolorize('fill')
 		$fill.style.display = 'none'
 	}
+})
+
+const $blend = $ui.querySelector('#blend')
+ul_select($blend)
+$blend.addEventListener('change', evt => {
+    const mode = $blend.options[$blend.selectedIndex].text
+    $selection.forEach($el => {
+        $el.style.mixBlendMode = mode
+    })
 })
 
 export const $fill_opacity = $ui.querySelector('#fill-opacity')
