@@ -61,7 +61,7 @@ async function imagesAsUrldata($svgclone) {
 	}
 }
 
-export const render_image = async (k=1, bleed=0, down=false, func=null) => {
+export const render_image = async (k=1, bleed=0, down=false, func=null, after=null) => {
 	let $div = document.querySelector('#bkg_modal')
 	let $svgclone = $svg.cloneNode(true)
 	let svgsize = $svgclone.viewBox.baseVal
@@ -109,6 +109,9 @@ export const render_image = async (k=1, bleed=0, down=false, func=null) => {
 				a.click()
 		} else {
 				$div.insertAdjacentHTML('afterEnd', '<div class="preview" ><img src="' + canvasdata  + '"></div>')
+		}
+		if (after != null && after instanceof Function) {
+			after()
 		}
 	})
 	$img.setAttribute('src', 'data:image/svg+xml;base64,' + srcdata)
