@@ -33,7 +33,7 @@ const tpl = `<style>
 		filter: grayscale(100%) brightness(100%);
 		box-shadow: 0px 0px 0px white, 0px 0px 0px white;
 	}
-	img.late.loaded:hover {
+	img.late:hover {
 		filter: grayscale(0%)  brightness(150%);
 		box-shadow: 0px -10px 75px white, 0px 10px 75px white;
 		z-index: 2;

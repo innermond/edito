@@ -28,39 +28,63 @@ async function addUrlImage(evt) {
 	dragging_all_marks_reset()
 	$selection.clear()
 
-	const proxyurl =  'http://localhost:3000/cors.php?url=' 
-	//''https://cors-anywhere.herokuapp.com/'
+	const tag = await urlImage($url_image.value, img => {
+		center(img)
+		$url_image.value = ''
+	})
+	$svg.appendChild(tag)
+	$clicked.from(tag).over()
+}
+
+export function proxied_url(src) {
+	const proxyorigin = 'http://localhost:3000'
+	const proxyurl =  proxyorigin + '/cors.php?url=' 
+
+	let url_image = new URL(src)
+	if (url_image.origin !== proxyorigin) {
+		url_image = proxyurl + src
+	} else {
+		url_image = src
+	} 
+
+	return url_image
+}
+
+export async function urlImage(src, onload) {
+	const url_image = proxied_url(src)
+
 	let tag = newtag('image')
 	if ($url_image.value.split('.')?.pop()?.toLowerCase() === 'svg') {
 		try {
-			let resp = await fetch(proxyurl + $url_image.value)
+			let resp = await fetch(url_image)
 			if (resp.ok) {
 				let svg = await resp.text()
 				let p = new DOMParser()
 				let osvg = p.parseFromString(svg, 'image/svg+xml')
 				osvg.querySelectorAll('defs')?.children?.foreach($c => $defs.appendChild($c))
 				osvg.querySelectorAll('style')?.children?.foreach($c => $style.appendChild($c))
+
 				tag = newtag('g')
 				tag.classList.add('group')
 				tag.insertAdjacentHTML('beforeend', osvg.documentElement.innerHTML)
-				$svg.appendChild(tag)
-				$clicked.from(tag).over()
+
+				return tag
 			} else {
 				console.log(resp.status)
 			}
 		} catch(e) {
 			console.log(e)
 		}
-		return
+
+		return null
 	}
 
 	tag.addEventListener('load', evt => {
-		center(tag)
-		$url_image.value = ''
+		onload(tag)
 	})
-	tag.href.baseVal = $url_image.value
-	$svg.appendChild(tag)
-	$clicked.from(tag).over()
+	tag.href.baseVal = url_image
+
+	return tag
 }
 
 function addFileImage(evt) {

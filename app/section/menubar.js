@@ -8,6 +8,10 @@ import {add_panning, remove_panning} from '../pan.js'
 import movement from '../cap.js'
 import {scrollable} from '../div_scroller.js'
 
+import {dragging_all_marks_reset} from '../ui.js'
+import {$clicked, $selection} from '../selection/index.js'
+import {urlImage} from '../section/image.js'
+
 const tpl = `<section id="menu-bar">
 	<div>
 		<ul id="tool-menu-sections" class="tool-menu vertical-align">
@@ -115,13 +119,22 @@ const load_colections_images = (() => {
 							scrollable($element)
 
 							box = document.querySelector('#box')
-							box.addEventListener('click', evt => {
+							box.addEventListener('click', async evt => {
 								if (evt.target.nodeName.toLowerCase() !== 'img') return
 								for (let cls of ['late', 'loaded']) {
 									if (evt.target.classList.contains(cls)) continue
 									return
 								}
-								console.log(evt.target.dataset.src)
+
+								dragging_all_marks_reset()
+								$selection.clear()
+
+								const imgsrc = evt.target.dataset.src.replace('stock-images-thumbs', 'stock-images')
+								const tag = await urlImage(imgsrc, img => {
+									center(img)
+								})
+								$svg.appendChild(tag)
+								$clicked.from(tag).over()
 							})
 						}
 						if (!box) box = document.querySelector('#box')

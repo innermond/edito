@@ -28,7 +28,6 @@ export default function(nextnum=1, q='') {
 				url = inf[0]
 				img = new Image()
 				img.classList.add('late')
-				img.classList.add('watched')
 				img.dataset.src = location.protocol + '//' + location.host + '/img/' + url
 				img.src = blankimg
 				img.width = inf[1]

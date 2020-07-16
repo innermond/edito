@@ -1,4 +1,5 @@
 import {$svg} from './dom.js'
+import {proxied_url} from './section/image.js'
 
 function toDataURL(url) {
 	return new Promise((resolve, reject) => {
@@ -18,8 +19,7 @@ function toDataURL(url) {
 				}
 		}
 		image.onerror = reject
-		const proxyurl =  'http://localhost:3000/cors.php?url=' 
-		image.src = proxyurl + url	
+		image.src = proxied_url(url)
 	})
 }
 
