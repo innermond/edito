@@ -614,8 +614,34 @@ hr {
 		&.on {
 			display: block;
 			opacity: 0.9;
+			&::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: url(/icon/loading.svg) no-repeat center black;
+				animation-name: spinning;
+				animation-duration: 1s;
+				animation-iteration-count: infinite;
+			}
+			&.loading-off::before {
+				background: none;
+				animation: none;
+			}
 		}
 }
+
+@keyframes spinning{
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
 div.preview {
     display: flex;
     position: fixed;

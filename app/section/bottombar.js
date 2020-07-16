@@ -33,30 +33,45 @@ $clone_element.addEventListener('click', cloning)
 export const $save_svg = $ui.querySelector('#save_svg')
 export const $send_svg = $ui.querySelector('#send_svg')
 
+function loading() {
+	let $bkg = document.querySelector('#bkg_modal')
+	const remove = () => {
+		$bkg.classList.remove('on')
+		$bkg.classList.remove('loading-off')
+		document.querySelectorAll('div[class~=preview]').forEach($d => $d.remove())
+	}
+	if (!$bkg) {
+		$bkg = document.createElement('div')
+		$bkg.id = 'bkg_modal'
+		$bkg.classList.remove('on')
+		$bkg.classList.remove('loading-off')
+		$bkg.addEventListener('click', evt => remove())
+		document.querySelector('body').appendChild($bkg)
+	}
+	$bkg.classList.add('on')
+	
+	return $bkg
+}
+
 $save_svg.addEventListener('click', async evt => {
 	const current_viewbox = copy_viewbox($svg.viewBox)
 	let func = null
 	if (!$zoom_is_edit.checked) func = $svg_clone => zoom_reset($svg_clone)
-	let $bkg = document.querySelector('#bkg_modal')
-	if (!$bkg) {
-			$bkg = document.createElement('div')
-			$bkg.id = 'bkg_modal'
-			$bkg.classList.remove('on')
-			$bkg.addEventListener('click', evt => {
-				$bkg.classList.remove('on')
-				document.querySelectorAll('div[class~=preview]').forEach($d => $d.remove())
-			})
-	}
-	$bkg.classList.add('on')
-	document.querySelector('body').appendChild($bkg)
-	await render_image(1, 0, false, func)
+	const $bkg = loading()
+	await render_image(1, 0, false, func, () => {
+		$bkg.classList.add('loading-off')
+	})
 })
 $send_svg.addEventListener('click', async evt => {
 	const current_viewbox = copy_viewbox($svg.viewBox)
 	let func = null
 	if (!$zoom_is_edit.checked) func = $svg_clone => zoom_reset($svg_clone)
 	const dpi_scale = 300/72 // scale rendered image suposedly produced native at 72 dpi as much as needed to be printed at 300 dpi
-	await render_image(dpi_scale, $bleed.value, true, func)
+	const $bkg = loading()
+	await render_image(dpi_scale, $bleed.value, true, func, () => {
+		$bkg.classList.remove('on')
+		document.querySelectorAll('div[class~=preview]').forEach($d => $d.remove())
+	})
 })
 
 const $undo = $ui.querySelector('#undo')

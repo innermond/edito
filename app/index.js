@@ -4,7 +4,6 @@ import './drag.js'
 import './ul_select.js'
 import {tooltip} from './tooltip.js'
 import {span_checkbox} from './span_checkbox.js'
-import {add_rectangling} from './selectangle.js'
 import {dragElement, show_hide} from './html_drag.js'
 
 import {$section_menubar, $section_properties, $section_add_shape, $section_text, $section_image, $section_filter, $section_mask_clip_path, 
@@ -70,5 +69,3 @@ const vbox = $svg.viewBox.baseVal
 if (vbox.width === 0) vbox.width = $svg.width.baseVal.value
 if (vbox.height === 0) vbox.height = $svg.height.baseVal.value
 zoom_reset.viewbox = copy_viewbox($svg.viewBox)
-
-//add_rectangling()
