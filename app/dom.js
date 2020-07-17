@@ -287,17 +287,17 @@ export function path_text($e) {
 }
 
 export function previousSiblingNoAnts($el) {
-	while ($el.previousElementSibling?.dataset.ants === 'true') {
+	while ($el?.previousElementSibling?.dataset.ants === 'true' || ['defs', 'style', 'metadata'].includes($el?.previousElementSibling?.nodeName.toLowerCase())) {
 		$el = $el.previousElementSibling
 	}
-	return $el.previousElementSibling
+	return $el?.previousElementSibling
 }
 
 export function nextSiblingNoAnts($el) {
-	while ($el.nextElementSibling?.dataset.ants === 'true') {
+	while ($el?.nextElementSibling?.dataset.ants === 'true' || ['defs', 'style', 'metadata'].includes($el?.nextElementSibling?.nodeName.toLowerCase())) {
 		$el = $el.nextElementSibling
 	}
-	return $el.nextElementSibling
+	return $el?.nextElementSibling
 }
 
 export function display_none($el) {
