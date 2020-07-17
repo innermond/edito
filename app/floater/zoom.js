@@ -10,6 +10,7 @@ import {ungroup_one} from '../user_action/group.js'
 import {addEventInterval} from '../event_interval.js'
 import {disable} from '../click.js'
 import movement from '../cap.js'
+import {toggle_dive} from '../section/menubar.js'
 
 const tpl = `<section class="movable" id="zoom">
 <div class="wrap-row">
@@ -70,20 +71,18 @@ const $zoomreset = $ui.querySelector('#zoom_reset')
 $zoomreset.addEventListener('click', evt => zoom_reset())
 
 const $pan = $ui.querySelector('#pan')
+let have_pan = false
 const panning = () => {
-	let have_pan = false
-	return evt => {
-		if(have_pan) {
-			movement.pan.off()
-			document.body.classList.remove('pan')
-		} else {
-			movement.pan.on()
-			document.body.classList.add('pan')
-		}
-		have_pan = !have_pan
-	}
+    if(have_pan) {
+        movement.pan.off()
+        document.body.classList.remove('pan')
+    } else {
+        movement.pan.on()
+        document.body.classList.add('pan')
+    }
+    have_pan = !have_pan
 }
-$pan.addEventListener('click', panning())
+$pan.addEventListener('click', panning)
 $pan.addEventListener('mousedown', evt => $pan.classList.toggle('active'))
 
 $ui.querySelectorAll('[for]').forEach($e => {
@@ -92,3 +91,11 @@ $ui.querySelectorAll('[for]').forEach($e => {
 	})
 })
 
+$ui.querySelector('.close').addEventListener('click', evt => {
+    console.log('off')
+    toggle_dive()
+    if (have_pan) {
+        panning()
+        $pan.classList.remove('active')
+    }
+})
