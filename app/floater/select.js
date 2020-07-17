@@ -1,5 +1,7 @@
 import {$clicked, $selection} from '../selection/index.js'
 import {$svg, ui_fragment} from '../dom.js'
+import movement from '../cap.js'
+import {toggle_select} from '../section/menubar.js'
 
 const tpl = `<section class="movable" id="select">
 <div class="wrap-row">
@@ -76,3 +78,6 @@ $ui.querySelectorAll('[for]').forEach($e => {
 	})
 })
 
+$ui.querySelector('.close').addEventListener('click', evt => {
+    toggle_select()
+})

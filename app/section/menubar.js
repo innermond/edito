@@ -55,32 +55,33 @@ $tool_floater.addEventListener('mouseover', evt => {
 let have_area = false
 
 const $select = $ui.querySelector('#tool-select')
+
 let select_clicked = false
-$select.addEventListener('click', evt => {
-	if (select_clicked) {
-		movement.select.off()
-		if (have_area) document.body.classList.add('area')
-	} else {
-		movement.select.on()
-		if (have_area) document.body.classList.remove('area')
-	}
-	select_clicked = !select_clicked
-})
+export const toggle_select = () => {
+    if (select_clicked) {
+        movement.select.off()
+        if (have_area) document.body.classList.add('area')
+    } else {
+        movement.select.on()
+        if (have_area) document.body.classList.remove('area')
+    }
+    select_clicked = !select_clicked
+}
+
+$select.addEventListener('click', toggle_select)
 
 const $area = $ui.querySelector('#tool-zoom')
-const diving = () => {
-	return evt => {
-		if(have_area) {
-			movement.dive.off()
-			document.body.classList.remove('area')
-		} else {
-			movement.dive.on()
-			document.body.classList.add('area')
-		}
-		have_area = !have_area
-	}
+export const toggle_dive = () => {
+    if(have_area) {
+        movement.dive.off()
+        document.body.classList.remove('area')
+    } else {
+        movement.dive.on()
+        document.body.classList.add('area')
+    }
+    have_area = !have_area
 }
-$area.addEventListener('click', diving())
+$area.addEventListener('click', toggle_dive)
 
 const $add_image = $ui.querySelector('#tool-image')
 const load_colections_images = (() => {
