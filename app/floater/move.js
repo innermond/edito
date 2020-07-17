@@ -1,5 +1,4 @@
 import {ui_fragment} from '../dom.js'
-import {wrap} from '../drawer.js'
 import {group, ungroup, ungroup_all} from '../user_action/group.js'
 import {front, back} from '../user_action/front_back.js'
 import {aligning, referencing} from '../user_action/align.js'
@@ -21,6 +20,8 @@ const tpl = `<section class="movable" id="order">
 	<select id="ordering" style="display:none">
 			<option value="f">față</option>
 			<option value="b">spate</option>
+			<option value="fx">primul</option>
+			<option value="bx">ultimul</option>
 	</select>
 	</div>
 	<div>
@@ -68,7 +69,7 @@ $grouping.addEventListener('change', evt => {
 })
 
 export const $ordering = $ui.querySelector('#ordering')
-const order_val_svg_map = {'f': 'front', 'b': 'back'}
+const order_val_svg_map = {'f': 'front', 'b': 'back', 'fx': 'first', 'bx': 'last'}
 const $ordering_ul = ul_select_iconset($ordering, order_val_svg_map, 0, -10)
 $ordering.addEventListener('change', evt => {
 	switch ($ordering.value) {
@@ -77,6 +78,12 @@ $ordering.addEventListener('change', evt => {
 		break;
 		case 'b':
 			back()
+		break;
+		case 'fx':
+			front(true)
+		break;
+		case 'bx':
+			back(true)
 		break;
 	}
 	$ordering_ul.querySelector('li[class~=active]').classList.remove('active')
@@ -92,8 +99,8 @@ const reference_map = {
 '4': 'la un dreptunghi interior paginii ca să protejeze textul de tăiere'
 }
 const tooltiping = (tooltiping_map, pos='bottom', adjx=0, adjy=0) => ($opt, $li) => {
-	if ($opt.value in reference_map){
-		$li.dataset.tooltipText = reference_map[$opt.value]
+	if ($opt.value in tooltiping_map){
+		$li.dataset.tooltipText = tooltiping_map[$opt.value]
 		const attr = document.createAttribute(`data-tooltip-${pos}`)
 		$li.setAttributeNode(attr)
 		$li.classList.add('tooltip')
