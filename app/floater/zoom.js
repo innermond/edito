@@ -49,7 +49,7 @@ const $zoomout = $ui.querySelector('#zoom_out')
 let $g = null
 let to = null
 const start_func = scale => {
-	if ($selection.size) {
+	if ($selection.size && !$g) {
 		$g = $selection.as_group(true)
 		to = centerpoint($g, $svg)
 	}
