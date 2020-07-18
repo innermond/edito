@@ -342,4 +342,12 @@ export const watch = object => {
 	return new Proxy(object, handler)
 }
 
+export function find_my_ants($el, shape='rect') {
+	const $ants = $svg.querySelectorAll(`[data-ants="true"][data-${shape}="true"]`)
+	for (const $e of $ants) {
+		if ($e.$element === $el) return $e
+	}
+	return null
+}
+
 export {attr, newtag, rnd, xmlns, nsattr, rectpage, px}

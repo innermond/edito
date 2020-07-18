@@ -5,7 +5,7 @@ import {point_in} from '../pos.js'
  export class Ants {
 	
 	constructor(tagname='rect') {
-		this.style =  'vector-effect:non-scaling-stroke;stroke-width:1;fill:none;stroke:#000000;stroke-opacity:1;stroke-miterlimit:2;stroke-dasharray:3,3;stroke-dashoffset:2'
+		this.style =  'vector-effect:non-scaling-stroke;stroke-width:2;fill:none;stroke:#ffffff;mix-blend-mode:difference;stroke-opacity:1;stroke-miterlimit:2;stroke-dasharray:3,3;stroke-dashoffset:2'
 		this.$shape = newtag(tagname, {dataAnts:true, dataRect:true, style:this.style})
 		this.$owner = null
 		this.$element = null
@@ -167,6 +167,7 @@ export class Square extends Ants {
 		this.side = side
 		this.$shape = newtag('rect', {dataAnts:true, dataSquare:true, width:side, height:side, style: this.style})
 		this.$shape.style.fill = 'white'
+		this.$shape.style.mixBlendMode = 'normal'
 	}
 	
 	follow() {
@@ -194,6 +195,7 @@ export class Circle extends Ants {
 		super()
 		this.$shape = newtag('circle', {dataAnts:true, dataCircle:true, r:r, style: this.style})
 		this.$shape.style.fill = 'white'
+		this.$shape.style.mixBlendMode = 'normal'
 	}
 	
 	follow() {

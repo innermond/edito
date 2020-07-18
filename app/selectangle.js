@@ -1,6 +1,6 @@
 import {$svg, attr, newtag} from './dom.js'
 import {point_screen} from './pos.js'
-import {$clicked, $selection} from './selection/index.js'
+import {$clicked} from './selection/index.js'
 import feature from './feature.js'
 
 export const cycle = {
@@ -35,7 +35,7 @@ export function remove_rectangling() {
 }
 
 export let $selectangle
-const style =  'pointer-events:none;vector-effect:non-scaling-stroke;stroke-width:1;fill:none;stroke:#000000;stroke-opacity:1;stroke-miterlimit:2;stroke-dasharray:3,3;stroke-dashoffset:2'
+const style =  'pointer-events:none;vector-effect:non-scaling-stroke;stroke-width:2;fill:none;stroke:#ffffff;mix-blend-mode:difference;stroke-opacity:1;stroke-miterlimit:2;stroke-dasharray:3,3;stroke-dashoffset:2'
 let start = null
 export let moved = null
 function startRectangle(evt) {

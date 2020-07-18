@@ -1,4 +1,4 @@
-import {$svg, change_id, px} from '../dom.js'
+import {$svg, change_id, px, find_my_ants} from '../dom.js'
 import {appendm} from '../mtx.js'
 import {dragging_all_marks_reset} from '../ui.js'
 import {$clicked, $selection} from '../selection/index.js'
@@ -7,10 +7,19 @@ import {$step} from '../ui.js'
 window.addEventListener('keydown', evt => {if (evt.key === 'Delete') deleting()})
 
 export function locking(toggle=false) {
-	let $clicked_original = $clicked
+	//let $clicked_original = $clicked
 	$selection.forEach($el => {
+		const $shape = find_my_ants($el)
 		if ('lock' in $el.dataset) {
+			if ($shape) {
+				$shape.style.stroke = 'green'
+				$shape.style.strokeWidth = '4'
+			}
 			if (toggle) {
+				if ($shape) {
+					$shape.style.stroke = '#ffffff'
+					$shape.style.strokeWidth = '2'
+				}
 				$el.removeAttribute('data-lock')
 			}
 			return
@@ -18,10 +27,15 @@ export function locking(toggle=false) {
 		// create data-lock
 		const $attr = document.createAttribute('data-lock')
 		$el.setAttributeNode($attr)
-		$clicked.from($el)
-		$clicked.unover()
+		if ($shape) {
+			$shape.style.stroke = 'green'
+			$shape.style.strokeWidth = '4'
+		}
+
+		//$clicked.from($el)
+		//$clicked.unover()
 	})
-	$clicked.from($clicked_original)
+	//$clicked.from($clicked_original)
 }
 
 export function  deleting() {
