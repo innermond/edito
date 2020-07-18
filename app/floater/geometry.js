@@ -81,28 +81,16 @@ export const $skewx = $ui.querySelector('#skewx')
 export const $skewy = $ui.querySelector('#skewy')
 $skewx.addEventListener('input', () => {
 	$selection.each($el => {
-		let $ee = [$el]
-		if ($el.nodeName === 'g') {
-			$ee = Array.from($el.children)
-		}
-		$ee.forEach($e => {
-			skewx($e, $skewx.value)
-			$clicked.from($e)
-			$clicked.over()
-		})
+		skewx($el, $skewx.value)
+		$clicked.from($el)
+		$clicked.over()
 	})
 })
 $skewy.addEventListener('input', () => {
 	$selection.each($el => {
-		let $ee = [$el]
-		if ($el.nodeName === 'g') {
-			$ee = Array.from($el.children)
-		}
-		$ee.forEach($e => {
-			skewy($e, $skewy.value)
-			$clicked.from($e)
-			$clicked.over()
-		})
+		skewy($el, $skewy.value)
+		$clicked.from($el)
+		$clicked.over()
 	})
 })
 

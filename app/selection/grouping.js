@@ -78,11 +78,12 @@ class selection extends Set {
 	each(func) {
 		this.forEach($el => {
 			if ('lock' in $el.dataset) return
-			let $ee = [$el]
+			func($el)
+			/*let $ee = [$el]
 			if ($el.nodeName === 'g') {
 				$ee = Array.from($el.children)
 			}
-			$ee.forEach($e => func($e))
+			$ee.forEach($e => func($e))*/
 		})
 	}
 

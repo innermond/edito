@@ -2,15 +2,15 @@ import {$svg, rectpage, px} from '../dom.js'
 import {outpoint, outpoints, centerpoint} from '../pos.js'
 import {m, m2e, appendm} from '../mtx.js'
 import {$clicked, $selection} from '../selection/index.js'
-import {$bleed} from '../ui.js'
 
 export function aligning(val, refval) {
 	if ($clicked.is_zero()) return
 	set_reference(refval)
 	let mode = alignMap[val] ?? ''
-	let is_group = $clicked.nodeName === 'g' 
-	let $ee = is_group ? Array.from($clicked.children) : [$clicked]
-	if ($selection.size > 1) $ee = Array.from($selection)
+	//let is_group = $clicked.nodeName === 'g' 
+	//let $ee = is_group ? Array.from($clicked.children) : [$clicked]
+	//if ($selection.size > 1) $ee = Array.from($selection)
+	const $ee = Array.from($selection)
 
 	align_objects($ee, mode, $svg)
 	$selection.forEach($e => $e.classList.contains('rectpage') && $selection.delete($e))
@@ -104,6 +104,7 @@ const align_objects = (oo, mode='left', owner=null) => {
 			ref.x = p.x
 		}
 		let o = pe.get(p)
+		if ('lock' in o.dataset) return
 		let mtx = m2e(owner,o)
 		let op = p.matrixTransform(mtx)
 		let oref = ref.matrixTransform(mtx)

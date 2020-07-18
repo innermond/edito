@@ -4,9 +4,7 @@ import {point_screen, point_in, outpoint} from './pos.js'
 import {m, setm} from './mtx.js'
 import {$clicked, $selection} from './selection/index.js'
 import {disable} from './click.js'
-import feature from './feature.js'
 
-const opt = feature.supportsPassive ? { passive: true } : false
 // manage dragging
 export function add_dragging() {
 	$svg.addEventListener('mousedown', startDrag);
@@ -50,7 +48,7 @@ function startDrag(evt) {
 	mouseStart = $pt.matrixTransform($svg.getScreenCTM().inverse())
 }
 
-function endDrag(evt) {
+function endDrag() {
 	if (moved === null) {
 		disable.click = false
 		return
@@ -62,17 +60,17 @@ function endDrag(evt) {
 
 function drag(evt) {
 	if (moved === null) return
-
-	moved = true
-	$clicked.clues.dragging = true
 	switch (true) {
 		case !$clicked:
 			return
 		case $clicked.is_zero():
 			return
-		case $clicked.clues.is_reset():
-			return
+//		case $clicked.clues.is_reset():
+//			return
 	}
+
+	moved = true
+	$clicked.clues.dragging = true
 
 	let $othersvg = $clicked.closest('svg')
 	let $pt = $othersvg.createSVGPoint()
@@ -85,13 +83,10 @@ function drag(evt) {
 	const $original = $clicked
 	const aa = []
 	$selection.each($x => {
-		$clicked.from($x)
-		if ($clicked.clues.rotating || $clicked.clues.sizing) {
-			aa.push($x)
-		}
-	})
-	$selection.each($x => {
 			$clicked.from($x)
+			if ($clicked.clues.rotating || $clicked.clues.sizing) {
+				aa.push($x)
+			}
 			if (aa.length > 0 && !aa.includes($clicked)) return
 			let $pta = point_in($clicked, current.x, current.y)
 			let $ptz = point_in($clicked, mouseStart.x, mouseStart.y)
