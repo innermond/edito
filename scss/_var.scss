@@ -7,3 +7,6 @@ $txt-color: invert($bk-color);
 $txt-color-darker : darken($txt-color, 25%);
 $txt-color-darkest : darken($txt-color, 50%);
 $tool-width: 50px;
+
+$folded-max-width: 12rem;
+$border-size: 0.125rem;

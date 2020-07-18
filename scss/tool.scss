@@ -478,7 +478,7 @@ hr {
 }
 
 .wrap-row {
-	border: 1px solid $txt-color-border;
+	border: $border-size solid $txt-color-border;
 	display: flex;
 	flex-flow: row wrap;
 	& label {
@@ -497,6 +497,9 @@ hr {
 		& + div {
 			border-left: 2px solid $bk-color-silent;
 			padding-left: 1rem;
+			&:last-child {
+				border-left: none;
+			}
 		}
 	}
 	&.vertical {

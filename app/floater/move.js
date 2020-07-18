@@ -46,6 +46,9 @@ const tpl = `<section class="movable" id="order">
 			<option value="4">siguranța text</option>
 	</select>
 	</div>
+	<div class="folded-neighbor">
+		<img src="/icon/close.svg" class="close" />
+	</div>
 </div>
 </section>`
 export const $ui = ui_fragment(tpl)

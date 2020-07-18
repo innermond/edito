@@ -3,6 +3,7 @@ ul.folded {
 	padding: 0;
 	position: absolute;
 	width: max-content;
+	max-width: $folded-max-width;
 	&.relative {
 		position: relative;
 		width: 100%;
@@ -12,8 +13,8 @@ ul.folded {
 		display: none;
 		cursor: pointer;
 		list-style-type: none;
-		border-bottom: 0.25rem solid $bk-color-loud;
-		height: 1.15rem;
+		border-bottom: $border-size solid $bk-color-loud;
+		height: 1.15rem + $border-size;
 		padding: 1.25rem;
 		background-color: $bk-color;
 		transition: all .2s ease-out;
@@ -23,7 +24,7 @@ ul.folded {
 		}
 		&:first-child {
 			display: list-item;
-			border-color: $bk-color-loud;
+			border-color: $txt-color-border;
 			&:after {
 				content: '▾';
 				float: right;
@@ -31,4 +32,8 @@ ul.folded {
 			}
 		}
 	}
+}
+
+div.folded-neighbor {
+	margin-left: $folded-max-width;
 }
