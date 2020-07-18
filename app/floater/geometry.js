@@ -79,8 +79,8 @@ addEventInterval($scale_minus, 'mousedown', () => start_func(-1), 10, 'mouseup',
 
 export const $skewx = $ui.querySelector('#skewx')
 export const $skewy = $ui.querySelector('#skewy')
-$skewx.addEventListener('input', evt => {
-	$selection.forEach($el => {
+$skewx.addEventListener('input', () => {
+	$selection.each($el => {
 		let $ee = [$el]
 		if ($el.nodeName === 'g') {
 			$ee = Array.from($el.children)
@@ -92,8 +92,8 @@ $skewx.addEventListener('input', evt => {
 		})
 	})
 })
-$skewy.addEventListener('input', evt => {
-	$selection.forEach($el => {
+$skewy.addEventListener('input', () => {
+	$selection.each($el => {
 		let $ee = [$el]
 		if ($el.nodeName === 'g') {
 			$ee = Array.from($el.children)
@@ -107,12 +107,12 @@ $skewy.addEventListener('input', evt => {
 })
 
 export const $angle = $ui.querySelector('#angle')
-$angle.addEventListener('input', evt => rotate($angle.value))
+$angle.addEventListener('input', () => rotate($angle.value))
 
 export const $flipping = $ui.querySelector('#flipping')
 const flip_val_svg_map = {'h': 'flip-h', 'v': 'flip-v'}
 const $flipping_ul = ul_select_iconset($flipping, flip_val_svg_map, 0, -10)
-$flipping.addEventListener('change', evt => {
+$flipping.addEventListener('change', () => {
 	switch ($flipping.value) {
 		case 'h':
 			mirror_h()

@@ -1,16 +1,23 @@
 import {$svg, newtag, nextSiblingNoAnts} from '../dom.js'
 import {$clicked} from './clicked.js'
 
-export let $selection = new class extends Set {
+class selection extends Set {
+	new_one() {
+		let $fresh = new selection()
+		return $fresh
+	}
+
 	as_group(temporary=false) {
 		if (this.size === 0) return $clicked.zero()
+		// locked elements kept out	of set
+		const $locked = Array.from(this).filter($e => {
+			if ('lock' in $e.dataset) {
+				this.delete($e)
+				return true
+			}
+			return false
+		})
 
-		let $next = nextSiblingNoAnts($clicked)
-		// assure  nextelementsibling is not in current set
-		while (this.has($next?.nextElementSibling)) {
-			$next = nextSiblingNoAnts($next.nextElementSibling)
-		}
-		const $g = newtag('g', {dataGroup:true})
 		let arr = Array.from(this)
 		// order as in source code
 		// marks elements for subsequent retrieval
@@ -20,12 +27,26 @@ export let $selection = new class extends Set {
 		arr = Array.from($ordered)
 		arr.forEach($e => $e.removeAttribute('data-source-order'))
 
+		let $next = nextSiblingNoAnts(arr[arr.length-1])
+		// assure  nextelementsibling is not in current set
+		while (this.has($next?.nextElementSibling)) {
+			$next = nextSiblingNoAnts($next.nextElementSibling)
+		}
+		const $g = newtag('g', {dataGroup:true})
+
 		// do not append $next 
 		arr.forEach($e => {if ($next !== $e) $g.appendChild($e)})
 		$next
 		? $svg.insertBefore($g, $next) && this.has($next) && $g.appendChild($next)
 		: $svg.appendChild($g)
-		if (!temporary) this.clear() // TODO when clear all selection make ants dissapear too or is needed so much this clear() ?
+		if (!temporary) {
+			this.clear() 
+			// TODO when clear all selection make ants dissapear too or is needed so much this clear() ?
+		} else {
+			// add back to selection
+			for (const $k of $locked) this.add($k)
+		}
+
 		return $clicked.from($g)
 	}
 
@@ -34,6 +55,14 @@ export let $selection = new class extends Set {
 			$clicked.from($e)
 			$clicked.over()
 		})
+	}
+
+	deselect() {
+		this.forEach($e => {
+			$clicked.from($e)
+			$clicked.unover()
+		})
+		this.clear()
 	}
 
 	async forEachAsync(func) {
@@ -48,6 +77,7 @@ export let $selection = new class extends Set {
 
 	each(func) {
 		this.forEach($el => {
+			if ('lock' in $el.dataset) return
 			let $ee = [$el]
 			if ($el.nodeName === 'g') {
 				$ee = Array.from($el.children)
@@ -61,4 +91,5 @@ export let $selection = new class extends Set {
 		return $found.length ? $found.pop() : null
 	}
 		
-}() 
+}
+export let $selection = new selection()

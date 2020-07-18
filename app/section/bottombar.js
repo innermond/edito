@@ -2,7 +2,7 @@ import {$svg, ui_fragment, px, copy_viewbox} from '../dom.js'
 import {zoom_reset} from '../zoom.js'
 import {$bleed} from '../ui.js'
 import {render_image} from '../save.js'
-import {deleting, undeleting, cloning} from '../user_action/del_undel_clone.js'
+import {deleting, undeleting, cloning, locking} from '../user_action/del_undel_clone.js'
 import {tooltip} from '../tooltip.js'
 import {$zoom_is_edit} from '../floater/zoom.js'
 
@@ -19,9 +19,14 @@ const tpl = `<section id="bottom-bar">
 
 export const $ui = ui_fragment(tpl)
 
-	$ui.querySelectorAll('[class~="tooltip"]')?.forEach($e => {
-		tooltip($e)
-	})
+$ui.querySelectorAll('[class~="tooltip"]')?.forEach($e => {
+	tooltip($e)
+})
+
+const $lock = $ui.querySelector('#lock')
+$lock.addEventListener('click', () => {
+	locking(true)	
+})
 
 export const $group_repr = $ui.querySelector('#group_repr')
 export const $delete_element = $ui.querySelector('#delete_element')

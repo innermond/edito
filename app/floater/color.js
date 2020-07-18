@@ -1,10 +1,8 @@
-import {$clicked, $selection} from '../selection/index.js'
+import {$selection} from '../selection/index.js'
 import {fill_opacity} from '../user_action/opacity.js'
 import {stroke_opacity, stroke_width} from '../user_action/stroke.js'
 import {colorize, uncolorize} from '../selection/colorize.js'
 import {ui_fragment} from '../dom.js'
-import {rgb_hex, computed_color} from '../color.js'
-import {background_color} from '../user_action/background.js'
 import {addEventInterval} from '../event_interval.js'
 
 const tpl = `<section class="movable" id="fill_stroke_color">
@@ -52,7 +50,7 @@ $ui.querySelectorAll('[for]').forEach($e => {
 })
 
 export const $fill = $ui.querySelector('#fill')
-$fill.addEventListener('input', evt => {
+$fill.addEventListener('input', () => {
 	if ($fill_switch.checked !== true) return
 	$fill.style.backgroundColor = colorize('fill', $fill.value)
 })
@@ -60,7 +58,7 @@ $fill.style.display = 'none'
 
 // switch
 export const $fill_switch = $ui.querySelector('#fill-switch')
-$fill_switch.addEventListener('change', evt => {
+$fill_switch.addEventListener('change', () => {
 	if ($fill_switch.checked === true) {
 		const val = colorize('fill', $fill.value)
 		$fill.style.display = 'block'
@@ -73,17 +71,17 @@ $fill_switch.addEventListener('change', evt => {
 })
 
 export const $fill_opacity = $ui.querySelector('#fill-opacity')
-$fill_opacity.addEventListener('input', evt => fill_opacity($fill_opacity.value))
+$fill_opacity.addEventListener('input', () => fill_opacity($fill_opacity.value))
 
 export const $stroke_fill = $ui.querySelector('#stroke-fill')
-$stroke_fill.addEventListener('input', evt => {
+$stroke_fill.addEventListener('input', () => {
 	if ($stroke_fill_switch.checked !== true) return
 	$stroke_fill.style.backgroundColor = colorize('stroke', $stroke_fill.value)
 })
 $stroke_fill.style.display = 'none'
 
 export const $stroke_fill_switch = $ui.querySelector('#stroke-fill-switch')
-$stroke_fill_switch.addEventListener('change', evt => {
+$stroke_fill_switch.addEventListener('change', () => {
 	if ($stroke_fill_switch.checked === true) {
 		const val = colorize('stroke', $stroke_fill.value)
 		$stroke_fill.value = val
@@ -91,15 +89,14 @@ $stroke_fill_switch.addEventListener('change', evt => {
 		//FIXME stroke color always create a visible contour 
 		//even there is no width set
 		$stroke_fill.style.display = 'block'
-        $selection.forEach($e => $e.style.paintOrder = 'stroke')
+		$selection.each($e => $e.style.paintOrder = 'stroke')
 	} else {
 		uncolorize('stroke')
 		$stroke_fill.style.display = 'none'
-        $selection.forEach($e => $e.style.paintOrder = 'inherit')
+		$selection.each($e => $e.style.paintOrder = 'inherit')
 	}
 })
 
-//export const $stroke_width = $ui.querySelector('#stroke-width')
 export const $stroke_opacity = $ui.querySelector('#stroke-opacity')
 
 const $stroke_plus = $ui.querySelector('#stroke_plus')
@@ -141,5 +138,4 @@ const end_func = () => {}
 addEventInterval($stroke_plus, 'mousedown', () => start_func(1), 10, 'mouseup', end_func)
 addEventInterval($stroke_minus, 'mousedown', () => start_func(-1), 10, 'mouseup', end_func)
 
-//$stroke_width.addEventListener('input', evt => stroke_width($stroke_width.value))
-$stroke_opacity.addEventListener('input', evt => stroke_opacity($stroke_opacity.value))    
+$stroke_opacity.addEventListener('input', () => stroke_opacity($stroke_opacity.value))    

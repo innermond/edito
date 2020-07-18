@@ -6,7 +6,7 @@ import {dragging_all_marks_reset, $group_repr} from '../ui.js'
 
 // grouping / degrouping
 export function ungroup(deep=false) {
-	$selection.forEach($el => {
+	$selection.each($el => {
 		ungroup_one($el, deep)
 		$group_repr.innerHTML = ''
 		dragging_all_marks_reset()
@@ -35,7 +35,6 @@ export function ungroup_one($el, deep=false) {
 	$ee = Array.from($ee)
 	$ee.forEach(
 		$e => {
-			let $path = path_text($e)
 			// matrix to preserve geometry 
 			// while moving element to new parent
 			let mtx = m2e($e, $svg)

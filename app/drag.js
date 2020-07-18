@@ -72,7 +72,6 @@ function drag(evt) {
 			return
 		case $clicked.clues.is_reset():
 			return
-		break
 	}
 
 	let $othersvg = $clicked.closest('svg')
@@ -85,74 +84,74 @@ function drag(evt) {
 	}
 	const $original = $clicked
 	const aa = []
-	$selection.forEach($x => {
+	$selection.each($x => {
 		$clicked.from($x)
 		if ($clicked.clues.rotating || $clicked.clues.sizing) {
 			aa.push($x)
 		}
 	})
-    $selection.forEach($x => {
-        $clicked.from($x)
-				if (aa.length > 0 && !aa.includes($clicked)) return
-        let $pta = point_in($clicked, current.x, current.y)
-        let $ptz = point_in($clicked, mouseStart.x, mouseStart.y)
-        $pt.x = $pta.x-$ptz.x
-        $pt.y = $pta.y-$ptz.y
-        let bb = $clicked.getBBox()
-        let mtx = m($clicked)
-        // rotation
-        if ($clicked.clues.rotating){
-            let x = bb.x+bb.width*0.5
-            let y = bb.y+bb.height*0.5
-            if ('useThat' in $clicked) {
-                bb = $clicked.useThat.bbox
-                x = bb.x+bb.width*0.5
-                y = bb.y+bb.height*0.5
-                // TODO: relative boxes
-                let mtx = m($clicked.useThat.el)
-                let p = outpoint(x,y,mtx)
-                x=p.x
-                y=p.y
-            }
-            mtx = mtx.translate(x,y)
-            setm($clicked, mtx)
-            let $pta = point_in($clicked, current.x, current.y)
-            if ($pta.x != 0 && $pta.y != 0) mtx = mtx.rotateFromVector(-$pta.x, -$pta.y)
-            mtx = mtx.translate(-x,-y)
-        } else if ($clicked.clues.sizing){
-            let x = bb.x
-            let y = bb.y
-            if ('useThat' in $clicked) {
-                bb = $clicked.useThat.bbox
-                x = bb.x
-                y = bb.y
-                // TODO: relative boxes
-                let mtx = m($clicked.useThat.el)
-                let p = outpoint(x,y,mtx)
-                x=p.x
-                y=p.y
-            }
-            mtx = mtx.translate(x,y)
-            let dx = 1+$pta.x/bb.width-$ptz.x/bb.width
-            let dy = 1+$pta.y/bb.height-$ptz.y/bb.height
-            if (evt.shiftKey) {
-                mtx = mtx.scaleNonUniform(dx,dy)
-            } else {
-                mtx = mtx.scale(dx,dy)
-            }
-            mtx = mtx.translate(-x,-y)
-        } else {
-            mtx = mtx.translate($pt.x, $pt.y)
-        }
-        setm($clicked, mtx)
-        if ($clicked?.textPath) {
-            // textPath path is replicating in its coordinates system 
-            // the transformations made to $clicked path in its own coordinates system
-            setm($clicked.textPath.path, $clicked.textPath.text.getCTM().inverse().multiply($clicked.getCTM()))
-        }
-				$clicked.over()
-        $clicked.follow()
-    })
+	$selection.each($x => {
+			$clicked.from($x)
+			if (aa.length > 0 && !aa.includes($clicked)) return
+			let $pta = point_in($clicked, current.x, current.y)
+			let $ptz = point_in($clicked, mouseStart.x, mouseStart.y)
+			$pt.x = $pta.x-$ptz.x
+			$pt.y = $pta.y-$ptz.y
+			let bb = $clicked.getBBox()
+			let mtx = m($clicked)
+			// rotation
+			if ($clicked.clues.rotating){
+					let x = bb.x+bb.width*0.5
+					let y = bb.y+bb.height*0.5
+					if ('useThat' in $clicked) {
+							bb = $clicked.useThat.bbox
+							x = bb.x+bb.width*0.5
+							y = bb.y+bb.height*0.5
+							// TODO: relative boxes
+							let mtx = m($clicked.useThat.el)
+							let p = outpoint(x,y,mtx)
+							x=p.x
+							y=p.y
+					}
+					mtx = mtx.translate(x,y)
+					setm($clicked, mtx)
+					let $pta = point_in($clicked, current.x, current.y)
+					if ($pta.x != 0 && $pta.y != 0) mtx = mtx.rotateFromVector(-$pta.x, -$pta.y)
+					mtx = mtx.translate(-x,-y)
+			} else if ($clicked.clues.sizing){
+					let x = bb.x
+					let y = bb.y
+					if ('useThat' in $clicked) {
+							bb = $clicked.useThat.bbox
+							x = bb.x
+							y = bb.y
+							// TODO: relative boxes
+							let mtx = m($clicked.useThat.el)
+							let p = outpoint(x,y,mtx)
+							x=p.x
+							y=p.y
+					}
+					mtx = mtx.translate(x,y)
+					let dx = 1+$pta.x/bb.width-$ptz.x/bb.width
+					let dy = 1+$pta.y/bb.height-$ptz.y/bb.height
+					if (evt.shiftKey) {
+							mtx = mtx.scaleNonUniform(dx,dy)
+					} else {
+							mtx = mtx.scale(dx,dy)
+					}
+					mtx = mtx.translate(-x,-y)
+			} else {
+					mtx = mtx.translate($pt.x, $pt.y)
+			}
+			setm($clicked, mtx)
+			if ($clicked?.textPath) {
+					// textPath path is replicating in its coordinates system 
+					// the transformations made to $clicked path in its own coordinates system
+					setm($clicked.textPath.path, $clicked.textPath.text.getCTM().inverse().multiply($clicked.getCTM()))
+			}
+			$clicked.over()
+			$clicked.follow()
+	})
 	mouseStart = current
 	$clicked.from($original)
 }

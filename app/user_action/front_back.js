@@ -10,7 +10,11 @@ export function back(last=null) {
 	const $prev = last ? $host.firstElementChild : previousSiblingNoAnts($clicked)
 	const $ui = new DocumentFragment()
 	let $ee = $selection.size > 1 && $clicked.nodeName === 'g' && $clicked.dataset.group === 'true' ? Array.from($clicked.children) : [$clicked]
-	for (let $e of $ee) $ui.appendChild($e)
+	for (let $e of $ee) {
+		// FIXME move to $selection this check
+		if ('lock' in $e.dataset) continue
+		$ui.appendChild($e)
+	}
 	if ($prev && !last) {
 		$host.insertBefore($ui, $prev)
 	} else {
@@ -27,8 +31,12 @@ export function front(first=null) {
 	let $next = first ? $host.lastElementChild : nextSiblingNoAnts($clicked)
 	const $ui = new DocumentFragment()
 	let $ee = $selection.size > 1 && $clicked.nodeName === 'g' && $clicked.dataset.group === 'true' ? Array.from($clicked.children) : [$clicked]
-	for (let $e of $ee) $ui.appendChild($e)
-    $next = nextSiblingNoAnts($next)
+	for (let $e of $ee) {
+		// FIXME move to $selection this check
+		if ('lock' in $e.dataset) continue
+		$ui.appendChild($e)
+	}
+	$next = nextSiblingNoAnts($next)
 	if ($next && !first) {
 		$host.insertBefore($ui, $next)
 	} else {

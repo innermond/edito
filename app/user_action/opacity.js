@@ -2,7 +2,7 @@ import {$selection} from '../selection/index.js'
 
 export function fill_opacity(opacity) {
 	const val	= parseFloat(opacity)
-	$selection.forEach($el => {
+	$selection.each($el => {
 		//let $ee = $el.nodeName === 'g' ? Array.from($el.children) : [$el]
 		let $ee = [$el]
 		if ($el.nodeName === 'g') {

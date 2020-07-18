@@ -6,8 +6,26 @@ import {$step} from '../ui.js'
 
 window.addEventListener('keydown', evt => {if (evt.key === 'Delete') deleting()})
 
-export function  deleting() {
+export function locking(toggle=false) {
+	let $clicked_original = $clicked
 	$selection.forEach($el => {
+		if ('lock' in $el.dataset) {
+			if (toggle) {
+				$el.removeAttribute('data-lock')
+			}
+			return
+		}
+		// create data-lock
+		const $attr = document.createAttribute('data-lock')
+		$el.setAttributeNode($attr)
+		$clicked.from($el)
+		$clicked.unover()
+	})
+	$clicked.from($clicked_original)
+}
+
+export function  deleting() {
+	$selection.each($el => {
 		grave.push([$el, $el.parentNode])
 		$selection.delete($el)
 		$el.remove()
@@ -24,8 +42,8 @@ export function  undeleting() {
 }
 
 export function cloning(evt) {
-	const $new_selection = []
-	$selection.forEach($el => {
+	let $new_selection = $selection.new_one()
+	$selection.each($el => {
 		let $el_cloned = $el.cloneNode(true)
 		change_id($el_cloned)
 		$el.parentNode.insertBefore($el_cloned, $el.nextElementSibling)
@@ -34,11 +52,8 @@ export function cloning(evt) {
 		$el.circle.reset()
 		let dx=0, dy=px($step.value)
 		appendm($el_cloned, $svg.createSVGMatrix().translate(dx, dy))
-		$new_selection.push($el_cloned)
+		$new_selection.add($el_cloned)
 	})
-	$selection.clear()
-	$new_selection.forEach($el_cloned => {
-		$clicked.from($el_cloned)
-		$clicked.over()
-	})
+	$selection.deselect()
+	$new_selection.as_ants()
 }

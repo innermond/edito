@@ -2,7 +2,7 @@ import {mirror} from '../dom.js'
 import {$clicked, $selection} from '../selection/index.js'
 
 export function mirror_h() {
-	$selection.forEach($el => {
+	$selection.each($el => {
 		let $ee = [$el]
 		if ($el.nodeName === 'g') {
 			$ee = Array.from($el.children)
@@ -16,7 +16,7 @@ export function mirror_h() {
 }
 
 export function mirror_v() {
-	$selection.forEach($el => {
+	$selection.each($el => {
 		let $ee = [$el]
 		if ($el.nodeName === 'g') {
 			$ee = Array.from($el.children)
