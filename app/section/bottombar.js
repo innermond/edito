@@ -8,6 +8,7 @@ import {$zoom_is_edit} from '../floater/zoom.js'
 
 const tpl = `<section id="bottom-bar">
 		<p id="group_repr"></p>
+    <button class="tooltip" data-tooltip-text="Blochează/deblochează obiectul/selecția" data-tooltip-bottom id="lock"><img src="/icon/lock.svg"></button>
     <button class="tooltip" data-tooltip-text="Renunță la modificări" data-tooltip-bottom id="undo"><img src="/icon/undo.svg"></button>
     <button id="delete_element" class="tooltip" data-tooltip-text="Șterge elementul" data-tooltip-bottom><img src="/icon/delete.svg"></button>
     <button id="undelete_element" class="tooltip" data-tooltip-text="Anulează ultima ștergere" data-tooltip-bottom><img src="/icon/undelete.svg"></button>
