@@ -19,7 +19,8 @@
 </div>
 </div>
 
-<script type="module" src="app/index.js"></script>
+<! //-- <script type="module" src="app/index.js"></script> //-->
+<script src="app.pak.js"></script>
 
 </body>
 

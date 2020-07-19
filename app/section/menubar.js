@@ -1,10 +1,7 @@
-import {$svg, ui_fragment, newtag, display_none, cycle_zindex} from '../dom.js'
+import {$svg, ui_fragment, display_none, cycle_zindex} from '../dom.js'
 import {center} from '../pos.js'
 import {tooltip} from '../tooltip.js'
 
-import {add_selecting, remove_selecting} from '../select.js'
-import {add_diving, remove_diving} from '../dive.js'
-import {add_panning, remove_panning} from '../pan.js'
 import movement from '../cap.js'
 import {scrollable} from '../div_scroller.js'
 
@@ -92,7 +89,7 @@ const load_colections_images = (() => {
 			return
 		}
 		try {
-			let resp = await fetch('/app/data/image-category.js')
+			let resp = await fetch('/app/data/image-category.json')
 			if (!resp.ok) {
 				throw new Error('response not ok')
 			}
