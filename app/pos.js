@@ -84,7 +84,7 @@ let align_objects = (oo, mode='left', owner=null) => {
 		$box = rectpage()
 		oo.push($box)
 	}
-	if (!owner) oo[0].ownerSVGElement
+	if (!owner) owner = oo[0].ownerSVGElement
 
 	let coord, sortfunc
 

@@ -122,5 +122,4 @@ go.mod
 stock-images*
 app/data
 app/tags
-app.pak.js
-js
+dist
