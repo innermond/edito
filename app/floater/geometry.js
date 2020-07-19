@@ -49,13 +49,13 @@ const update_scale_elements = v => {
 	v = v.toFixed(3)
 	$scale_plus.value = $scale_minus.value = v
 	if ($scale_plus.dataset.tooltipId) {
-			const $tooltip = document.getElementById($scale_plus.dataset.tooltipId)
-			if ($tooltip) $tooltip.textContent = v
+		const $tooltip = document.getElementById($scale_plus.dataset.tooltipId)
+		if ($tooltip) $tooltip.textContent = v
 	}
 	if ($scale_minus.dataset.tooltipId) {
-			const $tooltip = document.getElementById($scale_minus.dataset.tooltipId)
-			if ($tooltip) $tooltip.textContent = v
-    }
+		const $tooltip = document.getElementById($scale_minus.dataset.tooltipId)
+		if ($tooltip) $tooltip.textContent = v
+	}
 }
 
 const step = 0.01
