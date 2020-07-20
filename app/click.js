@@ -2,31 +2,32 @@ import {initial, dragging_marks_reset, dragging_all_marks_reset, dragging_all_ma
 import {$svg, element_from} from './dom.js'
 import {$selection} from './selection/grouping.js'
 import {$clicked} from './selection/clicked.js'
-import {add_selecting, remove_selecting} from './select.js'
-//import {watch} from './dom.js'
 
-//export const disable = watch({click: false})
 export const disable = {click: false}
 
 $svg.addEventListener('click', click);
-//add_selecting()
 
 export function click(evt) {
-    if (disable.click) return
+	if (disable.click) return
 
 	// deselect anything
-	if (evt.target === $svg) {
-		const $active = $selection.get_active_element()
-		if ($selection.size && $active) {
-			dragging_marks_reset($active)
-			$active.over()
+	const $tel = element_from(evt.target)
+	const on_locked = 'lock' in $tel.dataset
+	const on_stopping = $tel === $svg || on_locked
+	if (on_stopping) {
+		const $active = on_locked ? $tel : $selection.get_active_element()
+		if ($active) {
+			$clicked.from($active)
+			dragging_marks_reset($clicked)
+			if (on_locked) dragging_all_marks_reset()
+			$clicked.over()
 			return
 		}
-			$clicked.zero()
-			$selection.clear()
-			dragging_all_marks_reset()
-			initial() //TODO update to drag select pan ui
-			return
+		$clicked.zero()
+		$selection.clear()
+		dragging_all_marks_reset()
+		initial() //TODO update to drag select pan ui
+		return
 	}
 	
 

@@ -237,6 +237,8 @@ export function circle_over($el) {
 	$circle.over($el)
 }
 
+const OPERATIONS = ['dragging', 'rotating', 'sizing']
+
 export class Clues {
 	constructor(){
 		this.reset()
@@ -252,9 +254,14 @@ export class Clues {
 		return !this.dragging && !this.rotating && !this.sizing
 	}
 
-	operating() {
+	operating(ops=null) {
+		if (ops === null) {
+			ops = OPERATIONS
+		} else {
+			ops = ops.filter(e => OPERATIONS.includes(e))
+		}
 		// whitelist properties
-		for (const clue of ['dragging', 'rotating', 'sizing']) {
+		for (const clue of ops) {
 			if (!!this[clue]) return true
 		}
 		return false

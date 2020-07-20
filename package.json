@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack --config webpack.dev.js",
     "sass": "node-sass  --include-path scss scss/main.scss css/edito.css -w scss -r",
-    "babel": "babel app -d js",
-    "build": "webpack --config webpack.prod.js"
+		"liteserver": "lite-server",
+    "dev": "webpack --config webpack.dev.js",
+    "prod": "webpack --config webpack.prod.js"
   },
   "author": "Gabriel Braila",
   "license": "ISC",

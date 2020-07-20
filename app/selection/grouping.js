@@ -87,8 +87,8 @@ class selection extends Set {
 		})
 	}
 
-	get_active_element() {
-		const $found = Array.from(this).filter($el => $el.clues?.operating())
+	get_active_element(ops=null) {
+		const $found = Array.from(this).filter($el => $el.clues?.operating(ops))
 		return $found.length ? $found.pop() : null
 	}
 		

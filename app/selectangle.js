@@ -53,7 +53,7 @@ function startRectangle(evt) {
 	return true
 }
 
-function endRectangle(evt) {
+function endRectangle() {
 	start = null
 	moved = null
 	if (!$selectangle?.ownerSVGElement) return false

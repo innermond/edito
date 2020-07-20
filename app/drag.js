@@ -27,7 +27,10 @@ let moved = null
 // is startDrag ~= click event?
 function startDrag(evt) {
 	if (moved !== null) return
-	if (evt.target === $svg) return
+	const $el = element_from(evt.target)
+	const on_locked = 'lock' in $el.dataset
+	const on_stop_dragg = $el === $svg || on_locked
+	if (on_stop_dragg) return
 
 	moved = false
 
@@ -81,13 +84,10 @@ function drag(evt) {
 		$clicked.over()
 	}
 	const $original = $clicked
-	const aa = []
+	const $active = $selection.get_active_element(['rotating', 'sizing'])
 	$selection.each($x => {
+		if ($active && $x !== $active) return
 			$clicked.from($x)
-			if ($clicked.clues.rotating || $clicked.clues.sizing) {
-				aa.push($x)
-			}
-			if (aa.length > 0 && !aa.includes($clicked)) return
 			let $pta = point_in($clicked, current.x, current.y)
 			let $ptz = point_in($clicked, mouseStart.x, mouseStart.y)
 			$pt.x = $pta.x-$ptz.x
