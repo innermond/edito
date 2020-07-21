@@ -83,7 +83,7 @@ $area.addEventListener('click', toggle_dive)
 const $add_image = $ui.querySelector('#tool-image')
 const load_colections_images = (() => {
 	let already_loaded = false
-	return async evt => {
+	return async () => {
 		if (already_loaded) {
 			$add_image.removeEventListener('click', load_colections_images)
 			return
@@ -105,8 +105,7 @@ const load_colections_images = (() => {
 				$mark.insertAdjacentHTML('afterend', categories.repeat(100))
 				already_loaded = true
 				$mark.parentNode.querySelectorAll('button[class=category-image]').forEach($btn => {
-					$btn.addEventListener('click', async evt => {
-						console.log($btn.value)
+					$btn.addEventListener('click', async () => {
 						let $el = document.querySelector('#category-image')
 						let box
 						if (!$el) {
@@ -164,7 +163,7 @@ $add_image.addEventListener('click', load_colections_images)
 
 const $tool_menu = $ui.querySelector('#tool-menu-sections')
 
-document.addEventListener('tool_menu:all_inactive', evt => {
+document.addEventListener('tool_menu:all_inactive', () => {
 	toggle_all_inactive()
 })
 

@@ -1,5 +1,6 @@
 import {$svg, newtag, nextSiblingNoAnts} from '../dom.js'
 import {$clicked} from './clicked.js'
+import {OPERATIONS_ROT_SIZE} from './ants.js'
 
 class selection extends Set {
 	new_one() {
@@ -76,6 +77,11 @@ class selection extends Set {
 	}
 
 	each(func) {
+		const $active = this.get_active_element(OPERATIONS_ROT_SIZE)
+		if ($active) {
+			func($active)
+			return
+		}
 		this.forEach($el => {
 			if ('lock' in $el.dataset) return
 			func($el)

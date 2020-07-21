@@ -42,7 +42,6 @@ import {point_in} from '../pos.js'
     draw_point($p, fill='red') {
         let p = $p //point_in($svg, $p.x, $p.y)
         //p = p.matrixTransform($svg.getCTM().inverse())
-        const r = 2
         const mark = newtag('circle', {r:2, cx:p.x, cy:p.y, fill})
         $svg.appendChild(mark)
     }
@@ -238,6 +237,7 @@ export function circle_over($el) {
 }
 
 const OPERATIONS = ['dragging', 'rotating', 'sizing']
+export const OPERATIONS_ROT_SIZE = ['rotating', 'sizing']
 
 export class Clues {
 	constructor(){
@@ -269,7 +269,7 @@ export class Clues {
 
 	operation() {
 		// whitelist properties
-		for (const clue of ['dragging', 'rotating', 'sizing']) {
+		for (const clue of OPERATIONS) {
 			if (!!this[clue]) return clue
 		}
 		return false

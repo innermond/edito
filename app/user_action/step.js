@@ -7,7 +7,7 @@ export function handle_step(val, arrow) {
     if (!['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'].includes(arrow)) return
 
 	const step = px(val)
-	$selection.forEach($e => {
+	$selection.each($e => {
 		let x = 0
 		let y = 0
 		switch (arrow) {
