@@ -33,11 +33,10 @@ function startDrag(evt) {
 	if (on_stop_dragg) return
 
 	moved = false
-
 	// avoid ants elements
 	if (!('ants' in evt.target.dataset)) {
 		if (!evt.shiftKey && !evt.ctrlKey && !$selection.has(element_from(evt.target))) dragging_all_marks_reset()
-		$clicked.from(element_from(evt.target))
+		$clicked.from($el)
 	}
 	// posibly a click on an embeded svg into a svg
 	// TODO check if point_screen will work

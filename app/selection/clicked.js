@@ -6,9 +6,9 @@ import {$selection} from './grouping.js'
 // as we cant instanciate directly a SVGElement
 // we create a dummy SVGElement
 // which is zero value for $clicked
-let $zero = document.createElementNS(xmlns, 'rect')
+const $zero = document.createElementNS(xmlns, 'rect')
 
-export let $clicked
+export let $clicked = $zero.cloneNode(true)
 
 // replace $clicked with other SVGElement
 // and reattach necesarry methos
@@ -19,6 +19,8 @@ const from = ($el, prefer_group=true) => {
 		$clicked = $el
 		return $clicked
 	}
+
+    if (!($el instanceof SVGElement)) return
 
 	$clicked = $el ?? $zero
 	attach_methods($clicked)

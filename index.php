@@ -19,8 +19,8 @@
 </div>
 </div>
 
-<script type="module" src="app/index.js"></script>
-<! //-- <script src="dist/app.pak.js"></script> //-->
+<! //-- <script type="module" src="app/index.js"></script> //-->
+<script src="dist/app.pak.js"></script>
 
 </body>
 
