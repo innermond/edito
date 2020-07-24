@@ -1,5 +1,6 @@
 import {$bleed} from './ui.js'
-import {m2e, m, setm, get_u} from './mtx.js'
+import {m2e, m, setm} from './mtx.js'
+//import './idb.js'
 
 const ns = 'http://www.w3.org/2000/'
 const nsattr = 'http://www.w3.org/1999/'
@@ -43,6 +44,7 @@ export const ui_fragment = (html) => {
 }
 
 export const $svg = document.querySelector('svg')
+$svg.addEventListener('load', () => console.log('loaded svg'))
 
 export const $defs = document.querySelector('svg > defs') ?? newtag('defs')
 export const $style = $defs.querySelector(':scope > style') ?? newtag('style')
