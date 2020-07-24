@@ -1,6 +1,5 @@
 import {$bleed} from './ui.js'
 import {m2e, m, setm} from './mtx.js'
-//import './idb.js'
 
 const ns = 'http://www.w3.org/2000/'
 const nsattr = 'http://www.w3.org/1999/'

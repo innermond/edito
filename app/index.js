@@ -13,6 +13,7 @@ import {$floater_select, $floater_zoom, $floater_move, $floater_geometry, $float
 
 import {$svg, display_none, copy_viewbox} from './dom.js'
 import {zoom_reset} from './zoom.js'
+import './idb.js'
 
 const $ui = new DocumentFragment()
 $ui.appendChild($section_menubar)
