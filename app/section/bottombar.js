@@ -1,10 +1,11 @@
-import {$svg, ui_fragment, px, copy_viewbox} from '../dom.js'
+import {ui_fragment} from '../dom.js'
 import {zoom_reset} from '../zoom.js'
 import {$bleed} from '../ui.js'
 import {render_image} from '../save.js'
 import {deleting, undeleting, cloning, locking} from '../user_action/del_undel_clone.js'
 import {tooltip} from '../tooltip.js'
 import {$zoom_is_edit} from '../floater/zoom.js'
+import {apply_last_patch} from '../idb.js'
 
 const tpl = `<section id="bottom-bar">
 		<p id="group_repr"></p>
@@ -60,7 +61,6 @@ function loading() {
 }
 
 $save_svg.addEventListener('click', async evt => {
-	const current_viewbox = copy_viewbox($svg.viewBox)
 	let func = null
 	if (!$zoom_is_edit.checked) func = $svg_clone => zoom_reset($svg_clone)
 	const $bkg = loading()
@@ -68,8 +68,7 @@ $save_svg.addEventListener('click', async evt => {
 		$bkg.classList.add('loading-off')
 	})
 })
-$send_svg.addEventListener('click', async evt => {
-	const current_viewbox = copy_viewbox($svg.viewBox)
+$send_svg.addEventListener('click', async () => {
 	let func = null
 	if (!$zoom_is_edit.checked) func = $svg_clone => zoom_reset($svg_clone)
 	const dpi_scale = 300/72 // scale rendered image suposedly produced native at 72 dpi as much as needed to be printed at 300 dpi
@@ -81,5 +80,6 @@ $send_svg.addEventListener('click', async evt => {
 })
 
 const $undo = $ui.querySelector('#undo')
-$undo.addEventListener('click', evt => {
+$undo.addEventListener('click', () => {
+	apply_last_patch()
 })
