@@ -62,6 +62,7 @@ function endDrag() {
 	disable.click = moved
 	moved = null
 	add_patch(svg_before)
+	svg_before = null
 }
 
 function drag(evt) {

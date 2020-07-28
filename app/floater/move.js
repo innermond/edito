@@ -4,6 +4,7 @@ import {front, back} from '../user_action/front_back.js'
 import {aligning, referencing} from '../user_action/align.js'
 import {ul_select, ul_select_iconset} from '../ul_select.js'
 import {tooltip} from '../tooltip.js'
+import {add_patch, serialize_without_ants} from '../idb.js'
 
 const tpl = `<section class="movable" id="order">
 	<div class="wrap-row">
@@ -56,7 +57,8 @@ export const $ui = ui_fragment(tpl)
 export const $grouping = $ui.querySelector('#grouping')
 const group_val_svg_map = {'g': 'group', 'h': 'ungroup', 'hv': 'ungroup_all'}
 const $grouping_ul = ul_select_iconset($grouping, group_val_svg_map, 0, -10)
-$grouping.addEventListener('change', evt => {
+$grouping.addEventListener('change', () => {
+	const svg_before = serialize_without_ants()
 	switch ($grouping.value) {
 		case 'g':
 			group()
@@ -68,13 +70,15 @@ $grouping.addEventListener('change', evt => {
 			ungroup_all()
 		break;
 	}
+	add_patch(svg_before)
 	$grouping_ul.querySelector('li[class~=active]').classList.remove('active')
 })
 
 export const $ordering = $ui.querySelector('#ordering')
 const order_val_svg_map = {'f': 'front', 'b': 'back', 'fx': 'first', 'bx': 'last'}
 const $ordering_ul = ul_select_iconset($ordering, order_val_svg_map, 0, -10)
-$ordering.addEventListener('change', evt => {
+$ordering.addEventListener('change', () => {
+	const svg_before = serialize_without_ants()
 	switch ($ordering.value) {
 		case 'f':
 			front()
@@ -89,11 +93,12 @@ $ordering.addEventListener('change', evt => {
 			back(true)
 		break;
 	}
+	add_patch(svg_before)
 	$ordering_ul.querySelector('li[class~=active]').classList.remove('active')
 })
 
 export const $reference = $ui.querySelector('#reference')
-$reference.addEventListener('change', evt => referencing($reference.value))
+$reference.addEventListener('change', () => referencing($reference.value))
 const reference_map = {
 '0': 'la centrul grupului format din obiectele selectate',
 '1': 'la ultimul obiect selectat',
@@ -116,7 +121,9 @@ ul_select($reference, tooltiping(reference_map))
 export const $align = $ui.querySelector('#align')
 const align_val_svg_map = {'l': 'l', 'r': 'r', 'c': 'c', 't': 't', 'b': 'b', 'm': 'm'}
 const $align_ul = ul_select_iconset($align, align_val_svg_map, 0, -10)
-$align.addEventListener('change', evt => {
+$align.addEventListener('change', () => {
+	const svg_before = serialize_without_ants()
 	aligning($align.value, $reference.value)
+	add_patch(svg_before)
 	$align_ul.querySelector('li[class~=active]').classList.remove('active')
 })

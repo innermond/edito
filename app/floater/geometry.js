@@ -6,7 +6,6 @@ import {skewx, skewy} from '../user_action/skew.js'
 import {addEventInterval} from '../event_interval.js'
 import {ul_select_iconset} from '../ul_select.js'
 import {mirror_h, mirror_v} from '../user_action/mirror.js'
-
 import {add_patch, serialize_without_ants} from '../idb.js'
 
 const tpl = `<section class="movable" id="geometry">
@@ -105,7 +104,6 @@ $skewy.addEventListener('mouseup', () => {
 	svg_before = null
 })
 $skewy.addEventListener('input', () => {
-	const svg_before = serialize_without_ants()
 	$selection.each($el => {
 		skewy($el, $skewy.value)
 		$clicked.from($el)

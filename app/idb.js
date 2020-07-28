@@ -20,6 +20,7 @@ let queue = []
 
 req.onsuccess = evt => {
 	db = evt.target.result
+	db.onerror = e => console.log(e.error)
 	for (const fn of queue) {
 		fn()
 	}
@@ -27,7 +28,7 @@ req.onsuccess = evt => {
 }
 
 req.onupgradeneeded = e => {
-	db = e.target.result
+	const db = e.target.result
 
 	const patchStore = db.createObjectStore('patch', {keyPath: 'id', autoIncrement: true})
 	patchStore.createIndex('id', 'id', {unique: true})
@@ -38,33 +39,19 @@ req.onupgradeneeded = e => {
 		const svg = db.transaction(['svg'], 'readwrite').objectStore('svg')
 		// add serialized svg as base
 		const svg_unmodified = new XMLSerializer().serializeToString($svg)
-		const add = svg.add({svg: svg_unmodified})
-		add.onsuccess = evt => console.log(evt.target.result)
-		add.onerror = evt => console.log(evt.target.result)
+		svg.add({svg: svg_unmodified})
 	}
 }
 
 export function add_patch(svg_before) {
 	const svg_after = serialize_without_ants()
 	let diff = dmp.diff_main(svg_after, svg_before, false)
-	console.log(diff)
 	let pp = dmp.patch_make(svg_after, diff)
 	if (pp.length === 0) return
 
 	const tx_patch = db.transaction(['patch'], 'readwrite')
-	tx_patch.oncomplete = () => {
-		console.log('add', pp)
-	}
-	tx_patch.onerror = evt => console.log(evt.target.transaction.error)
 	const store_patch = tx_patch.objectStore('patch')
 	store_patch.add({patch: pp})
-}
-
-function get_last_patch() {
-	const tx = db.transaction('patch', 'readwrite')
-	const store = tx.objectStore('patch')
-	const req_inx = store.index('id').openCursor(null, 'prev')
-	return req_inx
 }
 
 export function serialize_without_ants() {
@@ -76,8 +63,10 @@ export function serialize_without_ants() {
 }
 
 export function apply_last_patch() {
-	const req_patch = get_last_patch()
-	req_patch.onsuccess = e => {
+	const tx = db.transaction('patch', 'readwrite')
+	const store = tx.objectStore('patch')
+	const c = store.index('id').openCursor(null, 'prev')
+	c.onsuccess = e => {
 		const cursor = e.target.result
 		if (!cursor) return
 		const p = cursor.value.patch
@@ -94,7 +83,6 @@ export function apply_last_patch() {
 		// need to deal with svg element modifcation itself, most probably attributes modification
 		$svg.innerHTML = doc.documentElement.innerHTML
 	}
-	req_patch.onerror = e => console.log(e)
 }
 
 export function clear_patch() {
