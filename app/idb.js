@@ -16,9 +16,14 @@ req.onerror = evt => {
 }
 
 let db = null
+let queue = []
 
 req.onsuccess = evt => {
 	db = evt.target.result
+	for (const fn of queue) {
+		fn()
+	}
+	queue = []
 }
 
 req.onupgradeneeded = e => {
@@ -90,4 +95,14 @@ export function apply_last_patch() {
 		$svg.innerHTML = doc.documentElement.innerHTML
 	}
 	req_patch.onerror = e => console.log(e)
+}
+
+export function clear_patch() {
+	if (!db) {
+		queue.push(clear_patch)
+		return
+	}
+	const tx = db.transaction('patch', 'readwrite')
+	const store = tx.objectStore('patch')
+	store.clear()
 }
