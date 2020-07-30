@@ -35,5 +35,9 @@ export function span_checkbox($ee) {
 			$e.dispatchEvent(new Event('change'))
 			evt.preventDefault()
 		})
+		$span.addEventListener('mousedown', evt => {
+			$e.dispatchEvent(new Event('mousedown'))
+			evt.preventDefault()
+		})
 	})
 }

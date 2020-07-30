@@ -1,13 +1,11 @@
 import {ui_fragment, $svg, media_zoom, copy_viewbox} from '../dom.js'
 import {zoom_reset} from '../zoom.js'
-import {$clicked, $selection} from '../selection/index.js'
-import {scale} from '../user_action/size.js'
-import {rotate} from '../user_action/rotate.js'
 import {wrap} from '../drawer.js'
 import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
 import {handle_step} from '../user_action/step.js'
 import {addEventInterval} from '../event_interval.js'
+import {serialize_without_ants, add_patch} from '../idb.js'
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Schimbi lățimea documentului" data-tooltip-bottom for="media_width">Lățime</label>
@@ -48,7 +46,6 @@ const $real = $ui.querySelector('#real')
 $media_width.value = $svg.width.baseVal.valueInSpecifiedUnits
 $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits
 
-let current_canvas_width = '100%'
 const show_at_real_dimensions = () => {
 	const $canvas = document.querySelector('#canvas')
 	if ($real.checked) {
@@ -103,7 +100,7 @@ const media_zoom_event = () => {
 $media_width.addEventListener('input', media_zoom_event, true)
 $media_height.addEventListener('input', media_zoom_event, true)
 $all_visible.addEventListener('change', media_zoom_event)
-$real.addEventListener('change', evt => {
+$real.addEventListener('change', () => {
 	show_at_real_dimensions()
 })
 
@@ -119,14 +116,24 @@ $bkcolor.value = bkcolor
 $bkcolor.style.backgroundColor = bkcolor
 $bkcolor.style.display = 'none'
 
-$bkcolor.addEventListener('input', evt => {
+const bkg_color_change = () => {
 	const val = $bkcolor.value
 	background_color(val)
 	$bkcolor.style.backgroundColor = val
+}
+let svg_before
+$bkcolor.addEventListener('mousedown', () => {
+	svg_before = serialize_without_ants()
 })
+$bkcolor.addEventListener('change', () => {
+	bkg_color_change()
+	add_patch(svg_before)
+	svg_before = null
+})
+$bkcolor.addEventListener('input', bkg_color_change)
 
 export const $bkcolor_switch = $ui.querySelector('#bkcolor-switch')
-$bkcolor_switch.addEventListener('change', evt => {
+const bkg_color_switch_change = () => {
 	if ($bkcolor_switch.checked === true) {
 		const val = $bkcolor.value
 		$bkcolor.style.display = 'block'
@@ -138,6 +145,14 @@ $bkcolor_switch.addEventListener('change', evt => {
 		background_color('')
 		$bkcolor.style.display = 'none'
 	}
+}
+$bkcolor_switch.addEventListener('mousedown', () => {
+	svg_before = serialize_without_ants()
+})
+$bkcolor_switch.addEventListener('change', () => {
+	bkg_color_switch_change()
+	add_patch(svg_before)
+	svg_before = null
 })
 
 const $canvas_plus = $ui.querySelector('#canvas_plus')

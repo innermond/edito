@@ -81,6 +81,8 @@ export function apply_last_patch() {
 		// lost events callbacks
 		//$svg.replaceWith(doc.documentElement)
 		// need to deal with svg element modifcation itself, most probably attributes modification
+		Array.from($svg.attributes).forEach($attr => $svg.removeAttributeNode($attr))
+		Array.from(doc.documentElement.attributes).forEach($attr => $svg.setAttributeNode($attr.cloneNode(true)))
 		$svg.innerHTML = doc.documentElement.innerHTML
 	}
 }
@@ -93,4 +95,11 @@ export function clear_patch() {
 	const tx = db.transaction('patch', 'readwrite')
 	const store = tx.objectStore('patch')
 	store.clear()
+}
+
+// if you need context use fn.bind(ctx)
+export function with_undo(fn, ...args) {
+	const svg_before = serialize_without_ants()
+	fn(...args)
+	add_patch(svg_before)
 }

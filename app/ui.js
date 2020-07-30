@@ -1,6 +1,6 @@
 import {$textname, $text_features, $font_size, $word_spacing, $letter_spacing, $line_spacing} from './section/text.js'
 import{$fonts} from './section/text.js'
-import{$delete_element, $undelete_element, $clone_element} from './section/bottombar.js'
+import{$delete_element} from './section/bottombar.js'
 import {$media_width, $media_height, $bleed, $step, $bkcolor} from './section/page.js'
 import {$add_rect, $add_circle, $add_line} from './section/add_shape.js'
 import {$url_image, $add_url_image, $file_image} from './section/image.js'
@@ -32,7 +32,7 @@ export {$media_width, $media_height, $bleed, $step,
 $fonts, $font_size, 
 $text_features,
 $align, $reference,
-$delete_element, $undelete_element,
+$delete_element,
 $angle, 
 $flipping,
 $fill, 

@@ -1,13 +1,10 @@
 import {$svg, change_id, px, find_my_ants} from '../dom.js'
 import {appendm} from '../mtx.js'
 import {dragging_all_marks_reset} from '../ui.js'
-import {$clicked, $selection} from '../selection/index.js'
+import {$selection} from '../selection/index.js'
 import {$step} from '../ui.js'
 
-window.addEventListener('keydown', evt => {if (evt.key === 'Delete') deleting()})
-
 export function locking(toggle=false) {
-	//let $clicked_original = $clicked
 	$selection.forEach($el => {
 		const $shape = find_my_ants($el)
 		if ('lock' in $el.dataset) {
@@ -31,31 +28,18 @@ export function locking(toggle=false) {
 			$shape.style.stroke = 'green'
 			$shape.style.strokeWidth = '4'
 		}
-
-		//$clicked.from($el)
-		//$clicked.unover()
 	})
-	//$clicked.from($clicked_original)
 }
 
 export function  deleting() {
 	$selection.each($el => {
-		grave.push([$el, $el.parentNode])
 		$selection.delete($el)
 		$el.remove()
 	})
 	dragging_all_marks_reset()
 }
 
-let grave = []
-export function  undeleting() {
-		while (grave.length) {
-				let [$el, father] = grave.pop()
-				father.appendChild($el)
-		}            
-}
-
-export function cloning(evt) {
+export function cloning() {
 	let $new_selection = $selection.new_one()
 	$selection.each($el => {
 		let $el_cloned = $el.cloneNode(true)
