@@ -22,7 +22,8 @@ class selection extends Set {
 		let arr = Array.from(this)
 		// order as in source code
 		// marks elements for subsequent retrieval
-		arr.forEach($e => $e.setAttribute('data-source-order', ''))
+		const $dso = document.createAttribute('data-source-order')
+		arr.forEach($e => $e.setAttributeNode($dso.cloneNode()))
 		// get elements ordered as in source code
 		const $ordered = $svg.querySelectorAll('[data-source-order]')
 		arr = Array.from($ordered)

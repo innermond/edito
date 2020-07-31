@@ -5,7 +5,7 @@ import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
 import {handle_step} from '../user_action/step.js'
 import {addEventInterval} from '../event_interval.js'
-import {serialize_without_ants, add_patch} from '../idb.js'
+import {serialize_without_ants, add_patch, with_undo} from '../idb.js'
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Schimbi lățimea documentului" data-tooltip-bottom for="media_width">Lățime</label>
@@ -46,7 +46,9 @@ const $real = $ui.querySelector('#real')
 $media_width.value = $svg.width.baseVal.valueInSpecifiedUnits
 $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits
 
-const show_at_real_dimensions = () => {
+//let current_canvas_width
+
+/*const show_at_real_dimensions = () => {
 	const $canvas = document.querySelector('#canvas')
 	if ($real.checked) {
 		$canvas.style.width = 'auto'
@@ -54,29 +56,33 @@ const show_at_real_dimensions = () => {
 		if(!$all_visible.checked) {
 		 $canvas.style.width = '100%'
 		} else {
-		 //$canvas.style.width = current_canvas_width
+			//$canvas.style.width = current_canvas_width
 			media_zoom_event()
 		}
 	}
-}
+}*/
+// FIXME for real dimensions auto is not appropriate
 const media_zoom_event = () => {
 	const $canvas = document.querySelector('#canvas')
 	$canvas.style.width = '100%'
-	current_canvas_width = $canvas.style.width
+	//current_canvas_width = $canvas.style.width
 
 	zoom_reset()
 	media_zoom($media_width.value, $media_height.value)
 	zoom_reset.viewbox = copy_viewbox($svg.viewBox)
 
 	// fit?
-	if (!$all_visible.checked) {
+/*	if (!$all_visible.checked) {
 		if ($real.checked) show_at_real_dimensions()
 		return
 	}
+*/
 	if ($real.checked) {
-		show_at_real_dimensions()
-		return
+		$canvas.style.width = 'auto'
+		//show_at_real_dimensions()
+		//return
 	}
+	if (!$all_visible.checked) return
 	const $bottom = document.querySelector('#bottom-bar')
 	let canvas_box = $canvas.getBoundingClientRect()
 	let bottom_box = $bottom.getBoundingClientRect()
@@ -95,14 +101,23 @@ const media_zoom_event = () => {
 		bottom_box = $bottom.getBoundingClientRect()
 		d = canvas_box.bottom - bottom_box.top
 	}
-	current_canvas_width = $canvas.style.width
+	//current_canvas_width = $canvas.style.width
 }
-$media_width.addEventListener('input', media_zoom_event, true)
-$media_height.addEventListener('input', media_zoom_event, true)
-$all_visible.addEventListener('change', media_zoom_event)
-$real.addEventListener('change', () => {
-	show_at_real_dimensions()
-})
+
+let svg_before = null 
+
+const keep_svg = () => svg_before = serialize_without_ants()
+const media_zoom_svg = () => {
+	media_zoom_event()
+	add_patch(svg_before)
+	svg_before = null
+}
+
+$media_width.addEventListener('change', () => with_undo(media_zoom_event))
+$media_height.addEventListener('change', media_zoom_event)
+
+$all_visible.addEventListener('change',() => with_undo(media_zoom_event))
+$real.addEventListener('change', media_zoom_event)
 
 export const $bleed = $ui.querySelector('#bleed')
 
@@ -121,7 +136,7 @@ const bkg_color_change = () => {
 	background_color(val)
 	$bkcolor.style.backgroundColor = val
 }
-let svg_before
+
 $bkcolor.addEventListener('mousedown', () => {
 	svg_before = serialize_without_ants()
 })
@@ -172,7 +187,7 @@ const update_canvas_elements = v => {
 }
 
 const step = 10
-const stop = 200 
+const stop = 50 
 let k = 0
 const start_func = way => {
 	k = way*step

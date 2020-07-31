@@ -160,6 +160,8 @@ export function get_paren_id($el, attr) {
 }
 
 export function media_zoom(w, h) {
+	$svg.setAttribute('width', w+'mm')
+	$svg.setAttribute('height', h+'mm')
 	$svg.width.baseVal.valueInSpecifiedUnits = w
 	$svg.viewBox.baseVal.width=$svg.width.baseVal.value
 	$svg.height.baseVal.valueInSpecifiedUnits = h
