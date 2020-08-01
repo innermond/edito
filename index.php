@@ -20,7 +20,7 @@
 </div>
 
 <! //-- <script type="module" src="app/index.js"></script> //-->
-<script src="dist/app.pak.js"></script>
+<script src="./app.pak.js"></script>
 
 </body>
 
