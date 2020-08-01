@@ -45,8 +45,15 @@ export const ui_fragment = (html) => {
 export const $svg = document.querySelector('svg')
 $svg.addEventListener('load', () => console.log('loaded svg'))
 
-export const $defs = document.querySelector('svg > defs') ?? newtag('defs')
-export const $style = $defs.querySelector(':scope > style') ?? newtag('style')
+export let $defs, $style
+
+export const update_def_style = () => {
+	$defs = document.querySelector('svg > defs') ?? newtag('defs')
+	$style = $defs.querySelector(':scope > style') ?? newtag('style')
+}
+
+update_def_style()
+
 // force a style element to be there
 if (!$style.ownerSVGElement){
 	$svg.insertBefore($style, $svg.firstChild)

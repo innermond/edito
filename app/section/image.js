@@ -1,7 +1,6 @@
 import {$svg, $defs, $style, ui_fragment, newtag} from '../dom.js'
 import {$clicked, $selection} from '../selection/index.js'
 import {center} from '../pos.js'
-import {ul_select} from '../ul_select.js'
 import {wrap} from '../drawer.js'
 import {dragging_all_marks_reset} from '../ui.js'
 
@@ -24,7 +23,7 @@ export const $file_image = $ui.querySelector('#file_image')
 $add_url_image.addEventListener('click', addUrlImage)
 $file_image.addEventListener('change', addFileImage)
 
-async function addUrlImage(evt) {
+async function addUrlImage() {
 	dragging_all_marks_reset()
 	$selection.clear()
 
@@ -79,7 +78,7 @@ export async function urlImage(src, onload) {
 		return null
 	}
 
-	tag.addEventListener('load', evt => {
+	tag.addEventListener('load', () => {
 		onload(tag)
 	})
 	tag.href.baseVal = url_image
@@ -87,7 +86,7 @@ export async function urlImage(src, onload) {
 	return tag
 }
 
-function addFileImage(evt) {
+function addFileImage() {
 	dragging_all_marks_reset()
 	$selection.clear()
 
@@ -97,11 +96,10 @@ function addFileImage(evt) {
 	reader.addEventListener('load', () => {
 		let $img = new Image()
 		$img.src = reader.result
-		$img.addEventListener('load', evt => {
+		$img.addEventListener('load', () => {
 			let tag = newtag('image')
 			tag.href.baseVal =  reader.result
 			$svg.appendChild(tag)
-			//$svg.querySelector(':scope > g').appendChild(tag)
 			center(tag)
 			$url_image.value = ''
 			$clicked.from(tag).over()

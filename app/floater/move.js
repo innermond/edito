@@ -4,7 +4,7 @@ import {front, back} from '../user_action/front_back.js'
 import {aligning, referencing} from '../user_action/align.js'
 import {ul_select, ul_select_iconset} from '../ul_select.js'
 import {tooltip} from '../tooltip.js'
-import {add_patch, serialize_without_ants} from '../idb.js'
+import {add_patch} from '../idb.js'
 
 const tpl = `<section class="movable" id="order">
 	<div class="wrap-row">
@@ -58,7 +58,6 @@ export const $grouping = $ui.querySelector('#grouping')
 const group_val_svg_map = {'g': 'group', 'h': 'ungroup', 'hv': 'ungroup_all'}
 const $grouping_ul = ul_select_iconset($grouping, group_val_svg_map, 0, -10)
 $grouping.addEventListener('change', () => {
-	const svg_before = serialize_without_ants()
 	switch ($grouping.value) {
 		case 'g':
 			group()
@@ -70,7 +69,7 @@ $grouping.addEventListener('change', () => {
 			ungroup_all()
 		break;
 	}
-	add_patch(svg_before)
+	add_patch()
 	$grouping_ul.querySelector('li[class~=active]').classList.remove('active')
 })
 
@@ -78,7 +77,6 @@ export const $ordering = $ui.querySelector('#ordering')
 const order_val_svg_map = {'f': 'front', 'b': 'back', 'fx': 'first', 'bx': 'last'}
 const $ordering_ul = ul_select_iconset($ordering, order_val_svg_map, 0, -10)
 $ordering.addEventListener('change', () => {
-	const svg_before = serialize_without_ants()
 	switch ($ordering.value) {
 		case 'f':
 			front()
@@ -93,7 +91,7 @@ $ordering.addEventListener('change', () => {
 			back(true)
 		break;
 	}
-	add_patch(svg_before)
+	add_patch()
 	$ordering_ul.querySelector('li[class~=active]').classList.remove('active')
 })
 
@@ -122,8 +120,7 @@ export const $align = $ui.querySelector('#align')
 const align_val_svg_map = {'l': 'l', 'r': 'r', 'c': 'c', 't': 't', 'b': 'b', 'm': 'm'}
 const $align_ul = ul_select_iconset($align, align_val_svg_map, 0, -10)
 $align.addEventListener('change', () => {
-	const svg_before = serialize_without_ants()
 	aligning($align.value, $reference.value)
-	add_patch(svg_before)
+	add_patch()
 	$align_ul.querySelector('li[class~=active]').classList.remove('active')
 })

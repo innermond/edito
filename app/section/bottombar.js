@@ -24,17 +24,18 @@ $ui.querySelectorAll('[class~="tooltip"]')?.forEach($e => {
 })
 
 const $lock = $ui.querySelector('#lock')
-$lock.addEventListener('click', () => with_undo(locking, true))
+$lock.addEventListener('click', with_undo(locking, true))
 
 export const $group_repr = $ui.querySelector('#group_repr')
 
 export const $delete_element = $ui.querySelector('#delete_element')
-$delete_element.addEventListener('click', () => with_undo(deleting))
+$delete_element.addEventListener('click', with_undo(deleting))
 
-window.addEventListener('keydown', evt => {if (evt.key === 'Delete') with_undo(deleting)})
+const deleting_undo = with_undo(deleting)
+window.addEventListener('keydown', evt => {if (evt.key === 'Delete') deleting_undo()})
 
 export const $clone_element = $ui.querySelector('#clone_element')
-$clone_element.addEventListener('click', () => with_undo(cloning))
+$clone_element.addEventListener('click', with_undo(cloning))
 
 export const $save_svg = $ui.querySelector('#save_svg')
 export const $send_svg = $ui.querySelector('#send_svg')

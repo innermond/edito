@@ -6,7 +6,7 @@ import {skewx, skewy} from '../user_action/skew.js'
 import {addEventInterval} from '../event_interval.js'
 import {ul_select_iconset} from '../ul_select.js'
 import {mirror_h, mirror_v} from '../user_action/mirror.js'
-import {add_patch, serialize_without_ants} from '../idb.js'
+import {add_patch} from '../idb.js'
 
 const tpl = `<section class="movable" id="geometry">
 <div class="wrap-row">
@@ -66,7 +66,7 @@ export const set_k = v => {
     update_scale_elements(k)
 }
 const stop = 0.01
-let svg_before = null 
+
 const start_func = way => {
 	k += way*step
 	if (way < 0 && k < stop) {
@@ -76,20 +76,15 @@ const start_func = way => {
 	update_scale_elements(k)
 }
 const end_func = () => {
-	add_patch(svg_before)
-	svg_before = null
+	add_patch()
 }
-$scale_plus.addEventListener('mousedown', () => svg_before = serialize_without_ants())
 addEventInterval($scale_plus, 'mousedown', () => start_func(1), 10, 'mouseup', end_func)
-$scale_minus.addEventListener('mousedown', () => svg_before = serialize_without_ants())
 addEventInterval($scale_minus, 'mousedown', () => start_func(-1), 10, 'mouseup', end_func)
 
 export const $skewx = $ui.querySelector('#skewx')
 export const $skewy = $ui.querySelector('#skewy')
-$skewx.addEventListener('mousedown', () => svg_before = serialize_without_ants())
 $skewx.addEventListener('mouseup', () => {
-	add_patch(svg_before)
-	svg_before = null
+	add_patch()
 })
 $skewx.addEventListener('input', () => {
 	$selection.each($el => {
@@ -98,10 +93,8 @@ $skewx.addEventListener('input', () => {
 		$clicked.over()
 	})
 })
-$skewy.addEventListener('mousedown', () => svg_before = serialize_without_ants())
 $skewy.addEventListener('mouseup', () => {
-	add_patch(svg_before)
-	svg_before = null
+	add_patch()
 })
 $skewy.addEventListener('input', () => {
 	$selection.each($el => {
@@ -112,18 +105,15 @@ $skewy.addEventListener('input', () => {
 })
 
 export const $angle = $ui.querySelector('#angle')
-$angle.addEventListener('mousedown', () => svg_before = serialize_without_ants())
 $angle.addEventListener('input', () => rotate($angle.value))
 $angle.addEventListener('mouseup', () =>{
-	add_patch(svg_before)
-	svg_before = null
+	add_patch()
 })
 
 export const $flipping = $ui.querySelector('#flipping')
 const flip_val_svg_map = {'h': 'flip-h', 'v': 'flip-v'}
 const $flipping_ul = ul_select_iconset($flipping, flip_val_svg_map, 0, -10)
 $flipping.addEventListener('change', () => {
-	const svg_before = serialize_without_ants()
 	switch ($flipping.value) {
 		case 'h':
 			mirror_h()
@@ -132,6 +122,6 @@ $flipping.addEventListener('change', () => {
 			mirror_v()
 		break;
 	}
-	add_patch(svg_before)
+	add_patch()
 	$flipping_ul.querySelector('li[class~=active]').classList.remove('active')
 })

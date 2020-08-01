@@ -6,8 +6,6 @@ import {
 	$shadow_dx,
 	$shadow_dy,
 	$shadow_color,
-	$add_shadow,
-	$remove_shadow,
 	$grayscale,
 	$blur,
 	$sharpen,
@@ -284,7 +282,7 @@ function newglass() {
 	return flt
 }
 
-export const add_shadow = evt => {
+export const add_shadow = () => {
 	let blur = 5
 	let color = '#000000'
 	let dx = 0
@@ -295,14 +293,13 @@ export const add_shadow = evt => {
 	//const $shadow = newshadow(blur,color,dx,dy,slope, $flt ? 'CurrentGraphic' : 'SourceGraphic')
 	const $shadow = newshadow(blur,color,dx,dy,slope, 'SourceGraphic')
 	if ($flt) {
-		let $f
 		Array.from($shadow.children).reverse().forEach($f => $flt.insertBefore($f, $flt.firstElementChild))
 	} else {
 		$defs.appendChild($shadow)
 		set_filter($clicked, $shadow.id)
 	}
 }
-export const add_glass = evt => {
+export const add_glass = () => {
 	let $flt = get_filter($clicked)
 	const glass = newglass()
 	if ($flt) {
@@ -311,7 +308,6 @@ export const add_glass = evt => {
 		const $inner = get_filter_inner($flt, 'glass')
 		if ($inner?.length) return
 
-		let $f
 		Array.from(glass.children).forEach($f => $flt.appendChild($f))
 	} else {
 		$defs.appendChild(glass)
@@ -319,7 +315,7 @@ export const add_glass = evt => {
 	}
 }
 
-export const removing = filter_name => evt => {
+export const removing = filter_name => () => {
 	let is = filter_name in filterFuncMap
 	if (!is) return
 	remove($clicked, filter_name)

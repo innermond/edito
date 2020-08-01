@@ -4,7 +4,7 @@ import {stroke_opacity, stroke_width} from '../user_action/stroke.js'
 import {colorize, uncolorize} from '../selection/colorize.js'
 import {ui_fragment} from '../dom.js'
 import {addEventInterval} from '../event_interval.js'
-import {add_patch, serialize_without_ants} from '../idb.js'
+import {add_patch} from '../idb.js'
 
 const tpl = `<section class="movable" id="fill_stroke_color">
 <div class="wrap-row">
@@ -50,15 +50,9 @@ $ui.querySelectorAll('[for]').forEach($e => {
 	})
 })
 
-let svg_before
-
 export const $fill = $ui.querySelector('#fill')
-$fill.addEventListener('mousedown', () => {
-	svg_before = serialize_without_ants()
-})
 $fill.addEventListener('change', () => {
-	add_patch(svg_before)
-	svg_before = null
+	add_patch()
 }) 
 $fill.addEventListener('input', () => {
 	if ($fill_switch.checked !== true) return
@@ -81,22 +75,14 @@ $fill_switch.addEventListener('change', () => {
 })
 
 export const $fill_opacity = $ui.querySelector('#fill-opacity')
-$fill_opacity.addEventListener('mousedown', () => {
-	svg_before = serialize_without_ants()
-})
 $fill_opacity.addEventListener('mouseup', () => {
-	add_patch(svg_before)
-	svg_before = null
+	add_patch()
 }) 
 $fill_opacity.addEventListener('input', () => fill_opacity($fill_opacity.value))
 
 export const $stroke_fill = $ui.querySelector('#stroke-fill')
-$stroke_fill.addEventListener('mousedown', () => {
-	svg_before = serialize_without_ants()
-})
 $stroke_fill.addEventListener('change', () => {
-	add_patch(svg_before)
-	svg_before = null
+	add_patch()
 }) 
 $stroke_fill.addEventListener('input', () => {
 	if ($stroke_fill_switch.checked !== true) return
@@ -122,12 +108,8 @@ $stroke_fill_switch.addEventListener('change', () => {
 })
 
 export const $stroke_opacity = $ui.querySelector('#stroke-opacity')
-$stroke_opacity.addEventListener('mousedown', () => {
-	svg_before = serialize_without_ants()
-})
 $stroke_opacity.addEventListener('mouseup', () => {
-	add_patch(svg_before)
-	svg_before = null
+	add_patch()
 }) 
 $stroke_opacity.addEventListener('input', () => stroke_opacity($stroke_opacity.value))    
 
@@ -167,10 +149,7 @@ const start_func = way => {
 	update_stroke_elements(k)
 }
 const end_func = () => {
-	add_patch(svg_before)
-	svg_before = null
+	add_patch()
 }
-$stroke_plus.addEventListener('mousedown', () => svg_before = serialize_without_ants())
 addEventInterval($stroke_plus, 'mousedown', () => start_func(1), 10, 'mouseup', end_func)
-$stroke_minus.addEventListener('mousedown', () => svg_before = serialize_without_ants())
 addEventInterval($stroke_minus, 'mousedown', () => start_func(-1), 10, 'mouseup', end_func)

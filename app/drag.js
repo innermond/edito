@@ -4,7 +4,7 @@ import {point_screen, point_in, outpoint} from './pos.js'
 import {m, setm} from './mtx.js'
 import {$clicked, $selection} from './selection/index.js'
 import {disable} from './click.js'
-import {add_patch, serialize_without_ants} from './idb.js'
+import {add_patch} from './idb.js'
 
 // manage dragging
 export function add_dragging() {
@@ -23,7 +23,6 @@ export function remove_dragging() {
 
 add_dragging()
 
-let svg_before
 let mouseStart
 let moved = null
 // is startDrag ~= click event?
@@ -50,7 +49,6 @@ function startDrag(evt) {
 	$pt.x = evt.clientX
 	$pt.y = evt.clientY
 	mouseStart = $pt.matrixTransform($svg.getScreenCTM().inverse())
-	svg_before = serialize_without_ants()
 }
 
 function endDrag() {
@@ -61,8 +59,7 @@ function endDrag() {
 	$clicked.clues.dragging = false
 	disable.click = moved
 	moved = null
-	add_patch(svg_before)
-	svg_before = null
+	add_patch()
 }
 
 function drag(evt) {

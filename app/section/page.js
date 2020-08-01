@@ -5,7 +5,7 @@ import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
 import {handle_step} from '../user_action/step.js'
 import {addEventInterval} from '../event_interval.js'
-import {serialize_without_ants, add_patch, with_undo} from '../idb.js'
+import {add_patch, with_undo} from '../idb.js'
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Schimbi lățimea documentului" data-tooltip-bottom for="media_width">Lățime</label>
@@ -104,19 +104,10 @@ const media_zoom_event = () => {
 	//current_canvas_width = $canvas.style.width
 }
 
-let svg_before = null 
-
-const keep_svg = () => svg_before = serialize_without_ants()
-const media_zoom_svg = () => {
-	media_zoom_event()
-	add_patch(svg_before)
-	svg_before = null
-}
-
-$media_width.addEventListener('change', () => with_undo(media_zoom_event))
+$media_width.addEventListener('change', with_undo(media_zoom_event))
 $media_height.addEventListener('change', media_zoom_event)
 
-$all_visible.addEventListener('change',() => with_undo(media_zoom_event))
+$all_visible.addEventListener('change',with_undo(media_zoom_event))
 $real.addEventListener('change', media_zoom_event)
 
 export const $bleed = $ui.querySelector('#bleed')
@@ -137,13 +128,9 @@ const bkg_color_change = () => {
 	$bkcolor.style.backgroundColor = val
 }
 
-$bkcolor.addEventListener('mousedown', () => {
-	svg_before = serialize_without_ants()
-})
 $bkcolor.addEventListener('change', () => {
 	bkg_color_change()
-	add_patch(svg_before)
-	svg_before = null
+	add_patch()
 })
 $bkcolor.addEventListener('input', bkg_color_change)
 
@@ -161,13 +148,10 @@ const bkg_color_switch_change = () => {
 		$bkcolor.style.display = 'none'
 	}
 }
-$bkcolor_switch.addEventListener('mousedown', () => {
-	svg_before = serialize_without_ants()
-})
+
 $bkcolor_switch.addEventListener('change', () => {
 	bkg_color_switch_change()
-	add_patch(svg_before)
-	svg_before = null
+	add_patch()
 })
 
 const $canvas_plus = $ui.querySelector('#canvas_plus')

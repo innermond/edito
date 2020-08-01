@@ -14,7 +14,7 @@ export const $file_image = $ui.querySelector('#file_image')
 $add_url_image.addEventListener('click', addUrlImage)
 $file_image.addEventListener('change', addFileImage)
 
-async function addUrlImage(evt) {
+async function addUrlImage() {
 	dragging_all_marks_reset()
 	$selection.clear()
 
@@ -38,7 +38,7 @@ async function addUrlImage(evt) {
 		return
 	}
 
-	tag.addEventListener('load', evt => {
+	tag.addEventListener('load', () => {
 		center(tag)
 		$url_image.value = ''
 	})
@@ -47,14 +47,14 @@ async function addUrlImage(evt) {
 	$clicked.from(tag).over()
 }
 
-function addFileImage(evt) {
+function addFileImage() {
 	const file = $file_image.files[0] ?? null
 	if (!file) return
 	const reader = new FileReader()
 	reader.addEventListener('load', () => {
 		let $img = new Image()
 		$img.src = reader.result
-		$img.addEventListener('load', evt => {
+		$img.addEventListener('load', () => {
 			let tag = newtag('image')
 			tag.href.baseVal =  reader.result
 			$svg.appendChild(tag)
