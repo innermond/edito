@@ -3,6 +3,7 @@ import {$clicked, $selection} from '../selection/index.js'
 import {center} from '../pos.js'
 import {wrap} from '../drawer.js'
 import {dragging_all_marks_reset} from '../ui.js'
+import {with_undo} from '../idb.js'
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de imagine" data-tooltip-bottom>Adresa de web</label>
@@ -20,8 +21,8 @@ export const $url_image = $ui.querySelector('#url_image')
 export const $add_url_image = $ui.querySelector('#add_url_imagine')
 export const $file_image = $ui.querySelector('#file_image')
 
-$add_url_image.addEventListener('click', addUrlImage)
-$file_image.addEventListener('change', addFileImage)
+$add_url_image.addEventListener('click', with_undo(addUrlImage))
+$file_image.addEventListener('change', with_undo(addFileImage))
 
 async function addUrlImage() {
 	dragging_all_marks_reset()

@@ -113,7 +113,10 @@ $real.addEventListener('change', media_zoom_event)
 export const $bleed = $ui.querySelector('#bleed')
 
 export const $step = $ui.querySelector('#step')
-document.addEventListener('keyup', evt => handle_step($step.value, evt.key))      
+document.addEventListener('keyup', evt => {
+	handle_step($step.value, evt.key)
+	add_patch()
+})      
 export const $bkcolor = $ui.querySelector('#bkcolor')
 // try to gues background color of page
 let bkcolor = $svg.getAttributeNS(null, 'viewport-fill')          
