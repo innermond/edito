@@ -9,7 +9,7 @@ if (!indexedDB) {
 }
 
 const dmp = new diff_match_patch()
-const req = indexedDB.open('undo', 1)
+const req = indexedDB.open('time-machine', 1)
 
 req.onerror = evt => {
 	console.log(evt.target.errorCode)
@@ -30,9 +30,13 @@ req.onsuccess = evt => {
 req.onupgradeneeded = e => {
 	const db = e.target.result
 
-	const patchStore = db.createObjectStore('patch', {keyPath: 'id', autoIncrement: true})
+	let patchStore = db.createObjectStore('undo', {keyPath: 'id', autoIncrement: true})
 	patchStore.createIndex('id', 'id', {unique: true})
-	patchStore.createIndex('patch', 'patch', {unique: true})
+	patchStore.createIndex('undo', 'undo', {unique: true})
+	
+	patchStore = db.createObjectStore('redo', {keyPath: 'id', autoIncrement: true})
+	patchStore.createIndex('id', 'id', {unique: true})
+	patchStore.createIndex('redo', 'redo', {unique: true})
 
 	const svgStore = db.createObjectStore('svg', {keyPath: 'id', autoIncrement: true})
 	svgStore.transaction.oncomplete = () => {
@@ -44,7 +48,7 @@ req.onupgradeneeded = e => {
 }
 
 export function add_patch() {
-	const tx = db.transaction(['patch', 'svg'], 'readwrite')
+	const tx = db.transaction(['undo', 'svg'], 'readwrite')
 	const store_svg = tx.objectStore('svg')
 	const x = store_svg.get(1)
 	x.onsuccess = evt => {
@@ -54,7 +58,7 @@ export function add_patch() {
 		let pp = dmp.patch_make(svg_after, diff)
 		if (pp.length === 0) return
 
-		const store_patch = tx.objectStore('patch')
+		const store_patch = tx.objectStore('undo')
 		store_patch.add({patch: pp})
 
 		store_svg.put({id:1, svg:svg_after})
@@ -70,8 +74,8 @@ export function serialize_without_ants() {
 }
 
 export function apply_last_patch() {
-	const tx = db.transaction(['patch', 'svg'], 'readwrite')
-	const store_patch = tx.objectStore('patch')
+	const tx = db.transaction(['undo', 'redo', 'svg'], 'readwrite')
+	const store_patch = tx.objectStore('undo')
 	const c = store_patch.openCursor(null, 'prev')
 	c.onsuccess = e => {
 		const cursor = e.target.result
@@ -82,20 +86,67 @@ export function apply_last_patch() {
 			const p = cursor.value.patch
 			const svg_after = evt.target.result.svg
 			let [svg_patched] = dmp.patch_apply(p, svg_after)
+		
+			// redo patch
+			let diff = dmp.diff_main(svg_patched, svg_after, false)
+			let pp = dmp.patch_make(svg_patched, diff)
+			const store_redo = tx.objectStore('redo')
+			store_redo.add({patch: pp})
+			
 			const parser = new DOMParser()
 			const doc = parser.parseFromString(svg_patched, 'image/svg+xml')
 			// remove last patch
 			cursor.delete()
+
 			store_svg.put({id:1, svg:svg_patched})
-			// lost events callbacks
-			//$svg.replaceWith(doc.documentElement)
-			// need to deal with svg element modifcation itself, most probably attributes modification
-			Array.from($svg.attributes).forEach($attr => $svg.removeAttributeNode($attr))
-			Array.from(doc.documentElement.attributes).forEach($attr => $svg.setAttributeNode($attr.cloneNode(true)))
-			$svg.innerHTML = doc.documentElement.innerHTML
-			update_def_style()
+			
+			update_svg(doc)
 		}
 	}
+}
+
+export function redo() {
+	let tx = db.transaction(['redo', 'svg'], 'readwrite')
+	const store_patch = tx.objectStore('redo')
+	const c = store_patch.openCursor(null, 'prev')
+	c.onsuccess = e => {
+		const cursor = e.target.result
+		if (!cursor) return
+		const store_svg = tx.objectStore('svg')
+		const x = store_svg.get(1)
+		x.onsuccess = evt => {
+			const p = cursor.value.patch
+			const svg_after = evt.target.result.svg
+			let [svg_patched] = dmp.patch_apply(p, svg_after)
+		
+			const parser = new DOMParser()
+			const doc = parser.parseFromString(svg_patched, 'image/svg+xml')
+			// remove last patch
+			cursor.delete()
+
+			store_svg.put({id:1, svg:svg_patched})
+			
+			update_svg(doc)
+
+			add_patch()
+
+			/*tx = db.transaction(['undo'], 'readwrite')
+			let diff = dmp.diff_main(svg_patched, svg_after, false)
+			let pp = dmp.patch_make(svg_patched, diff)
+			if (pp.length === 0) return
+
+			const store_undo = tx.objectStore('undo')
+			store_undo.add({patch: pp})
+*/
+		}
+	}
+}
+
+function update_svg(doc) {
+		Array.from($svg.attributes).forEach($attr => $svg.removeAttributeNode($attr))
+		Array.from(doc.documentElement.attributes).forEach($attr => $svg.setAttributeNode($attr.cloneNode(true)))
+		$svg.innerHTML = doc.documentElement.innerHTML
+		update_def_style()
 }
 
 export function clear_patch() {
@@ -103,8 +154,10 @@ export function clear_patch() {
 		queue.push(clear_patch)
 		return
 	}
-	const tx = db.transaction('patch', 'readwrite')
-	const store = tx.objectStore('patch')
+	const tx = db.transaction(['undo', 'redo'], 'readwrite')
+	let store = tx.objectStore('undo')
+	store.clear()
+	store = tx.objectStore('redo')
 	store.clear()
 }
 

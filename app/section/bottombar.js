@@ -5,12 +5,13 @@ import {render_image} from '../save.js'
 import {deleting, cloning, locking} from '../user_action/del_undel_clone.js'
 import {tooltip} from '../tooltip.js'
 import {$zoom_is_edit} from '../floater/zoom.js'
-import {apply_last_patch, with_undo} from '../idb.js'
+import {apply_last_patch, with_undo, redo} from '../idb.js'
 
 const tpl = `<section id="bottom-bar">
 		<p id="group_repr"></p>
     <button class="tooltip" data-tooltip-text="Blochează/deblochează obiectul/selecția" data-tooltip-bottom id="lock"><img src="/icon/lock.svg"></button>
     <button class="tooltip" data-tooltip-text="Renunță la modificări" data-tooltip-bottom id="undo"><img src="/icon/undo.svg"></button>
+    <button class="tooltip" data-tooltip-text="Refaci modificările" data-tooltip-bottom id="redo"><img src="/icon/undo.svg"></button>
     <button id="delete_element" class="tooltip" data-tooltip-text="Șterge elementul" data-tooltip-bottom><img src="/icon/delete.svg"></button>
     <button id="clone_element" class="tooltip" data-tooltip-text="Clonează elementul" data-tooltip-bottom><img src="/icon/copy.svg"></button>
     <button id="save_svg" class="tooltip" data-tooltip-text="Previzualizează documentul" data-tooltip-bottom><img src="/icon/preview.svg"></button>
@@ -80,6 +81,7 @@ $send_svg.addEventListener('click', async () => {
 })
 
 const $undo = $ui.querySelector('#undo')
-$undo.addEventListener('click', () => {
-	apply_last_patch()
-})
+$undo.addEventListener('click', apply_last_patch)
+
+const $redo = $ui.querySelector('#redo')
+$redo.addEventListener('click', redo)
