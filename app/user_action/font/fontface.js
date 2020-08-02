@@ -15,7 +15,7 @@ export function load_font($fonts) {
 			for (let $e of $ee) {
 				if (!$e || $e.nodeName!=='text') continue
 				// wait the font to be loaded
-				await loadfont($opt.text)
+				await load_font_remote($opt.text)
 				// apply font to text element
 				$e.style.fontFamily = $opt.text 
 				$e.querySelectorAll('tspan').forEach( $x => $x.style.fontFamily = 'inherit')
@@ -37,7 +37,7 @@ export function load_font($fonts) {
 
 // load font from google into webpage
 let loaded = {}
-const loadfont = async text => {
+const load_font_remote = async text => {
 	let url = `https://fonts.googleapis.com/css?family=` + text.replace(/["']+/g, '').replace(/\s+/,'+') + '&display=swap'
 	if (url in loaded) return
 
@@ -48,7 +48,6 @@ const loadfont = async text => {
 		return
 	}	
 	let txt = await response.text()
-	let value
 	let start = '/* latin */'
 	let end = '}'
 	let arr = txt.split("\n")
@@ -81,7 +80,7 @@ const loadfont = async text => {
 	
 	src =`url(data:application/font-woff;charset=utf-8;base64,${b64}) format('woff')` 
 	let fontcode = new FontFace(text, src)
-const fontcode_str = 
+	const fontcode_str = 
 	`
 @font-face {
 font-display: swap;
@@ -111,7 +110,7 @@ $svg.querySelectorAll('tspan').forEach($tspan => {
 		if (/(sans\-serif|serif)/.test(ff)) return
 		if (!ff) return
 	}
-	loadfont(ff)
+	load_font_remote(ff)
 	$tspan.parentNode.style.fontFamily = ff
 	$tspan.parentNode.querySelectorAll('tspan').forEach( $el => $el.style.fontFamily = 'inherit' )
 })
