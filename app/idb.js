@@ -21,10 +21,16 @@ let queue = []
 req.onsuccess = evt => {
 	db = evt.target.result
 	db.onerror = e => console.log(e.error)
-	for (const fn of queue) {
-		fn()
+	for (const ff of queue) {
+		const [fn, args] = ff
+		fn.call(args)
 	}
 	queue = []
+	
+	const svg = db.transaction(['svg'], 'readwrite').objectStore('svg')
+	// add serialized svg as base
+	const svg_unmodified = new XMLSerializer().serializeToString($svg)
+	svg.put({id: 1, svg: svg_unmodified})
 }
 
 req.onupgradeneeded = e => {
@@ -37,18 +43,12 @@ req.onupgradeneeded = e => {
 	patchStore = db.createObjectStore('redo', {keyPath: 'id', autoIncrement: true})
 	patchStore.createIndex('id', 'id', {unique: true})
 	patchStore.createIndex('redo', 'redo', {unique: true})
-
-	const svgStore = db.createObjectStore('svg', {keyPath: 'id', autoIncrement: true})
-	svgStore.transaction.oncomplete = () => {
-		const svg = db.transaction(['svg'], 'readwrite').objectStore('svg')
-		// add serialized svg as base
-		const svg_unmodified = new XMLSerializer().serializeToString($svg)
-		svg.add({svg: svg_unmodified})
-	}
+	
+	db.createObjectStore('svg', {keyPath: 'id', autoIncrement: true})
 }
 
 export function add_patch() {
-	const tx = db.transaction(['undo', 'svg'], 'readwrite')
+	const tx = db.transaction(['undo', 'svg', 'redo'], 'readwrite')
 	const store_svg = tx.objectStore('svg')
 	const x = store_svg.get(1)
 	x.onsuccess = evt => {
@@ -62,6 +62,10 @@ export function add_patch() {
 		store_patch.add({patch: pp})
 
 		store_svg.put({id:1, svg:svg_after})
+
+		const r = tx.objectStore('redo')
+		const req_r = r.count()
+		req_r.onsuccess = () => r.clear()
 	}
 }
 
@@ -106,7 +110,7 @@ export function apply_last_patch() {
 }
 
 export function redo() {
-	let tx = db.transaction(['redo', 'svg'], 'readwrite')
+	let tx = db.transaction(['redo', 'svg', 'undo'], 'readwrite')
 	const store_patch = tx.objectStore('redo')
 	const c = store_patch.openCursor(null, 'prev')
 	c.onsuccess = e => {
@@ -128,16 +132,12 @@ export function redo() {
 			
 			update_svg(doc)
 
-			add_patch()
-
-			/*tx = db.transaction(['undo'], 'readwrite')
-			let diff = dmp.diff_main(svg_patched, svg_after, false)
-			let pp = dmp.patch_make(svg_patched, diff)
-			if (pp.length === 0) return
+			const ffid = dmp.diff_main(svg_patched, svg_after, false)
+			const pz = dmp.patch_make(svg_patched, ffid)
+			if (pz.length === 0) return
 
 			const store_undo = tx.objectStore('undo')
-			store_undo.add({patch: pp})
-*/
+			store_undo.add({patch: pz})
 		}
 	}
 }
@@ -149,16 +149,22 @@ function update_svg(doc) {
 		update_def_style()
 }
 
-export function clear_patch() {
+export function clear_patch(clear_svg=false) {
 	if (!db) {
-		queue.push(clear_patch)
+		queue.push([clear_patch, clear_svg])
 		return
 	}
-	const tx = db.transaction(['undo', 'redo'], 'readwrite')
-	let store = tx.objectStore('undo')
-	store.clear()
-	store = tx.objectStore('redo')
-	store.clear()
+
+	const tx = db.transaction(['undo', 'redo', 'svg'], 'readwrite')
+	
+	const u = tx.objectStore('undo')
+	u.clear()
+	const r = tx.objectStore('redo')
+	r.clear()
+	if (clear_svg) {
+		const s = tx.objectStore('svg')
+		s.clear()
+	}
 }
 
 // if you need context use fn.bind(ctx)

@@ -11,7 +11,7 @@ const tpl = `<section id="bottom-bar">
 		<p id="group_repr"></p>
     <button class="tooltip" data-tooltip-text="Blochează/deblochează obiectul/selecția" data-tooltip-bottom id="lock"><img src="/icon/lock.svg"></button>
     <button class="tooltip" data-tooltip-text="Renunță la modificări" data-tooltip-bottom id="undo"><img src="/icon/undo.svg"></button>
-    <button class="tooltip" data-tooltip-text="Refaci modificările" data-tooltip-bottom id="redo"><img src="/icon/undo.svg"></button>
+    <button class="tooltip" data-tooltip-text="Refaci modificările" data-tooltip-bottom id="redo"><img src="/icon/redo.svg"></button>
     <button id="delete_element" class="tooltip" data-tooltip-text="Șterge elementul" data-tooltip-bottom><img src="/icon/delete.svg"></button>
     <button id="clone_element" class="tooltip" data-tooltip-text="Clonează elementul" data-tooltip-bottom><img src="/icon/copy.svg"></button>
     <button id="save_svg" class="tooltip" data-tooltip-text="Previzualizează documentul" data-tooltip-bottom><img src="/icon/preview.svg"></button>
