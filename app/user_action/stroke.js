@@ -1,5 +1,4 @@
-import {$selection} from '../selection/grouping.js'
-import {computed_color} from '../color.js'
+import {$selection, $clicked} from '../selection'
 import {px} from '../dom.js'
 
 export function stroke_width(val) {
@@ -20,7 +19,7 @@ export function stroke_width(val) {
 				$tt = $e.querySelectorAll(':scope > tspan[style]')
 				$tt.forEach($t => $t.style.strokeWidth = 'inherit')
 			}	
-			$e.follow()
+			$clicked.from($e).follow()
 		}
 	})
 }

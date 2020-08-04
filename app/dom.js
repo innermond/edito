@@ -1,5 +1,5 @@
 import {$bleed} from './ui.js'
-import {m2e, m, setm, get_u} from './mtx.js'
+import {m2e, m, setm} from './mtx.js'
 
 const ns = 'http://www.w3.org/2000/'
 const nsattr = 'http://www.w3.org/1999/'
@@ -43,9 +43,17 @@ export const ui_fragment = (html) => {
 }
 
 export const $svg = document.querySelector('svg')
+$svg.addEventListener('load', () => console.log('loaded svg'))
 
-export const $defs = document.querySelector('svg > defs') ?? newtag('defs')
-export const $style = $defs.querySelector(':scope > style') ?? newtag('style')
+export let $defs, $style
+
+export const update_def_style = () => {
+	$defs = document.querySelector('svg > defs') ?? newtag('defs')
+	$style = $defs.querySelector(':scope > style') ?? newtag('style')
+}
+
+update_def_style()
+
 // force a style element to be there
 if (!$style.ownerSVGElement){
 	$svg.insertBefore($style, $svg.firstChild)
@@ -159,6 +167,8 @@ export function get_paren_id($el, attr) {
 }
 
 export function media_zoom(w, h) {
+	$svg.setAttribute('width', w+'mm')
+	$svg.setAttribute('height', h+'mm')
 	$svg.width.baseVal.valueInSpecifiedUnits = w
 	$svg.viewBox.baseVal.width=$svg.width.baseVal.value
 	$svg.height.baseVal.valueInSpecifiedUnits = h

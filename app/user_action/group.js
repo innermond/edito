@@ -1,4 +1,4 @@
-import {$svg, $defs, path_text} from '../dom.js'
+import {$svg, $defs} from '../dom.js'
 import {$clicked, $selection} from '../selection/index.js'
 import {m2e, setm} from '../mtx.js'
 import {get_filter} from '../filter.js'

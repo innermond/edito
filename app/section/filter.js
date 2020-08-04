@@ -1,6 +1,7 @@
 import {ui_fragment} from '../dom.js'
 import {wrap} from '../drawer.js'
 import * as filter from '../filter.js'
+import {addEventListenerUndo} from '../idb.js'
 
 const tpl = `<section class="vertical-align">
     <button id="add_shadow">Adaugă umbră</button>
@@ -55,19 +56,19 @@ export const $glass = $ui.querySelector('#glass')
 export const $glass_one = $ui.querySelector('#glass_one')
 export const $glass_two = $ui.querySelector('#glass_two')
 
-$shadow_blur.addEventListener('input', filter.updating('shadow', 'feGaussianBlur', 'stdDeviation'))
-$shadow_slope.addEventListener('input', filter.updating('shadow', 'feFuncA', 'slope'))
-$shadow_dx.addEventListener('input', filter.updating('shadow', 'feOffset', 'dx'))
-$shadow_dy.addEventListener('input', filter.updating('shadow', 'feOffset', 'dy'))
-$shadow_color.addEventListener('input',filter.updating('shadow', 'feFlood', 'flood-color'))
-$add_shadow.addEventListener('click', filter.add_shadow)
-$remove_shadow.addEventListener('click', filter.removing('shadow'))
-$grayscale.addEventListener('input', filter.updating('grayscale', 'feColorMatrix', 'values', 1))
-$blur.addEventListener('input', filter.updating('blur', 'feGaussianBlur', 'stdDeviation'))
-$sharpen.addEventListener('input', filter.sharpening())
-$hue_rotate.addEventListener('input',filter.updating('hueRotate', 'feColorMatrix', 'values'))
+addEventListenerUndo($shadow_blur, 'input', filter.updating('shadow', 'feGaussianBlur', 'stdDeviation'), 'mouseup')
+addEventListenerUndo($shadow_slope, 'input', filter.updating('shadow', 'feFuncA', 'slope'), 'mouseup')
+addEventListenerUndo($shadow_dx, 'input', filter.updating('shadow', 'feOffset', 'dx'), 'mouseup')
+addEventListenerUndo($shadow_dy, 'input', filter.updating('shadow', 'feOffset', 'dy'), 'mouseup')
+addEventListenerUndo($shadow_color, 'input',filter.updating('shadow', 'feFlood', 'flood-color'), 'mouseup')
+addEventListenerUndo($add_shadow, 'click', filter.add_shadow)
+addEventListenerUndo($remove_shadow, 'click', filter.removing('shadow'))
+addEventListenerUndo($grayscale, 'input', filter.updating('grayscale', 'feColorMatrix', 'values', 1), 'mouseup')
+addEventListenerUndo($blur, 'input', filter.updating('blur', 'feGaussianBlur', 'stdDeviation'), 'mouseup')
+addEventListenerUndo($sharpen, 'input', filter.sharpening(), 'mouseup')
+addEventListenerUndo($hue_rotate, 'input', filter.updating('hueRotate', 'feColorMatrix', 'values'), 'mouseup')
 const unglassing = filter.removing('glass')
-$glass.addEventListener('change', evt => {
+addEventListenerUndo($glass, 'change', () => {
 	if ($glass.checked) {
 		filter.add_glass()
 	} else {
@@ -75,7 +76,6 @@ $glass.addEventListener('change', evt => {
 	}
 })
 const glass_one = filter.updating('glass', 'feGaussianBlur[one]', 'stdDeviation', $glass_one.value)
-$glass_one.addEventListener('input', evt => $glass.checked && glass_one(evt))
+addEventListenerUndo($glass_one, 'input', evt => $glass.checked && glass_one(evt), 'nouseup')
 const glass_two = filter.updating('glass', 'feGaussianBlur[two]', 'stdDeviation', $glass_two.value)
-$glass_two.addEventListener('input', evt => $glass.checked && glass_two(evt))
-
+addEventListenerUndo($glass_two, 'input', evt => $glass.checked && glass_two(evt), 'nouseup')

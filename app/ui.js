@@ -1,6 +1,6 @@
 import {$textname, $text_features, $font_size, $word_spacing, $letter_spacing, $line_spacing} from './section/text.js'
 import{$fonts} from './section/text.js'
-import{$delete_element, $undelete_element, $clone_element} from './section/bottombar.js'
+import{$delete_element} from './section/bottombar.js'
 import {$media_width, $media_height, $bleed, $step, $bkcolor} from './section/page.js'
 import {$add_rect, $add_circle, $add_line} from './section/add_shape.js'
 import {$url_image, $add_url_image, $file_image} from './section/image.js'
@@ -32,7 +32,7 @@ export {$media_width, $media_height, $bleed, $step,
 $fonts, $font_size, 
 $text_features,
 $align, $reference,
-$delete_element, $undelete_element,
+$delete_element,
 $angle, 
 $flipping,
 $fill, 
@@ -277,7 +277,7 @@ export function after_click_update_ui($el) {
 }
 
 export function dragging_marks_reset($el) {
-	$el.clues.reset()
+	$el.clues?.reset()
 	$el.square.$shape.style.fill = 'white'
 	$el.circle.$shape.style.fill = 'white'
 	$el.unover()
@@ -287,7 +287,7 @@ export function dragging_all_marks_reset() {
 	$svg.querySelectorAll('[data-ants="true"]').forEach($e => {
 		// all marks paint in white - inactive color
 		if (!$e.dataset.rect) $e.style.fill = 'white'
-		$e.$element.clues.reset()
+		$e.$element?.clues?.reset()
 		$e.remove()
 	})
 }
@@ -297,7 +297,7 @@ export function dragging_all_marks_reset_except(...ee) {
 		if (ee.includes($e.$element)) return
 		// all marks paint in white - inactive color
 		if (!$e.dataset.rect) $e.style.fill = 'white'
-		$e.$element.clues.reset()
+		$e.$element?.clues?.reset()
 		$e.remove()
 	})
 }
@@ -306,7 +306,7 @@ export function dragging_all_marks_relax() {
 	$svg.querySelectorAll('[data-ants="true"]').forEach($e => {
 		// all marks paint in white - inactive color
 		if (!$e.dataset.rect) $e.style.fill = 'white'
-		$e.$element.clues.reset()
+		$e.$element?.clues?.reset()
 	})
 }
 
@@ -315,7 +315,7 @@ export function dragging_all_marks_relax_except(...ee) {
 		if (ee.includes($e.$element)) return
 		// all marks paint in white - inactive color
 		if (!$e.dataset.rect) $e.style.fill = 'white'
-		$e.$element.clues.reset()
+		$e.$element?.clues?.reset()
 	})
 }
 		

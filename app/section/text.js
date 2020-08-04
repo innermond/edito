@@ -7,6 +7,7 @@ import {sizing_text} from '../user_action/font/size.js'
 import {ui_fragment} from '../dom.js'
 import {ul_select} from '../ul_select.js'
 import {wrap} from '../drawer.js'
+import {addEventListenerUndo, add_patch, with_undo} from '../idb.js'
 
 const tpl = `<section class="vertical-align">
 	
@@ -55,8 +56,8 @@ export const $ui = wrap(ui_fragment(tpl), 'add-text', 'text')
 export const $textname = $ui.querySelector('#textname')
 const $add_text_btn = $ui.querySelector('#add-text-btn')
 
-$add_text_btn.addEventListener('click', evt => add_text($textname))
-$textname.addEventListener('keyup', evt => keyup($textname))
+$add_text_btn.addEventListener('click', with_undo(add_text, $textname))
+$textname.addEventListener('keyup', with_undo(keyup, $textname))
 
 export const $text_features = $ui.querySelector('#text-features')
 $text_features.addEventListener('click', evt => {
@@ -78,32 +79,31 @@ $text_features.addEventListener('click', evt => {
 			$textname.value = $textname.value.toUpperCase()
 		}
 	}
+	add_patch()
 	evt.target.classList.toggle('active')
 })
 
 export const $font_size = $ui.querySelector('#font-size')
-$font_size.addEventListener('input', evt => {
+addEventListenerUndo($font_size, 'input', () => {
 	sizing_text($font_size.value)
-})
+}, 'mouseup')
 
 export const $word_spacing = $ui.querySelector('#word-spacing')
-$word_spacing.addEventListener('input', evt => {
+addEventListenerUndo($word_spacing, 'input', () => {
 	spacing_text('word-spacing', $word_spacing.value)
-})
+}, 'mouseup')
 
 export const $letter_spacing = $ui.querySelector('#letter-spacing')
-const $letter_spacing_tooltip = $ui.querySelector('#letter-spacing-tooltip')
-$letter_spacing.addEventListener('input', evt => {
+addEventListenerUndo($letter_spacing, 'input', () => {
 	spacing_text('letter-spacing', $letter_spacing.value)
-})
+}, 'mouseup')
 
 export const $line_spacing = $ui.querySelector('#line-spacing')
-$line_spacing.addEventListener('input', evt => {
+addEventListenerUndo($line_spacing, 'input', () => {
 	spacing_lines_text($line_spacing.value)
-})
+}, 'mouseup')
 
 export const $fonts = $ui.querySelector('#fonts')
-$fonts.addEventListener('change', evt => load_font($fonts))
+$fonts.addEventListener('change', with_undo(load_font, $fonts))
 
 ul_select($fonts, ul_select.opt_fn, {'class': 'folded relative'})
-//ul_select($fonts, val => val.toUpperCase())

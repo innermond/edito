@@ -1,13 +1,11 @@
 import {ui_fragment, $svg, media_zoom, copy_viewbox} from '../dom.js'
 import {zoom_reset} from '../zoom.js'
-import {$clicked, $selection} from '../selection/index.js'
-import {scale} from '../user_action/size.js'
-import {rotate} from '../user_action/rotate.js'
 import {wrap} from '../drawer.js'
 import {rgb_hex, computed_color} from '../color.js'
 import {background_color} from '../user_action/background.js'
 import {handle_step} from '../user_action/step.js'
 import {addEventInterval} from '../event_interval.js'
+import {add_patch, with_undo} from '../idb.js'
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Schimbi lățimea documentului" data-tooltip-bottom for="media_width">Lățime</label>
@@ -48,8 +46,9 @@ const $real = $ui.querySelector('#real')
 $media_width.value = $svg.width.baseVal.valueInSpecifiedUnits
 $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits
 
-let current_canvas_width = '100%'
-const show_at_real_dimensions = () => {
+//let current_canvas_width
+
+/*const show_at_real_dimensions = () => {
 	const $canvas = document.querySelector('#canvas')
 	if ($real.checked) {
 		$canvas.style.width = 'auto'
@@ -57,29 +56,33 @@ const show_at_real_dimensions = () => {
 		if(!$all_visible.checked) {
 		 $canvas.style.width = '100%'
 		} else {
-		 //$canvas.style.width = current_canvas_width
+			//$canvas.style.width = current_canvas_width
 			media_zoom_event()
 		}
 	}
-}
+}*/
+// FIXME for real dimensions auto is not appropriate
 const media_zoom_event = () => {
 	const $canvas = document.querySelector('#canvas')
 	$canvas.style.width = '100%'
-	current_canvas_width = $canvas.style.width
+	//current_canvas_width = $canvas.style.width
 
 	zoom_reset()
 	media_zoom($media_width.value, $media_height.value)
 	zoom_reset.viewbox = copy_viewbox($svg.viewBox)
 
 	// fit?
-	if (!$all_visible.checked) {
+/*	if (!$all_visible.checked) {
 		if ($real.checked) show_at_real_dimensions()
 		return
 	}
+*/
 	if ($real.checked) {
-		show_at_real_dimensions()
-		return
+		$canvas.style.width = 'auto'
+		//show_at_real_dimensions()
+		//return
 	}
+	if (!$all_visible.checked) return
 	const $bottom = document.querySelector('#bottom-bar')
 	let canvas_box = $canvas.getBoundingClientRect()
 	let bottom_box = $bottom.getBoundingClientRect()
@@ -98,19 +101,22 @@ const media_zoom_event = () => {
 		bottom_box = $bottom.getBoundingClientRect()
 		d = canvas_box.bottom - bottom_box.top
 	}
-	current_canvas_width = $canvas.style.width
+	//current_canvas_width = $canvas.style.width
 }
-$media_width.addEventListener('input', media_zoom_event, true)
-$media_height.addEventListener('input', media_zoom_event, true)
-$all_visible.addEventListener('change', media_zoom_event)
-$real.addEventListener('change', evt => {
-	show_at_real_dimensions()
-})
+
+$media_width.addEventListener('change', with_undo(media_zoom_event))
+$media_height.addEventListener('change', media_zoom_event)
+
+$all_visible.addEventListener('change',with_undo(media_zoom_event))
+$real.addEventListener('change', media_zoom_event)
 
 export const $bleed = $ui.querySelector('#bleed')
 
 export const $step = $ui.querySelector('#step')
-document.addEventListener('keyup', evt => handle_step($step.value, evt.key))      
+document.addEventListener('keyup', evt => {
+	handle_step($step.value, evt.key)
+	add_patch()
+})      
 export const $bkcolor = $ui.querySelector('#bkcolor')
 // try to gues background color of page
 let bkcolor = $svg.getAttributeNS(null, 'viewport-fill')          
@@ -119,14 +125,20 @@ $bkcolor.value = bkcolor
 $bkcolor.style.backgroundColor = bkcolor
 $bkcolor.style.display = 'none'
 
-$bkcolor.addEventListener('input', evt => {
+const bkg_color_change = () => {
 	const val = $bkcolor.value
 	background_color(val)
 	$bkcolor.style.backgroundColor = val
+}
+
+$bkcolor.addEventListener('change', () => {
+	bkg_color_change()
+	add_patch()
 })
+$bkcolor.addEventListener('input', bkg_color_change)
 
 export const $bkcolor_switch = $ui.querySelector('#bkcolor-switch')
-$bkcolor_switch.addEventListener('change', evt => {
+const bkg_color_switch_change = () => {
 	if ($bkcolor_switch.checked === true) {
 		const val = $bkcolor.value
 		$bkcolor.style.display = 'block'
@@ -138,6 +150,11 @@ $bkcolor_switch.addEventListener('change', evt => {
 		background_color('')
 		$bkcolor.style.display = 'none'
 	}
+}
+
+$bkcolor_switch.addEventListener('change', () => {
+	bkg_color_switch_change()
+	add_patch()
 })
 
 const $canvas_plus = $ui.querySelector('#canvas_plus')
@@ -157,7 +174,7 @@ const update_canvas_elements = v => {
 }
 
 const step = 10
-const stop = 200 
+const stop = 50 
 let k = 0
 const start_func = way => {
 	k = way*step

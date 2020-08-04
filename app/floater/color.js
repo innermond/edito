@@ -4,6 +4,7 @@ import {stroke_opacity, stroke_width} from '../user_action/stroke.js'
 import {colorize, uncolorize} from '../selection/colorize.js'
 import {ui_fragment} from '../dom.js'
 import {addEventInterval} from '../event_interval.js'
+import {add_patch} from '../idb.js'
 
 const tpl = `<section class="movable" id="fill_stroke_color">
 <div class="wrap-row">
@@ -50,6 +51,9 @@ $ui.querySelectorAll('[for]').forEach($e => {
 })
 
 export const $fill = $ui.querySelector('#fill')
+$fill.addEventListener('change', () => {
+	add_patch()
+}) 
 $fill.addEventListener('input', () => {
 	if ($fill_switch.checked !== true) return
 	$fill.style.backgroundColor = colorize('fill', $fill.value)
@@ -71,9 +75,15 @@ $fill_switch.addEventListener('change', () => {
 })
 
 export const $fill_opacity = $ui.querySelector('#fill-opacity')
+$fill_opacity.addEventListener('mouseup', () => {
+	add_patch()
+}) 
 $fill_opacity.addEventListener('input', () => fill_opacity($fill_opacity.value))
 
 export const $stroke_fill = $ui.querySelector('#stroke-fill')
+$stroke_fill.addEventListener('change', () => {
+	add_patch()
+}) 
 $stroke_fill.addEventListener('input', () => {
 	if ($stroke_fill_switch.checked !== true) return
 	$stroke_fill.style.backgroundColor = colorize('stroke', $stroke_fill.value)
@@ -98,6 +108,10 @@ $stroke_fill_switch.addEventListener('change', () => {
 })
 
 export const $stroke_opacity = $ui.querySelector('#stroke-opacity')
+$stroke_opacity.addEventListener('mouseup', () => {
+	add_patch()
+}) 
+$stroke_opacity.addEventListener('input', () => stroke_opacity($stroke_opacity.value))    
 
 const $stroke_plus = $ui.querySelector('#stroke_plus')
 const $stroke_minus = $ui.querySelector('#stroke_minus')
@@ -134,8 +148,8 @@ const start_func = way => {
 	stroke_width(k)
 	update_stroke_elements(k)
 }
-const end_func = () => {}
+const end_func = () => {
+	add_patch()
+}
 addEventInterval($stroke_plus, 'mousedown', () => start_func(1), 10, 'mouseup', end_func)
 addEventInterval($stroke_minus, 'mousedown', () => start_func(-1), 10, 'mouseup', end_func)
-
-$stroke_opacity.addEventListener('input', () => stroke_opacity($stroke_opacity.value))    

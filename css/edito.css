@@ -596,8 +596,7 @@ ul.folded {
   margin: -0.5rem 0 0 0;
   padding: 0;
   position: absolute;
-  width: max-content;
-  max-width: 11rem; }
+  width: max-content; }
   ul.folded.relative {
     position: relative;
     width: 100%; }

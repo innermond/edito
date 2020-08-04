@@ -97,7 +97,7 @@ export const render_image = async (k=1, bleed=0, down=false, func=null, after=nu
 	ctx.scale(k,k)
 
 	let $img = document.createElement('img')
-	$img.addEventListener('load', evt => {
+	$img.addEventListener('load', () => {
 		ctx.drawImage($img, 0, 0)
 		let canvasdata = $canvas.toDataURL('image/png')
 

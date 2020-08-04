@@ -10,7 +10,6 @@ function nth(el) {
 const blankimg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
 
 export default function(nextnum=1, q='') {
-	let fetching = false
 
 	const loadimg = async (observer, $box, a, z) => {
 		const opt = {

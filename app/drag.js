@@ -4,6 +4,7 @@ import {point_screen, point_in, outpoint} from './pos.js'
 import {m, setm} from './mtx.js'
 import {$clicked, $selection} from './selection/index.js'
 import {disable} from './click.js'
+import {add_patch} from './idb.js'
 
 // manage dragging
 export function add_dragging() {
@@ -58,6 +59,7 @@ function endDrag() {
 	$clicked.clues.dragging = false
 	disable.click = moved
 	moved = null
+	add_patch()
 }
 
 function drag(evt) {

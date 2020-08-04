@@ -8,6 +8,7 @@ import {scrollable} from '../div_scroller.js'
 import {dragging_all_marks_reset} from '../ui.js'
 import {$clicked, $selection} from '../selection/index.js'
 import {urlImage} from '../section/image.js'
+import {add_patch} from '../idb.js'
 
 const tpl = `<section id="menu-bar">
 	<div>
@@ -132,6 +133,7 @@ const load_colections_images = (() => {
 								})
 								$svg.appendChild(tag)
 								$clicked.from(tag).over()
+								add_patch()
 							})
 						}
 						if (!box) box = document.querySelector('#box')
