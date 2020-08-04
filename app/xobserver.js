@@ -1,12 +1,3 @@
-function nth(el) {
-	let i = 0;
-	while (el.previousSibling != null && el !== el.previousSibling && el.nodeType === el.previousSibling.nodeType){
-		i++
-		el = el.previousSibling
-	}
-	return i
-}
-
 const blankimg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
 
 export default function(nextnum=1, q='') {
@@ -44,7 +35,7 @@ export default function(nextnum=1, q='') {
 		}
 	}
 
-	const callback = (xx, obs) => {
+	const callback = xx => {
 		xx.forEach(x => {
 			// threshold is crucial in the following reasoning
 			// x leaves when it's (1-threshold)*height is outside the root

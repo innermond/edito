@@ -1,6 +1,5 @@
 import {$clicked, $selection} from '../selection/index.js'
 import {$svg, ui_fragment} from '../dom.js'
-import movement from '../cap.js'
 import {toggle_select} from '../section/menubar.js'
 
 const tpl = `<section class="movable" id="select">
