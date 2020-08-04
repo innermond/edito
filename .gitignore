@@ -119,7 +119,7 @@ dist
 lab
 go.mod
 *.svg
-stock-images*
+stock-*
 app/data
 app/tags
 *.pak.js
