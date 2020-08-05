@@ -82,7 +82,7 @@ export const toggle_dive = () => {
 $area.addEventListener('click', toggle_dive)
 
 const $add_image = $ui.querySelector('#tool-image')
-const load_colections_images = (() => {
+const load_colections_images = ((categories_data, image_panel, category_images_id) => {
 	let already_loaded = false
 	return async () => {
 		if (already_loaded) {
@@ -90,7 +90,7 @@ const load_colections_images = (() => {
 			return
 		}
 		try {
-			let resp = await fetch('/app/data/image-category.json')
+			let resp = await fetch(`/app/data/${categories_data}`)
 			if (!resp.ok) {
 				throw new Error('response not ok')
 			}
@@ -100,17 +100,18 @@ const load_colections_images = (() => {
 			// assume just append
 			let categories = ''
 			Object.keys(resp).forEach(k => {
-				categories += `<button class="category-image" id="category-${k}" value="${k}"><img src="/img/${resp[k]}"><div class="category-image-text">${k}</div></button>`
+				categories += `<button class="category-image" id="${categories_data}-${k}" value="${k}"><img src="/img/${resp[k]}"><div class="category-image-text">${k}</div></button>`
 			})
 			if (categories.length > 0) {
 				$mark.insertAdjacentHTML('afterend', categories.repeat(100))
 				already_loaded = true
 				$mark.parentNode.querySelectorAll('button[class=category-image]').forEach($btn => {
 					$btn.addEventListener('click', async () => {
-						let $el = document.querySelector('#category-image')
+
+						let $el = document.querySelector(`#${category_images_id}`)
 						let box
 						if (!$el) {
-							let {$ui} = await import('./category_image.js')	
+							let {$ui} = await import(`./${image_panel}.js`)	
 							const $element = $ui.querySelector('.tool-drawer-scroll')
 							$el = $ui.firstChild
 							document.querySelector('#editor').appendChild($ui)
@@ -160,7 +161,7 @@ const load_colections_images = (() => {
 			console.log(e)
 		}
 	}
-})()
+})('image-category.json', 'category_image', 'category-image')
 $add_image.addEventListener('click', load_colections_images)
 
 const $tool_menu = $ui.querySelector('#tool-menu-sections')
