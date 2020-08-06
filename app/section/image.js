@@ -54,7 +54,8 @@ export async function urlImage(src, onload) {
 	const url_image = proxied_url(src)
 
 	let tag = newtag('image')
-	if ($url_image.value.split('.')?.pop()?.toLowerCase() === 'svg') {
+	const is_svg = src.split('.')?.pop()?.toLowerCase() === 'svg'
+	if (is_svg) {
 		try {
 			let resp = await fetch(url_image)
 			if (resp.ok) {
