@@ -13,7 +13,7 @@ const tpl = `<section class="vertical-align">
 	<input type="file" id="file_image">
 	<hr/>
 	<label class="tooltip" data-tooltip-text="Alegeți o colecție de imagini" data-tooltip-bottom>Librărie</label>
-	<a id="categories-images-mark"/>
+	<a name="categories-mark"/>
 </section>`
 export const $ui = wrap(ui_fragment(tpl), 'add-image', 'imagini')
 
