@@ -116,3 +116,37 @@ export const render_image = async (k=1, bleed=0, down=false, func=null, after=nu
 	})
 	$img.setAttribute('src', 'data:image/svg+xml;base64,' + srcdata)
 }
+
+export function svg_png($svg_node, maxw=100) {
+	let $svgclone = $svg_node.cloneNode(true)
+	$svgclone.querySelectorAll('[data-ants=true]').forEach($ant => $ant.remove())
+
+	const svgdata = new XMLSerializer().serializeToString($svgclone)
+	const srcdata = btoa(unescape(encodeURIComponent(svgdata)))
+	
+	const cw = $svgclone.width.baseVal.value
+	const s = maxw/cw
+	$svgclone = null
+
+	let $canvas = document.createElement('canvas')
+	const r = $canvas.width/$canvas.height
+	$canvas.width = Math.min(cw, maxw)
+	$canvas.height = $canvas.width/r
+	$canvas.style.width = $canvas.width + 'px'
+	$canvas.style.height = $canvas.height + 'px'
+	const ctx = $canvas.getContext("2d")
+	ctx.scale(s, s)
+
+	return new Promise((resolve, reject) => {
+		let $img = document.createElement('img')
+		$img.addEventListener('load', () => {
+			ctx.drawImage($img, 0, 0)
+			const pngdata = $canvas.toDataURL('image/png')
+			$img = null
+			$canvas = null
+			resolve([pngdata, svgdata])
+		})
+		$img.addEventListener('error', err => reject(err))
+		$img.setAttribute('src', 'data:image/svg+xml;base64,' + srcdata)
+	})
+}

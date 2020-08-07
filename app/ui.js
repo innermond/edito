@@ -18,7 +18,7 @@ import {
 	$hue_rotate,
 	$glass, $glass_one, $glass_two
 } from './section/filter.js'
-import {$save_svg, $group_repr, $send_svg} from './section/bottombar.js'
+import {$prev_svg, $group_repr, $send_svg} from './section/bottombar.js'
 
 import{$align, $reference, $grouping, $ordering} from './floater/move.js'
 import{$angle, $skewx, $skewy, $flipping} from './floater/geometry.js'
@@ -53,7 +53,7 @@ $blur,
 $sharpen,
 $hue_rotate,
 $glass, $glass_one, $glass_two,
-$save_svg, $send_svg
+$prev_svg, $send_svg
 }
 
 import {$svg, get_angle, scale_prevs, angle_prevs, get_paren_id, newtag, unit_conv} from './dom.js'

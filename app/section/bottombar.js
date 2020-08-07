@@ -1,4 +1,4 @@
-import {ui_fragment} from '../dom.js'
+import {$svg, ui_fragment} from '../dom.js'
 import {zoom_reset} from '../zoom.js'
 import {$bleed} from '../ui.js'
 import {render_image} from '../save.js'
@@ -6,6 +6,8 @@ import {deleting, cloning, locking} from '../user_action/del_undel_clone.js'
 import {tooltip} from '../tooltip.js'
 import {$zoom_is_edit} from '../floater/zoom.js'
 import {apply_last_patch, with_undo, redo} from '../idb.js'
+import {svg_png} from '../save.js'
+import {save_svg, clear_patch} from '../idb.js'
 
 const tpl = `<section id="bottom-bar">
 		<p id="group_repr"></p>
@@ -14,8 +16,9 @@ const tpl = `<section id="bottom-bar">
     <button class="tooltip" data-tooltip-text="Refaci modificările" data-tooltip-bottom id="redo"><img src="/icon/redo.svg"></button>
     <button id="delete_element" class="tooltip" data-tooltip-text="Șterge elementul" data-tooltip-bottom><img src="/icon/delete.svg"></button>
     <button id="clone_element" class="tooltip" data-tooltip-text="Clonează elementul" data-tooltip-bottom><img src="/icon/copy.svg"></button>
-    <button id="save_svg" class="tooltip" data-tooltip-text="Previzualizează documentul" data-tooltip-bottom><img src="/icon/preview.svg"></button>
+    <button id="prev_svg" class="tooltip" data-tooltip-text="Previzualizează documentul" data-tooltip-bottom><img src="/icon/preview.svg"></button>
     <button id="send_svg" class="tooltip" data-tooltip-text="Comandă" data-tooltip-bottom><img src="/icon/order.svg"></button>
+    <button id="save_svg" class="tooltip" data-tooltip-text="Salvează" data-tooltip-bottom><img src="/icon/save.svg"></button>
 </section>`
 
 export const $ui = ui_fragment(tpl)
@@ -38,7 +41,7 @@ window.addEventListener('keydown', evt => {if (evt.key === 'Delete') deleting_un
 export const $clone_element = $ui.querySelector('#clone_element')
 $clone_element.addEventListener('click', with_undo(cloning))
 
-export const $save_svg = $ui.querySelector('#save_svg')
+export const $prev_svg = $ui.querySelector('#prev_svg')
 export const $send_svg = $ui.querySelector('#send_svg')
 
 function loading() {
@@ -61,7 +64,7 @@ function loading() {
 	return $bkg
 }
 
-$save_svg.addEventListener('click', async () => {
+$prev_svg.addEventListener('click', async () => {
 	let func = null
 	if (!$zoom_is_edit.checked) func = $svg_clone => zoom_reset($svg_clone)
 	const $bkg = loading()
@@ -78,6 +81,21 @@ $send_svg.addEventListener('click', async () => {
 		$bkg.classList.remove('on')
 		document.querySelectorAll('div[class~=preview]').forEach($d => $d.remove())
 	})
+})
+
+const $save = $ui.querySelector('#save_svg')
+$save.addEventListener('click', async () => {
+	const $bkg = loading()
+	const data = await svg_png($svg)
+	try {
+		await save_svg(...data)
+		clear_patch()
+	} catch (e) {
+		console.log(e)
+	} finally {
+		$bkg.classList.remove('on')
+		$bkg.classList.remove('loading-off')
+	}
 })
 
 const $undo = $ui.querySelector('#undo')

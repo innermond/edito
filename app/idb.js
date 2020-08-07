@@ -36,15 +36,17 @@ req.onsuccess = evt => {
 req.onupgradeneeded = e => {
 	const db = e.target.result
 
-	let patchStore = db.createObjectStore('undo', {keyPath: 'id', autoIncrement: true})
-	patchStore.createIndex('id', 'id', {unique: true})
-	patchStore.createIndex('undo', 'undo', {unique: true})
+	let store = db.createObjectStore('undo', {keyPath: 'id', autoIncrement: true})
+	store.createIndex('id', 'id', {unique: true})
+	store.createIndex('undo', 'undo', {unique: true})
 	
-	patchStore = db.createObjectStore('redo', {keyPath: 'id', autoIncrement: true})
-	patchStore.createIndex('id', 'id', {unique: true})
-	patchStore.createIndex('redo', 'redo', {unique: true})
+	store = db.createObjectStore('redo', {keyPath: 'id', autoIncrement: true})
+	store.createIndex('id', 'id', {unique: true})
+	store.createIndex('redo', 'redo', {unique: true})
 	
 	db.createObjectStore('svg', {keyPath: 'id', autoIncrement: true})
+
+	db.createObjectStore('save', {keyPath: 'id', autoIncrement: true})
 }
 
 export function add_patch() {
@@ -67,6 +69,24 @@ export function add_patch() {
 		const req_r = r.count()
 		req_r.onsuccess = () => r.clear()
 	}
+}
+
+export function save_svg(png, svg) {
+	const tx = db.transaction(['save', 'svg'], 'readwrite')
+	const store_save = tx.objectStore('save')
+	const x = store_save.add({png, svg})
+	const $x = new Promise((resolve, reject) => {
+		x.onsuccess = () => resolve()
+		x.onerror = evt => reject(evt.error)
+	})
+	const store_svg = tx.objectStore('svg')
+	const y = store_svg.put({id:1, svg})
+	const $y = new Promise((resolve, reject) => {
+		y.onsuccess = () => resolve()
+		y.onerror = evt => reject(evt.error)
+	})
+
+	return Promise.all([$x, $y])
 }
 
 export function serialize_without_ants() {
