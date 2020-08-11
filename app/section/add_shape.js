@@ -5,4 +5,3 @@ const tpl = `<section class="vertical-align">
 	<a name="categories-mark" />
 </section>`
 export const $ui = wrap(ui_fragment(tpl), 'add-element', 'Forme')
-

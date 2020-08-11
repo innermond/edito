@@ -41,11 +41,12 @@ export default function(nextnum=1, q='') {
 			// x leaves when it's (1-threshold)*height is outside the root
 			// x enters when it's threshold*height is inside the root
 			const yup = x.boundingClientRect.y < x.rootBounds.y;
-			const loaded = (x.target.src === x.target.dataset.src)
+			const loaded = (x.target.src === x.target.dataset.src && x.target.complete === true)
 			if (x.isIntersecting) {
 				window.requestAnimationFrame(()=>{
 				// enters from bellow as blank image
-					if (!yup && !loaded) {
+					//if (!yup && !loaded) {
+					if (!loaded) {
 						x.target.onload = () => {
 							if (x.target.src !== x.target.dataset.src) return
 							x.target.classList.add('loaded')
@@ -62,7 +63,8 @@ export default function(nextnum=1, q='') {
 					}
 				})	
 			// leave to above
-			} else if (yup) {
+			//} else if (yup) {
+			} else {
 				window.requestAnimationFrame(()=>{
 					const {width:w, height:h} = x.target
 					x.target.style.width = w + 'px'
