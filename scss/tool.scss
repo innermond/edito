@@ -282,6 +282,10 @@ $title-height: 3rem;
 			margin: 0.5rem 1rem;
 		}
 
+		& > div[class~=full] {
+			margin: 0rem;
+		}
+
 		select {
 			background-color: $bk-color-loud;
 			border: none;

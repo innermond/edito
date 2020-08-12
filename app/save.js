@@ -117,9 +117,10 @@ export const render_image = async (k=1, bleed=0, down=false, func=null, after=nu
 	$img.setAttribute('src', 'data:image/svg+xml;base64,' + srcdata)
 }
 
-export function svg_png($svg_node, maxw=100) {
+export async function svg_png($svg_node, maxw=200) {
 	let $svgclone = $svg_node.cloneNode(true)
 	$svgclone.querySelectorAll('[data-ants=true]').forEach($ant => $ant.remove())
+	await imagesAsUrldata($svgclone)
 
 	const svgdata = new XMLSerializer().serializeToString($svgclone)
 	const srcdata = btoa(unescape(encodeURIComponent(svgdata)))

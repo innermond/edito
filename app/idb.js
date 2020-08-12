@@ -15,12 +15,18 @@ req.onerror = evt => {
 	console.log(evt.target.errorCode)
 }
 
+export const emmiter = {}
+emmiter.__proto__.onDBAvailable = function(func) {
+	this.DBAvailable = func
+}
+
 let db = null
 let queue = []
 
 req.onsuccess = evt => {
 	db = evt.target.result
 	db.onerror = e => console.log(e.error)
+	emmiter.DBAvailable(db)
 	for (const ff of queue) {
 		const [fn, args] = ff
 		fn.call(args)
@@ -87,6 +93,18 @@ export function save_svg(png, svg) {
 	})
 
 	return Promise.all([$x, $y])
+}
+
+export function get_saves() {
+	const tx = db.transaction(['save'], 'readwrite')
+	const store_save = tx.objectStore('save')
+	const x = store_save.getAll()
+	const $x = new Promise((resolve, reject) => {
+		x.onsuccess = evt => resolve(evt.target.result)
+		x.onerror = evt => reject(evt.error)
+	})
+
+	return $x
 }
 
 export function serialize_without_ants() {

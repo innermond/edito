@@ -12,6 +12,7 @@ const tpl = `<section id="menu-bar">
 			<li id="tool-element" data-panel="add-element" class="tool-item tooltip" data-tooltip-text="Adaugă elemente grafice"><img src="/icon/add-element.svg"></li>
 			<li id="tool-text" data-panel="add-text" class="tool-item tooltip" data-tooltip-text="Adaugă text"><img src="/icon/add-text.svg"></li>
 			<li id="tool-image" data-panel="add-image" class="tool-item tooltip" data-tooltip-text="Adaugă imagini"><img src="/icon/add-image.svg"></li>
+			<li id="tool-save" data-panel="save-svg" class="tool-item tooltip" data-tooltip-text="Salvează proiectul"><img src="/icon/save.svg"></li>
 		</ul>
 		<ul id="tool-menu-floaters" class="tool-menu vertical-align">
 			<li id="tool-select" data-panel="select" class="tool-item tooltip" data-tooltip-text="Selectează, indică și opțiuni specifice"><img src="/icon/pointer.svg"></li>

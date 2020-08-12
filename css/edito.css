@@ -232,6 +232,8 @@ section.movable:hover, section.tool-drawer:hover, #bottom-bar:hover {
         margin-top: 0.5rem; }
     .tool-drawer-scroll > section > * {
       margin: 0.5rem 1rem; }
+    .tool-drawer-scroll > section > div[class~=full] {
+      margin: 0rem; }
     .tool-drawer-scroll > section select {
       background-color: #24272b;
       border: none;
