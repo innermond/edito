@@ -99,12 +99,40 @@ export function get_saves() {
 	const tx = db.transaction(['save'], 'readwrite')
 	const store_save = tx.objectStore('save')
 	const x = store_save.getAll()
-	const $x = new Promise((resolve, reject) => {
+
+	return new Promise((resolve, reject) => {
 		x.onsuccess = evt => resolve(evt.target.result)
 		x.onerror = evt => reject(evt.error)
 	})
+}
 
-	return $x
+export function del_save(id) {
+	const tx = db.transaction(['save'], 'readwrite')
+	const store_save = tx.objectStore('save')
+	id = 1*id
+	const x = store_save.delete(id)
+
+	return new Promise((resolve, reject) => {
+		x.onsuccess = () => resolve()
+		x.onerror = evt => reject(evt.error)
+	})
+}
+
+export function apply_save(id) {
+	const tx = db.transaction(['save'], 'readwrite')
+	const store_save = tx.objectStore('save')
+	id = 1*id
+	const x = store_save.get(id)
+
+	return new Promise((resolve, reject) => {
+		x.onsuccess = evt => {
+			const parser = new DOMParser()
+			const doc = parser.parseFromString(evt.target.result.svg, 'image/svg+xml')
+			update_svg(doc)
+			resolve()
+		}
+		x.onerror = evt => reject(evt.error)
+	})
 }
 
 export function serialize_without_ants() {

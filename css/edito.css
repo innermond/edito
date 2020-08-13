@@ -276,12 +276,23 @@ section label {
   cursor: pointer;
   width: 1rem;
   height: 1rem;
-  opacity: .6;
+  opacity: .8;
   padding: 0.5rem;
   border-radius: 50%;
   transition: all .2s ease-out; }
   .close:hover {
     background-color: #171717; }
+
+.action {
+  position: relative; }
+  .action .close {
+    width: 0.8rem;
+    height: 0.8rem;
+    background: #292c31; }
+    .action .close:hover {
+      width: 1rem;
+      height: 1rem;
+      opacity: 1.0; }
 
 .cancel {
   height: 3rem;
