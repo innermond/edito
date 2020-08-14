@@ -34,6 +34,10 @@ $mark.parentElement.addEventListener('click', async evt => {
 	}
 
 	if ('thumb' in $el.dataset) {
-		await apply_save($action.dataset.id)
+		try {
+			await apply_save($action.dataset.id)
+		} catch (e) {
+			console.log(e)
+		}
 	}
 })
