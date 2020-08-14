@@ -1,6 +1,7 @@
 import {ui_fragment} from '../dom.js'
 import {wrap} from '../drawer.js'
 import {emmiter, get_saves, del_save, apply_save} from '../idb.js'
+import {loading} from '../loading.js'
 
 const tpl = `<section class="vertical-align">
 	<a name="categories-mark" />
@@ -23,12 +24,16 @@ $mark.parentElement.addEventListener('click', async evt => {
 	const $el = evt.target
 	const $action = $el.closest('[class="action"]')
 
+	const [done,] = loading()
+
 	if ($el.classList.contains('close')) {
 		try {
 			await del_save($action.dataset.id)
 			$action.remove()
 		} catch(e) {
 			console.log(e)
+		} finally {
+			done()
 		}
 		return
 	}
@@ -38,6 +43,8 @@ $mark.parentElement.addEventListener('click', async evt => {
 			await apply_save($action.dataset.id)
 		} catch (e) {
 			console.log(e)
+		} finally {
+			done()
 		}
 	}
 })
