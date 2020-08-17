@@ -69,7 +69,10 @@ $save.addEventListener('click', async () => {
 	const [done,] = loading()
 	const data = await svg_png($svg)
 	try {
-		await save_svg(...data)
+		const result = await save_svg(...data)
+		let saved = `<div class="action" data-id="${result[0]}" ><img data-thumb src=${data[0]}><img src="/icon/close.svg" class="close"></img></div>`
+		const $place = document.querySelector('#save-svg a[name=categories-mark]+div.full')
+		$place.insertAdjacentHTML('afterbegin', saved)
 		clear_patch()
 	} catch (e) {
 		console.log(e)

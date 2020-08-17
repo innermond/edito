@@ -82,7 +82,7 @@ export function save_svg(png, svg) {
 	const store_save = tx.objectStore('save')
 	const x = store_save.add({png, svg})
 	const $x = new Promise((resolve, reject) => {
-		x.onsuccess = () => resolve()
+		x.onsuccess = evt => resolve(evt.target.result)
 		x.onerror = evt => reject(evt.error)
 	})
 	const store_svg = tx.objectStore('svg')
