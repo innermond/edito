@@ -18,15 +18,17 @@ function do_colorize($collection, prop, val) {
 	let val_dataset = val
 	let len
 
-	$selection.each($el => {
+	$collection.each($el => {
 		let $ee = [$el]
 		if ($el.nodeName === 'g') {
 			$ee = Array.from($el.children)
 		}
+		if ($ee.length === 0) return
 
 		for (const $e of $ee) {
 			if ($e.nodeName === 'g') {
-				do_colorize(Array.from($e.children), prop, val)
+				const $xx = Array.from($e.children)
+				if ($xx.length) do_colorize($xx, prop, val)
 				continue
 			}
 			const has_none = 'none' === $e.style.getPropertyValue(prop)
