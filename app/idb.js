@@ -208,7 +208,7 @@ export function redo() {
 	}
 }
 
-function update_svg(doc) {
+export function update_svg(doc) {
 		Array.from($svg.attributes).forEach($attr => $svg.removeAttributeNode($attr))
 		Array.from(doc.documentElement.attributes).forEach($attr => $svg.setAttributeNode($attr.cloneNode(true)))
 		$svg.innerHTML = doc.documentElement.innerHTML

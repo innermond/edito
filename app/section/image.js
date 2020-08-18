@@ -10,7 +10,7 @@ const tpl = `<section class="vertical-align">
 	<input id="url_image" placeholder="https://imagine"><button id="add_url_imagine">Adaugă URL imagine</button>
 	<hr/>
 	<label for="file_image" class="file-upload tooltip" data-tooltip-text="Alegeți o imagine de pe calculatorul dvs." data-tooltip-bottom>Fișier local</label>
-	<input type="file" id="file_image">
+	<input class="none" type="file" id="file_image">
 	<hr/>
 	<label class="tooltip" data-tooltip-text="Alegeți o colecție de imagini" data-tooltip-bottom>Librărie</label>
 	<a name="categories-mark"/>

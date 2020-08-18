@@ -2,11 +2,16 @@ import {ui_fragment} from '../dom.js'
 import {wrap} from '../drawer.js'
 import {emmiter, get_saves, del_save, apply_save} from '../idb.js'
 import {loading} from '../loading.js'
+import {update_svg} from '../idb.js'
 
 const tpl = `<section class="vertical-align">
+	<label for="open-file-svg" class="tooltip" data-tooltip-text="Deschide un fișier svg de pe disc" data-tooltip-bottom><img src="/icon/open-file.svg">
+	<input class="none" type="file" id="open-file-svg">
+	</label>
 	<a name="categories-mark" />
 </section>`
 export const $ui = wrap(ui_fragment(tpl), 'save-svg', 'Salvare')
+const $open_file = $ui.querySelector('#open-file-svg')
 
 const $mark = $ui.querySelector('a[name=categories-mark]')
 emmiter.onDBAvailable(async () => {
@@ -47,4 +52,25 @@ $mark.parentElement.addEventListener('click', async evt => {
 			done()
 		}
 	}
+
+	done()
+})
+
+$open_file.addEventListener('change', async () => {
+	const file = $open_file.files[0] ?? null
+	if (!file) return
+	
+	const future = new Promise((resolve, reject) => {
+		const reader = new FileReader()
+		reader.onload = () => {
+			resolve(reader.result)
+		}
+		reader.onerror = reject
+		reader.readAsText(file)
+	})
+
+	const svg_text = await future
+	const parser = new DOMParser()
+	const doc = parser.parseFromString(svg_text, 'image/svg+xml')
+	update_svg(doc)
 })

@@ -321,7 +321,7 @@ button, .file-upload {
     background-color: #292c31;
     color: white; }
 
-#file_image {
+.none {
   display: none; }
 
 input[type=color] {
