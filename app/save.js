@@ -127,10 +127,10 @@ export async function svg_png($svg_node, maxw=200) {
 	
 	const cw = $svgclone.width.baseVal.value
 	const s = maxw/cw
+	const r = $svgclone.width.baseVal.value/$svgclone.height.baseVal.value
 	$svgclone = null
 
 	let $canvas = document.createElement('canvas')
-	const r = $canvas.width/$canvas.height
 	$canvas.width = Math.min(cw, maxw)
 	$canvas.height = $canvas.width/r
 	$canvas.style.width = $canvas.width + 'px'
