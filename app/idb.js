@@ -1,4 +1,4 @@
-import {$svg, update_def_style} from './dom.js'
+import {$svg, update_def_style, $style} from './dom.js'
 import {diff_match_patch} from 'diff-match-patch'
 
 if (!indexedDB) {
@@ -209,10 +209,18 @@ export function redo() {
 }
 
 export function update_svg(doc) {
-		Array.from($svg.attributes).forEach($attr => $svg.removeAttributeNode($attr))
-		Array.from(doc.documentElement.attributes).forEach($attr => $svg.setAttributeNode($attr.cloneNode(true)))
-		$svg.innerHTML = doc.documentElement.innerHTML
-		update_def_style()
+	Array.from($svg.attributes).forEach($attr => $svg.removeAttributeNode($attr))
+	Array.from(doc.documentElement.attributes).forEach($attr => $svg.setAttributeNode($attr.cloneNode(true)))
+	$svg.innerHTML = doc.documentElement.innerHTML
+	update_def_style()
+
+	// to mm
+	$svg.width.baseVal.convertToSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_MM)
+	$svg.height.baseVal.convertToSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_MM)
+
+	// inline style
+	$svg.style.width = '100%'
+	$svg.style.height = '100%'
 }
 
 export function clear_patch(clear_svg=false) {

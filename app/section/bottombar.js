@@ -1,4 +1,4 @@
-import {$svg, ui_fragment} from '../dom.js'
+import {ui_fragment} from '../dom.js'
 import {zoom_reset} from '../zoom.js'
 import {$bleed} from '../ui.js'
 import {render_image} from '../save.js'
@@ -6,8 +6,6 @@ import {deleting, cloning, locking} from '../user_action/del_undel_clone.js'
 import {tooltip} from '../tooltip.js'
 import {$zoom_is_edit} from '../floater/zoom.js'
 import {apply_last_patch, with_undo, redo} from '../idb.js'
-import {svg_png} from '../save.js'
-import {save_svg, clear_patch} from '../idb.js'
 import {loading} from '../loading.js'
 
 const tpl = `<section id="bottom-bar">
@@ -19,7 +17,6 @@ const tpl = `<section id="bottom-bar">
     <button id="clone_element" class="tooltip" data-tooltip-text="Clonează elementul" data-tooltip-bottom><img src="/icon/copy.svg"></button>
     <button id="prev_svg" class="tooltip" data-tooltip-text="Previzualizează documentul" data-tooltip-bottom><img src="/icon/preview.svg"></button>
     <button id="send_svg" class="tooltip" data-tooltip-text="Comandă" data-tooltip-bottom><img src="/icon/order.svg"></button>
-    <button id="save_svg" class="tooltip" data-tooltip-text="Salvează" data-tooltip-bottom><img src="/icon/save.svg"></button>
 </section>`
 
 export const $ui = ui_fragment(tpl)
@@ -62,23 +59,6 @@ $send_svg.addEventListener('click', async () => {
 		done()
 		document.querySelectorAll('div[class~=preview]').forEach($d => $d.remove())
 	})
-})
-
-const $save = $ui.querySelector('#save_svg')
-$save.addEventListener('click', async () => {
-	const [done,] = loading()
-	const data = await svg_png($svg)
-	try {
-		const result = await save_svg(...data)
-		let saved = `<div class="action" data-id="${result[0]}" ><img data-thumb src=${data[0]}><img src="/icon/close.svg" class="close"></img></div>`
-		const $place = document.querySelector('#save-svg a[name=categories-mark]+div.full')
-		$place.insertAdjacentHTML('afterbegin', saved)
-		clear_patch()
-	} catch (e) {
-		console.log(e)
-	} finally {
-		done()
-	}
 })
 
 const $undo = $ui.querySelector('#undo')
