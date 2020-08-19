@@ -34,6 +34,9 @@ const tpl = `<style>
 		box-shadow: 0px -10px 75px white, 0px 10px 75px white;
 		z-index: 2;
 	}
+	img.late.loaded:hover {
+		background-color: white;
+	}
 </style>
 
 <section class="vertical-align">

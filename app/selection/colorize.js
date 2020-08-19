@@ -18,7 +18,7 @@ function do_colorize($collection, prop, val) {
 	let val_dataset = val
 	let len
 
-	$collection.each($el => {
+	$collection.forEach($el => {
 		let $ee = [$el]
 		if ($el.nodeName === 'g') {
 			$ee = Array.from($el.children)
