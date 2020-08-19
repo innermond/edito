@@ -56,7 +56,7 @@ $mark.parentElement.addEventListener('click', async evt => {
 	done()
 })
 
-$open_file.addEventListener('change', async () => {
+$open_file.addEventListener('input', async () => {
 	const file = $open_file.files[0] ?? null
 	if (!file) return
 	
