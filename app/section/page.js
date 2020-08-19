@@ -104,11 +104,12 @@ const media_zoom_event = () => {
 	//current_canvas_width = $canvas.style.width
 }
 
-$media_width.addEventListener('change', with_undo(media_zoom_event))
-$media_height.addEventListener('change', media_zoom_event)
+const media_zoom_undo = with_undo(media_zoom_event)
+$media_width.addEventListener('change', media_zoom_undo)
+$media_height.addEventListener('change', media_zoom_undo)
 
-$all_visible.addEventListener('change',with_undo(media_zoom_event))
-$real.addEventListener('change', media_zoom_event)
+$all_visible.addEventListener('change', media_zoom_undo)
+$real.addEventListener('change', media_zoom_undo)
 
 export const $bleed = $ui.querySelector('#bleed')
 

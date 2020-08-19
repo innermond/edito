@@ -58,6 +58,24 @@ $mark.parentElement.addEventListener('click', async evt => {
 		} finally {
 			done()
 		}
+		return
+	}
+
+	if ($el.id === 'save_svg') {
+		const data = await svg_png($svg)
+		try {
+			const result = await save_svg(...data)
+			let saved = `<div class="action" data-id="${result[0]}" ><img data-thumb src=${data[0]}><img src="/icon/close.svg" class="close"></img></div>`
+			const $place = document.querySelector('#save-svg a[name=categories-mark]+div.full')
+			$place.insertAdjacentHTML('afterbegin', saved)
+			clear_patch()
+		} catch (e) {
+			console.log(e)
+		} finally {
+			evt.stopPropagation()
+			done()
+		}
+		return
 	}
 
 	done()
@@ -88,22 +106,5 @@ $open_file.addEventListener('change', async () => {
 	} finally {
 		done()
 		$open_file.value = null
-	}
-})
-
-const $save = $ui.querySelector('#save_svg')
-$save.addEventListener('click', async () => {
-	const [done,] = loading()
-	const data = await svg_png($svg)
-	try {
-		const result = await save_svg(...data)
-		let saved = `<div class="action" data-id="${result[0]}" ><img data-thumb src=${data[0]}><img src="/icon/close.svg" class="close"></img></div>`
-		const $place = document.querySelector('#save-svg a[name=categories-mark]+div.full')
-		$place.insertAdjacentHTML('afterbegin', saved)
-		clear_patch()
-	} catch (e) {
-		console.log(e)
-	} finally {
-		done()
 	}
 })

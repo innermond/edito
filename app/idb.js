@@ -1,5 +1,6 @@
-import {$svg, update_def_style, $style} from './dom.js'
+import {$svg, update_def_style} from './dom.js'
 import {diff_match_patch} from 'diff-match-patch'
+import{$media_width, $media_height} from './ui.js'
 
 if (!indexedDB) {
 	window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB
@@ -217,6 +218,10 @@ export function update_svg(doc) {
 	// to mm
 	$svg.width.baseVal.convertToSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_MM)
 	$svg.height.baseVal.convertToSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_MM)
+
+	// update page controlls
+	$media_width.value = $svg.width.baseVal.valueInSpecifiedUnits	
+	$media_height.value = $svg.height.baseVal.valueInSpecifiedUnits	
 
 	// inline style
 	$svg.style.width = '100%'
