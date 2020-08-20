@@ -122,7 +122,7 @@ export function after_click_update_ui($el) {
 
 		let text = ''
 		$el.querySelectorAll('tspan').forEach($t => text += $t.innerHTML + "\n")
-		$textname.value = text.trim()
+		$textname.value = ($el.firstChild.nodeType === Node.TEXT_NODE ? $el.firstChild.textContent : '') + text.trim()
 		
 		if ($textname.value !== '') {
 			if ($textname.value !== $textname.value.toUpperCase()) $text_features.querySelector('li[data-case]').classList.remove('active')

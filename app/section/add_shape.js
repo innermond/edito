@@ -70,6 +70,8 @@ $add_url_svg.addEventListener('click', async () => {
 	const src = $url_svg.value
 	const u = new URL(src)
 
+	const [done,] = loading()
+
 	const is_svg = u.pathname.split('.')?.pop()?.toLowerCase() === 'svg'
 	if (is_svg) {
 		try {
@@ -102,6 +104,7 @@ $add_url_svg.addEventListener('click', async () => {
 		} catch(e) {
 			console.log(e)
 		}
+		done()
 	}
 
 })
