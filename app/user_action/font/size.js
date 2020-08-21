@@ -9,10 +9,13 @@ export function sizing_text(val) {
 				$e.style.fontSize = val+'pt'          
 				const style = window.getComputedStyle($e)
 
-				let $tt
-				$tt = $e.querySelectorAll('tspan[style]')
+				const $tt = Array.from($e.childNodes).filter($x => $x.nodeType === Node.TEXT_NODE || $x.nodeType === Node.ELEMENT_NODE) 
 				$tt.forEach(($t, inx) => {
-					const tstyle = window.getComputedStyle($t)
+					if ($t.nodeType === Node.TEXT_NODE) return
+					const is_positioned = !!$t.getAttributeNS(null, 'y')
+					if (!is_positioned) return
+
+					const tstyle = window.getComputedStyle($t) || style
 					let tfz = tstyle.getPropertyValue('font-size')
 					tfz = parseFloat(tfz)
 					let tlh = tstyle.getPropertyValue('line-height')

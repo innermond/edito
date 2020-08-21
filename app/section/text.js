@@ -58,6 +58,7 @@ const $add_text_btn = $ui.querySelector('#add-text-btn')
 
 $add_text_btn.addEventListener('click', with_undo(add_text, $textname))
 $textname.addEventListener('keyup', with_undo(keyup, $textname))
+$textname.addEventListener('keyup', evt => evt.stopPropagation())
 
 export const $text_features = $ui.querySelector('#text-features')
 $text_features.addEventListener('click', evt => {

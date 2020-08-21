@@ -1,4 +1,4 @@
-import {$svg, newtag} from '../dom.js'
+import {newtag} from '../dom.js'
 import {$clicked} from '../selection/index.js'
 
 export function keyup($target) {

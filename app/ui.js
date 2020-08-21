@@ -120,9 +120,31 @@ export function after_click_update_ui($el) {
 		$letter_spacing.value = unit_conv($el.style.letterSpacing, 'mm')
 		$line_spacing.value = $el.style.lineHeight || 1.2
 
+		// TODO replace textarea with div[contenteditable=true] ?
+		// to hide svg code
 		let text = ''
-		$el.querySelectorAll('tspan').forEach($t => text += $t.innerHTML + "\n")
-		$textname.value = ($el.firstChild.nodeType === Node.TEXT_NODE ? $el.firstChild.textContent : '') + text.trim()
+		let prev_y = 1.0*$el.getAttributeNS(null, 'y')
+		const $tt = Array.from($el.childNodes).filter($e => $e.nodeType === Node.TEXT_NODE || $e.nodeType === Node.ELEMENT_NODE) 
+		$tt.forEach($t => {
+			switch($t.nodeType) {
+				case (Node.TEXT_NODE):
+					text += $t.textContent
+				break
+				case (Node.ELEMENT_NODE):
+					const t_y = 1.0*$t.getAttributeNS(null, 'y')
+					// assume contained tspan are not y or x positioned
+					$t.querySelectorAll('tspan').forEach($s => $s.removeAttributeNS(null, 'y'))
+					if (t_y && t_y !== prev_y) {
+						text += "\n" + $t.innerHTML
+						prev_y = t_y
+					} else {
+						text += $t.innerHTML
+					}
+				break
+			}
+		})
+		//$textname.value = ($el.firstChild.nodeType === Node.TEXT_NODE ? $el.firstChild.textContent : '') + text.trim()
+		$textname.value = text.trim()
 		
 		if ($textname.value !== '') {
 			if ($textname.value !== $textname.value.toUpperCase()) $text_features.querySelector('li[data-case]').classList.remove('active')
