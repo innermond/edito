@@ -137,7 +137,7 @@ function set_reference(to) {
 		$selection.add($box)
 		break
 		case '4':
-		let $box_text = rectpage(null, -1*px(3))
+		let $box_text = rectpage(null, -1*px(3, false))
 		$selection.add($box_text)
 		break
 	}
