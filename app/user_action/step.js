@@ -30,7 +30,6 @@ export function handle_step(val, arrow) {
 		default:
 			return
 		}
-		let t = $svg.createSVGTransform()
 		let mtx = m($e)
 		let bb = $e.getBBox()
 		let $p = point_in($svg, bb.x, bb.y)

@@ -129,9 +129,12 @@ function rectpage(id='rectpage', d=px($bleed.value)) {
 	return $box
 }
 
+// units in mm returned as px
 function px(units) {
-		//let BB = $svg.viewBox.baseVal
-		return units*(parseFloat(window.getComputedStyle($svg).width)/$svg.width.baseVal.valueInSpecifiedUnits)
+	const r = newtag('rect', {width: units + 'mm', height: units + 'mm'})
+	const u = r.width.baseVal
+	u.convertToSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_PX)
+	return u.valueInSpecifiedUnits
 }
 
 export function unit_conv(unit_src, u_dst) {
