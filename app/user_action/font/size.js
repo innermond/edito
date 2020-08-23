@@ -1,5 +1,4 @@
 import {$clicked, $selection} from '../../selection/index.js'
-import {point_in} from '../../pos.js'
 
 export function sizing_text(val) {
 	if ($clicked.is_zero()) return
@@ -13,6 +12,7 @@ export function sizing_text(val) {
 				const modified = style.getPropertyValue('font-size')
 				const r = parseFloat(modified)/parseFloat(base)
 				sizing($e, r)
+				$e.setAttributeNS(null, 'y', $e.getStartPositionOfChar(0).y)
 			}
 		} 
 		$el.ants.reset()
@@ -38,13 +38,13 @@ function sizing ($e, r) {
 			$t.style.fontSize = tfz + 'px'
 		}
 
+		let y0 = $e.getAttributeNS(null, 'y')
+		y0 = parseFloat(y0)
+
 		let y = $t.getAttributeNS(null, 'y')
 		const is_positioned = Number.isFinite(parseFloat(y))
-
 		if (is_positioned) {
 			y = parseFloat(y)
-			let y0 = $e.getAttributeNS(null, 'y')
-			y0 = parseFloat(y0)
 			let dy = 0
 			dy = y - y0 //r > 1 ? y-y0 : y0-y
 			dy = r*dy
