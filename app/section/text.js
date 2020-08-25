@@ -59,19 +59,33 @@ const $add_text_btn = $ui.querySelector('#add-text-btn')
 function onenter(ml, obs) {
 	console.log(ml)
 	if (ml.length > 0) {
-		const m = ml[0]
-		if (m.previousSibling === null && m.nextSibling) return
-		const nodes = m.addedNodes
-		if (nodes.length != 1) return
 		obs.disconnect()
-		const father = nodes[0]
-		const $br = document.createElement('br')
-		father.parentElement.insertBefore($br, father)
-		const $ee = Array.from(father.childNodes)
-		$ee.forEach($el => {
-			father.parentElement.insertBefore($el, father)
-		})
-		father.remove()
+		for (let i = 0; i < ml.length; i++) {
+			const m = ml[i]
+			if (m.previousSibling === null && m.nextSibling === null) {
+				obs.observe($textname, {childList: true})
+				return
+			}			
+			const nodes = m.addedNodes
+			if (nodes.length != 1) continue
+			const father = nodes[0]
+console.log('a', father.childNodes)
+			if (father.nodeName.toLowerCase() === 'tspan') continue
+			//const add_br_before = !!father.previousSibling
+			const $br = document.createElement('br')
+			$textname.insertBefore($br, father.nextElementSibling)
+			const $ee = Array.from(father.childNodes)
+			/*$ee.sort((a,b) => {
+				if (a?.getAttributeNS(null, 'y') || b?.getAttributeNS(null, 'y')) return 1
+				return 1*(b?.getAttributeNS(null, 'y') ?? 0) - 1*(a?.getAttributeNS(null, 'y') ?? 0)
+			})*/
+			$ee.forEach($el => {
+				$textname.insertBefore($el, father)
+			})
+			father.remove()
+			if ($textname.lastElementChild.nodeName.toLowerCase() === 'br') $textname.removeChild($textname.lastElementChild)
+console.log('z',$textname.childNodes)
+		}
 		obs.observe($textname, {childList: true})
 	}
 }

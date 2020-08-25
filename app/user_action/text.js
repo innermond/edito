@@ -25,6 +25,8 @@ export function keyup($target, evt=null) {
 	let $prev_el = $clicked
 	const $lines = document.createDocumentFragment()
 	lines.forEach( (line, inx) => {
+//TODO empty case manage
+if (!line) return
 		const $line = document.createRange().createContextualFragment(line).firstElementChild
 		const style = window.getComputedStyle($prev_el)
 		if ($line.nodeType === Node.TEXT_NODE) {
