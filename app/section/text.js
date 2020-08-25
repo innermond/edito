@@ -14,7 +14,7 @@ const tpl = `<section class="vertical-align">
 		<button id="add-text-btn">Adaugă text nou</button>
 
 			<label>Text</label>
-			<textarea aria-autocomplete="none" spellcheck="false" id="textname"></textarea>
+			<div contenteditable="true" style="display:inline-block" aria-autocomplete="none" spellcheck="false" id="textname"></div>
 
 			<label>Aliniere</label>
 			<ul id="text-features" class="icon-button-set">
@@ -56,9 +56,60 @@ export const $ui = wrap(ui_fragment(tpl), 'add-text', 'text')
 export const $textname = $ui.querySelector('#textname')
 const $add_text_btn = $ui.querySelector('#add-text-btn')
 
+function onenter(ml, obs) {
+	console.log(ml)
+	if (ml.length > 0) {
+		const m = ml[0]
+		if (m.previousSibling === null && m.nextSibling) return
+		const nodes = m.addedNodes
+		if (nodes.length != 1) return
+		obs.disconnect()
+		const father = nodes[0]
+		const $br = document.createElement('br')
+		father.parentElement.insertBefore($br, father)
+		const $ee = Array.from(father.childNodes)
+		$ee.forEach($el => {
+			father.parentElement.insertBefore($el, father)
+		})
+		father.remove()
+		obs.observe($textname, {childList: true})
+	}
+}
+const observer = new MutationObserver(onenter)
+observer.observe($textname, {childList: true})
+
+/*$textname.addEventListener('keyup', evt => {
+	if (evt.keyCode === 13) {
+		let sel
+		if (window.getSelection && (sel = window.getSelection()).rangeCount) {
+			let range = sel.getRangeAt(0)
+			range.collapse(true)
+			const br = document.createElement('br')
+			range.insertNode(br)
+
+			// Move the caret immediately after the inserted span
+			range.setStartAfter(br)
+			range.collapse(true)
+			sel.removeAllRanges()
+			sel.addRange(range)
+
+			const father = br.parentElement
+			Array.from(father.childNodes).forEach($el => {
+				document.insertBefore($el, father)
+			})
+			father.remove()
+		}
+		//document.execCommand('innerHTML', false, 'br')
+		return false
+	}
+})*/
 $add_text_btn.addEventListener('click', with_undo(add_text, $textname))
-$textname.addEventListener('keyup', with_undo(keyup, $textname))
-$textname.addEventListener('keyup', evt => evt.stopPropagation())
+$textname.addEventListener('keyup', evt => {
+	evt.stopPropagation()
+	keyup($textname, evt)
+	add_patch()
+})
+
 
 export const $text_features = $ui.querySelector('#text-features')
 $text_features.addEventListener('click', evt => {
@@ -74,10 +125,10 @@ $text_features.addEventListener('click', evt => {
 	} else if (evt.target.dataset?.case) {
 		if (evt.target.classList.contains('active')) {
 			case_text('down')
-			$textname.value = $textname.value.toLowerCase()
+			$textname.innerHTML = $textname.innerHTML.toLowerCase()
 		} else {
 			case_text('up')
-			$textname.value = $textname.value.toUpperCase()
+			$textname.innerHTML = $textname.innerHTML.toUpperCase()
 		}
 	}
 	add_patch()

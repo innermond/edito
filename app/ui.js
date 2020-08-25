@@ -72,8 +72,8 @@ export function initial() {
 	$font_size.value = 10
 	$text_features.querySelectorAll('li[class~=active]').forEach($e => $e.classList.remove('active'))
 	$angle.value = 0
-	$textname.value = ''
-	$textname.setAttribute('rows', 1)
+	$textname.innerHTML = ''
+	//$textname.setAttribute('rows', 1)
 	$fill.value = colorDefault
 	$fill.style.backgroundColor = colorDefault
 	$fill_opacity.value = 1
@@ -92,6 +92,32 @@ export function initial() {
 	}
 	$glass_one.value = 0.2
 	$glass_two.value = 0.5
+}
+
+export function text_svg_html($el, $text) {
+		let text = ''
+		let prev_y = 1.0*$el.getAttributeNS(null, 'y')
+		const $tt = Array.from($el.childNodes).filter($e => $e.nodeType === Node.TEXT_NODE || $e.nodeType === Node.ELEMENT_NODE) 
+		$tt.forEach($t => {
+			switch($t.nodeType) {
+				case (Node.TEXT_NODE):
+					text += $t.textContent
+				break
+				case (Node.ELEMENT_NODE):
+					const t_y = 1.0*$t.getAttributeNS(null, 'y')
+					// assume contained tspan are not y or x positioned
+					//$t.querySelectorAll('tspan').forEach($s => $s.removeAttributeNS(null, 'y'))
+					if (t_y && t_y !== prev_y) {
+						text += '<br>' + $t.outerHTML
+						prev_y = t_y
+					} else {
+						text += $t.outerHTML
+					}
+				break
+			}
+		})
+
+	$text.innerHTML = text.trim()
 }
 
 export function after_click_update_ui($el) {
@@ -122,44 +148,23 @@ export function after_click_update_ui($el) {
 
 		// TODO replace textarea with div[contenteditable=true] ?
 		// to hide svg code
-		let text = ''
-		let prev_y = 1.0*$el.getAttributeNS(null, 'y')
-		const $tt = Array.from($el.childNodes).filter($e => $e.nodeType === Node.TEXT_NODE || $e.nodeType === Node.ELEMENT_NODE) 
-		$tt.forEach($t => {
-			switch($t.nodeType) {
-				case (Node.TEXT_NODE):
-					text += $t.textContent
-				break
-				case (Node.ELEMENT_NODE):
-					const t_y = 1.0*$t.getAttributeNS(null, 'y')
-					// assume contained tspan are not y or x positioned
-					$t.querySelectorAll('tspan').forEach($s => $s.removeAttributeNS(null, 'y'))
-					if (t_y && t_y !== prev_y) {
-						text += "\n" + $t.innerHTML
-						prev_y = t_y
-					} else {
-						text += $t.innerHTML
-					}
-				break
-			}
-		})
+		text_svg_html($el, $textname)
 		//$textname.value = ($el.firstChild.nodeType === Node.TEXT_NODE ? $el.firstChild.textContent : '') + text.trim()
-		$textname.value = text.trim()
 		
-		if ($textname.value !== '') {
-			if ($textname.value !== $textname.value.toUpperCase()) $text_features.querySelector('li[data-case]').classList.remove('active')
-			else if ($textname.value === $textname.value.toUpperCase()) $text_features.querySelector('li[data-case]').classList.add('active')
-			$textname.setAttribute('rows', Math.min(3, $el.querySelectorAll('tspan').length ?? 1))
+		if ($textname.innerHTML !== '') {
+			if ($textname.innerHTML !== $textname.innerHTML.toUpperCase()) $text_features.querySelector('li[data-case]').classList.remove('active')
+			else if ($textname.innerHTML === $textname.innerHTML.toUpperCase()) $text_features.querySelector('li[data-case]').classList.add('active')
+//			$textname.setAttribute('rows', Math.min(3, $el.querySelectorAll('tspan').length ?? 1))
 		}
 	} else {
 		$align.options[0].selected = true
 		initial_ul_select($fonts)
-		$textname.setAttribute('rows', 1)
+		//$textname.setAttribute('rows', 1)
 		$font_size.value = 10
 		$text_features.querySelectorAll('li[class~=active]').forEach($e => $e.classList.remove('active'))
 		$angle.value = 0
-		$textname.value = ''
-		$textname.setAttribute('rows', 1)
+		$textname.innerHTML = ''
+		//$textname.setAttribute('rows', 1)
 	}
 	
 	set_scale(scale_prevs.get($el) ?? 1)

@@ -34,7 +34,7 @@ export const $delete_element = $ui.querySelector('#delete_element')
 $delete_element.addEventListener('click', with_undo(deleting))
 
 const deleting_undo = with_undo(deleting)
-window.addEventListener('keydown', evt => {if (evt.key === 'Delete') deleting_undo()})
+document.addEventListener('keyup', evt => {if (evt.key === 'Delete') deleting_undo()})
 
 export const $clone_element = $ui.querySelector('#clone_element')
 $clone_element.addEventListener('click', with_undo(cloning))

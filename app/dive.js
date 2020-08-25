@@ -1,20 +1,9 @@
-import {dragging_all_marks_reset} from './ui.js'
-import {$svg, attr, newtag, element_from} from './dom.js'
-import {point_screen} from './pos.js'
-import {setm, m2e, m} from './mtx.js'
+import {$svg} from './dom.js'
 import {disable} from './click.js'
-import {add_dragging, remove_dragging} from './drag.js'
-import {add_panning, remove_panning} from './pan.js'
-import {$clicked, $selection} from './selection/index.js'
-import {is_selectable, $select_inside} from './floater/select.js'
 import {centerpoint} from './pos.js'
 import {zoom} from './zoom.js'
-import {click} from './click.js'
-import feature from './feature.js'
 import movement from './cap.js'
 import {cycle, moved, add_rectangling, remove_rectangling, $selectangle} from './selectangle.js'
-
-const opt = feature.supportsPassive ? { passive: true } : false
 
 function cycle_start(stage) {
 	return evt => {
