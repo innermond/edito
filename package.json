@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "sass": "node-sass  --include-path scss scss/main.scss css/edito.css -w scss -r",
     "liteserver": "lite-server",
+    "nice": "yarn prettier --write app",
     "dev": "webpack --config webpack.dev.js && cp dist/*.js .",
     "prod": "webpack --config webpack.prod.js"
   },
@@ -23,6 +24,7 @@
     "core-js": "3",
     "lite-server": "^2.5.4",
     "node-sass": "^4.14.0",
+    "prettier": "2.1.1",
     "terser-webpack-plugin": "^3.0.7",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",

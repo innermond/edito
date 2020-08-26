@@ -1,55 +1,57 @@
-import {$clicked, $selection} from '../../selection/index.js'
+import { $clicked, $selection } from "../../selection/index.js";
 
 export function sizing_text(val) {
-	if ($clicked.is_zero()) return
-	$selection.forEach($el => {
-		let $ee =  $el.nodeName === 'g' ? $el.children : [$el]
-		for (let $e of $ee) {
-			if ($e.nodeName==='text') {
-				const style = window.getComputedStyle($e)
-				const base = style.getPropertyValue('font-size')
-				$e.style.fontSize = val+'pt'          
-				const modified = style.getPropertyValue('font-size')
-				const r = parseFloat(modified)/parseFloat(base)
-				sizing($e, r)
-				$e.setAttributeNS(null, 'y', $e.getStartPositionOfChar(0).y)
-			}
-		} 
-		$el.ants.reset()
-		$el.square.reset()
-		$el.circle.reset()
+  if ($clicked.is_zero()) return;
+  $selection.forEach(($el) => {
+    let $ee = $el.nodeName === "g" ? $el.children : [$el];
+    for (let $e of $ee) {
+      if ($e.nodeName === "text") {
+        const style = window.getComputedStyle($e);
+        const base = style.getPropertyValue("font-size");
+        $e.style.fontSize = val + "pt";
+        const modified = style.getPropertyValue("font-size");
+        const r = parseFloat(modified) / parseFloat(base);
+        sizing($e, r);
+        $e.setAttributeNS(null, "y", $e.getStartPositionOfChar(0).y);
+      }
+    }
+    $el.ants.reset();
+    $el.square.reset();
+    $el.circle.reset();
 
-		$clicked.from($el)
-		$el.over()
-	})
+    $clicked.from($el);
+    $el.over();
+  });
 }
 
-function sizing ($e, r) {
-	const $tt = Array.from($e.childNodes).filter($x => $x.nodeType === Node.TEXT_NODE || $x.nodeType === Node.ELEMENT_NODE) 
-	$tt.forEach($t => {
-		if ($t.nodeType === Node.TEXT_NODE) return
+function sizing($e, r) {
+  const $tt = Array.from($e.childNodes).filter(
+    ($x) => $x.nodeType === Node.TEXT_NODE || $x.nodeType === Node.ELEMENT_NODE
+  );
+  $tt.forEach(($t) => {
+    if ($t.nodeType === Node.TEXT_NODE) return;
 
-		if ($t.style.fontSize === "") {
-			$t.style.fontSize = 'inherit'
-		} else {
-			const tstyle = window.getComputedStyle($t)
-			let tfz = tstyle.getPropertyValue('font-size')
-			tfz = r*parseFloat(tfz)
-			$t.style.fontSize = tfz + 'px'
-		}
+    if ($t.style.fontSize === "") {
+      $t.style.fontSize = "inherit";
+    } else {
+      const tstyle = window.getComputedStyle($t);
+      let tfz = tstyle.getPropertyValue("font-size");
+      tfz = r * parseFloat(tfz);
+      $t.style.fontSize = tfz + "px";
+    }
 
-		let y0 = $e.getAttributeNS(null, 'y')
-		y0 = parseFloat(y0)
+    let y0 = $e.getAttributeNS(null, "y");
+    y0 = parseFloat(y0);
 
-		let y = $t.getAttributeNS(null, 'y')
-		const is_positioned = Number.isFinite(parseFloat(y))
-		if (is_positioned) {
-			y = parseFloat(y)
-			let dy = 0
-			dy = y - y0 //r > 1 ? y-y0 : y0-y
-			dy = r*dy
-			y0 = $e.getStartPositionOfChar(0).y
-		/*	
+    let y = $t.getAttributeNS(null, "y");
+    const is_positioned = Number.isFinite(parseFloat(y));
+    if (is_positioned) {
+      y = parseFloat(y);
+      let dy = 0;
+      dy = y - y0; //r > 1 ? y-y0 : y0-y
+      dy = r * dy;
+      y0 = $e.getStartPositionOfChar(0).y;
+      /*	
 			const style = window.getComputedStyle($e)
 		 	const tstyle = window.getComputedStyle($t) || style
 			let tfz = tstyle.getPropertyValue('font-size')
@@ -70,9 +72,9 @@ function sizing ($e, r) {
 			let y = 1.0*$e.getAttributeNS(null, 'y') + inx*lineHeight
 			$t.setAttributeNS(null, 'y', y)
 			*/
-			$t.setAttributeNS(null, 'y', y0 + dy)
-		}
-		if ($t.querySelectorAll('tspan')) sizing($t, r)
-		//$t.style.fontSize = 'inherit'
-	})
+      $t.setAttributeNS(null, "y", y0 + dy);
+    }
+    if ($t.querySelectorAll("tspan")) sizing($t, r);
+    //$t.style.fontSize = 'inherit'
+  });
 }
