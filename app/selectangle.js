@@ -1,7 +1,7 @@
-import { $svg, attr, newtag } from "./dom.js";
-import { point_screen } from "./pos.js";
-import { $clicked } from "./selection/index.js";
-import feature from "./feature.js";
+import { $svg, attr, newtag } from './dom.js';
+import { point_screen } from './pos.js';
+import { $clicked } from './selection/index.js';
+import feature from './feature.js';
 
 export const cycle = {
   start: null,
@@ -29,20 +29,20 @@ export function add_rectangling() {
     ? cycle.step(stepRectangle)
     : stepRectangle;
 
-  $svg.addEventListener("mousedown", cycle_consolidated.start);
-  $svg.addEventListener("mouseup", cycle_consolidated.end);
-  $svg.addEventListener("mousemove", cycle_consolidated.step, opt);
+  $svg.addEventListener('mousedown', cycle_consolidated.start);
+  $svg.addEventListener('mouseup', cycle_consolidated.end);
+  $svg.addEventListener('mousemove', cycle_consolidated.step, opt);
 }
 
 export function remove_rectangling() {
-  $svg.removeEventListener("mousedown", cycle_consolidated.start);
-  $svg.removeEventListener("mouseup", cycle_consolidated.end);
-  $svg.removeEventListener("mousemove", cycle_consolidated.step, opt);
+  $svg.removeEventListener('mousedown', cycle_consolidated.start);
+  $svg.removeEventListener('mouseup', cycle_consolidated.end);
+  $svg.removeEventListener('mousemove', cycle_consolidated.step, opt);
 }
 
 export let $selectangle;
 const style =
-  "pointer-events:none;vector-effect:non-scaling-stroke;stroke-width:2;fill:none;stroke:#ffffff;mix-blend-mode:difference;stroke-opacity:1;stroke-miterlimit:2;stroke-dasharray:3,3;stroke-dashoffset:2";
+  'pointer-events:none;vector-effect:non-scaling-stroke;stroke-width:2;fill:none;stroke:#ffffff;mix-blend-mode:difference;stroke-opacity:1;stroke-miterlimit:2;stroke-dasharray:3,3;stroke-dashoffset:2';
 let start = null;
 export let moved = null;
 function startRectangle(evt) {
@@ -53,8 +53,8 @@ function startRectangle(evt) {
 
   start = point_screen(evt);
 
-  $selectangle = newtag("rect", { style: style });
-  $selectangle.dataset.selectangle = "true";
+  $selectangle = newtag('rect', { style: style });
+  $selectangle.dataset.selectangle = 'true';
   attr($selectangle, { x: start.x, y: start.y, width: 1, height: 1 });
   $svg.appendChild($selectangle);
   return true;

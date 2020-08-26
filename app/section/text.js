@@ -1,18 +1,18 @@
-import { keyup } from "../user_action/text.js";
-import { add_text } from "../user_action/add.js";
-import { aligning_text } from "../user_action/font/align.js";
-import { load_font } from "../user_action/font/fontface.js";
+import { keyup } from '../user_action/text.js';
+import { add_text } from '../user_action/add.js';
+import { aligning_text } from '../user_action/font/align.js';
+import { load_font } from '../user_action/font/fontface.js';
 import {
   styling_text,
   case_text,
   spacing_text,
   spacing_lines_text,
-} from "../user_action/font/style.js";
-import { sizing_text } from "../user_action/font/size.js";
-import { ui_fragment } from "../dom.js";
-import { ul_select } from "../ul_select.js";
-import { wrap } from "../drawer.js";
-import { addEventListenerUndo, add_patch, with_undo } from "../idb.js";
+} from '../user_action/font/style.js';
+import { sizing_text } from '../user_action/font/size.js';
+import { ui_fragment } from '../dom.js';
+import { ul_select } from '../ul_select.js';
+import { wrap } from '../drawer.js';
+import { addEventListenerUndo, add_patch, with_undo } from '../idb.js';
 
 const tpl = `<section class="vertical-align">
 	
@@ -56,30 +56,30 @@ const tpl = `<section class="vertical-align">
 		<label for="line-spacing">Spațiere randuri</label>
 		<input class="tooltip" data-tooltip-text="Modifici spațiul dintre randuri" data-tooltip-bottom type="range" min="0" max="12" value="1.2" step="0.01" id="line-spacing">
 	</section>`;
-export const $ui = wrap(ui_fragment(tpl), "add-text", "text");
+export const $ui = wrap(ui_fragment(tpl), 'add-text', 'text');
 
-export const $textname = $ui.querySelector("#textname");
-const $add_text_btn = $ui.querySelector("#add-text-btn");
+export const $textname = $ui.querySelector('#textname');
+const $add_text_btn = $ui.querySelector('#add-text-btn');
 
+// TODO use a documentfragment as truth not $textname
 function onenter(ml, obs) {
   obs.disconnect();
   const ee = Array.from($textname.childNodes);
   ee.forEach((e) => {
     if (
-      ["tspan", "br"].includes(e.nodeName.toLowerCase()) ||
+      ['tspan', 'br'].includes(e.nodeName.toLowerCase()) ||
       e.nodeType === Node.TEXT_NODE
     )
       return;
-    console.log(e.previousElementSibling, e.childNodes);
-    const $br = document.createElement("br");
+    const $br = document.createElement('br');
     const prev = e.previousElementSibling;
     if (!prev) {
       $textname.insertBefore($br, e.nextElementSibling);
     } else {
       const name = prev.nodeName.toLowerCase();
-      if (name === "br") {
+      if (name === 'br') {
         $textname.insertBefore($br, e.nextElementSibling);
-      } else if (name === "tspan") {
+      } else if (name === 'tspan') {
         $textname.insertBefore($br, e);
       }
     }
@@ -88,39 +88,21 @@ function onenter(ml, obs) {
       $textname.insertBefore($el, e);
     });
     e.remove();
+    if (window.getSelection) {
+      const sel = window.getSelection();
+      if (sel.rangeCount) {
+        const range = document.createRange();
+        range.setStartAfter($br);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    }
   });
   obs.observe($textname, { childList: true });
-  /*if (ml.length > 0) {
-		for (let i = 0; i < ml.length; i++) {
-			const m = ml[i]
-			if (m.previousSibling === null && m.nextSibling === null) {
-				obs.observe($textname, {childList: true})
-				return
-			}			
-			const nodes = m.addedNodes
-			if (nodes.length != 1) continue
-			const father = nodes[0]
-console.log('a', father.childNodes)
-			if (father.nodeName.toLowerCase() === 'tspan') continue
-			//const add_br_before = !!father.previousSibling
-			const $br = document.createElement('br')
-			$textname.insertBefore($br, father.nextElementSibling)
-			const $ee = Array.from(father.childNodes)
-			$ee.sort((a,b) => {
-				if (a?.getAttributeNS(null, 'y') || b?.getAttributeNS(null, 'y')) return 1
-				return 1*(b?.getAttributeNS(null, 'y') ?? 0) - 1*(a?.getAttributeNS(null, 'y') ?? 0)
-			})
-			$ee.forEach($el => {
-				$textname.insertBefore($el, father)
-			})
-			father.remove()
-			if ($textname.lastElementChild.nodeName.toLowerCase() === 'br') $textname.removeChild($textname.lastElementChild)
-console.log('z',$textname.childNodes)
-		}
-		obs.observe($textname, {childList: true})
-	}*/
 }
-const observer = new MutationObserver(onenter);
+
+export const observer = new MutationObserver(onenter);
 observer.observe($textname, { childList: true });
 
 /*$textname.addEventListener('keyup', evt => {
@@ -148,80 +130,80 @@ observer.observe($textname, { childList: true });
 		return false
 	}
 })*/
-$add_text_btn.addEventListener("click", with_undo(add_text, $textname));
-$textname.addEventListener("keyup", (evt) => {
+$add_text_btn.addEventListener('click', with_undo(add_text, $textname));
+$textname.addEventListener('keyup', (evt) => {
   evt.stopPropagation();
   keyup($textname, evt);
   add_patch();
 });
 
-export const $text_features = $ui.querySelector("#text-features");
-$text_features.addEventListener("click", (evt) => {
+export const $text_features = $ui.querySelector('#text-features');
+$text_features.addEventListener('click', (evt) => {
   if (evt.target.dataset?.align) {
     $text_features
-      .querySelectorAll("li[data-align][class~=active]")
-      .forEach(($e) => $e.classList.remove("active"));
+      .querySelectorAll('li[data-align][class~=active]')
+      .forEach(($e) => $e.classList.remove('active'));
     aligning_text(evt.target.dataset?.align);
   } else if (evt.target.dataset?.style) {
-    if (!evt.target.classList.contains("active")) {
+    if (!evt.target.classList.contains('active')) {
       styling_text(evt.target.dataset?.style);
     } else {
-      styling_text(evt.target.dataset?.style, "normal");
+      styling_text(evt.target.dataset?.style, 'normal');
     }
   } else if (evt.target.dataset?.case) {
-    if (evt.target.classList.contains("active")) {
-      case_text("down");
+    if (evt.target.classList.contains('active')) {
+      case_text('down');
       $textname.innerHTML = $textname.innerHTML.toLowerCase();
     } else {
-      case_text("up");
+      case_text('up');
       $textname.innerHTML = $textname.innerHTML.toUpperCase();
     }
   }
   add_patch();
-  evt.target.classList.toggle("active");
+  evt.target.classList.toggle('active');
 });
 
-export const $font_size = $ui.querySelector("#font-size");
+export const $font_size = $ui.querySelector('#font-size');
 addEventListenerUndo(
   $font_size,
-  "input",
+  'input',
   () => {
     sizing_text($font_size.value);
   },
-  "mouseup"
+  'mouseup',
 );
 
-export const $word_spacing = $ui.querySelector("#word-spacing");
+export const $word_spacing = $ui.querySelector('#word-spacing');
 addEventListenerUndo(
   $word_spacing,
-  "input",
+  'input',
   () => {
-    spacing_text("word-spacing", $word_spacing.value);
+    spacing_text('word-spacing', $word_spacing.value);
   },
-  "mouseup"
+  'mouseup',
 );
 
-export const $letter_spacing = $ui.querySelector("#letter-spacing");
+export const $letter_spacing = $ui.querySelector('#letter-spacing');
 addEventListenerUndo(
   $letter_spacing,
-  "input",
+  'input',
   () => {
-    spacing_text("letter-spacing", $letter_spacing.value);
+    spacing_text('letter-spacing', $letter_spacing.value);
   },
-  "mouseup"
+  'mouseup',
 );
 
-export const $line_spacing = $ui.querySelector("#line-spacing");
+export const $line_spacing = $ui.querySelector('#line-spacing');
 addEventListenerUndo(
   $line_spacing,
-  "input",
+  'input',
   () => {
     spacing_lines_text($line_spacing.value);
   },
-  "mouseup"
+  'mouseup',
 );
 
-export const $fonts = $ui.querySelector("#fonts");
-$fonts.addEventListener("change", with_undo(load_font, $fonts));
+export const $fonts = $ui.querySelector('#fonts');
+$fonts.addEventListener('change', with_undo(load_font, $fonts));
 
-ul_select($fonts, ul_select.opt_fn, { class: "folded relative" });
+ul_select($fonts, ul_select.opt_fn, { class: 'folded relative' });

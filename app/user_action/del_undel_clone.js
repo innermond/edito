@@ -1,32 +1,32 @@
-import { $svg, change_id, px, find_my_ants } from "../dom.js";
-import { appendm } from "../mtx.js";
-import { dragging_all_marks_reset } from "../ui.js";
-import { $selection } from "../selection/index.js";
-import { $step } from "../ui.js";
+import { $svg, change_id, px, find_my_ants } from '../dom.js';
+import { appendm } from '../mtx.js';
+import { dragging_all_marks_reset } from '../ui.js';
+import { $selection } from '../selection/index.js';
+import { $step } from '../ui.js';
 
 export function locking(toggle = false) {
   $selection.forEach(($el) => {
     const $shape = find_my_ants($el);
-    if ("lock" in $el.dataset) {
+    if ('lock' in $el.dataset) {
       if ($shape) {
-        $shape.style.stroke = "green";
-        $shape.style.strokeWidth = "4";
+        $shape.style.stroke = 'green';
+        $shape.style.strokeWidth = '4';
       }
       if (toggle) {
         if ($shape) {
-          $shape.style.stroke = "#ffffff";
-          $shape.style.strokeWidth = "2";
+          $shape.style.stroke = '#ffffff';
+          $shape.style.strokeWidth = '2';
         }
-        $el.removeAttribute("data-lock");
+        $el.removeAttribute('data-lock');
       }
       return;
     }
     // create data-lock
-    const $attr = document.createAttribute("data-lock");
+    const $attr = document.createAttribute('data-lock');
     $el.setAttributeNode($attr);
     if ($shape) {
-      $shape.style.stroke = "green";
-      $shape.style.strokeWidth = "4";
+      $shape.style.stroke = 'green';
+      $shape.style.strokeWidth = '4';
     }
   });
 }

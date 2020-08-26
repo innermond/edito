@@ -1,33 +1,33 @@
-import { $svg } from "./dom.js";
-import { disable, click } from "./click.js";
-import { add_dragging, remove_dragging } from "./drag.js";
-import feature from "./feature.js";
+import { $svg } from './dom.js';
+import { disable, click } from './click.js';
+import { add_dragging, remove_dragging } from './drag.js';
+import feature from './feature.js';
 
 const opt = feature.supportsPassive ? { passive: true } : false;
 
 export function add_panning() {
   // manage panning
-  $svg.addEventListener("mousedown", startPan);
+  $svg.addEventListener('mousedown', startPan);
 
-  $svg.addEventListener("click", clickPan);
-  $svg.addEventListener("mouseup", endPan);
-  $svg.addEventListener("mousemove", pan, opt);
-  $svg.addEventListener("mouseleave", endPan);
+  $svg.addEventListener('click', clickPan);
+  $svg.addEventListener('mouseup', endPan);
+  $svg.addEventListener('mousemove', pan, opt);
+  $svg.addEventListener('mouseleave', endPan);
 }
 
 export function remove_panning() {
   // manage panging
-  $svg.removeEventListener("mousedown", startPan);
+  $svg.removeEventListener('mousedown', startPan);
 
-  $svg.removeEventListener("click", clickPan);
-  $svg.removeEventListener("mouseup", endPan);
-  $svg.removeEventListener("mousemove", pan, opt);
-  $svg.removeEventListener("mouseleave", endPan);
+  $svg.removeEventListener('click', clickPan);
+  $svg.removeEventListener('mouseup', endPan);
+  $svg.removeEventListener('mousemove', pan, opt);
+  $svg.removeEventListener('mouseleave', endPan);
 }
 
 let start;
 function startPan(evt) {
-  document.body.classList.add("panning");
+  document.body.classList.add('panning');
   start = { x: evt.clientX, y: evt.clientY };
   evt.stopPropagation();
 }
@@ -35,7 +35,7 @@ function clickPan(evt) {
   evt.stopPropagation();
 }
 function endPan(evt) {
-  document.body.classList.remove("panning");
+  document.body.classList.remove('panning');
   start = null;
 }
 

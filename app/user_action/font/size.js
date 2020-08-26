@@ -1,18 +1,18 @@
-import { $clicked, $selection } from "../../selection/index.js";
+import { $clicked, $selection } from '../../selection/index.js';
 
 export function sizing_text(val) {
   if ($clicked.is_zero()) return;
   $selection.forEach(($el) => {
-    let $ee = $el.nodeName === "g" ? $el.children : [$el];
+    let $ee = $el.nodeName === 'g' ? $el.children : [$el];
     for (let $e of $ee) {
-      if ($e.nodeName === "text") {
+      if ($e.nodeName === 'text') {
         const style = window.getComputedStyle($e);
-        const base = style.getPropertyValue("font-size");
-        $e.style.fontSize = val + "pt";
-        const modified = style.getPropertyValue("font-size");
+        const base = style.getPropertyValue('font-size');
+        $e.style.fontSize = val + 'pt';
+        const modified = style.getPropertyValue('font-size');
         const r = parseFloat(modified) / parseFloat(base);
         sizing($e, r);
-        $e.setAttributeNS(null, "y", $e.getStartPositionOfChar(0).y);
+        $e.setAttributeNS(null, 'y', $e.getStartPositionOfChar(0).y);
       }
     }
     $el.ants.reset();
@@ -26,24 +26,24 @@ export function sizing_text(val) {
 
 function sizing($e, r) {
   const $tt = Array.from($e.childNodes).filter(
-    ($x) => $x.nodeType === Node.TEXT_NODE || $x.nodeType === Node.ELEMENT_NODE
+    ($x) => $x.nodeType === Node.TEXT_NODE || $x.nodeType === Node.ELEMENT_NODE,
   );
   $tt.forEach(($t) => {
     if ($t.nodeType === Node.TEXT_NODE) return;
 
-    if ($t.style.fontSize === "") {
-      $t.style.fontSize = "inherit";
+    if ($t.style.fontSize === '') {
+      $t.style.fontSize = 'inherit';
     } else {
       const tstyle = window.getComputedStyle($t);
-      let tfz = tstyle.getPropertyValue("font-size");
+      let tfz = tstyle.getPropertyValue('font-size');
       tfz = r * parseFloat(tfz);
-      $t.style.fontSize = tfz + "px";
+      $t.style.fontSize = tfz + 'px';
     }
 
-    let y0 = $e.getAttributeNS(null, "y");
+    let y0 = $e.getAttributeNS(null, 'y');
     y0 = parseFloat(y0);
 
-    let y = $t.getAttributeNS(null, "y");
+    let y = $t.getAttributeNS(null, 'y');
     const is_positioned = Number.isFinite(parseFloat(y));
     if (is_positioned) {
       y = parseFloat(y);
@@ -72,9 +72,9 @@ function sizing($e, r) {
 			let y = 1.0*$e.getAttributeNS(null, 'y') + inx*lineHeight
 			$t.setAttributeNS(null, 'y', y)
 			*/
-      $t.setAttributeNS(null, "y", y0 + dy);
+      $t.setAttributeNS(null, 'y', y0 + dy);
     }
-    if ($t.querySelectorAll("tspan")) sizing($t, r);
+    if ($t.querySelectorAll('tspan')) sizing($t, r);
     //$t.style.fontSize = 'inherit'
   });
 }

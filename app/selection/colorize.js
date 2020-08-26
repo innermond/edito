@@ -1,37 +1,37 @@
-import { rgb_hex } from "../color.js";
-import { $selection } from "./grouping.js";
+import { rgb_hex } from '../color.js';
+import { $selection } from './grouping.js';
 
-let tpl = "{}_previous_color";
+let tpl = '{}_previous_color';
 
 export function colorize(prop, val) {
   const len = do_colorize($selection, prop, val);
-  return len === 1 ? rgb_hex(val) : "";
+  return len === 1 ? rgb_hex(val) : '';
 }
 
 export function uncolorize(prop) {
-  colorize(prop, "none");
+  colorize(prop, 'none');
 }
 
 function do_colorize($collection, prop, val) {
-  const prev_prop = tpl.replace("{}", prop);
-  let keep = "none" !== val;
+  const prev_prop = tpl.replace('{}', prop);
+  let keep = 'none' !== val;
   let val_dataset = val;
   let len;
 
   $collection.forEach(($el) => {
     let $ee = [$el];
-    if ($el.nodeName === "g") {
+    if ($el.nodeName === 'g') {
       $ee = Array.from($el.children);
     }
     if ($ee.length === 0) return;
 
     for (const $e of $ee) {
-      if ($e.nodeName === "g") {
+      if ($e.nodeName === 'g') {
         const $xx = Array.from($e.children);
         if ($xx.length) do_colorize($xx, prop, val);
         continue;
       }
-      const has_none = "none" === $e.style.getPropertyValue(prop);
+      const has_none = 'none' === $e.style.getPropertyValue(prop);
       // has applied none color or at all
       // but knows its previous color
       if (has_none && prev_prop in $e.dataset) {
@@ -53,9 +53,9 @@ function do_colorize($collection, prop, val) {
       if (keep_now) $e.dataset[prev_prop] = val_dataset;
 
       let $tt;
-      if ($e.nodeName === "text") {
-        $tt = $e.querySelectorAll("tspan[style]");
-        $tt.forEach(($t) => ($t.style.fill = "inherit"));
+      if ($e.nodeName === 'text') {
+        $tt = $e.querySelectorAll('tspan[style]');
+        $tt.forEach(($t) => ($t.style.fill = 'inherit'));
       }
     }
 

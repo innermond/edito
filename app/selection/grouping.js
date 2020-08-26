@@ -1,6 +1,6 @@
-import { $svg, newtag, nextSiblingNoAnts } from "../dom.js";
-import { $clicked } from "./clicked.js";
-import { OPERATIONS_ROT_SIZE } from "./ants.js";
+import { $svg, newtag, nextSiblingNoAnts } from '../dom.js';
+import { $clicked } from './clicked.js';
+import { OPERATIONS_ROT_SIZE } from './ants.js';
 
 class selection extends Set {
   new_one() {
@@ -12,7 +12,7 @@ class selection extends Set {
     if (this.size === 0) return $clicked.zero();
     // locked elements kept out	of set
     const $locked = Array.from(this).filter(($e) => {
-      if ("lock" in $e.dataset) {
+      if ('lock' in $e.dataset) {
         this.delete($e);
         return true;
       }
@@ -22,19 +22,19 @@ class selection extends Set {
     let arr = Array.from(this);
     // order as in source code
     // marks elements for subsequent retrieval
-    const $dso = document.createAttribute("data-source-order");
+    const $dso = document.createAttribute('data-source-order');
     arr.forEach(($e) => $e.setAttributeNode($dso.cloneNode()));
     // get elements ordered as in source code
-    const $ordered = $svg.querySelectorAll("[data-source-order]");
+    const $ordered = $svg.querySelectorAll('[data-source-order]');
     arr = Array.from($ordered);
-    arr.forEach(($e) => $e.removeAttribute("data-source-order"));
+    arr.forEach(($e) => $e.removeAttribute('data-source-order'));
 
     let $next = nextSiblingNoAnts(arr[arr.length - 1]);
     // assure  nextelementsibling is not in current set
     while (this.has($next?.nextElementSibling)) {
       $next = nextSiblingNoAnts($next.nextElementSibling);
     }
-    const $g = newtag("g", { dataGroup: true });
+    const $g = newtag('g', { dataGroup: true });
 
     // do not append $next
     arr.forEach(($e) => {
@@ -86,7 +86,7 @@ class selection extends Set {
       return;
     }
     this.forEach(($el) => {
-      if ("lock" in $el.dataset) return;
+      if ('lock' in $el.dataset) return;
       func($el);
       /*let $ee = [$el]
 			if ($el.nodeName === 'g') {

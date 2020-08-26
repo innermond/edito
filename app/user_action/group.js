@@ -1,15 +1,15 @@
-import { $svg, $defs, rnd } from "../dom.js";
-import { $clicked, $selection } from "../selection/index.js";
-import { m2e, setm } from "../mtx.js";
-import { get_filter } from "../filter.js";
-import { dragging_all_marks_reset, $group_repr } from "../ui.js";
-import { is_selectable } from "../floater/select.js";
+import { $svg, $defs, rnd } from '../dom.js';
+import { $clicked, $selection } from '../selection/index.js';
+import { m2e, setm } from '../mtx.js';
+import { get_filter } from '../filter.js';
+import { dragging_all_marks_reset, $group_repr } from '../ui.js';
+import { is_selectable } from '../floater/select.js';
 
 // grouping / degrouping
 export function ungroup(deep = false) {
   $selection.each(($el) => {
     ungroup_one($el, deep);
-    $group_repr.innerHTML = "";
+    $group_repr.innerHTML = '';
   });
   dragging_all_marks_reset();
 }
@@ -18,7 +18,7 @@ export function ungroup_all() {
   ungroup(true);
 }
 
-const selector = "g:not([data-layer])";
+const selector = 'g:not([data-layer])';
 export function ungroup_one($el, deep = false) {
   const is_group = true === $el.matches(selector);
   if (deep === false) {
@@ -56,7 +56,7 @@ export function ungroup_one($el, deep = false) {
 
     if (deep) ungroup_one($e, deep);
   });
-  let $ff = $defs.querySelectorAll("filter");
+  let $ff = $defs.querySelectorAll('filter');
   for (let $f of $ff) {
     let others = $svg.querySelectorAll('[filter="url(#' + $f.id + ')"]');
     if (others.length === 0) $f.remove();

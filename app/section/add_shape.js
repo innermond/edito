@@ -1,11 +1,11 @@
-import { $svg, ui_fragment, newtag } from "../dom.js";
-import { wrap } from "../drawer.js";
-import { loading } from "../loading.js";
-import { dragging_all_marks_reset } from "../ui.js";
-import { center } from "../pos.js";
-import { $selection, $clicked } from "../selection/index.js";
-import { add_patch } from "../idb.js";
-import { proxied_url } from "./image.js";
+import { $svg, ui_fragment, newtag } from '../dom.js';
+import { wrap } from '../drawer.js';
+import { loading } from '../loading.js';
+import { dragging_all_marks_reset } from '../ui.js';
+import { center } from '../pos.js';
+import { $selection, $clicked } from '../selection/index.js';
+import { add_patch } from '../idb.js';
+import { proxied_url } from './image.js';
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de imagine" data-tooltip-bottom>Adresa de web</label>
@@ -17,15 +17,15 @@ const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Alegeți o colecție de vectori" data-tooltip-bottom>Librărie</label>
 	<a name="categories-mark" />
 </section>`;
-export const $ui = wrap(ui_fragment(tpl), "add-element", "Forme");
-const $file_svg = $ui.querySelector("#file_svg");
-const $url_svg = $ui.querySelector("#url_svg");
-const $add_url_svg = $ui.querySelector("#add_url_svg");
+export const $ui = wrap(ui_fragment(tpl), 'add-element', 'Forme');
+const $file_svg = $ui.querySelector('#file_svg');
+const $url_svg = $ui.querySelector('#url_svg');
+const $add_url_svg = $ui.querySelector('#add_url_svg');
 
-$file_svg.addEventListener("change", async () => {
+$file_svg.addEventListener('change', async () => {
   const file = $file_svg.files[0] ?? null;
   if (!file) return;
-  const is_svg = $file_svg.value.split(".")?.pop()?.toLowerCase() === "svg";
+  const is_svg = $file_svg.value.split('.')?.pop()?.toLowerCase() === 'svg';
   if (!is_svg) return;
 
   const [done] = loading();
@@ -42,17 +42,17 @@ $file_svg.addEventListener("change", async () => {
   try {
     const svg_text = await future;
     const parser = new DOMParser();
-    const osvg = parser.parseFromString(svg_text, "image/svg+xml");
+    const osvg = parser.parseFromString(svg_text, 'image/svg+xml');
     osvg
-      .querySelectorAll("defs")
+      .querySelectorAll('defs')
       ?.children?.foreach(($c) => $defs.appendChild($c));
     osvg
-      .querySelectorAll("style")
+      .querySelectorAll('style')
       ?.children?.foreach(($c) => $style.appendChild($c));
 
-    const tag = newtag("g");
-    tag.classList.add("group");
-    tag.insertAdjacentHTML("beforeend", osvg.documentElement.innerHTML);
+    const tag = newtag('g');
+    tag.classList.add('group');
+    tag.insertAdjacentHTML('beforeend', osvg.documentElement.innerHTML);
     dragging_all_marks_reset();
     $selection.clear();
     $svg.appendChild(tag);
@@ -67,7 +67,7 @@ $file_svg.addEventListener("change", async () => {
   }
 });
 
-$add_url_svg.addEventListener("click", async () => {
+$add_url_svg.addEventListener('click', async () => {
   dragging_all_marks_reset();
   $selection.clear();
 
@@ -76,7 +76,7 @@ $add_url_svg.addEventListener("click", async () => {
 
   const [done] = loading();
 
-  const is_svg = u.pathname.split(".")?.pop()?.toLowerCase() === "svg";
+  const is_svg = u.pathname.split('.')?.pop()?.toLowerCase() === 'svg';
   if (is_svg) {
     try {
       const url_image = proxied_url(src);
@@ -89,17 +89,17 @@ $add_url_svg.addEventListener("click", async () => {
       if (resp.ok) {
         let svg = await resp.text();
         let p = new DOMParser();
-        let osvg = p.parseFromString(svg, "image/svg+xml");
+        let osvg = p.parseFromString(svg, 'image/svg+xml');
         osvg
-          .querySelectorAll("defs")
+          .querySelectorAll('defs')
           ?.children?.foreach(($c) => $defs.appendChild($c));
         osvg
-          .querySelectorAll("style")
+          .querySelectorAll('style')
           ?.children?.foreach(($c) => $style.appendChild($c));
 
-        const tag = newtag("g");
-        tag.classList.add("group");
-        tag.insertAdjacentHTML("beforeend", osvg.documentElement.innerHTML);
+        const tag = newtag('g');
+        tag.classList.add('group');
+        tag.insertAdjacentHTML('beforeend', osvg.documentElement.innerHTML);
         dragging_all_marks_reset();
         $selection.clear();
         $svg.appendChild(tag);

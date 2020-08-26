@@ -1,5 +1,5 @@
-import { $svg, $style } from "../../dom.js";
-import { $clicked, $selection } from "../../selection/index.js";
+import { $svg, $style } from '../../dom.js';
+import { $clicked, $selection } from '../../selection/index.js';
 
 // native forEach method is not async
 // it will go without waiting for completion
@@ -11,15 +11,15 @@ export function load_font($fonts) {
   }
   const $opt = $fonts.options[inx];
   $selection.forEachAsync(async ($el) => {
-    const $ee = $el.nodeName === "g" ? Array.from($el.children) : [$el];
+    const $ee = $el.nodeName === 'g' ? Array.from($el.children) : [$el];
     for (let $e of $ee) {
-      if (!$e || $e.nodeName !== "text") continue;
+      if (!$e || $e.nodeName !== 'text') continue;
       // wait the font to be loaded
       await load_font_remote($opt.text);
       // apply font to text element
       $e.style.fontFamily = $opt.text;
-      $e.querySelectorAll("tspan").forEach(
-        ($x) => ($x.style.fontFamily = "inherit")
+      $e.querySelectorAll('tspan').forEach(
+        ($x) => ($x.style.fontFamily = 'inherit'),
       );
 
       // apply marks to element that posibly contains
@@ -42,8 +42,8 @@ let loaded = {};
 const load_font_remote = async (text) => {
   let url =
     `https://fonts.googleapis.com/css?family=` +
-    text.replace(/["']+/g, "").replace(/\s+/, "+") +
-    "&display=swap";
+    text.replace(/["']+/g, '').replace(/\s+/, '+') +
+    '&display=swap';
   if (url in loaded) return;
 
   //FIXME catch exception
@@ -53,20 +53,20 @@ const load_font_remote = async (text) => {
     return;
   }
   let txt = await response.text();
-  let start = "/* latin */";
-  let end = "}";
-  let arr = txt.split("\n");
+  let start = '/* latin */';
+  let end = '}';
+  let arr = txt.split('\n');
   let pos = arr.indexOf(start);
   if (pos === -1) return;
   let src;
-  let splitBy = ", ";
+  let splitBy = ', ';
   while (arr[++pos] !== end) {
-    if (arr[pos].trim().substr(0, 4) === "src:") {
+    if (arr[pos].trim().substr(0, 4) === 'src:') {
       src = arr[pos].trim().substr(4);
       let xx = src.split(splitBy);
       let x;
       while ((x = xx.pop())) {
-        if (x.trim().substr(0, 3) == "url") {
+        if (x.trim().substr(0, 3) == 'url') {
           src = x.substr(0, x.length - 1);
           break;
         }
@@ -93,8 +93,8 @@ src: url(data:application/font-woff;charset=utf-8;base64,${b64}) format('woff');
 }`;
 
   const ff = await fontcode.load();
-  if (ff.status === "error") return;
-  ff.display = "swap";
+  if (ff.status === 'error') return;
+  ff.display = 'swap';
   ff.family = text;
 
   document.fonts.add(ff);
@@ -105,7 +105,7 @@ src: url(data:application/font-woff;charset=utf-8;base64,${b64}) format('woff');
 };
 
 // load fonts used in svg document
-$svg.querySelectorAll("tspan").forEach(($tspan) => {
+$svg.querySelectorAll('tspan').forEach(($tspan) => {
   if (/^\s+$/g.test($tspan.innerText)) return;
   let ff = $tspan.style.fontFamily;
   if (/(sans\-serif|serif)/.test(ff)) return;
@@ -117,6 +117,6 @@ $svg.querySelectorAll("tspan").forEach(($tspan) => {
   load_font_remote(ff);
   $tspan.parentNode.style.fontFamily = ff;
   $tspan.parentNode
-    .querySelectorAll("tspan")
-    .forEach(($el) => ($el.style.fontFamily = "inherit"));
+    .querySelectorAll('tspan')
+    .forEach(($el) => ($el.style.fontFamily = 'inherit'));
 });

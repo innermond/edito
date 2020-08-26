@@ -1,8 +1,8 @@
-import { add_diving, remove_diving } from "./dive.js";
-import { add_panning, remove_panning } from "./pan.js";
-import { add_selecting, remove_selecting } from "./select.js";
-import { add_dragging, remove_dragging } from "./drag.js";
-import { disable } from "./click.js";
+import { add_diving, remove_diving } from './dive.js';
+import { add_panning, remove_panning } from './pan.js';
+import { add_selecting, remove_selecting } from './select.js';
+import { add_dragging, remove_dragging } from './drag.js';
+import { disable } from './click.js';
 //import {watch} from './dom.js'
 
 const activated_default = {

@@ -1,5 +1,5 @@
-import { $svg } from "./dom.js";
-import { m2e } from "./mtx.js";
+import { $svg } from './dom.js';
+import { m2e } from './mtx.js';
 
 export const center = (tag) => {
   let bb = $svg.getBoundingClientRect();
@@ -54,7 +54,7 @@ export const outpoint = (x, y, mtx) => {
 export const outpoints = (a, b = null) => {
   if (!b) b = a.ownerSVGElement;
   let bb, mtx;
-  if ("useThat" in a) {
+  if ('useThat' in a) {
     bb = a.useThat.bbox;
     mtx = m(a).multiply(m(a.useThat.el));
   } else {
@@ -79,15 +79,15 @@ export const centerpoint = (a, b) => {
 };
 
 let alignMap = {
-  l: "left",
-  c: "center",
-  r: "right",
-  t: "top",
-  b: "bottom",
-  m: "middle",
+  l: 'left',
+  c: 'center',
+  r: 'right',
+  t: 'top',
+  b: 'bottom',
+  m: 'middle',
 };
 
-let align_objects = (oo, mode = "left", owner = null) => {
+let align_objects = (oo, mode = 'left', owner = null) => {
   if (oo.length === 0) return;
   let $box;
   if (oo.length === 1) {
@@ -102,39 +102,39 @@ let align_objects = (oo, mode = "left", owner = null) => {
   let bybiggest = (a, b) => b[coord] - a[coord];
 
   switch (mode) {
-    case "left":
-      coord = "x";
+    case 'left':
+      coord = 'x';
       sortfunc = bysmallest;
       break;
-    case "right":
-      coord = "x";
+    case 'right':
+      coord = 'x';
       sortfunc = bybiggest;
       break;
-    case "center":
-      coord = "x";
+    case 'center':
+      coord = 'x';
       break;
-    case "top":
-      coord = "y";
+    case 'top':
+      coord = 'y';
       sortfunc = bysmallest;
       break;
-    case "bottom":
-      coord = "y";
+    case 'bottom':
+      coord = 'y';
       sortfunc = bybiggest;
       break;
-    case "middle":
-      coord = "y";
+    case 'middle':
+      coord = 'y';
       break;
   }
 
   let pp, ref;
   for (let o of oo) {
-    if (o.classList.contains("is-reference")) {
+    if (o.classList.contains('is-reference')) {
       ref = o;
     }
   }
   let pe = new Map();
 
-  if (!["center", "middle"].includes(mode)) {
+  if (!['center', 'middle'].includes(mode)) {
     for (let o of oo) {
       let pp = outpoints(o, owner);
       pp = pp.sort(sortfunc);
@@ -163,7 +163,7 @@ let align_objects = (oo, mode = "left", owner = null) => {
       : outpoint(
           p0.x + (p1.x - p0.x) * 0.5,
           p0.y + (p1.y - p0.y) * 0.5,
-          m(owner)
+          m(owner),
         );
     /*for (let p of [p0, p1, ref]) {
 			let mark = newtag('circle', {r:2, cx:p.x, cy:p.y, fill:'red'})
@@ -173,9 +173,9 @@ let align_objects = (oo, mode = "left", owner = null) => {
   }
 
   pp.forEach((p) => {
-    if (["left", "right", "center"].includes(mode)) {
+    if (['left', 'right', 'center'].includes(mode)) {
       ref.y = p.y;
-    } else if (["top", "bottom", "middle"].includes(mode)) {
+    } else if (['top', 'bottom', 'middle'].includes(mode)) {
       ref.x = p.x;
     }
     let o = pe.get(p);
@@ -185,6 +185,6 @@ let align_objects = (oo, mode = "left", owner = null) => {
     let dx = oref.x - op.x,
       dy = oref.y - op.y;
     appendm(o, owner.createSVGMatrix().translate(dx, dy));
-    if (o.classList.contains("is-reference", "rectpage")) $box = o;
+    if (o.classList.contains('is-reference', 'rectpage')) $box = o;
   });
 };

@@ -4,13 +4,13 @@ export const scrollable = ($scrollee) => {
   // element to be scrollable, usually a div
   // that is fixed and an inner element will resize and trigger
   const $resizeables = Array.from($scrollee.children);
-  $scrollee.insertAdjacentHTML("beforeend", tpl);
+  $scrollee.insertAdjacentHTML('beforeend', tpl);
   // scroller stripe
   const $e = $scrollee.lastChild;
   // scroller thumb
   const $thumb = $e.firstChild;
 
-  $scrollee.addEventListener("mouseenter", (evt) => {
+  $scrollee.addEventListener('mouseenter', (evt) => {
     const $s = $e.parentNode;
     // there is hidden content in need to show ?
     const d = $s.scrollHeight - $s.clientHeight;
@@ -18,17 +18,17 @@ export const scrollable = ($scrollee) => {
     if (d > 0) $e.style.opacity = 1.0;
   });
   // hide scroller when leave scrollee
-  $scrollee.addEventListener("mouseleave", (evt) => {
+  $scrollee.addEventListener('mouseleave', (evt) => {
     if (move === false) {
       $e.style.opacity = 0.0;
     }
   });
 
   // terminate
-  $scrollee.addEventListener("mouseup", (evt) => {
+  $scrollee.addEventListener('mouseup', (evt) => {
     move = false;
-    $e.classList.remove("active");
-    document.body.classList.remove("div-scroller-active");
+    $e.classList.remove('active');
+    document.body.classList.remove('div-scroller-active');
   });
 
   const bb = $e.getBoundingClientRect();
@@ -39,23 +39,23 @@ export const scrollable = ($scrollee) => {
   let move = false;
   let adj = 0;
   // initiale
-  $e.addEventListener("mousedown", (evt) => {
-    $e.classList.add("active");
-    document.body.classList.add("div-scroller-active");
+  $e.addEventListener('mousedown', (evt) => {
+    $e.classList.add('active');
+    document.body.classList.add('div-scroller-active');
     move = true;
     adj = evt.clientY - $thumb.getBoundingClientRect().top;
     if (adj > h) adj = h;
     if (adj < 0) adj = 0;
   });
   // terminate
-  document.addEventListener("mouseup", (evt) => {
+  document.addEventListener('mouseup', (evt) => {
     if (move === false) return;
     move = false;
-    $e.classList.remove("active");
-    document.body.classList.remove("div-scroller-active");
+    $e.classList.remove('active');
+    document.body.classList.remove('div-scroller-active');
     $e.style.opacity = 0.0;
   });
-  $e.addEventListener("click", (evt) => {
+  $e.addEventListener('click', (evt) => {
     const tbb = $thumb.getBoundingClientRect();
     let y = evt.clientY;
     if (evt.clientY >= tbb.bottom) {
@@ -76,15 +76,15 @@ export const scrollable = ($scrollee) => {
     mouse_pos(y);
   });
   // move the thumb
-  document.addEventListener("mousemove", (evt) => {
+  document.addEventListener('mousemove', (evt) => {
     if (move === false) return;
     mouse_pos(evt.clientY);
   });
 
   $scrollee.addEventListener(
-    "wheel",
+    'wheel',
     (evt) => {
-      $e.classList.add("active");
+      $e.classList.add('active');
       move = true;
       let step = evt.deltaY > 0 ? 1 : evt.deltaY === 0 ? 0 : -1;
       const $s = $e.parentNode;
@@ -98,7 +98,7 @@ export const scrollable = ($scrollee) => {
       mouse_pos(y);
       move = false;
     },
-    { passive: true }
+    { passive: true },
   );
 
   function mouse_pos(y) {
@@ -117,7 +117,7 @@ export const scrollable = ($scrollee) => {
     posy -= adj;
     if (posy < 0) posy = 0;
     if (posy > H - h) posy = H - h;
-    $thumb.style.top = posy + "px";
+    $thumb.style.top = posy + 'px';
     adj = y - $thumb.getBoundingClientRect().top;
     if (adj > h) adj = h;
     if (adj < 0) adj = 0;
@@ -133,7 +133,7 @@ export const scrollable = ($scrollee) => {
       const d = $s.scrollHeight - $s.clientHeight;
       if (d === 0) return;
       const percent_scroll = $s.scrollTop / d;
-      $thumb.style.top = percent_scroll * (H - h) + "px";
+      $thumb.style.top = percent_scroll * (H - h) + 'px';
     }
   });
 
@@ -142,7 +142,7 @@ export const scrollable = ($scrollee) => {
     // is this element capable of resizing?
     // has geometrical features
     const bb = $r.getBoundingClientRect();
-    if (bb.width === 0 || bb.heigth || $r.style.display === "none") return;
+    if (bb.width === 0 || bb.heigth || $r.style.display === 'none') return;
     ro.observe($r);
   });
 };
@@ -152,7 +152,7 @@ export function div_scroller($ss, add_scrollable_now = false) {
   //  so execute the scrolling ritual after they have been inserted
   add_scrollable_now
     ? $ss.forEach(($element) => scrollable($element))
-    : document.addEventListener("DOMContentLoaded", (evt_dom_loaded) => {
+    : document.addEventListener('DOMContentLoaded', (evt_dom_loaded) => {
         $ss.forEach(($element) => scrollable($element));
       });
 }

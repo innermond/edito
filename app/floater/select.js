@@ -1,6 +1,6 @@
-import { $clicked, $selection } from "../selection/index.js";
-import { $svg, ui_fragment } from "../dom.js";
-import { toggle_select } from "../section/menubar.js";
+import { $clicked, $selection } from '../selection/index.js';
+import { $svg, ui_fragment } from '../dom.js';
+import { toggle_select } from '../section/menubar.js';
 
 const tpl = `<section class="movable" id="select">
 <div class="wrap-row">
@@ -22,29 +22,29 @@ const tpl = `<section class="movable" id="select">
 </div>
 </section>`;
 export const $ui = ui_fragment(tpl);
-export const $select_all = $ui.querySelector("#select_all");
-export const $select_inverse = $ui.querySelector("#select_inverse");
-export const $select_inside = $ui.querySelector("#select_inside");
+export const $select_all = $ui.querySelector('#select_all');
+export const $select_inverse = $ui.querySelector('#select_inverse');
+export const $select_inside = $ui.querySelector('#select_inside');
 
 export const is_selectable = ($e) => {
   if (
-    $e.dataset.ants === "true" ||
-    $e.dataset.rect === "true" ||
-    $e.dataset.selectangle === "true" ||
-    $e.classList.contains("rectpage") ||
-    $e.id === "rectpage"
+    $e.dataset.ants === 'true' ||
+    $e.dataset.rect === 'true' ||
+    $e.dataset.selectangle === 'true' ||
+    $e.classList.contains('rectpage') ||
+    $e.id === 'rectpage'
   )
     return false;
   const style = window.getComputedStyle($e);
-  if (style.display === "none" || style.visibility === "hidden") return false;
-  if (!("getBBox" in $e)) return false;
+  if (style.display === 'none' || style.visibility === 'hidden') return false;
+  if (!('getBBox' in $e)) return false;
   const bb = $e.getBBox();
   if (bb.width === 0 || bb.height === 0) return false;
 
   return true;
 };
 
-$select_all.addEventListener("change", (evt) => {
+$select_all.addEventListener('change', (evt) => {
   if ($select_all.checked) {
     Array.from($svg.children).forEach(($c) => {
       if (!is_selectable($c)) return;
@@ -62,7 +62,7 @@ $select_all.addEventListener("change", (evt) => {
   }
 });
 
-$select_inverse.addEventListener("click", (evt) => {
+$select_inverse.addEventListener('click', (evt) => {
   Array.from($svg.children).forEach(($c) => {
     if (!is_selectable($c)) return;
     $selection.has($c) ? $clicked.from($c).unover() : $selection.add($c);
@@ -72,12 +72,12 @@ $select_inverse.addEventListener("click", (evt) => {
   }
 });
 
-$ui.querySelectorAll("[for]").forEach(($e) => {
-  $e.addEventListener("click", (evt) => {
+$ui.querySelectorAll('[for]').forEach(($e) => {
+  $e.addEventListener('click', (evt) => {
     evt.preventDefault();
   });
 });
 
-$ui.querySelector(".close").addEventListener("click", (evt) => {
+$ui.querySelector('.close').addEventListener('click', (evt) => {
   toggle_select();
 });

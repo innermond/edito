@@ -1,5 +1,5 @@
-import { mirror } from "../dom.js";
-import { $clicked, $selection } from "../selection/index.js";
+import { mirror } from '../dom.js';
+import { $clicked, $selection } from '../selection/index.js';
 
 export function mirror_h() {
   $selection.each(($el) => {

@@ -13,13 +13,13 @@ export default function () {
   function normalizePath(d) {
     // preprocess "d" so that we have spaces between values
     d = d
-      .replace(/,/g, " ") // replace commas with spaces
-      .replace(/-/g, " - ") // add spacing around minus signs
-      .replace(/-\s+/g, "-") // remove spacing to the right of minus signs.
-      .replace(/([a-zA-Z])/g, " $1 ");
+      .replace(/,/g, ' ') // replace commas with spaces
+      .replace(/-/g, ' - ') // add spacing around minus signs
+      .replace(/-\s+/g, '-') // remove spacing to the right of minus signs.
+      .replace(/([a-zA-Z])/g, ' $1 ');
 
     // set up the variables used in this function
-    var instructions = d.replace(/([a-zA-Z])\s?/g, "|$1").split("|"),
+    var instructions = d.replace(/([a-zA-Z])\s?/g, '|$1').split('|'),
       instructionLength = instructions.length,
       i,
       instruction,
@@ -36,7 +36,7 @@ export default function () {
       cy = 0,
       cx2 = 0,
       cy2 = 0,
-      normalized = "";
+      normalized = '';
 
     // we run through the instruction list starting at 1, not 0,
     // because we split up "|M x y ...." so the first element will
@@ -49,10 +49,10 @@ export default function () {
 
       // what are the arguments? note that we need to convert
       // all strings into numbers, or + will do silly things.
-      args = instruction.replace(op, "").trim().split(" ");
+      args = instruction.replace(op, '').trim().split(' ');
       args = args
         .filter(function (v) {
-          return v !== "";
+          return v !== '';
         })
         .map(parseFloat);
       alen = args.length;
@@ -62,9 +62,9 @@ export default function () {
       // statements instead.
 
       // moveto command (plus possible lineto)
-      if (lop === "m") {
-        normalized += "M ";
-        if (op === "m") {
+      if (lop === 'm') {
+        normalized += 'M ';
+        if (op === 'm') {
           x += args[0];
           y += args[1];
         } else {
@@ -75,57 +75,57 @@ export default function () {
         // with the shape close operator ('Z')
         sx = x;
         sy = y;
-        normalized += x + " " + y + " ";
+        normalized += x + ' ' + y + ' ';
         if (alen > 2) {
           for (a = 0; a < alen; a += 2) {
-            if (op === "m") {
+            if (op === 'm') {
               x += args[a];
               y += args[a + 1];
             } else {
               x = args[a];
               y = args[a + 1];
             }
-            normalized += "L " + x + " " + y + " ";
+            normalized += 'L ' + x + ' ' + y + ' ';
           }
         }
       }
 
       // lineto commands
-      else if (lop === "l") {
+      else if (lop === 'l') {
         for (a = 0; a < alen; a += 2) {
-          if (op === "l") {
+          if (op === 'l') {
             x += args[a];
             y += args[a + 1];
           } else {
             x = args[a];
             y = args[a + 1];
           }
-          normalized += "L " + x + " " + y + " ";
+          normalized += 'L ' + x + ' ' + y + ' ';
         }
-      } else if (lop === "h") {
+      } else if (lop === 'h') {
         for (a = 0; a < alen; a++) {
-          if (op === "h") {
+          if (op === 'h') {
             x += args[a];
           } else {
             x = args[a];
           }
-          normalized += "L " + x + " " + y + " ";
+          normalized += 'L ' + x + ' ' + y + ' ';
         }
-      } else if (lop === "v") {
+      } else if (lop === 'v') {
         for (a = 0; a < alen; a++) {
-          if (op === "v") {
+          if (op === 'v') {
             y += args[a];
           } else {
             y = args[a];
           }
-          normalized += "L " + x + " " + y + " ";
+          normalized += 'L ' + x + ' ' + y + ' ';
         }
       }
 
       // quadratic curveto commands
-      else if (lop === "q") {
+      else if (lop === 'q') {
         for (a = 0; a < alen; a += 4) {
-          if (op === "q") {
+          if (op === 'q') {
             cx = x + args[a];
             cy = y + args[a + 1];
             x += args[a + 2];
@@ -136,29 +136,29 @@ export default function () {
             x = args[a + 2];
             y = args[a + 3];
           }
-          normalized += "Q " + cx + " " + cy + " " + x + " " + y + " ";
+          normalized += 'Q ' + cx + ' ' + cy + ' ' + x + ' ' + y + ' ';
         }
-      } else if (lop === "t") {
+      } else if (lop === 't') {
         for (a = 0; a < alen; a += 2) {
           // reflect previous cx/cy over x/y
           cx = x + (x - cx);
           cy = y + (y - cy);
           // then get real end point
-          if (op === "t") {
+          if (op === 't') {
             x += args[a];
             y += args[a + 1];
           } else {
             x = args[a];
             y = args[a + 1];
           }
-          normalized += "Q " + cx + " " + cy + " " + x + " " + y + " ";
+          normalized += 'Q ' + cx + ' ' + cy + ' ' + x + ' ' + y + ' ';
         }
       }
 
       // cubic curveto commands
-      else if (lop === "c") {
+      else if (lop === 'c') {
         for (a = 0; a < alen; a += 6) {
-          if (op === "c") {
+          if (op === 'c') {
             cx = x + args[a];
             cy = y + args[a + 1];
             cx2 = x + args[a + 2];
@@ -174,27 +174,27 @@ export default function () {
             y = args[a + 5];
           }
           normalized +=
-            "C " +
+            'C ' +
             cx +
-            " " +
+            ' ' +
             cy +
-            " " +
+            ' ' +
             cx2 +
-            " " +
+            ' ' +
             cy2 +
-            " " +
+            ' ' +
             x +
-            " " +
+            ' ' +
             y +
-            " ";
+            ' ';
         }
-      } else if (lop === "s") {
+      } else if (lop === 's') {
         for (a = 0; a < alen; a += 4) {
           // reflect previous cx2/cy2 over x/y
           cx = x + (x - cx2);
           cy = y + (y - cy2);
           // then get real control and end point
-          if (op === "s") {
+          if (op === 's') {
             cx2 = x + args[a];
             cy2 = y + args[a + 1];
             x += args[a + 2];
@@ -206,22 +206,22 @@ export default function () {
             y = args[a + 3];
           }
           normalized +=
-            "C " +
+            'C ' +
             cx +
-            " " +
+            ' ' +
             cy +
-            " " +
+            ' ' +
             cx2 +
-            " " +
+            ' ' +
             cy2 +
-            " " +
+            ' ' +
             x +
-            " " +
+            ' ' +
             y +
-            " ";
+            ' ';
         }
-      } else if (lop === "z") {
-        normalized += "Z ";
+      } else if (lop === 'z') {
+        normalized += 'Z ';
         // not unimportant: path closing changes the current x/y coordinate
         x = sx;
         y = sy;
@@ -248,7 +248,7 @@ export default function () {
    *   - the path end becomes Z iff it was there to begin with.
    */
   function reverseNormalizedPath(normalized) {
-    var terms = normalized.trim().split(" "),
+    var terms = normalized.trim().split(' '),
       term,
       tlen = terms.length,
       tlen1 = tlen - 1,
@@ -259,8 +259,8 @@ export default function () {
       pair,
       pairs,
       shift,
-      matcher = new RegExp("[MLCQZ]", ""),
-      closed = terms.slice(-1)[0].toUpperCase() === "Z";
+      matcher = new RegExp('[MLCQZ]', ''),
+      closed = terms.slice(-1)[0].toUpperCase() === 'Z';
 
     for (t = 0; t < tlen; t++) {
       term = terms[t];
@@ -271,16 +271,16 @@ export default function () {
         // how many coordinate pairs do we need to read,
         // and by how many pairs should this operator be
         // shifted left?
-        if (term === "C") {
+        if (term === 'C') {
           pairs = 3;
           shift = 2;
-        } else if (term === "Q") {
+        } else if (term === 'Q') {
           pairs = 2;
           shift = 1;
-        } else if (term === "L") {
+        } else if (term === 'L') {
           pairs = 1;
           shift = 1;
-        } else if (term === "M") {
+        } else if (term === 'M') {
           pairs = 1;
           shift = 0;
         } else {
@@ -306,32 +306,32 @@ export default function () {
       // we see is a pathing operator, not a number. As
       // such, if we get to this "else" the path is malformed.
       else {
-        var pre = terms.slice(Math.max(t - 3, 0), 3).join(" ");
-        post = terms.slice(t + 1, Math.min(t + 4, tlen1)).join(" ");
-        range = pre + " [" + term + "] " + post;
+        var pre = terms.slice(Math.max(t - 3, 0), 3).join(' ');
+        post = terms.slice(t + 1, Math.min(t + 4, tlen1)).join(' ');
+        range = pre + ' [' + term + '] ' + post;
         throw (
-          "Error while trying to reverse normalized SVG path, at position " +
+          'Error while trying to reverse normalized SVG path, at position ' +
           t +
-          " (" +
+          ' (' +
           range +
-          ").\n" +
+          ').\n' +
           "Either the path is not normalised, or it's malformed."
         );
       }
     }
 
-    reversed.push("M");
+    reversed.push('M');
 
     // generating the reversed path string involves
     // running through our transformed terms in reverse.
-    var revstring = "",
+    var revstring = '',
       rlen1 = reversed.length - 1,
       r;
     for (r = rlen1; r > 0; r--) {
-      revstring += reversed[r] + " ";
+      revstring += reversed[r] + ' ';
     }
-    if (closed) revstring += "Z";
-    revstring = revstring.replace(/M M/g, "Z M");
+    if (closed) revstring += 'Z';
+    revstring = revstring.replace(/M M/g, 'Z M');
 
     return revstring;
   }
@@ -344,7 +344,7 @@ export default function () {
   function reverseSubPath(path, subpath) {
     subpath = parseInt(subpath) == subpath ? subpath : false;
     var path = normalizePath(path),
-      paths = path.replace(/M/g, "|M").split("|"),
+      paths = path.replace(/M/g, '|M').split('|'),
       revpath;
     paths.splice(0, 1);
     if (subpath !== false && subpath >= paths.length) {
@@ -363,7 +363,7 @@ export default function () {
       }
     }
 
-    return paths.join(" ").replace(/ +/g, " ");
+    return paths.join(' ').replace(/ +/g, ' ');
   }
 
   /**

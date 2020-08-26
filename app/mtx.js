@@ -2,13 +2,13 @@
 
 const setm = (e, m) => {
   e.transform.baseVal.initialize(
-    e.ownerSVGElement?.createSVGTransformFromMatrix(m)
+    e.ownerSVGElement?.createSVGTransformFromMatrix(m),
   );
 };
 
 const appendm = (e, m) =>
   e.transform.baseVal.appendItem(
-    e.ownerSVGElement?.createSVGTransformFromMatrix(m)
+    e.ownerSVGElement?.createSVGTransformFromMatrix(m),
   );
 
 const m2e = (a, e) => {

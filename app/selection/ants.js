@@ -1,11 +1,11 @@
-import { $svg, px, attr, newtag } from "../dom.js";
-import { setm, m2e, m, get_scale } from "../mtx.js";
-import { point_in } from "../pos.js";
+import { $svg, px, attr, newtag } from '../dom.js';
+import { setm, m2e, m, get_scale } from '../mtx.js';
+import { point_in } from '../pos.js';
 
 export class Ants {
-  constructor(tagname = "rect") {
+  constructor(tagname = 'rect') {
     this.style =
-      "vector-effect:non-scaling-stroke;stroke-width:2;fill:none;stroke:#ffffff;mix-blend-mode:difference;stroke-opacity:1;stroke-miterlimit:2;stroke-dasharray:3,3;stroke-dashoffset:2";
+      'vector-effect:non-scaling-stroke;stroke-width:2;fill:none;stroke:#ffffff;mix-blend-mode:difference;stroke-opacity:1;stroke-miterlimit:2;stroke-dasharray:3,3;stroke-dashoffset:2';
     this.$shape = newtag(tagname, {
       dataAnts: true,
       dataRect: true,
@@ -33,7 +33,7 @@ export class Ants {
       h = br.y - tl.y;
 
     let bb;
-    if ("useThat" in $el) {
+    if ('useThat' in $el) {
       bb = $el.useThat.bbox;
     } else {
       bb = { x: tl.x, y: tl.y, width: w, height: h };
@@ -42,10 +42,10 @@ export class Ants {
     return bb;
   }
 
-  draw_point($p, fill = "red") {
+  draw_point($p, fill = 'red') {
     let p = $p; //point_in($svg, $p.x, $p.y)
     //p = p.matrixTransform($svg.getCTM().inverse())
-    const mark = newtag("circle", { r: 2, cx: p.x, cy: p.y, fill });
+    const mark = newtag('circle', { r: 2, cx: p.x, cy: p.y, fill });
     $svg.appendChild(mark);
   }
 
@@ -78,7 +78,7 @@ export class Ants {
     }
 
     let l = points.sort((a, b) => a.x - b.x)[0];
-    const ll = this.candidate_points(points, "x", l.x);
+    const ll = this.candidate_points(points, 'x', l.x);
     // chose the lower left to not compete with top
     l = ll.sort((a, b) => b.y - a.y)[0];
     l = l.matrixTransform(m2e($el, $svg));
@@ -89,7 +89,7 @@ export class Ants {
     this.arr_del(points, r);
     //       this.draw_point(r, 'green')
     let t = points.sort((a, b) => a.y - b.y)[0];
-    const tt = this.candidate_points(points, "y", t.y);
+    const tt = this.candidate_points(points, 'y', t.y);
     t = tt.sort((a, b) => a.x - b.x)[0];
     t = t.matrixTransform(m2e($el, $svg));
     this.arr_del(points, t);
@@ -104,9 +104,9 @@ export class Ants {
     arr.forEach((p) => {
       def.push(`${p.x},${p.y}`);
     });
-    def = def.join(" ");
+    def = def.join(' ');
 
-    const poly = newtag("polyline", { points: def, stroke: "red" });
+    const poly = newtag('polyline', { points: def, stroke: 'red' });
     $svg.appendChild(poly);
 
     let bb = poly.getBBox();
@@ -146,16 +146,16 @@ export class Ants {
     //FIXME unperformant contour routine if object have many points
     //let bb = this.bbox_contour($el)
     // has stroke
-    let d = $el.style.strokeWidth || "0";
+    let d = $el.style.strokeWidth || '0';
     d = parseFloat(d) * 0.5;
-    if ($el.style.stroke === "none" || $el.style.stroke === "") d = 0;
+    if ($el.style.stroke === 'none' || $el.style.stroke === '') d = 0;
     attr(this.$shape, {
       x: bb.x - d,
       y: bb.y - d,
       width: bb.width + 2 * d,
       height: bb.height + 2 * d,
     });
-    if ($el && "useThat" in $el) {
+    if ($el && 'useThat' in $el) {
       setm(this.$shape, m2e($el.useThat.el, $el));
     } else {
       setm(this.$shape, m2e($el, this.$owner));
@@ -171,26 +171,26 @@ export class Square extends Ants {
   constructor(side = 10) {
     super();
     this.side = side;
-    this.$shape = newtag("rect", {
+    this.$shape = newtag('rect', {
       dataAnts: true,
       dataSquare: true,
       width: side,
       height: side,
       style: this.style,
     });
-    this.$shape.style.fill = "white";
-    this.$shape.style.stroke = "black";
-    this.$shape.style.mixBlendMode = "normal";
+    this.$shape.style.fill = 'white';
+    this.$shape.style.stroke = 'black';
+    this.$shape.style.mixBlendMode = 'normal';
   }
 
   follow() {
     let $el = this.$shape.$element;
-    let bb = "useThat" in $el ? $el.useThat.bbox : $el.getBBox();
+    let bb = 'useThat' in $el ? $el.useThat.bbox : $el.getBBox();
     attr(this.$shape, {
       x: bb.x + bb.width - this.side * 0.5,
       y: bb.y + bb.height * 0.5 - this.side * 0.5,
     });
-    "useThat" in $el
+    'useThat' in $el
       ? setm(this.$shape, m2e($el.useThat.el, $el))
       : setm(this.$shape, m2e($el, this.$owner));
 
@@ -213,22 +213,22 @@ export class Square extends Ants {
 export class Circle extends Ants {
   constructor(r = 5) {
     super();
-    this.$shape = newtag("circle", {
+    this.$shape = newtag('circle', {
       dataAnts: true,
       dataCircle: true,
       r: r,
       style: this.style,
     });
-    this.$shape.style.fill = "white";
-    this.$shape.style.stroke = "black";
-    this.$shape.style.mixBlendMode = "normal";
+    this.$shape.style.fill = 'white';
+    this.$shape.style.stroke = 'black';
+    this.$shape.style.mixBlendMode = 'normal';
   }
 
   follow() {
     let $el = this.$shape.$element;
-    let bb = $el && "useThat" in $el ? $el.useThat.bbox : $el.getBBox();
+    let bb = $el && 'useThat' in $el ? $el.useThat.bbox : $el.getBBox();
     attr(this.$shape, { cx: bb.x, cy: bb.y + bb.height * 0.5 });
-    $el && "useThat" in $el
+    $el && 'useThat' in $el
       ? setm(this.$shape, m2e($el.useThat.el, $el))
       : setm(this.$shape, m2e($el, this.$owner));
 
@@ -266,8 +266,8 @@ export function circle_over($el) {
   $circle.over($el);
 }
 
-const OPERATIONS = ["dragging", "rotating", "sizing"];
-export const OPERATIONS_ROT_SIZE = ["rotating", "sizing"];
+const OPERATIONS = ['dragging', 'rotating', 'sizing'];
+export const OPERATIONS_ROT_SIZE = ['rotating', 'sizing'];
 
 export class Clues {
   constructor() {
@@ -307,7 +307,7 @@ export class Clues {
 
   negate(cluename) {
     // whitelist properties
-    ["dragging", "rotating", "sizing"].forEach((clue) => {
+    ['dragging', 'rotating', 'sizing'].forEach((clue) => {
       if (clue === cluename) {
         this[clue] = !this[clue];
       } else {

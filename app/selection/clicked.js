@@ -1,12 +1,12 @@
-import { xmlns, element_from } from "../dom.js";
-import { Ants, Square, Circle, Clues } from "./ants.js";
-import { $selection } from "./grouping.js";
+import { xmlns, element_from } from '../dom.js';
+import { Ants, Square, Circle, Clues } from './ants.js';
+import { $selection } from './grouping.js';
 
 // svg element clicked / selected
 // as we cant instanciate directly a SVGElement
 // we create a dummy SVGElement
 // which is zero value for $clicked
-const $zero = document.createElementNS(xmlns, "rect");
+const $zero = document.createElementNS(xmlns, 'rect');
 
 export let $clicked = $zero.cloneNode(true);
 
@@ -43,8 +43,8 @@ const over = () => {
   // no-op when zero
   if ($clicked.is_zero()) return;
   if (
-    $clicked.classList.contains("is-reference") &&
-    $clicked.classList.contains("rectpage")
+    $clicked.classList.contains('is-reference') &&
+    $clicked.classList.contains('rectpage')
   )
     return;
   if (!$clicked.ownerSVGElement) return;

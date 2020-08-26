@@ -1,12 +1,12 @@
-import "./feature.js";
-import "./click.js";
-import "./drag.js";
-import "./ul_select.js";
-import { tooltip } from "./tooltip.js";
-import { span_checkbox } from "./span_checkbox.js";
-import { dragElement, show_hide } from "./html_drag.js";
+import './feature.js';
+import './click.js';
+import './drag.js';
+import './ul_select.js';
+import { tooltip } from './tooltip.js';
+import { span_checkbox } from './span_checkbox.js';
+import { dragElement, show_hide } from './html_drag.js';
 
-import "./idb.js";
+import './idb.js';
 
 import {
   $section_menubar,
@@ -18,7 +18,7 @@ import {
   $section_mask_clip_path,
   $section_bottombar,
   $section_save,
-} from "./section/index.js";
+} from './section/index.js';
 
 import {
   $floater_select,
@@ -26,10 +26,10 @@ import {
   $floater_move,
   $floater_geometry,
   $floater_color,
-} from "./floater/index.js";
+} from './floater/index.js';
 
-import { $svg, display_none, copy_viewbox } from "./dom.js";
-import { zoom_reset } from "./zoom.js";
+import { $svg, display_none, copy_viewbox } from './dom.js';
+import { zoom_reset } from './zoom.js';
 
 const $ui = new DocumentFragment();
 $ui.appendChild($section_menubar);
@@ -49,42 +49,42 @@ $ui.appendChild($floater_geometry);
 $ui.appendChild($floater_color);
 
 // here $ui is gone into document
-document.querySelector("#editor").appendChild($ui);
-$svg.style.width = "100%";
-$svg.style.height = "100%";
+document.querySelector('#editor').appendChild($ui);
+$svg.style.width = '100%';
+$svg.style.height = '100%';
 
-document.querySelectorAll(".movable").forEach(($e) => {
+document.querySelectorAll('.movable').forEach(($e) => {
   dragElement($e);
-  $e.querySelectorAll(".wrap-row > div > label").forEach(($el) =>
-    show_hide($el)
+  $e.querySelectorAll('.wrap-row > div > label').forEach(($el) =>
+    show_hide($el),
   );
 
   $e.dataset.display = $e.style.display;
-  $e.style.display = "none";
+  $e.style.display = 'none';
 
   const $img = $e.querySelector('img[class~="close"]');
-  $img?.addEventListener("click", (evt) => {
-    const $el = evt.target.closest("section");
+  $img?.addEventListener('click', (evt) => {
+    const $el = evt.target.closest('section');
     if ($el) {
       display_none($el);
       const qry = `[data-panel="${$el.id}"]`;
       const $remote = document.querySelector(qry);
-      $remote.classList.toggle("active");
+      $remote.classList.toggle('active');
     }
   });
 
-  const $kk = $e.querySelectorAll("[type=checkbox][class~=switch]");
+  const $kk = $e.querySelectorAll('[type=checkbox][class~=switch]');
   span_checkbox($kk);
 
   $e.querySelectorAll('[class~="tooltip"]')?.forEach(($e) => {
     tooltip($e);
   });
 
-  $e.querySelectorAll("input[type=range]")?.forEach(($e) =>
-    $e.addEventListener("mousedown", (evt) => evt.stopPropagation())
+  $e.querySelectorAll('input[type=range]')?.forEach(($e) =>
+    $e.addEventListener('mousedown', (evt) => evt.stopPropagation()),
   );
 });
-document.querySelector("#canvas").style.opacity = 1;
+document.querySelector('#canvas').style.opacity = 1;
 // assure viewbox is ok
 const vbox = $svg.viewBox.baseVal;
 if (vbox.width === 0) vbox.width = $svg.width.baseVal.value;

@@ -1,10 +1,10 @@
-import { $svg, px } from "../dom.js";
-import { m, setm } from "../mtx.js";
-import { point_in } from "../pos.js";
-import { $clicked, $selection } from "../selection/index.js";
+import { $svg, px } from '../dom.js';
+import { m, setm } from '../mtx.js';
+import { point_in } from '../pos.js';
+import { $clicked, $selection } from '../selection/index.js';
 
 export function handle_step(val, arrow) {
-  if (!["ArrowUp", "ArrowDown", "ArrowRight", "ArrowLeft"].includes(arrow))
+  if (!['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'].includes(arrow))
     return;
 
   const step = px(val);
@@ -12,19 +12,19 @@ export function handle_step(val, arrow) {
     let x = 0;
     let y = 0;
     switch (arrow) {
-      case "ArrowUp":
+      case 'ArrowUp':
         x = 0;
         y = -step;
         break;
-      case "ArrowDown":
+      case 'ArrowDown':
         x = 0;
         y = +step;
         break;
-      case "ArrowRight":
+      case 'ArrowRight':
         x = +step;
         y = 0;
         break;
-      case "ArrowLeft":
+      case 'ArrowLeft':
         x = -step;
         y = 0;
         break;

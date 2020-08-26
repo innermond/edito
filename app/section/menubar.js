@@ -1,7 +1,7 @@
-import { ui_fragment, display_none, cycle_zindex } from "../dom.js";
-import { tooltip } from "../tooltip.js";
-import movement from "../cap.js";
-import swarm from "../swarm.js";
+import { ui_fragment, display_none, cycle_zindex } from '../dom.js';
+import { tooltip } from '../tooltip.js';
+import movement from '../cap.js';
+import swarm from '../swarm.js';
 
 const tpl = `<section id="menu-bar">
 	<div>
@@ -25,9 +25,9 @@ const tpl = `<section id="menu-bar">
 </section>`;
 export const $ui = ui_fragment(tpl);
 
-const $tool_floater = $ui.querySelector("#tool-menu-floaters");
+const $tool_floater = $ui.querySelector('#tool-menu-floaters');
 
-$tool_floater.addEventListener("click", (evt) => {
+$tool_floater.addEventListener('click', (evt) => {
   const $me = evt.target;
   const fid = $me.dataset.panel;
   const $floater = document.getElementById(fid);
@@ -36,68 +36,68 @@ $tool_floater.addEventListener("click", (evt) => {
   toggle_active($me);
 });
 
-$tool_floater.addEventListener("mouseover", (evt) => {
+$tool_floater.addEventListener('mouseover', (evt) => {
   const $me = evt.target;
-  if (!$me.classList.contains("active")) return;
+  if (!$me.classList.contains('active')) return;
   const fid = $me.dataset.panel;
   const $floater = document.getElementById(fid);
-  if ($floater.style.display !== "none") cycle_zindex($floater);
+  if ($floater.style.display !== 'none') cycle_zindex($floater);
 });
 
 let have_area = false;
 
-const $select = $ui.querySelector("#tool-select");
+const $select = $ui.querySelector('#tool-select');
 
 let select_clicked = false;
 export const toggle_select = () => {
   if (select_clicked) {
     movement.select.off();
-    if (have_area) document.body.classList.add("area");
+    if (have_area) document.body.classList.add('area');
   } else {
     movement.select.on();
-    if (have_area) document.body.classList.remove("area");
+    if (have_area) document.body.classList.remove('area');
   }
   select_clicked = !select_clicked;
 };
 
-$select.addEventListener("click", toggle_select);
+$select.addEventListener('click', toggle_select);
 
-const $area = $ui.querySelector("#tool-zoom");
+const $area = $ui.querySelector('#tool-zoom');
 export const toggle_dive = () => {
   if (have_area) {
     movement.dive.off();
-    document.body.classList.remove("area");
+    document.body.classList.remove('area');
   } else {
     movement.dive.on();
-    document.body.classList.add("area");
+    document.body.classList.add('area');
   }
   have_area = !have_area;
 };
-$area.addEventListener("click", toggle_dive);
+$area.addEventListener('click', toggle_dive);
 
-const $add_image = $ui.querySelector("#tool-image");
+const $add_image = $ui.querySelector('#tool-image');
 const load_colections_images = swarm(
-  "image-category.json",
-  "section/category_image.js",
-  "category-image"
+  'image-category.json',
+  'section/category_image.js',
+  'category-image',
 );
-$add_image.addEventListener("click", load_colections_images);
+$add_image.addEventListener('click', load_colections_images);
 
-const $add_element = $ui.querySelector("#tool-element");
+const $add_element = $ui.querySelector('#tool-element');
 const load_colections_shapes = swarm(
-  "shape-category.json",
-  "section/category_shape.js",
-  "category-shape"
+  'shape-category.json',
+  'section/category_shape.js',
+  'category-shape',
 );
-$add_element.addEventListener("click", load_colections_shapes);
+$add_element.addEventListener('click', load_colections_shapes);
 
-const $tool_menu = $ui.querySelector("#tool-menu-sections");
+const $tool_menu = $ui.querySelector('#tool-menu-sections');
 
-document.addEventListener("tool_menu:all_inactive", () => {
+document.addEventListener('tool_menu:all_inactive', () => {
   toggle_all_inactive();
 });
 
-$tool_menu.addEventListener("click", (evt) => {
+$tool_menu.addEventListener('click', (evt) => {
   const $me = evt.target;
   //toggle_active($me)
   toggle_panel($me);
@@ -109,26 +109,26 @@ $ui.querySelectorAll('[class~="tooltip"]').forEach(($e) => {
 
 function toggle_all_inactive() {
   $tool_menu
-    .querySelectorAll(".tool-item.active")
-    .forEach(($e) => $e.classList.remove("active"));
+    .querySelectorAll('.tool-item.active')
+    .forEach(($e) => $e.classList.remove('active'));
 }
 
 function toggle_active($me, state = null) {
-  $tool_menu.querySelectorAll(".tool-item.active").forEach(($e) => {
-    if ($e !== $me) $e.classList.remove("active");
+  $tool_menu.querySelectorAll('.tool-item.active').forEach(($e) => {
+    if ($e !== $me) $e.classList.remove('active');
   });
   if (state === null) {
-    $me.classList.toggle("active");
+    $me.classList.toggle('active');
   } else {
-    $me.classList[state].call("active");
+    $me.classList[state].call('active');
   }
 }
 
 function toggle_panel($el) {
   $el.dispatchEvent(
-    new CustomEvent("panel:toggle", {
+    new CustomEvent('panel:toggle', {
       bubbles: true,
       detail: { panel_id: $el.dataset.panel },
-    })
+    }),
   );
 }

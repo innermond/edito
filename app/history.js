@@ -1,11 +1,11 @@
-import { $svg } from "./dom.js";
+import { $svg } from './dom.js';
 
 // history
 const is_ant = ($e) => {
   const is =
-    $e.dataset.ants === "true" ||
-    $e.dataset.rect === "true" ||
-    $e.dataset.selectangle === "true";
+    $e.dataset.ants === 'true' ||
+    $e.dataset.rect === 'true' ||
+    $e.dataset.selectangle === 'true';
 
   return is;
 };
@@ -17,7 +17,7 @@ export const historic = new MutationObserver((mm) => {
   MM = mm;
 });
 
-$svg.addEventListener("mouseup", (evt) => {
+$svg.addEventListener('mouseup', (evt) => {
   //console.log(MM)
   const batch = [];
   MM.forEach((m) => {
@@ -25,7 +25,7 @@ $svg.addEventListener("mouseup", (evt) => {
     if (is_ant(m.target)) return;
     //console.log(m.type)
     switch (m.type) {
-      case "childList":
+      case 'childList':
         m.addedNodes.forEach(($e) => {
           if (is_ant($e)) return;
           //console.log('added', m)
@@ -37,7 +37,7 @@ $svg.addEventListener("mouseup", (evt) => {
           batch.push(m);
         });
         break;
-      case "attributes":
+      case 'attributes':
         if (is_ant(m.target)) break;
         //console.log(m, m.target, m.oldValue)
         batch.push(m);

@@ -1,23 +1,23 @@
-import { dragging_all_marks_reset } from "./ui.js";
-import { $svg, attr, newtag, element_from } from "./dom.js";
-import { disable } from "./click.js";
-import { $selection } from "./selection/index.js";
-import { is_selectable, $select_inside } from "./floater/select.js";
+import { dragging_all_marks_reset } from './ui.js';
+import { $svg, attr, newtag, element_from } from './dom.js';
+import { disable } from './click.js';
+import { $selection } from './selection/index.js';
+import { is_selectable, $select_inside } from './floater/select.js';
 import {
   cycle,
   moved,
   add_rectangling,
   remove_rectangling,
   $selectangle,
-} from "./selectangle.js";
-import feature from "./feature.js";
+} from './selectangle.js';
+import feature from './feature.js';
 
 const opt = feature.supportsPassive ? { passive: true } : false;
 
 function cycle_start(stage) {
   return (evt) => {
     const $el = element_from(evt.target);
-    const on_locked = "lock" in $el.dataset;
+    const on_locked = 'lock' in $el.dataset;
     const on_allowed = $el === $svg || on_locked;
     if (!on_allowed) return;
     if (!stage(evt)) return;

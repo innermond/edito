@@ -1,9 +1,9 @@
-import { $bleed } from "./ui.js";
-import { m2e, m, setm } from "./mtx.js";
+import { $bleed } from './ui.js';
+import { m2e, m, setm } from './mtx.js';
 
-const ns = "http://www.w3.org/2000/";
-const nsattr = "http://www.w3.org/1999/";
-const xmlns = ns + "svg";
+const ns = 'http://www.w3.org/2000/';
+const nsattr = 'http://www.w3.org/1999/';
+const xmlns = ns + 'svg';
 
 const rnd = () => Math.floor(Math.random() * 1000000);
 
@@ -11,15 +11,15 @@ const attr = (n, v = null) => {
   for (let p in v) {
     n.setAttributeNS(
       null,
-      p.replace(/[A-Z]/g, (m, p, o, s) => "-" + m.toLowerCase()),
-      v[p]
+      p.replace(/[A-Z]/g, (m, p, o, s) => '-' + m.toLowerCase()),
+      v[p],
     );
   }
 };
 
 const newtag = (n, v = null) => {
   n = document.createElementNS(xmlns, n);
-  n.setAttributeNS(null, "id", "_" + rnd());
+  n.setAttributeNS(null, 'id', '_' + rnd());
   if (!v) return n;
 
   attr(n, v);
@@ -28,7 +28,7 @@ const newtag = (n, v = null) => {
 
 export const newtag_html = (n, v = null) => {
   n = document.createElement(n);
-  n.setAttribute("id", "_" + rnd());
+  n.setAttribute('id', '_' + rnd());
   if (!v) return n;
 
   attr(n, v);
@@ -37,7 +37,7 @@ export const newtag_html = (n, v = null) => {
 
 export const ui_fragment = (html) => {
   const $ui = new DocumentFragment();
-  let $tmp = newtag_html("div");
+  let $tmp = newtag_html('div');
   $tmp.innerHTML = html;
   // do not iterate and modify / move node on a live collection
   // collection will be shorten while iterating
@@ -46,27 +46,27 @@ export const ui_fragment = (html) => {
   return $ui;
 };
 
-export const $svg = document.querySelector("svg");
+export const $svg = document.querySelector('svg');
 
 export let $defs, $style;
 
 export const update_def_style = () => {
-  $defs = document.querySelector("svg > defs") ?? newtag("defs");
+  $defs = document.querySelector('svg > defs') ?? newtag('defs');
   // force a def element to be there
   if (!$defs.ownerSVGElement) {
     $svg.insertBefore($defs, $svg.firstChild);
   }
 
-  $style = $defs.querySelector(":scope > style") ?? newtag("style");
+  $style = $defs.querySelector(':scope > style') ?? newtag('style');
 };
 
 update_def_style();
 
 export function group_parent($el) {
-  if ($el.parentNode?.nodeName === "g") {
+  if ($el.parentNode?.nodeName === 'g') {
     return $el.parentNode;
   }
-  if ($el.nodeName === "tspan") {
+  if ($el.nodeName === 'tspan') {
     return group_parent($el.parentNode);
   }
   return null;
@@ -94,9 +94,9 @@ function el_furthest($el, selector, gap = true) {
 
 export function element_from($el) {
   //$el = $el.closest('g[data-group=true]') ?? group_parent($el) ?? $el
-  $el = el_furthest($el, "g") ?? $el;
-  if ($el && ["textPath", "tspan"].includes($el.nodeName))
-    $el = $el.closest("text");
+  $el = el_furthest($el, 'g') ?? $el;
+  if ($el && ['textPath', 'tspan'].includes($el.nodeName))
+    $el = $el.closest('text');
   return $el;
 }
 
@@ -104,45 +104,45 @@ export function change_id($el) {
   if ($el.children.length) {
     for (let $e of $el.children) change_id($e);
   }
-  let id = $el.getAttributeNS(null, "id");
-  if (id) $el.setAttributeNS(null, "id", id + rnd());
+  let id = $el.getAttributeNS(null, 'id');
+  if (id) $el.setAttributeNS(null, 'id', id + rnd());
 }
 
-function rectpage(id = "rectpage", d = px($bleed.value)) {
-  if (id === null) id = "rectpage";
+function rectpage(id = 'rectpage', d = px($bleed.value)) {
+  if (id === null) id = 'rectpage';
   if (d === null) d = px($bleed.value);
   let x = $svg.viewBox.baseVal.x;
   let y = $svg.viewBox.baseVal.y;
   let w = $svg.viewBox.baseVal.width;
   let h = $svg.viewBox.baseVal.height;
 
-  let $box = document.querySelector("#" + id);
+  let $box = document.querySelector('#' + id);
   if (!$box) {
-    $box = newtag("rect", {
+    $box = newtag('rect', {
       id: id,
       x: x - d,
       y: y - d,
       width: w + 2 * d,
       height: h + 2 * d,
-      class: "is-reference rectpage",
+      class: 'is-reference rectpage',
     });
-    $box.setAttributeNS(null, "fill", "none");
-    $box.setAttributeNS(null, "stroke-fill", "none");
-    $box.setAttributeNS(null, "stroke-width", "0");
+    $box.setAttributeNS(null, 'fill', 'none');
+    $box.setAttributeNS(null, 'stroke-fill', 'none');
+    $box.setAttributeNS(null, 'stroke-width', '0');
     $svg.appendChild($box);
   } else {
-    $box.classList.add("is-reference", "rectpage");
-    $box.setAttributeNS(null, "x", x - d);
-    $box.setAttributeNS(null, "y", y - d);
-    $box.setAttributeNS(null, "width", w + 2 * d);
-    $box.setAttributeNS(null, "height", h + 2 * d);
+    $box.classList.add('is-reference', 'rectpage');
+    $box.setAttributeNS(null, 'x', x - d);
+    $box.setAttributeNS(null, 'y', y - d);
+    $box.setAttributeNS(null, 'width', w + 2 * d);
+    $box.setAttributeNS(null, 'height', h + 2 * d);
   }
   return $box;
 }
 
 // units in mm returned as px
 function px(units, zoom = true) {
-  let r = newtag("rect", { width: units + "mm", height: units + "mm" });
+  let r = newtag('rect', { width: units + 'mm', height: units + 'mm' });
   const u = r.width.baseVal;
   u.convertToSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_PX);
   const v = zoom
@@ -158,13 +158,13 @@ export function unit_conv(unit_src, u_dst) {
   const u_src = unit_src.substr(-2);
   if (u_src === u_dst) return parseFloat(unit_src);
 
-  const div = document.createElement("div");
+  const div = document.createElement('div');
   const unit_val = 10;
   // assume unit is epressed as last 2 chars
   div.style.width = unit_val + u_src;
   document.body.appendChild(div);
   let unit_px;
-  if (u_src !== "px") {
+  if (u_src !== 'px') {
     const ss = window.getComputedStyle(div);
     unit_px = parseFloat(ss.width);
   } else {
@@ -186,8 +186,8 @@ export function get_paren_id($el, attr) {
 }
 
 export function media_zoom(w, h) {
-  $svg.setAttribute("width", w + "mm");
-  $svg.setAttribute("height", h + "mm");
+  $svg.setAttribute('width', w + 'mm');
+  $svg.setAttribute('height', h + 'mm');
   $svg.width.baseVal.valueInSpecifiedUnits = w;
   $svg.viewBox.baseVal.width = $svg.width.baseVal.value;
   $svg.height.baseVal.valueInSpecifiedUnits = h;
@@ -273,7 +273,7 @@ export const mirror = ($el, k) => {
   if (k !== 1 && k !== -1) return false;
 
   // create a group from element
-  const $g = newtag("g");
+  const $g = newtag('g');
   const $father = $el.parentElement || $el.ownerSVGElement;
   const $next = $el?.nextElementSibling;
   $next ? $father.insertBefore($g, $next) : $father.appendChild($g);
@@ -296,22 +296,22 @@ export const mirror = ($el, k) => {
 };
 
 export function set_xlink_href($el, id) {
-  $el.setAttributeNS(nsattr + "xlink", "xlink:href", id);
+  $el.setAttributeNS(nsattr + 'xlink', 'xlink:href', id);
 }
 
 export function text_path($e) {
-  if ($e.nodeName !== "path") return;
-  let $tp = $svg.getElementsByTagNameNS(xmlns, "textPath");
+  if ($e.nodeName !== 'path') return;
+  let $tp = $svg.getElementsByTagNameNS(xmlns, 'textPath');
   $tp = Array.from($tp).filter(
-    ($t) => $t.getAttributeNS(nsattr + "xlink", "href") === `#${$e.id}`
+    ($t) => $t.getAttributeNS(nsattr + 'xlink', 'href') === `#${$e.id}`,
   );
   $tp = $tp[0];
-  return $tp.closest("text");
+  return $tp.closest('text');
 }
 
 export function path_text($e) {
-  if ($e.nodeName === "text" && $e.firstChild?.nodeName === "textPath") {
-    let pathid = $e.firstChild.getAttributeNS(nsattr + "xlink", "href");
+  if ($e.nodeName === 'text' && $e.firstChild?.nodeName === 'textPath') {
+    let pathid = $e.firstChild.getAttributeNS(nsattr + 'xlink', 'href');
     if (pathid) {
       return $svg.querySelector(pathid);
     }
@@ -321,9 +321,9 @@ export function path_text($e) {
 
 export function previousSiblingNoAnts($el) {
   while (
-    $el?.previousElementSibling?.dataset.ants === "true" ||
-    ["defs", "style", "metadata"].includes(
-      $el?.previousElementSibling?.nodeName.toLowerCase()
+    $el?.previousElementSibling?.dataset.ants === 'true' ||
+    ['defs', 'style', 'metadata'].includes(
+      $el?.previousElementSibling?.nodeName.toLowerCase(),
     )
   ) {
     $el = $el.previousElementSibling;
@@ -333,9 +333,9 @@ export function previousSiblingNoAnts($el) {
 
 export function nextSiblingNoAnts($el) {
   while (
-    $el?.nextElementSibling?.dataset.ants === "true" ||
-    ["defs", "style", "metadata"].includes(
-      $el?.nextElementSibling?.nodeName.toLowerCase()
+    $el?.nextElementSibling?.dataset.ants === 'true' ||
+    ['defs', 'style', 'metadata'].includes(
+      $el?.nextElementSibling?.nodeName.toLowerCase(),
     )
   ) {
     $el = $el.nextElementSibling;
@@ -346,9 +346,9 @@ export function nextSiblingNoAnts($el) {
 export function display_none($el) {
   if (!$el) return;
   const state = window.getComputedStyle($el).display;
-  if (!("display" in $el.dataset)) $el.dataset.display = state;
+  if (!('display' in $el.dataset)) $el.dataset.display = state;
   $el.style.display =
-    $el.style.display === "none" ? $el.dataset.display : "none";
+    $el.style.display === 'none' ? $el.dataset.display : 'none';
 }
 
 const MAX_Z = 4;
@@ -387,9 +387,9 @@ export const watch = (object) => {
   return new Proxy(object, handler);
 };
 
-export function find_my_ants($el, shape = "rect") {
+export function find_my_ants($el, shape = 'rect') {
   const $ants = $svg.querySelectorAll(
-    `[data-ants="true"][data-${shape}="true"]`
+    `[data-ants="true"][data-${shape}="true"]`,
   );
   for (const $e of $ants) {
     if ($e.$element === $el) return $e;

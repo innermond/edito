@@ -1,4 +1,4 @@
-import { $svg } from "./dom.js";
+import { $svg } from './dom.js';
 
 export function zoom(scale, pt = null, step = 10) {
   const b = $svg.viewBox.baseVal;

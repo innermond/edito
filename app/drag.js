@@ -1,24 +1,24 @@
-import { dragging_all_marks_reset } from "./ui.js";
-import { $svg, element_from } from "./dom.js";
-import { point_screen, point_in, outpoint } from "./pos.js";
-import { m, setm } from "./mtx.js";
-import { $clicked, $selection } from "./selection/index.js";
-import { disable } from "./click.js";
-import { add_patch } from "./idb.js";
+import { dragging_all_marks_reset } from './ui.js';
+import { $svg, element_from } from './dom.js';
+import { point_screen, point_in, outpoint } from './pos.js';
+import { m, setm } from './mtx.js';
+import { $clicked, $selection } from './selection/index.js';
+import { disable } from './click.js';
+import { add_patch } from './idb.js';
 
 // manage dragging
 export function add_dragging() {
-  $svg.addEventListener("mousedown", startDrag);
-  $svg.addEventListener("mouseup", endDrag);
-  $svg.addEventListener("mousemove", drag);
-  $svg.addEventListener("mouseleave", endDrag);
+  $svg.addEventListener('mousedown', startDrag);
+  $svg.addEventListener('mouseup', endDrag);
+  $svg.addEventListener('mousemove', drag);
+  $svg.addEventListener('mouseleave', endDrag);
 }
 
 export function remove_dragging() {
-  $svg.removeEventListener("mousedown", startDrag);
-  $svg.removeEventListener("mouseup", endDrag);
-  $svg.removeEventListener("mousemove", drag);
-  $svg.removeEventListener("mouseleave", endDrag);
+  $svg.removeEventListener('mousedown', startDrag);
+  $svg.removeEventListener('mouseup', endDrag);
+  $svg.removeEventListener('mousemove', drag);
+  $svg.removeEventListener('mouseleave', endDrag);
 }
 
 add_dragging();
@@ -29,13 +29,13 @@ let moved = null;
 function startDrag(evt) {
   if (moved !== null) return;
   const $el = element_from(evt.target);
-  const on_locked = "lock" in $el.dataset;
+  const on_locked = 'lock' in $el.dataset;
   const on_stop_dragg = $el === $svg || on_locked;
   if (on_stop_dragg) return;
 
   moved = false;
   // avoid ants elements
-  if (!("ants" in evt.target.dataset)) {
+  if (!('ants' in evt.target.dataset)) {
     if (
       !evt.shiftKey &&
       !evt.ctrlKey &&
@@ -47,7 +47,7 @@ function startDrag(evt) {
   // posibly a click on an embeded svg into a svg
   // TODO check if point_screen will work
   // in case of an embeded svg
-  let $othersvg = $clicked.closest("svg");
+  let $othersvg = $clicked.closest('svg');
   let $pt = $othersvg.createSVGPoint();
   // TODO: needed for an embeded svg???
   //$pt = $pt.matrixTransform($svg.getScreenCTM().inverse())
@@ -81,7 +81,7 @@ function drag(evt) {
   moved = true;
   $clicked.clues.dragging = true;
 
-  let $othersvg = $clicked.closest("svg");
+  let $othersvg = $clicked.closest('svg');
   let $pt = $othersvg.createSVGPoint();
   $pt = $pt.matrixTransform($svg.getScreenCTM().inverse());
   let current = point_screen(evt);
@@ -90,7 +90,7 @@ function drag(evt) {
     $clicked.over();
   }
   const $original = $clicked;
-  const $active = $selection.get_active_element(["rotating", "sizing"]);
+  const $active = $selection.get_active_element(['rotating', 'sizing']);
   $selection.each(($x) => {
     if ($active && $x !== $active) return;
     $clicked.from($x);
@@ -104,7 +104,7 @@ function drag(evt) {
     if ($clicked.clues.rotating) {
       let x = bb.x + bb.width * 0.5;
       let y = bb.y + bb.height * 0.5;
-      if ("useThat" in $clicked) {
+      if ('useThat' in $clicked) {
         bb = $clicked.useThat.bbox;
         x = bb.x + bb.width * 0.5;
         y = bb.y + bb.height * 0.5;
@@ -123,7 +123,7 @@ function drag(evt) {
     } else if ($clicked.clues.sizing) {
       let x = bb.x;
       let y = bb.y;
-      if ("useThat" in $clicked) {
+      if ('useThat' in $clicked) {
         bb = $clicked.useThat.bbox;
         x = bb.x;
         y = bb.y;
@@ -151,7 +151,7 @@ function drag(evt) {
       // the transformations made to $clicked path in its own coordinates system
       setm(
         $clicked.textPath.path,
-        $clicked.textPath.text.getCTM().inverse().multiply($clicked.getCTM())
+        $clicked.textPath.text.getCTM().inverse().multiply($clicked.getCTM()),
       );
     }
     $clicked.over();

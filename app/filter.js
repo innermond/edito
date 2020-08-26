@@ -1,5 +1,5 @@
-import { $svg, $defs, newtag } from "./dom.js";
-import { $clicked, $selection } from "./selection/index.js";
+import { $svg, $defs, newtag } from './dom.js';
+import { $clicked, $selection } from './selection/index.js';
 import {
   $shadow_blur,
   $shadow_slope,
@@ -13,64 +13,64 @@ import {
   $glass,
   $glass_one,
   $glass_two,
-} from "./ui.js";
+} from './ui.js';
 
 export function ui(flt) {
   let val;
   switch (flt?.dataset.type) {
-    case "shadow":
+    case 'shadow':
       let blur =
         flt
-          .querySelector("feGaussianBlur")
-          ?.getAttributeNS(null, "stdDeviation") || 5;
+          .querySelector('feGaussianBlur')
+          ?.getAttributeNS(null, 'stdDeviation') || 5;
       $shadow_blur.value = blur;
       let color =
-        flt.querySelector("feFlood")?.getAttributeNS(null, "flood-color") ||
-        "#000000";
+        flt.querySelector('feFlood')?.getAttributeNS(null, 'flood-color') ||
+        '#000000';
       $shadow_color.value = color;
-      let dx = flt.querySelector("feOffset")?.getAttributeNS(null, "dx") || 0;
+      let dx = flt.querySelector('feOffset')?.getAttributeNS(null, 'dx') || 0;
       $shadow_dx.value = dx;
-      let dy = flt.querySelector("feOffset")?.getAttributeNS(null, "dy") || 0;
+      let dy = flt.querySelector('feOffset')?.getAttributeNS(null, 'dy') || 0;
       $shadow_dy.value = dy;
       let slope =
-        flt.querySelector("feFuncA")?.getAttributeNS(null, "slope") || 0.5;
+        flt.querySelector('feFuncA')?.getAttributeNS(null, 'slope') || 0.5;
       $shadow_slope.value = slope;
       break;
-    case "glass":
+    case 'glass':
       $glass.checked = true;
-      if ("proxy" in $glass.dataset) {
+      if ('proxy' in $glass.dataset) {
         const $span = document.querySelector($glass.dataset.proxy);
-        $span.dataset.value = "1";
+        $span.dataset.value = '1';
       }
       const one =
         flt
-          .querySelector("feGaussianBlur[one]")
-          ?.getAttributeNS(null, "stdDeviation") || 0.2;
+          .querySelector('feGaussianBlur[one]')
+          ?.getAttributeNS(null, 'stdDeviation') || 0.2;
       $glass_one.value = one;
       const two =
         flt
-          .querySelector("feGaussianBlur[two]")
-          ?.getAttributeNS(null, "stdDeviation") || 0.5;
+          .querySelector('feGaussianBlur[two]')
+          ?.getAttributeNS(null, 'stdDeviation') || 0.5;
       $glass_two.value = two;
       break;
-    case "grayscale":
-      val = flt.querySelector("feColorMatrix")?.getAttributeNS(null, "values");
+    case 'grayscale':
+      val = flt.querySelector('feColorMatrix')?.getAttributeNS(null, 'values');
       $grayscale.value = val;
       break;
-    case "blur":
+    case 'blur':
       val = flt
-        .querySelector("feGaussianBlur")
-        ?.getAttributeNS(null, "stdDeviation");
+        .querySelector('feGaussianBlur')
+        ?.getAttributeNS(null, 'stdDeviation');
       $blur.value = val;
       break;
-    case "sharpen":
+    case 'sharpen':
       val = flt
-        .querySelector("feConvolveMatrix")
-        ?.getAttributeNS(null, "kernelMatrix");
-      $sharpen.value = -1 * val.split(" ")[4];
+        .querySelector('feConvolveMatrix')
+        ?.getAttributeNS(null, 'kernelMatrix');
+      $sharpen.value = -1 * val.split(' ')[4];
       break;
-    case "hueRotate":
-      val = flt.querySelector("feColorMatrix")?.getAttributeNS(null, "values");
+    case 'hueRotate':
+      val = flt.querySelector('feColorMatrix')?.getAttributeNS(null, 'values');
       $hue_rotate.value = val;
       break;
   }
@@ -127,7 +127,7 @@ function remove($el, filtername) {
   if ($flt && $flt.length) {
     let $f;
     while (($f = $flt.pop())) {
-      let skyp = $f.dataset.pos == "start";
+      let skyp = $f.dataset.pos == 'start';
       $f.remove();
       if (skyp) break;
     }
@@ -152,7 +152,7 @@ export function get_filter($el) {
 
 export function get_filter_inner($el, datatype, innername = null) {
   let $f;
-  if ($el?.nodeName === "filter") $f = $el;
+  if ($el?.nodeName === 'filter') $f = $el;
   else $f = get_filter($el);
   if (!$f) return;
   let qry = `[data-type="${datatype}"]`;
@@ -163,7 +163,7 @@ export function get_filter_inner($el, datatype, innername = null) {
 }
 
 export function get_filter_id($el) {
-  let f = $el?.getAttributeNS(null, "filter");
+  let f = $el?.getAttributeNS(null, 'filter');
   if (!f || f.length === 0) return null;
   return f.trim().match(/"?#([^\)#]+)"?/)?.[1];
 }
@@ -171,35 +171,35 @@ export function get_filter_id($el) {
 function unset_filter($el, fid) {
   let $ee = [$el]; //$el.nodeName === 'g' ? Array.from($el.children) : [$el]
   $ee.forEach(($e) => {
-    let f = $e.getAttributeNS(null, "filter");
+    let f = $e.getAttributeNS(null, 'filter');
     if (!f) return;
-    $e.removeAttributeNS(null, "filter");
+    $e.removeAttributeNS(null, 'filter');
   });
 }
 
 function set_filter($el, fid) {
-  let val = $el.getAttributeNS(null, "filter") || "";
-  val = "url(#" + fid + ")";
+  let val = $el.getAttributeNS(null, 'filter') || '';
+  val = 'url(#' + fid + ')';
   let $ee = [$el]; //$el.nodeName === 'g' ? Array.from($el.children) : [$el]
-  $ee.forEach(($e) => $e.setAttributeNS(null, "filter", val));
+  $ee.forEach(($e) => $e.setAttributeNS(null, 'filter', val));
 }
 
 function newfilter_expanded(
-  x = "-200%",
-  y = "-200%",
-  width = "500%",
-  height = "500%"
+  x = '-200%',
+  y = '-200%',
+  width = '500%',
+  height = '500%',
 ) {
-  return newtag("filter", { x: x, y: y, width: width, height: height });
+  return newtag('filter', { x: x, y: y, width: width, height: height });
 }
 
 function newshadow(
   blur = 5,
-  color = "#000000",
+  color = '#000000',
   dx = 0,
   dy = 0,
   slope = 0.5,
-  source = "SourceGraphic"
+  source = 'SourceGraphic',
 ) {
   let flt = newfilter_expanded();
   let inner = `<feFlood data-pos="start" data-type="shadow" flood-color="${color}" in="${source}" result="flood"/>
@@ -246,7 +246,7 @@ function newhueRotate(val = 0) {
 }
 
 function newglass() {
-  let flt = newfilter_expanded("-100%", "-100%", "250%", "250%");
+  let flt = newfilter_expanded('-100%', '-100%', '250%', '250%');
   let inner = `<feBlend data-pos="start" data-type="glass" 
          in2="SourceGraphic"
          result="result1"
@@ -314,14 +314,14 @@ function newglass() {
 
 export const add_shadow = () => {
   let blur = 5;
-  let color = "#000000";
+  let color = '#000000';
   let dx = 0;
   let dy = 0;
   let slope = 0.5;
 
   let $flt = get_filter($clicked);
   //const $shadow = newshadow(blur,color,dx,dy,slope, $flt ? 'CurrentGraphic' : 'SourceGraphic')
-  const $shadow = newshadow(blur, color, dx, dy, slope, "SourceGraphic");
+  const $shadow = newshadow(blur, color, dx, dy, slope, 'SourceGraphic');
   if ($flt) {
     Array.from($shadow.children)
       .reverse()
@@ -337,7 +337,7 @@ export const add_glass = () => {
   if ($flt) {
     // glass can be added only once
     // if added already just return
-    const $inner = get_filter_inner($flt, "glass");
+    const $inner = get_filter_inner($flt, 'glass');
     if ($inner?.length) return;
 
     Array.from(glass.children).forEach(($f) => $flt.appendChild($f));
@@ -366,5 +366,5 @@ export const sharpening = function () {
     if (v < min) v = min; // 0 makes image disapear
     return `1 -1 1 -1 -${v} -1 1 -1 1`;
   };
-  return updating("sharpen", "feConvolveMatrix", "kernelMatrix", val);
+  return updating('sharpen', 'feConvolveMatrix', 'kernelMatrix', val);
 };

@@ -1,5 +1,5 @@
-export { $clicked } from "./clicked.js";
-export { $selection } from "./grouping.js";
+export { $clicked } from './clicked.js';
+export { $selection } from './grouping.js';
 export {
   Ants,
   Square,
@@ -7,4 +7,4 @@ export {
   ants_over,
   square_over,
   circle_over,
-} from "./ants.js";
+} from './ants.js';

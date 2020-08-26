@@ -1,5 +1,5 @@
-import { scaling } from "../dom.js";
-import { $clicked, $selection } from "../selection/index.js";
+import { scaling } from '../dom.js';
+import { $clicked, $selection } from '../selection/index.js';
 
 export function scale(val) {
   $selection.each(($el) => {
