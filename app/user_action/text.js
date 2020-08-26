@@ -27,7 +27,15 @@ export function keyup($target, evt=null) {
 	lines.forEach( (line, inx) => {
 //TODO empty case manage
 if (!line) return
-		const $line = document.createRange().createContextualFragment(line).firstElementChild
+		const $part = document.createRange().createContextualFragment(line)
+		if ($part.childNodes.length > 1) {
+			// FIXME br vs y
+			$part.childNodes.forEach($c => {
+				$c.removeAttributeNS(null, 'x')
+				$c.removeAttributeNS(null, 'y')
+			})
+		}
+		const $line = $part.firstElementChild
 		const style = window.getComputedStyle($prev_el)
 		if ($line.nodeType === Node.TEXT_NODE) {
 			$$clicked.appendChild($line)
@@ -51,7 +59,7 @@ if (!line) return
 			$prev_el = $line
 			prev_y = line_y
 			
-			$lines.appendChild($line)
+			$lines.appendChild($part)
 		}
 	})
 

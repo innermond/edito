@@ -141,7 +141,6 @@ observer.observe($textname, {childList: true})
 })*/
 $add_text_btn.addEventListener('click', with_undo(add_text, $textname))
 $textname.addEventListener('keyup', evt => {
-	return
 	evt.stopPropagation()
 	keyup($textname, evt)
 	add_patch()
