@@ -6,13 +6,14 @@ import {tooltip} from './tooltip.js'
 import {span_checkbox} from './span_checkbox.js'
 import {dragElement, show_hide} from './html_drag.js'
 
+import './idb.js'
+
 import {$section_menubar, $section_properties, $section_add_shape, $section_text, $section_image, $section_filter, $section_mask_clip_path, $section_bottombar, $section_save} from './section/index.js'
 
 import {$floater_select, $floater_zoom, $floater_move, $floater_geometry, $floater_color} from './floater/index.js'
 
 import {$svg, display_none, copy_viewbox} from './dom.js'
 import {zoom_reset} from './zoom.js'
-import {clear_patch} from './idb.js'
 
 const $ui = new DocumentFragment()
 $ui.appendChild($section_menubar)
@@ -70,7 +71,3 @@ const vbox = $svg.viewBox.baseVal
 if (vbox.width === 0) vbox.width = $svg.width.baseVal.value
 if (vbox.height === 0) vbox.height = $svg.height.baseVal.value
 zoom_reset.viewbox = copy_viewbox($svg.viewBox)
-
-window.addEventListener('DOMContentLoaded', () => {
-	clear_patch(true)
-})

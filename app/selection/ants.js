@@ -110,7 +110,7 @@ import {point_in} from '../pos.js'
         poly.remove()
         return bb
 
-        arr = [l, r, t, b]
+        /*arr = [l, r, t, b]
             arr.forEach(p => {
                 this.draw_point(p)
             } )
@@ -134,7 +134,7 @@ import {point_in} from '../pos.js'
             bb = {x:tl.x, y:tl.y, width:w, height:h}
         }
 
-        return bb
+        return bb*/
     }
 
 	follow() {

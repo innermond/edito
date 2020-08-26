@@ -27,17 +27,22 @@ let queue = []
 req.onsuccess = evt => {
 	db = evt.target.result
 	db.onerror = e => console.log(e.error)
+
 	emmiter.DBAvailable(db)
+
+	clear_patch(true)
+	const svg = db.transaction(['svg'], 'readwrite').objectStore('svg')
+	// add serialized svg as base
+	const svg_unmodified = new XMLSerializer().serializeToString($svg)
+	svg.put({id: 1, svg: svg_unmodified})
+	svg.onsuccess = () => console.log('svg saved')
+
 	for (const ff of queue) {
 		const [fn, args] = ff
 		fn.call(args)
 	}
 	queue = []
 	
-	const svg = db.transaction(['svg'], 'readwrite').objectStore('svg')
-	// add serialized svg as base
-	const svg_unmodified = new XMLSerializer().serializeToString($svg)
-	svg.put({id: 1, svg: svg_unmodified})
 }
 
 req.onupgradeneeded = e => {
@@ -57,6 +62,10 @@ req.onupgradeneeded = e => {
 }
 
 export function add_patch() {
+	if (!db) {
+		queue.push([add_patch, null])
+		return
+	}
 	const tx = db.transaction(['undo', 'svg', 'redo'], 'readwrite')
 	const store_svg = tx.objectStore('svg')
 	const x = store_svg.get(1)
@@ -228,22 +237,30 @@ export function update_svg(doc) {
 	$svg.style.height = '100%'
 }
 
-export function clear_patch(clear_svg=false) {
+export async function clear_patch(clear_svg=false) {
 	if (!db) {
 		queue.push([clear_patch, clear_svg])
 		return
 	}
 
-	const tx = db.transaction(['undo', 'redo', 'svg'], 'readwrite')
-	
-	const u = tx.objectStore('undo')
-	u.clear()
-	const r = tx.objectStore('redo')
-	r.clear()
-	if (clear_svg) {
-		const s = tx.objectStore('svg')
-		s.clear()
-	}
+	const p = new Promise((resolve, reject) => {
+		const tx = db.transaction(['undo', 'redo', 'svg'], 'readwrite')
+		
+		const u = tx.objectStore('undo')
+		u.clear()
+		const r = tx.objectStore('redo')
+		r.clear()
+		if (clear_svg) {
+			const s = tx.objectStore('svg')
+			s.clear()
+		}
+
+		tx.onerror = e => reject(e)
+		tx.onsuccess = e => resolve(e)
+
+	})
+
+	await p
 }
 
 // if you need context use fn.bind(ctx)
