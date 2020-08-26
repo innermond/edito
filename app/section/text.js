@@ -57,9 +57,31 @@ export const $textname = $ui.querySelector('#textname')
 const $add_text_btn = $ui.querySelector('#add-text-btn')
 
 function onenter(ml, obs) {
-	console.log(ml)
-	if (ml.length > 0) {
-		obs.disconnect()
+	obs.disconnect()
+	const ee = Array.from($textname.childNodes)
+	ee.forEach(e => {
+		if (['tspan', 'br'].includes(e.nodeName.toLowerCase()) || e.nodeType === Node.TEXT_NODE) return
+		console.log(e.previousElementSibling, e.childNodes)
+		const $br = document.createElement('br')
+		const prev = e.previousElementSibling
+		if (!prev) {
+			$textname.insertBefore($br, e.nextElementSibling)
+		} else {
+			const name = prev.nodeName.toLowerCase()
+			if (name === 'br') {
+				$textname.insertBefore($br, e.nextElementSibling)
+			} else if (name === 'tspan') {
+				$textname.insertBefore($br, e)
+			}
+		}
+		const $ee = Array.from(e.childNodes)
+		$ee.forEach($el => {
+			$textname.insertBefore($el, e)
+		})
+		e.remove()
+	})
+	obs.observe($textname, {childList: true})
+	/*if (ml.length > 0) {
 		for (let i = 0; i < ml.length; i++) {
 			const m = ml[i]
 			if (m.previousSibling === null && m.nextSibling === null) {
@@ -75,10 +97,10 @@ console.log('a', father.childNodes)
 			const $br = document.createElement('br')
 			$textname.insertBefore($br, father.nextElementSibling)
 			const $ee = Array.from(father.childNodes)
-			/*$ee.sort((a,b) => {
+			$ee.sort((a,b) => {
 				if (a?.getAttributeNS(null, 'y') || b?.getAttributeNS(null, 'y')) return 1
 				return 1*(b?.getAttributeNS(null, 'y') ?? 0) - 1*(a?.getAttributeNS(null, 'y') ?? 0)
-			})*/
+			})
 			$ee.forEach($el => {
 				$textname.insertBefore($el, father)
 			})
@@ -87,7 +109,7 @@ console.log('a', father.childNodes)
 console.log('z',$textname.childNodes)
 		}
 		obs.observe($textname, {childList: true})
-	}
+	}*/
 }
 const observer = new MutationObserver(onenter)
 observer.observe($textname, {childList: true})
@@ -119,6 +141,7 @@ observer.observe($textname, {childList: true})
 })*/
 $add_text_btn.addEventListener('click', with_undo(add_text, $textname))
 $textname.addEventListener('keyup', evt => {
+	return
 	evt.stopPropagation()
 	keyup($textname, evt)
 	add_patch()
