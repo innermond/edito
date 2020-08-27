@@ -62,6 +62,9 @@ export const $textname = $ui.querySelector('#textname');
 const $add_text_btn = $ui.querySelector('#add-text-btn');
 
 // TODO use a documentfragment as truth not $textname
+// convert svg alien elements like div, p or else into br
+// with significance of new line
+// which will be calculated
 function onenter(ml, obs) {
   obs.disconnect();
   const ee = Array.from($textname.childNodes);
