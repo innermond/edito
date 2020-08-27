@@ -67,23 +67,25 @@ const $add_text_btn = $ui.querySelector('#add-text-btn');
 // which will be calculated
 function onenter(ml, obs) {
   obs.disconnect();
+  let $br = null; 
   const ee = Array.from($textname.childNodes);
   ee.forEach((e) => {
+    console.log(e.childNodes);
     if (
       ['tspan', 'br'].includes(e.nodeName.toLowerCase()) ||
       e.nodeType === Node.TEXT_NODE
     )
       return;
-    const $br = document.createElement('br');
+    $br = document.createElement('br');
     const prev = e.previousElementSibling;
     if (!prev) {
-      $textname.insertBefore($br, e.nextElementSibling);
+      //$textname.insertBefore($br, e.nextElementSibling);
     } else {
       const name = prev.nodeName.toLowerCase();
       if (name === 'br') {
-        $textname.insertBefore($br, e.nextElementSibling);
+        //$textname.insertBefore($br, e.nextElementSibling);
       } else if (name === 'tspan') {
-        $textname.insertBefore($br, e);
+        //$textname.insertBefore($br, e);
       }
     }
     const $ee = Array.from(e.childNodes);
@@ -91,52 +93,27 @@ function onenter(ml, obs) {
       $textname.insertBefore($el, e);
     });
     e.remove();
-    if (window.getSelection) {
-      const sel = window.getSelection();
-      if (sel.rangeCount) {
-        const range = document.createRange();
-        range.setStartAfter($br);
-        range.collapse(true);
-        sel.removeAllRanges();
-        sel.addRange(range);
-      }
-    }
   });
+  if ($br?.isConnected && window.getSelection) {
+    const sel = window.getSelection();
+    if (sel.rangeCount) {
+      const range = document.createRange();
+      range.setStartAfter($br);
+      range.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+  }
   obs.observe($textname, { childList: true });
 }
 
 export const observer = new MutationObserver(onenter);
 observer.observe($textname, { childList: true });
 
-/*$textname.addEventListener('keyup', evt => {
-	if (evt.keyCode === 13) {
-		let sel
-		if (window.getSelection && (sel = window.getSelection()).rangeCount) {
-			let range = sel.getRangeAt(0)
-			range.collapse(true)
-			const br = document.createElement('br')
-			range.insertNode(br)
-
-			// Move the caret immediately after the inserted span
-			range.setStartAfter(br)
-			range.collapse(true)
-			sel.removeAllRanges()
-			sel.addRange(range)
-
-			const father = br.parentElement
-			Array.from(father.childNodes).forEach($el => {
-				document.insertBefore($el, father)
-			})
-			father.remove()
-		}
-		//document.execCommand('innerHTML', false, 'br')
-		return false
-	}
-})*/
 $add_text_btn.addEventListener('click', with_undo(add_text, $textname));
 $textname.addEventListener('keyup', (evt) => {
   evt.stopPropagation();
-  keyup($textname, evt);
+  //keyup($textname, evt);
   add_patch();
 });
 

@@ -72,11 +72,11 @@ export function keyup($target, evt = null) {
     }
   });
 
-  const str = new XMLSerializer().serializeToString($lines);
-  $clicked.innerHTML = str;
-  observer.disconnect();
-  text_svg_html($clicked, $target);
-  observer.observe($target, { childList: true });
+  //const str = new XMLSerializer().serializeToString($lines);
+  //$clicked.innerHTML = str;
+  //observer.disconnect();
+  //text_svg_html($clicked, $target);
+  //observer.observe($target, { childList: true });
 
   $clicked.over();
 }
