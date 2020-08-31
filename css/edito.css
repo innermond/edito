@@ -584,6 +584,12 @@ body.area {
   flex-flow: row wrap;
   justify-content: space-evenly; }
 
+.textarea {
+  border: 0.125rem solid #40454d;
+  padding: 0.25rem;
+  font-size: 1.2rem;
+  overflow: auto; }
+
 body {
   overflow: hidden; }
 

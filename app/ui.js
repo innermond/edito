@@ -152,8 +152,6 @@ export function initial() {
 }
 
 export function text_svg_html($el, $text) {
-  $text.innerHTML = $el.innerHTML;
-return;
   let text = '';
   let prev_y = 1.0 * $el.getAttributeNS(null, 'y');
   const $tt = Array.from($el.childNodes).filter(
@@ -178,6 +176,7 @@ return;
     }
   });
 
+  $text.style.fontFamily = $el.style.fontFamily;
   $text.innerHTML = text.trim();
 }
 

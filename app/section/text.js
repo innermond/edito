@@ -1,4 +1,4 @@
-import { keyup } from '../user_action/text.js';
+import { $clicked } from '../selection/index.js';
 import { add_text } from '../user_action/add.js';
 import { aligning_text } from '../user_action/font/align.js';
 import { load_font } from '../user_action/font/fontface.js';
@@ -19,7 +19,7 @@ const tpl = `<section class="vertical-align">
 		<button id="add-text-btn">Adaugă text nou</button>
 
 			<label>Text</label>
-			<div contenteditable="true" style="display:inline-block" aria-autocomplete="none" spellcheck="false" id="textname"></div>
+			<div contenteditable="true" aria-autocomplete="none" spellcheck="false" id="textname" class="textarea"></div>
 
 			<label>Aliniere</label>
 			<ul id="text-features" class="icon-button-set">
@@ -61,49 +61,30 @@ export const $ui = wrap(ui_fragment(tpl), 'add-text', 'text');
 export const $textname = $ui.querySelector('#textname');
 const $add_text_btn = $ui.querySelector('#add-text-btn');
 
-// TODO use a documentfragment as truth not $textname
-// convert svg alien elements like div, p or else into br
-// with significance of new line
-// which will be calculated
+// textname before changes
+let $old_textname = null;
+$textname.addEventListener('keydown', (evt) => {
+  $old_textname = $textname.cloneNode(true);
+});
+// after keydown dom modifications may occur
 function onenter(ml, obs) {
-  obs.disconnect();
-  let $br = null; 
-  const ee = Array.from($textname.childNodes);
-  ee.forEach((e) => {
-    console.log(e.childNodes);
-    if (
-      ['tspan', 'br'].includes(e.nodeName.toLowerCase()) ||
-      e.nodeType === Node.TEXT_NODE
-    )
-      return;
-    $br = document.createElement('br');
-    const prev = e.previousElementSibling;
-    if (!prev) {
-      //$textname.insertBefore($br, e.nextElementSibling);
-    } else {
-      const name = prev.nodeName.toLowerCase();
-      if (name === 'br') {
-        //$textname.insertBefore($br, e.nextElementSibling);
-      } else if (name === 'tspan') {
-        //$textname.insertBefore($br, e);
-      }
+  if ($old_textname === null) return;
+  obs.disconnect(); 
+
+  let keep_old = true;
+  for (const m of ml) {
+    if (m.addedNodes.length) {
+      keep_old = true;
+      break;
     }
-    const $ee = Array.from(e.childNodes);
-    $ee.forEach(($el) => {
-      $textname.insertBefore($el, e);
-    });
-    e.remove();
-  });
-  if ($br?.isConnected && window.getSelection) {
-    const sel = window.getSelection();
-    if (sel.rangeCount) {
-      const range = document.createRange();
-      range.setStartAfter($br);
-      range.collapse(true);
-      sel.removeAllRanges();
-      sel.addRange(range);
+    if (m.removedNodes.length) {
+      keep_old = false;
+      break;
     }
   }
+  // restore textname before adding/removing nodes
+  if (keep_old) $textname.innerHTML = $old_textname.innerHTML;
+  $old_textname = null;
   obs.observe($textname, { childList: true });
 }
 
@@ -111,9 +92,12 @@ export const observer = new MutationObserver(onenter);
 observer.observe($textname, { childList: true });
 
 $add_text_btn.addEventListener('click', with_undo(add_text, $textname));
+
 $textname.addEventListener('keyup', (evt) => {
   evt.stopPropagation();
-  //keyup($textname, evt);
+  const lines = $textname.innerHTML.split('<br>').join('');
+  $clicked.innerHTML = lines;
+  $clicked.over();
   add_patch();
 });
 
