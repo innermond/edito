@@ -154,15 +154,14 @@ export function initial() {
 export function text_svg_html($el, $text) {
   let text = '';
   let prev_y = 1.0 * $el.getAttributeNS(null, 'y');
-  const $tt = Array.from($el.childNodes).filter(
-    ($e) => $e.nodeType === Node.TEXT_NODE || $e.nodeType === Node.ELEMENT_NODE,
-  );
+  const $tt = Array.from($el.childNodes);
   $tt.forEach(($t) => {
     switch ($t.nodeType) {
       case Node.TEXT_NODE:
         text += $t.textContent;
         break;
       case Node.ELEMENT_NODE:
+        if ($t.nodeName.toLowerCase() !== 'tspan') return; 
         const t_y = 1.0 * $t.getAttributeNS(null, 'y');
         // assume contained tspan are not y or x positioned
         //$t.querySelectorAll('tspan').forEach($s => $s.removeAttributeNS(null, 'y'))

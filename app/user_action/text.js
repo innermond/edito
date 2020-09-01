@@ -10,7 +10,10 @@ export function keyup($target, evt = null) {
   // not a delete / backspace / enter key
   // there is no new nodes added / removed
   if ([8, 46, 13].includes(evt.keyCode)) return;
-  const lines = $target.innerHTML.split('<br>').join('');
+  const lines = $target.innerHTML
+    .replace(/^((\<br\>)*)/mg, '')
+    .replace(/((\<br\>)*)$/mg, '')
+    .split('<br>').join('');
   $clicked.innerHTML = lines;
   $clicked.over();
 }

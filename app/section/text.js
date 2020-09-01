@@ -74,7 +74,13 @@ function onenter(ml, obs) {
   let keep_old = true;
   for (const m of ml) {
     if (m.addedNodes.length) {
-      keep_old = true;
+      const just_br = Array.from(m.addedNodes).every(e => 'br' === e.nodeName.toLowerCase());
+      const just_text = Array.from(m.addedNodes).every(e => ['br', '#text'].includes(e.nodeName.toLowerCase()))
+
+      // do not allow adding nodes others than text mixed with br
+      keep_old = !just_text;
+      // do not allow just br
+      if (just_br) keep_old = true;
       break;
     }
     if (m.removedNodes.length) {
