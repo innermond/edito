@@ -146,7 +146,7 @@ function px(units, zoom = true) {
   const u = r.width.baseVal;
   u.convertToSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_PX);
   const v = zoom
-    ? $svg.getCTM().a * u.valueInSpecifiedUnits
+    ? ($svg.getCTM()?.a ?? 1) * u.valueInSpecifiedUnits
     : u.valueInSpecifiedUnits;
   r = null;
   return v;

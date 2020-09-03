@@ -155,7 +155,7 @@ export function text_svg_html($el, $text) {
   let text = '';
   let prev_y = 1.0 * $el.getAttributeNS(null, 'y');
   const $tt = Array.from($el.childNodes);
-  $tt.forEach(($t) => {
+  $tt.forEach(($t, inx) => {
     switch ($t.nodeType) {
       case Node.TEXT_NODE:
         text += $t.textContent;
@@ -165,7 +165,7 @@ export function text_svg_html($el, $text) {
         const t_y = 1.0 * $t.getAttributeNS(null, 'y');
         // assume contained tspan are not y or x positioned
         //$t.querySelectorAll('tspan').forEach($s => $s.removeAttributeNS(null, 'y'))
-        if (t_y && t_y !== prev_y) {
+        if (inx > 0 && t_y && t_y !== prev_y) {
           text += '<br>' + $t.outerHTML;
           prev_y = t_y;
         } else {

@@ -47,7 +47,7 @@ function startDrag(evt) {
   // posibly a click on an embeded svg into a svg
   // TODO check if point_screen will work
   // in case of an embeded svg
-  let $othersvg = $clicked.closest('svg');
+  let $othersvg = $el.closest('svg');
   let $pt = $othersvg.createSVGPoint();
   // TODO: needed for an embeded svg???
   //$pt = $pt.matrixTransform($svg.getScreenCTM().inverse())
