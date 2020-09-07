@@ -88,6 +88,7 @@ function onenter(ml, obs) {
       break;
     }
   }
+keep_old = false;
   // restore textname before adding/removing nodes
   if (keep_old) $textname.innerHTML = $old_textname.innerHTML;
   $old_textname = null;

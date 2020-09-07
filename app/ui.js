@@ -151,7 +151,67 @@ export function initial() {
   $glass_two.value = 0.5;
 }
 
+function simple_text($el) {
+  // plain text inside along elements?
+  const has_plain_text = $el.childNodes.length > $el.childElementCount;
+  if (has_plain_text) return false;
+
+  // other elements than tspan?
+  const other_elements = $el.querySelectorAll(':scope>tspan').length < $el.childElementCount;
+  if (other_elements) return false;
+
+  return true;
+}
+
+function tspan_wrap_free_text($el) {
+  const class_name = 'tspan-wrapped';
+  if ($el.classList.contains(class_name)) return;
+
+  const $tt = Array.from($el.childNodes).filter($e => $e.nodeType === Node.TEXT_NODE);
+  const a = [];
+  $tt.forEach(n => {
+    n.parentNode.classList.add(class_name);
+    a.push(n);
+  });
+  a.forEach(e => {
+    const tspan = newtag('tspan');
+    tspan.textContent = e.textContent;
+    tspan.classList.add(class_name);
+    e.parentNode.replaceChild(tspan, e); 
+  });
+}
+
+function adj($e) {
+  const X = +$e.getAttributeNS(null, 'x') ?? 0;
+  const Y = +$e.getAttributeNS(null, 'y') ?? 0;
+
+  const $cc = Array.from($e.children);
+  $cc.forEach($c => {
+    let x = $c.getAttributeNS(null, 'x') ?? null;
+    let dx = +$c.getAttributeNS(null, 'dx') ?? 0;
+    if (x !== null) {
+      x = +x;
+      $c.setAttributeNS(null, 'x', x + dx);
+    }
+    $c.removeAttributeNS(null, 'dx', dx);
+
+    let y = $c.getAttributeNS(null, 'y') ?? null;
+    let dy = +$c.getAttributeNS(null, 'dy') ?? 0;
+    if (y !== null) {
+      y = +y + dy;
+      let yprev = $c.previousElementSibling ? $c.previousElementSibling.getAttributeNS(null, 'y') ?? 0 : Y;
+      yprev = +yprev;
+      $c.setAttributeNS(null, 'ystep', y - yprev);
+    }
+    $c.removeAttributeNS(null, 'dy', dy);
+    if ($c.childElementCount) adj($c);
+  })
+}
+
 export function text_svg_html($el, $text) {
+  tspan_wrap_free_text($el);
+  adj($el);
+
   let text = '';
   let prev_y = 1.0 * $el.getAttributeNS(null, 'y');
   const $tt = Array.from($el.childNodes);
