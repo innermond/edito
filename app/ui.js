@@ -108,7 +108,6 @@ import {
   get_angle,
   scale_prevs,
   angle_prevs,
-  get_paren_id,
   newtag,
   unit_conv,
 } from './dom.js';
@@ -179,10 +178,13 @@ function tspan_wrap_free_text($el) {
     tspan.classList.add(class_name);
     e.parentNode.replaceChild(tspan, e); 
   });
+  const $ee = Array.from($el.children).filter($e => $e.nodeType === Node.ELEMENT_NODE);
+	$ee.forEach($e => tspan_wrap_free_text($e));
+	$el.classList.add(class_name);
 }
 
 function adj($e) {
-  const X = +$e.getAttributeNS(null, 'x') ?? 0;
+  //const X = +$e.getAttributeNS(null, 'x') ?? 0;
   const Y = +$e.getAttributeNS(null, 'y') ?? 0;
 
   const $cc = Array.from($e.children);

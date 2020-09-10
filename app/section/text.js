@@ -95,18 +95,79 @@ keep_old = false;
   obs.observe($textname, { childList: true });
 }
 
-export const observer = new MutationObserver(onenter);
-observer.observe($textname, { childList: true });
+//export const observer = new MutationObserver(onenter);
+//observer.observe($textname, { childList: true });
 
 $add_text_btn.addEventListener('click', with_undo(add_text, $textname));
 
 $textname.addEventListener('keyup', (evt) => {
   evt.stopPropagation();
-  const lines = $textname.innerHTML.split('<br>').join('');
-  $clicked.innerHTML = lines;
+	// extract content of any not-svg element
+	const $el = $textname;
+	const $tt = $el.children;
+	Array.from($tt).forEach($t => {
+		if (['tspan', 'br'].includes($t.nodeName.toLowerCase())) return;
+		// a just br inside means a new line
+		$el.insertBefore(document.createElement('br'), $t);
+		Array.from($t.childNodes).forEach($c => {
+			if ($c.firstElement?.nodeName.toLowerCase() === 'br' && $c.childElementCount === 1) return;
+			$el.insertBefore($c, $t);
+		})
+		$t.remove()
+	})
+	
+	const $text = $clicked.cloneNode(true);
+	$text.innerHTML = $textname.innerHTML;
+	reposition($text); 
+  $clicked.innerHTML = $text.innerHTML.split('<br>').join('');
   $clicked.over();
   add_patch();
 });
+
+function reposition($text) {
+	const $cc = $text.children;
+	const lines = [];
+	let line = [];
+	Array.from($cc).forEach($c => {
+		if ($c.nodeName.toLowerCase() === 'br') {
+			lines.push(line);
+			line = [];
+			return;
+		}
+		line.push($c);
+	});
+	if (line.length) lines.push(line);
+	let prev = $text
+	let prev_step_y = line_height($text);
+	let prev_x = prev.getAttributeNS(null, 'x');
+	let prev_y = +prev.getAttributeNS(null, 'y');
+	let y = prev_y;  
+	for (line of lines) {
+		line.forEach( 
+			($e, i) => {
+				if (i === 0) {
+					const x = $e.getAttributeNS(null, 'x') ?? prev_x;
+					if (!isNaN(x) || x !== null) $e.setAttributeNS(null, 'x', x);
+				} else {
+					$e.removeAttributeNS(null, 'x');
+				}
+				// needs to be recomputed
+				$e.removeAttributeNS(null, 'y');
+				$e.setAttributeNS(null, 'y', y);
+				reposition($e);
+			}
+		)
+		y += prev_step_y;
+	}
+}
+
+function line_height($e) {
+	const css = window.getComputedStyle($e);
+	let fs = css.getPropertyValue('font-size') || '16px';
+	fs = parseFloat(fs);
+	let lh = css.getPropertyValue('line-height') || fs*1.25;
+	return lh;
+}
 
 export const $text_features = $ui.querySelector('#text-features');
 $text_features.addEventListener('click', (evt) => {
