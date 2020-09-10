@@ -1,4 +1,5 @@
 import { $clicked } from '../selection/index.js';
+import {newtag} from '../dom.js';
 import { add_text } from '../user_action/add.js';
 import { aligning_text } from '../user_action/font/align.js';
 import { load_font } from '../user_action/font/fontface.js';
@@ -124,8 +125,21 @@ $textname.addEventListener('keyup', (evt) => {
   add_patch();
 });
 
-function reposition($text) {
-	const $cc = $text.children;
+$textname.addEventListener('paste', evt => {
+	evt.preventDefault();
+
+	const paste = (evt.clipboardData || window.clipboardData).getData('text');
+	const sel = window.getSelection();
+	if (!sel.rangeCount) return;
+	sel.deleteFromDocument();
+	
+	const tspan = newtag('tspan');
+	tspan.textContent = paste;
+	sel.getRangeAt(0).insertNode(tspan);
+})
+
+function reposition($text, remove_x=false) {
+	const $cc = $text.childNodes;
 	const lines = [];
 	let line = [];
 	Array.from($cc).forEach($c => {
@@ -139,22 +153,30 @@ function reposition($text) {
 	if (line.length) lines.push(line);
 	let prev = $text
 	let prev_step_y = line_height($text);
-	let prev_x = prev.getAttributeNS(null, 'x');
+	//let prev_x = prev.getAttributeNS(null, 'x');
 	let prev_y = +prev.getAttributeNS(null, 'y');
 	let y = prev_y;  
 	for (line of lines) {
 		line.forEach( 
 			($e, i) => {
-				if (i === 0) {
-					const x = $e.getAttributeNS(null, 'x') ?? prev_x;
-					if (!isNaN(x) || x !== null) $e.setAttributeNS(null, 'x', x);
-				} else {
+				if ($e.nodeName.toLowerCase() === '#text') return;
+				if (remove_x) {
 					$e.removeAttributeNS(null, 'x');
+				} else {
+					if (i === 0) {
+						const x = $e.getAttributeNS(null, 'x') ?? prev.getAttributeNS(null, 'x');
+						if (!isNaN(x) && x !== null) {
+							$e.setAttributeNS(null, 'x', x);
+						} 
+					} else {
+						$e.removeAttributeNS(null, 'x');
+					}
 				}
 				// needs to be recomputed
 				$e.removeAttributeNS(null, 'y');
 				$e.setAttributeNS(null, 'y', y);
-				reposition($e);
+				if (remove_x) $e.removeAttributeNS(null, 'x');
+				reposition($e, true);
 			}
 		)
 		y += prev_step_y;
