@@ -184,11 +184,13 @@ function tspan_wrap_free_text($el) {
 }
 
 function adj($e) {
+	if ($e.nodeType === Node.TEXT_NODE) return;
   //const X = +$e.getAttributeNS(null, 'x') ?? 0;
   const Y = +$e.getAttributeNS(null, 'y') ?? 0;
 
   const $cc = Array.from($e.children);
   $cc.forEach($c => {
+		if ($c.nodeType === Node.TEXT_NODE) return;
     let x = $c.getAttributeNS(null, 'x') ?? null;
     let dx = +$c.getAttributeNS(null, 'dx') ?? 0;
     if (x !== null) {
@@ -211,7 +213,7 @@ function adj($e) {
 }
 
 export function text_svg_html($el, $text) {
-  tspan_wrap_free_text($el);
+  //tspan_wrap_free_text($el);
   adj($el);
 
   let text = '';

@@ -114,6 +114,24 @@ $textname.addEventListener('keyup', (evt) => {
 			if ($c.firstElement?.nodeName.toLowerCase() === 'br' && $c.childElementCount === 1) return;
 			$el.insertBefore($c, $t);
 		})
+		// if only text or just one element no need a wrapping tspan as an independent line
+		/*
+		 const just_text = Array.from($t.childNodes).every(e => '#text' === e.nodeName.toLowerCase());
+		const should_wrap = !(just_text || $t.childElementCount === 1);
+		if (should_wrap) {
+			const $line_container = newtag('tspan');
+			Array.from($t.childNodes).forEach($c => {
+				if ($c.firstElement?.nodeName.toLowerCase() === 'br' && $c.childElementCount === 1) return;
+				$line_container.appendChild($c);
+			})
+			$el.insertBefore($line_container, $t);
+		} else {
+			Array.from($t.childNodes).forEach($c => {
+				if ($c.firstElement?.nodeName.toLowerCase() === 'br' && $c.childElementCount === 1) return;
+				$el.insertBefore($c, $t);
+			})
+		}*/
+
 		$t.remove()
 	})
 	
@@ -125,7 +143,7 @@ $textname.addEventListener('keyup', (evt) => {
   add_patch();
 });
 
-$textname.addEventListener('paste', evt => {
+/*$textname.addEventListener('paste', evt => {
 	evt.preventDefault();
 
 	const paste = (evt.clipboardData || window.clipboardData).getData('text');
@@ -135,8 +153,10 @@ $textname.addEventListener('paste', evt => {
 	
 	const tspan = newtag('tspan');
 	tspan.textContent = paste;
-	sel.getRangeAt(0).insertNode(tspan);
-})
+	const range = sel.getRangeAt(0);
+	console.log(sel.anchorNode.nodeType);
+	range.insertNode(tspan);
+})*/
 
 function reposition($text, remove_x=false) {
 	const $cc = $text.childNodes;
@@ -152,11 +172,23 @@ function reposition($text, remove_x=false) {
 	});
 	if (line.length) lines.push(line);
 	let prev = $text
-	let prev_step_y = line_height($text);
+	let prev_step_y = prev.getAttributeNS(null, 'ystep') || line_height($text);
 	//let prev_x = prev.getAttributeNS(null, 'x');
-	let prev_y = +prev.getAttributeNS(null, 'y');
+	let prev_y = prev.getAttributeNS(null, 'y');
 	let y = prev_y;  
-	for (line of lines) {
+	const y_is_number = !isNaN(y) && y !== null;
+	// TODO every line should be wrapped by a tspan
+	// for now a line can result as a free tspans y positioned and texts
+	for (const line of lines) {
+		const just_text = line.every(e => '#text' === e.nodeName.toLowerCase());
+		const just_one_element = line.filter(e => Node.ELEMENT_NODE === e.nodeType).length === 1;
+		const should_wrap = !(just_text || just_one_element);
+		const $line_container = should_wrap ? newtag('tspan') : null;
+		let $before_node = line[line.length-1]?.nextElementSibling;
+		while ($before_node?.nodeName.toLowerCase() === 'br') {
+			$before_node = $before_node.nextElementSibling;
+		}
+		if ($line_container && y_is_number) $line_container.setAttributeNS(null, 'y', y);
 		line.forEach( 
 			($e, i) => {
 				if ($e.nodeName.toLowerCase() === '#text') return;
@@ -174,12 +206,19 @@ function reposition($text, remove_x=false) {
 				}
 				// needs to be recomputed
 				$e.removeAttributeNS(null, 'y');
-				$e.setAttributeNS(null, 'y', y);
+				if (should_wrap) {
+				 $line_container.appendChild($e);
+				} else {
+					y_is_number && $e.setAttributeNS(null, 'y', y);
+				}
 				if (remove_x) $e.removeAttributeNS(null, 'x');
-				reposition($e, true);
+				//reposition($e, true);
 			}
 		)
-		y += prev_step_y;
+		if ($line_container) {
+			$text.insertBefore($line_container, $before_node);
+		}
+		y = +y + prev_step_y;
 	}
 }
 
