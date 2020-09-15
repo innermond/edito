@@ -115,7 +115,6 @@ $textname.addEventListener('keyup', (evt) => {
 			$el.insertBefore($c, $t);
 		})
 		// if only text or just one element no need a wrapping tspan as an independent line
-		/*
 		 const just_text = Array.from($t.childNodes).every(e => '#text' === e.nodeName.toLowerCase());
 		const should_wrap = !(just_text || $t.childElementCount === 1);
 		if (should_wrap) {
@@ -130,7 +129,7 @@ $textname.addEventListener('keyup', (evt) => {
 				if ($c.firstElement?.nodeName.toLowerCase() === 'br' && $c.childElementCount === 1) return;
 				$el.insertBefore($c, $t);
 			})
-		}*/
+		}
 
 		$t.remove()
 	})
@@ -162,57 +161,82 @@ function reposition($text, remove_x=false) {
 	const $cc = $text.childNodes;
 	const lines = [];
 	let line = [];
+	// makes lines as separated by br tag
 	Array.from($cc).forEach($c => {
 		if ($c.nodeName.toLowerCase() === 'br') {
 			lines.push(line);
 			line = [];
 			return;
 		}
-		line.push($c);
+		// element must be text or tspan
+		// anyother is converted to text node
+		const as_text = !['#text', 'tspan'].includes($c.nodeName.toLowerCase());
+		if (as_text) {
+			line.push(document.createTextNode($c.textContent));
+		} else {
+			line.push($c);
+		}
 	});
 	if (line.length) lines.push(line);
+
 	let prev = $text
 	let prev_step_y = prev.getAttributeNS(null, 'ystep') || line_height($text);
-	//let prev_x = prev.getAttributeNS(null, 'x');
 	let prev_y = prev.getAttributeNS(null, 'y');
 	let y = prev_y;  
-	const y_is_number = !isNaN(y) && y !== null;
-	// TODO every line should be wrapped by a tspan
-	// for now a line can result as a free tspans y positioned and texts
+	const y_is_number = (!isNaN(y) && y !== null);
+
+	let x = prev.getAttributeNS(null, 'x');
+	const x_is_number = (!isNaN(x) && x !== null);
+	
 	for (const line of lines) {
+		// examine line as all to see if we will wrap their children with a tspan or not
 		const just_text = line.every(e => '#text' === e.nodeName.toLowerCase());
-		const just_one_element = line.filter(e => Node.ELEMENT_NODE === e.nodeType).length === 1;
+		const just_one_element = line.length === 1 && line[0].nodeType === Node.ELEMENT_NODE;
 		const should_wrap = !(just_text || just_one_element);
-		const $line_container = should_wrap ? newtag('tspan') : null;
+		let $line_container = newtag('tspan');//should_wrap ? newtag('tspan'); : document.createDocumentFragment();
+		if (just_one_element) $line_container = line[0];
+
+		// find a reference node to insert line
 		let $before_node = line[line.length-1]?.nextElementSibling;
 		while ($before_node?.nodeName.toLowerCase() === 'br') {
 			$before_node = $before_node.nextElementSibling;
 		}
-		if ($line_container && y_is_number) $line_container.setAttributeNS(null, 'y', y);
+
+		// compute x, y of a line
+		if ($line_container && y_is_number && 'setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'y', y);
+		if ($line_container && x_is_number && 'setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'x', x);
+		// proces every line child
 		line.forEach( 
 			($e, i) => {
-				if ($e.nodeName.toLowerCase() === '#text') return;
-				if (remove_x) {
-					$e.removeAttributeNS(null, 'x');
-				} else {
-					if (i === 0) {
-						const x = $e.getAttributeNS(null, 'x') ?? prev.getAttributeNS(null, 'x');
-						if (!isNaN(x) && x !== null) {
-							$e.setAttributeNS(null, 'x', x);
-						} 
-					} else {
-						$e.removeAttributeNS(null, 'x');
-					}
+				switch ($e.nodeName.toLowerCase()){
+					case '#text':
+						$line_container.appendChild($e);
+					break;
+					default:
+						if (remove_x || i > 0) {
+							$e.removeAttributeNS(null, 'x');
+						} else {
+							// first node is leading x position
+							if (i === 0 && !remove_x) {
+								x = $e.getAttributeNS(null, 'x') ?? prev.getAttributeNS(null, 'x');
+								if (!isNaN(x) && x !== null) {
+									$e.setAttributeNS(null, 'x', x);
+								} 
+							} else {
+								$e.removeAttributeNS(null, 'x');
+							}
+
+						}
+						// needs to be recomputed
+						$e.removeAttributeNS(null, 'y');
+						if (should_wrap) {
+						 $line_container.appendChild($e);
+						} else {
+							y_is_number && $e.setAttributeNS(null, 'y', y);
+						}
+						if (remove_x) $e.removeAttributeNS(null, 'x');
+						reposition($e, true);
 				}
-				// needs to be recomputed
-				$e.removeAttributeNS(null, 'y');
-				if (should_wrap) {
-				 $line_container.appendChild($e);
-				} else {
-					y_is_number && $e.setAttributeNS(null, 'y', y);
-				}
-				if (remove_x) $e.removeAttributeNS(null, 'x');
-				//reposition($e, true);
 			}
 		)
 		if ($line_container) {
