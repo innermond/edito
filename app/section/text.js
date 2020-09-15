@@ -104,43 +104,48 @@ $add_text_btn.addEventListener('click', with_undo(add_text, $textname));
 $textname.addEventListener('keyup', (evt) => {
   evt.stopPropagation();
 	// extract content of any not-svg element
-	const $el = $textname;
-	const $tt = $el.children;
-	Array.from($tt).forEach($t => {
-		if (['tspan', 'br'].includes($t.nodeName.toLowerCase())) return;
-		// a just br inside means a new line
-		$el.insertBefore(document.createElement('br'), $t);
-		Array.from($t.childNodes).forEach($c => {
-			if ($c.firstElement?.nodeName.toLowerCase() === 'br' && $c.childElementCount === 1) return;
-			$el.insertBefore($c, $t);
-		})
-		// if only text or just one element no need a wrapping tspan as an independent line
-		 const just_text = Array.from($t.childNodes).every(e => '#text' === e.nodeName.toLowerCase());
-		const should_wrap = !(just_text || $t.childElementCount === 1);
-		if (should_wrap) {
-			const $line_container = newtag('tspan');
-			Array.from($t.childNodes).forEach($c => {
-				if ($c.firstElement?.nodeName.toLowerCase() === 'br' && $c.childElementCount === 1) return;
-				$line_container.appendChild($c);
-			})
-			$el.insertBefore($line_container, $t);
-		} else {
-			Array.from($t.childNodes).forEach($c => {
-				if ($c.firstElement?.nodeName.toLowerCase() === 'br' && $c.childElementCount === 1) return;
-				$el.insertBefore($c, $t);
-			})
-		}
+	convert_text_to_elements_and_separators(textname);
 
-		$t.remove()
-	})
-	
+	// prepare to apply textname to svg
 	const $text = $clicked.cloneNode(true);
 	$text.innerHTML = $textname.innerHTML;
 	reposition($text); 
-  $clicked.innerHTML = $text.innerHTML.split('<br>').join('');
+  
+	// apply new content
+	$clicked.innerHTML = $text.innerHTML.split('<br>').join('');
   $clicked.over();
   add_patch();
 });
+
+// modify $el content to have "rows" (represented by tspan) separated by br elements
+function convert_text_to_elements_and_separators($el) {
+	const $tt = $el.children;
+	// prevent occurence of separated elements with same id
+	Array.from($el.children).forEach($c => $c.removeAttributeNS(null, 'id'));
+
+	// find separations - assumed as div elements
+	const $last = Array.from($el.querySelectorAll('div')).pop();
+	Array.from($tt).forEach($t => {
+		if (['tspan', 'br'].includes($t.nodeName.toLowerCase())) return;
+		
+		// now $t is a div or other element that means separation
+		if ($t === $last) {
+			$el.insertBefore(document.createElement('br'), $t);
+			// there are more elelents after so do a separation
+			if ($last.nextElementSibling !== null) $el.insertBefore(document.createElement('br'), $last.nextElementSibling);
+		}
+
+		// extract content of separation
+		Array.from($t.childNodes).forEach($c => {
+			$el.insertBefore($c, $t);
+		})
+
+		$t.remove()
+	})
+
+	// remove non meaningfull tspan
+	Array.from($el.querySelectorAll(':empty')).filter($x => $x.nodeName.toLowerCase() !== 'br').forEach($x => $x.remove());
+}
 
 /*$textname.addEventListener('paste', evt => {
 	evt.preventDefault();
@@ -179,22 +184,30 @@ function reposition($text, remove_x=false) {
 	});
 	if (line.length) lines.push(line);
 
+	// we have lines
+	// lets reposition them on y and x axis
 	let prev = $text
 	let prev_step_y = prev.getAttributeNS(null, 'ystep') || line_height($text);
 	let prev_y = prev.getAttributeNS(null, 'y');
+	prev_y = +prev_y;
 	let y = prev_y;  
 	const y_is_number = (!isNaN(y) && y !== null);
 
-	let x = prev.getAttributeNS(null, 'x');
+	let prev_x = prev.getAttributeNS(null, 'x');
+	let x = prev_x;
 	const x_is_number = (!isNaN(x) && x !== null);
 	
 	for (const line of lines) {
-		// examine line as all to see if we will wrap their children with a tspan or not
-		const just_text = line.every(e => '#text' === e.nodeName.toLowerCase());
 		const just_one_element = line.length === 1 && line[0].nodeType === Node.ELEMENT_NODE;
-		const should_wrap = !(just_text || just_one_element);
-		let $line_container = newtag('tspan');//should_wrap ? newtag('tspan'); : document.createDocumentFragment();
+
+		// consume line and collect it to $line_container
+		let $line_container = newtag('tspan');
 		if (just_one_element) $line_container = line[0];
+		
+		// position line as parent
+		if ($line_container && y_is_number && 'setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'y', y);
+		if ($line_container && x_is_number && 'setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'x', x);
+		if ($line_container && 'setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'ystep', prev_step_y);
 
 		// find a reference node to insert line
 		let $before_node = line[line.length-1]?.nextElementSibling;
@@ -203,46 +216,30 @@ function reposition($text, remove_x=false) {
 		}
 
 		// compute x, y of a line
-		if ($line_container && y_is_number && 'setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'y', y);
-		if ($line_container && x_is_number && 'setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'x', x);
 		// proces every line child
 		line.forEach( 
-			($e, i) => {
+			($e) => {
 				switch ($e.nodeName.toLowerCase()){
 					case '#text':
 						$line_container.appendChild($e);
 					break;
 					default:
-						if (remove_x || i > 0) {
+						if (!just_one_element) {
 							$e.removeAttributeNS(null, 'x');
-						} else {
-							// first node is leading x position
-							if (i === 0 && !remove_x) {
-								x = $e.getAttributeNS(null, 'x') ?? prev.getAttributeNS(null, 'x');
-								if (!isNaN(x) && x !== null) {
-									$e.setAttributeNS(null, 'x', x);
-								} 
-							} else {
-								$e.removeAttributeNS(null, 'x');
-							}
-
+							$e.removeAttributeNS(null, 'y');
+							$line_container.appendChild($e);
 						}
-						// needs to be recomputed
-						$e.removeAttributeNS(null, 'y');
-						if (should_wrap) {
-						 $line_container.appendChild($e);
-						} else {
-							y_is_number && $e.setAttributeNS(null, 'y', y);
-						}
-						if (remove_x) $e.removeAttributeNS(null, 'x');
-						reposition($e, true);
 				}
 			}
 		)
-		if ($line_container) {
-			$text.insertBefore($line_container, $before_node);
-		}
+
+		$text.insertBefore($line_container, $before_node);
 		y = +y + prev_step_y;
+		if (y === prev_y) {
+			y += line_height(prev);
+		}
+		prev_y = y;
+		x = prev_x;
 	}
 }
 
