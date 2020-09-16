@@ -144,3 +144,4 @@ stock-*
 app/data
 app/tags
 *.pak.js
+*.swp

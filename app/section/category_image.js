@@ -1,5 +1,5 @@
-import {ui_fragment} from '../dom.js'
-import {wrap} from '../drawer.js'
+import { ui_fragment } from '../dom.js';
+import { wrap } from '../drawer.js';
 
 const tpl = `<style>
 	.tool-drawer-scroll > section > [name=box] {
@@ -38,6 +38,6 @@ const tpl = `<style>
 
 <section class="vertical-align">
 	<div name="box"></div>
-</section>`
+</section>`;
 
-export const $ui = wrap(ui_fragment(tpl), 'category-image', 'Temă')
+export const $ui = wrap(ui_fragment(tpl), 'category-image', 'Temă');

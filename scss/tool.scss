@@ -701,3 +701,9 @@ body{
 	flex-flow: row wrap;
 	justify-content: space-evenly;
 }
+.textarea {
+  border: $border-size solid $txt-color-border;
+  padding: 2*$border-size;
+  font-size: 1.2rem;
+  overflow: auto;
+}
