@@ -702,6 +702,7 @@ body{
 	justify-content: space-evenly;
 }
 .textarea {
+  min-height: 2rem;
   border: $border-size solid $txt-color-border;
   padding: 2*$border-size;
   font-size: 1.2rem;
