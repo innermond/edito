@@ -107,12 +107,16 @@ $textname.addEventListener('keyup', (evt) => {
 	convert_text_to_elements_and_separators(textname);
 
 	// prepare to apply textname to svg
-	const $text = $clicked.cloneNode(true);
-	$text.innerHTML = $textname.innerHTML;
-	reposition($text); 
+	const $clone = $clicked.cloneNode(true);
+	$clone.innerHTML = '';
+	for(const $x of $textname.childNodes) {
+		$clone.appendChild($x.cloneNode(true));
+	};
+	console.log($clone.childNodes);
+	reposition($clone); 
   
 	// apply new content
-	$clicked.innerHTML = $text.innerHTML.split('<br>').join('');
+	$clicked.innerHTML = $clone.innerHTML.split('<br>').join('');
   $clicked.over();
   add_patch();
 });
@@ -124,7 +128,9 @@ function convert_text_to_elements_and_separators($el) {
 	Array.from($el.children).forEach($c => $c.removeAttributeNS(null, 'id'));
 
 	// find separations - assumed as div elements
-	const $last = Array.from($el.querySelectorAll('div')).pop();
+	// TODO check for all valuable browsers if div tag is used to separate
+	const $separator = 'div'; // legal for Chrome / Firefox
+	const $last = Array.from($el.querySelectorAll($separator)).pop();
 	Array.from($tt).forEach($t => {
 		if (['tspan', 'br'].includes($t.nodeName.toLowerCase())) return;
 		
@@ -143,11 +149,18 @@ function convert_text_to_elements_and_separators($el) {
 		$t.remove()
 	})
 
-	// remove non meaningfull tspan
+	// remove non meaningfull empty tag, mostly tspans
 	Array.from($el.querySelectorAll(':empty')).filter($x => $x.nodeName.toLowerCase() !== 'br').forEach($x => $x.remove());
 }
 
-/*$textname.addEventListener('paste', evt => {
+function unhtml(str) {
+	const tmp = document.createElement('div');
+	tmp.innerHTML = str;
+	return tmp.textContent || tmp.innerText || '';
+}
+
+// paste date is brutally striped by tags
+$textname.addEventListener('paste', evt => {
 	evt.preventDefault();
 
 	const paste = (evt.clipboardData || window.clipboardData).getData('text');
@@ -155,20 +168,17 @@ function convert_text_to_elements_and_separators($el) {
 	if (!sel.rangeCount) return;
 	sel.deleteFromDocument();
 	
-	const tspan = newtag('tspan');
-	tspan.textContent = paste;
+	const txt = document.createTextNode(unhtml(paste));
 	const range = sel.getRangeAt(0);
-	console.log(sel.anchorNode.nodeType);
-	range.insertNode(tspan);
-})*/
+	range.insertNode(txt);
+})
 
-function reposition($text, remove_x=false) {
-	const $cc = $text.childNodes;
+function group_elements_into_lines($cc, $sep='br') {
 	const lines = [];
 	let line = [];
 	// makes lines as separated by br tag
 	Array.from($cc).forEach($c => {
-		if ($c.nodeName.toLowerCase() === 'br') {
+		if ($c.nodeName.toLowerCase() === $sep) {
 			lines.push(line);
 			line = [];
 			return;
@@ -184,12 +194,25 @@ function reposition($text, remove_x=false) {
 	});
 	if (line.length) lines.push(line);
 
+	return lines;
+}
+
+function unposition_inside($e) {
+	Array.from($e.children).forEach($c => {
+		if ($c.children.length) unposition_inside($c);
+		$c.removeAttributeNS(null, 'x');
+		$c.removeAttributeNS(null, 'y');
+	})
+}
+
+function reposition($text) {
+	const $cc = $text.childNodes;
+	const lines = group_elements_into_lines($cc);
 	// we have lines
 	// lets reposition them on y and x axis
 	let prev = $text
-	let prev_step_y = prev.getAttributeNS(null, 'ystep') || line_height($text);
+	let prev_ystep = prev.getAttributeNS(null, 'ystep') || line_height($text);
 	let prev_y = prev.getAttributeNS(null, 'y');
-	prev_y = +prev_y;
 	let y = prev_y;  
 	const y_is_number = (!isNaN(y) && y !== null);
 
@@ -202,12 +225,12 @@ function reposition($text, remove_x=false) {
 
 		// consume line and collect it to $line_container
 		let $line_container = newtag('tspan');
-		if (just_one_element) $line_container = line[0];
+		if (just_one_element && line[0].nodeName.toLowerCase() !== '#text') $line_container = line[0];
 		
 		// position line as parent
-		if ($line_container && y_is_number && 'setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'y', y);
-		if ($line_container && x_is_number && 'setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'x', x);
-		if ($line_container && 'setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'ystep', prev_step_y);
+		if (y_is_number && 'setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'y', y);
+		if (x_is_number && 'setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'x', x);
+		if ('setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'ystep', prev_ystep);
 
 		// find a reference node to insert line
 		let $before_node = line[line.length-1]?.nextElementSibling;
@@ -224,6 +247,7 @@ function reposition($text, remove_x=false) {
 						$line_container.appendChild($e);
 					break;
 					default:
+						unposition_inside($e);
 						if (!just_one_element) {
 							$e.removeAttributeNS(null, 'x');
 							$e.removeAttributeNS(null, 'y');
@@ -234,7 +258,9 @@ function reposition($text, remove_x=false) {
 		)
 
 		$text.insertBefore($line_container, $before_node);
-		y = +y + prev_step_y;
+
+		// prepare position for next line
+		y = +y + prev_ystep;
 		if (y === prev_y) {
 			y += line_height(prev);
 		}
