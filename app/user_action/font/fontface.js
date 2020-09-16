@@ -104,19 +104,26 @@ src: url(data:application/font-woff;charset=utf-8;base64,${b64}) format('woff');
   loaded[url] = true;
 };
 
-// load fonts used in svg document
-$svg.querySelectorAll('tspan').forEach(($tspan) => {
-  if (/^\s+$/g.test($tspan.innerText)) return;
-  let ff = $tspan.style.fontFamily;
-  if (/(sans\-serif|serif)/.test(ff)) return;
-  if (!ff) {
-    ff = $tspan.parentNode.style.fontFamily;
+export function load_fonts_of($el, only=false) {
+  // load fonts used in svg document
+  const $tt = only ? [$el] : $el.querySelectorAll('tspan');
+  $tt.forEach(($tspan) => {
+    if (/^\s+$/g.test($tspan.textContent)) return;
+    let ff = $tspan.style.fontFamily;
     if (/(sans\-serif|serif)/.test(ff)) return;
-    if (!ff) return;
-  }
-  load_font_remote(ff);
-  $tspan.parentNode.style.fontFamily = ff;
-  $tspan.parentNode
-    .querySelectorAll('tspan')
-    .forEach(($el) => ($el.style.fontFamily = 'inherit'));
-});
+    let i = 0;
+    const peak = 3;
+    while (!ff || ff === 'inherit') {
+      i++;
+      if (i > peak) return;
+
+      ff = $tspan.parentNode.style.fontFamily;
+      if (/(sans\-serif|serif)/.test(ff)) return;
+    }
+    load_font_remote(ff);
+    $tspan.parentNode.style.fontFamily = ff;
+    $tspan.parentNode
+      .querySelectorAll('tspan')
+      .forEach(($el) => ($el.style.fontFamily = 'inherit'));
+  });
+}

@@ -5,6 +5,7 @@ import { loading } from '../loading.js';
 import { update_svg } from '../idb.js';
 import { svg_png } from '../save.js';
 import { save_svg, clear_patch } from '../idb.js';
+import { load_fonts_of } from '../user_action/font/fontface.js';
 
 const tpl = `<section class="vertical-align">
 	<div class="row">
@@ -53,6 +54,7 @@ $mark.parentElement.addEventListener('click', async (evt) => {
   if ('thumb' in $el.dataset) {
     try {
       await apply_save($action.dataset.id);
+      load_fonts_of($svg); 
     } catch (e) {
       console.log(e);
     } finally {

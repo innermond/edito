@@ -30,6 +30,7 @@ import {
 
 import { $svg, display_none, copy_viewbox } from './dom.js';
 import { zoom_reset } from './zoom.js';
+import { load_fonts_of } from './user_action/font/fontface.js';
 
 const $ui = new DocumentFragment();
 $ui.appendChild($section_menubar);
@@ -90,3 +91,6 @@ const vbox = $svg.viewBox.baseVal;
 if (vbox.width === 0) vbox.width = $svg.width.baseVal.value;
 if (vbox.height === 0) vbox.height = $svg.height.baseVal.value;
 zoom_reset.viewbox = copy_viewbox($svg.viewBox);
+
+// cycle through svg and load all fonts found
+load_fonts_of($svg);

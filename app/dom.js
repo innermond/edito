@@ -57,7 +57,11 @@ export const update_def_style = () => {
     $svg.insertBefore($defs, $svg.firstChild);
   }
 
-  $style = $defs.querySelector(':scope > style') ?? newtag('style');
+  $style = $defs.querySelector(':scope > style');
+  if (!$style) {
+    $style = newtag('style');
+    $defs.appendChild($style);
+  }
 };
 
 update_def_style();
