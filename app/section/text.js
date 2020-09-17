@@ -105,7 +105,6 @@ $textname.addEventListener('keyup', (evt) => {
 	for(const $x of $textname.childNodes) {
 		$clone.appendChild($x.cloneNode(true));
 	};
-	console.log($clone.childNodes);
 	reposition($clone); 
   
 	// apply new content
@@ -205,11 +204,11 @@ function reposition($text) {
 	// lets reposition them on y and x axis
 	let prev = $text
 	let prev_ystep = prev.getAttributeNS(null, 'ystep') || line_height($text);
-	let prev_y = prev.getAttributeNS(null, 'y');
+	let prev_y = +prev.getAttributeNS(null, 'y');
 	let y = prev_y;  
 	const y_is_number = (!isNaN(y) && y !== null);
 
-	let prev_x = prev.getAttributeNS(null, 'x');
+	let prev_x = +prev.getAttributeNS(null, 'x');
 	let x = prev_x;
 	const x_is_number = (!isNaN(x) && x !== null);
 	

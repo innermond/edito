@@ -358,6 +358,9 @@ section label {
 			opacity: 1.0;
 		}
 	}
+	img[data-thumb] {
+		cursor: progress;
+	}
 }
 
 .cancel {

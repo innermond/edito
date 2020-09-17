@@ -5,7 +5,6 @@ export const center = (tag) => {
   let bb = $svg.getBoundingClientRect();
   let bbtag = tag.getBBox();
   let $g = $svg;
-  //let $g = $svg.querySelector(':scope > g')
   let pt = $svg.createSVGPoint();
   pt.x = bb.x + 0.5 * bb.width;
   pt.y = bb.y + 0.5 * bb.height;

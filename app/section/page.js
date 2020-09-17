@@ -115,7 +115,6 @@ export const $bleed = $ui.querySelector('#bleed');
 
 export const $step = $ui.querySelector('#step');
 document.addEventListener('keyup', (evt) => {
-  console.log('kp');
   handle_step($step.value, evt.key);
   add_patch();
 });
