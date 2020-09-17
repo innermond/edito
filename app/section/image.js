@@ -3,6 +3,7 @@ import { $clicked, $selection } from '../selection/index.js';
 import { center } from '../pos.js';
 import { wrap } from '../drawer.js';
 import { dragging_all_marks_reset } from '../ui.js';
+import { loading } from '../loading.js';
 import { with_undo } from '../idb.js';
 
 const tpl = `<section class="vertical-align">
@@ -28,12 +29,19 @@ async function addUrlImage() {
   dragging_all_marks_reset();
   $selection.clear();
 
-  const tag = await urlImage($url_image.value, (img) => {
-    center(img);
-    $url_image.value = '';
-  });
-  $svg.appendChild(tag);
-  $clicked.from(tag).over();
+  const [done] = loading();
+
+  try {
+    const tag = await urlImage($url_image.value, (img) => {
+      center(img);
+      $url_image.value = '';
+      done();
+    });
+    $svg.appendChild(tag);
+    $clicked.from(tag).over();
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 export function proxied_url(src) {
