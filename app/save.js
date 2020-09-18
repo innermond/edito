@@ -133,10 +133,12 @@ export async function svg_png($svg_node, maxw = 200) {
   $svgclone
     .querySelectorAll('[data-ants=true]')
     .forEach(($ant) => $ant.remove());
-  await imagesAsUrldata($svgclone);
-
+	// images are not embeded - this is what we save in database
   const svgdata = new XMLSerializer().serializeToString($svgclone);
-  const srcdata = btoa(unescape(encodeURIComponent(svgdata)));
+  // embed images to help canvas generate thumbnail
+	await imagesAsUrldata($svgclone);
+  const svgdataEmbeded = new XMLSerializer().serializeToString($svgclone);
+  const srcdata = btoa(unescape(encodeURIComponent(svgdataEmbeded)));
 
   const cw = $svgclone.width.baseVal.value;
   const s = maxw / cw;
