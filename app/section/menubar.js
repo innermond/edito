@@ -99,7 +99,6 @@ document.addEventListener('tool_menu:all_inactive', () => {
 
 $tool_menu.addEventListener('click', (evt) => {
   const $me = evt.target;
-  //toggle_active($me)
   toggle_panel($me);
 });
 

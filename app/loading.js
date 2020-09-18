@@ -1,9 +1,13 @@
 let $bkg = document.querySelector('#bkg_modal');
+const $doc = document.querySelector('body');
+
 // hide all: background and spinning
 function done(fn) {
   if (fn instanceof Function) fn();
   $bkg.classList.remove('on');
   $bkg.classList.remove('loading-off');
+
+  if ($bkg.parentNode !== $doc) $doc.appendChild($bkg);
 }
 
 // hide just spinning
@@ -14,12 +18,13 @@ function stop(fn) {
 
 let fn_onclick;
 
-export function loading(onclick) {
+export function loading(onclick, $host='body') {
   if (!$bkg) {
     $bkg = document.createElement('div');
     $bkg.id = 'bkg_modal';
     done();
-    document.querySelector('body').appendChild($bkg);
+    $host = typeof $host === 'string' ?  document.querySelector($host) : $host;
+    $host.appendChild($bkg);
   }
 
   // remove prev registered click handler

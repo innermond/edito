@@ -103,7 +103,7 @@ src: url(data:application/font-woff;charset=utf-8;base64,${b64}) format('woff');
 
   loaded[url] = true;
 };
-
+// TODO is async so use it as async
 export function load_fonts_of($el, only=false) {
   // load fonts used in svg document
   const $tt = only ? [$el] : $el.querySelectorAll('tspan');

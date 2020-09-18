@@ -130,6 +130,16 @@ export const render_image = async (
 
 export async function svg_png($svg_node, maxw = 200) {
   let $svgclone = $svg_node.cloneNode(true);
+  $svgclone.removeAttribute("xmlns");
+  $svgclone.removeAttribute("xmlns:xlink");
+  const prefix = "http://www.w3.org/2000/xmlns/";
+  if (!$svgclone.hasAttributeNS(prefix, "xmlns")) {
+      $svgclone.setAttributeNS(prefix, "xmlns", "http://www.w3.org/2000/svg");
+  }
+
+  if (!$svgclone.hasAttributeNS(prefix, "xmlns:xlink")) {
+      $svgclone.setAttributeNS(prefix, "xmlns:xlink", "http://www.w3.org/1999/xlink");
+  }
   $svgclone
     .querySelectorAll('[data-ants=true]')
     .forEach(($ant) => $ant.remove());

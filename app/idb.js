@@ -23,7 +23,7 @@ req.onerror = (evt) => {
   console.log(evt.target.errorCode);
 };
 
-export const emmiter = {};
+export const emmiter = {DB: null};
 emmiter.__proto__.onDBAvailable = function (func) {
   this.DBAvailable = func;
 };
@@ -35,7 +35,8 @@ req.onsuccess = (evt) => {
   db = evt.target.result;
   db.onerror = (e) => console.log(e.error);
 
-  emmiter.DBAvailable(db);
+  // if DBAv... not set up just put on emmiter db
+  (emmiter.DBAvailable ?? (x => emmiter.DB = x))(db);
 
   clear_patch(true);
   const svg = db.transaction(['svg'], 'readwrite').objectStore('svg');

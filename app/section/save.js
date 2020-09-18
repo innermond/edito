@@ -22,15 +22,35 @@ export const $ui = wrap(ui_fragment(tpl), 'save-svg', 'Salvare');
 const $open_file = $ui.querySelector('#open-file-svg');
 
 const $mark = $ui.querySelector('a[name=categories-mark]');
-emmiter.onDBAvailable(async () => {
-  let ss = await get_saves();
-  let $tmp = '';
-  ss = ss.reverse();
-  for (const s of ss) {
-    $tmp += `<div class="action" data-id="${s.id}" ><img data-thumb src=${s.png}><img src="/icon/close.svg" class="close"></img></div>`;
+
+let saves_loaded = false;
+document.addEventListener('panel:toggle', async (evt) => {
+  if (saves_loaded === true) return;
+
+  const panel_id = evt.detail.panel_id;
+  if (panel_id !== 'save-svg') return;
+  const $panel = document.getElementById(panel_id);
+  if (!$panel || !$panel.classList.contains('active')) return;
+  
+  if (emmiter.DB === null) return;
+
+  const [done] = loading(null, $mark.parentNode);
+  try {
+    let ss = await get_saves();
+
+    let $tmp = '';
+    ss = ss.reverse();
+    for (const s of ss) {
+      $tmp += `<div class="action" data-id="${s.id}" ><img data-thumb src=${s.png}><img src="/icon/close.svg" class="close"></img></div>`;
+    }
+    $tmp = `<div class="full">${$tmp}</div>`;
+    $mark.insertAdjacentHTML('afterend', $tmp);
+    saves_loaded = true;
+  } catch (e) {
+      console.log(e);
+  } finally {
+      done();
   }
-  $tmp = `<div class="full">${$tmp}</div>`;
-  $mark.insertAdjacentHTML('afterend', $tmp);
 });
 
 $mark.parentElement.addEventListener('click', async (evt) => {
@@ -55,6 +75,20 @@ $mark.parentElement.addEventListener('click', async (evt) => {
     try {
       await apply_save($action.dataset.id);
       load_fonts_of($svg); 
+      // check all svg images has been loaded
+      const imgs_loaded = [];
+      const $kk = $svg.querySelectorAll('image[*|href]');
+      $kk.forEach($img => imgs_loaded.push(
+        new Promise((resolve, reject) => {
+          $img.onload = () => {
+            resolve(true);
+          };
+          $img.onerror = reject;
+        })
+      ));
+      let loaded = await Promise.all(imgs_loaded);
+      loaded = loaded.every(x => x === true);
+      if (!loaded) throw new Error('not all images loaded');
     } catch (e) {
       console.log(e);
     } finally {
