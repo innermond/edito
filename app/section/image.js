@@ -23,6 +23,7 @@ export const $add_url_image = $ui.querySelector('#add_url_imagine');
 export const $file_image = $ui.querySelector('#file_image');
 
 $add_url_image.addEventListener('click', with_undo(addUrlImage));
+$url_image.addEventListener('keyup', evt => evt.stopPropagation());
 $file_image.addEventListener('change', with_undo(addFileImage));
 
 async function addUrlImage() {

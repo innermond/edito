@@ -16,10 +16,25 @@ const tpl = `<section class="vertical-align">
 	</div>
 	<hr/>
 	<label class="tooltip" data-tooltip-text="Documentele salvate" data-tooltip-bottom>Salvări</label>
+	<p id="save-estimate-storage"></p>
 	<a name="categories-mark" />
 </section>`;
 export const $ui = wrap(ui_fragment(tpl), 'save-svg', 'Salvare');
 const $open_file = $ui.querySelector('#open-file-svg');
+
+const $estimate = $ui.querySelector('#save-estimate-storage');
+async function estimate_storage() {
+	if ('storage' in navigator && 'estimate' in navigator.storage) {
+		const {usage, quota} = await navigator.storage.estimate();
+		const percentUsed = (usage / quota * 100).toFixed(2);
+		const usageInMib = (usage / (1024 * 1024)).toFixed(2);
+		const quotaInGib = (quota / (1024 * 1024 * 1000)).toFixed(2);
+
+		const details = `utilizare: ${usageInMib}Mb (${percentUsed}% din ${quotaInGib} GB)`;
+
+		$estimate.innerText = details;
+	}
+}
 
 const $mark = $ui.querySelector('a[name=categories-mark]');
 
@@ -36,6 +51,7 @@ document.addEventListener('panel:toggle', async (evt) => {
 
   const [done] = loading(null, $mark.parentNode);
   try {
+		estimate_storage();
     let ss = await get_saves();
 
     let $tmp = '';
@@ -61,6 +77,7 @@ $mark.parentElement.addEventListener('click', async (evt) => {
 
   if ($el.classList.contains('close')) {
     try {
+			estimate_storage();
       await del_save($action.dataset.id);
       $action.remove();
     } catch (e) {
@@ -101,6 +118,7 @@ $mark.parentElement.addEventListener('click', async (evt) => {
     const data = await svg_png($svg);
     try {
       const result = await save_svg(...data);
+			await estimate_storage();
       let saved = `<div class="action" data-id="${result[0]}" ><img data-thumb src=${data[0]}><img src="/icon/close.svg" class="close"></img></div>`;
       const $place = document.querySelector(
         '#save-svg a[name=categories-mark]+div.full',
