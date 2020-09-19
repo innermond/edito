@@ -114,7 +114,7 @@ function toggle_all_inactive() {
 
 function toggle_active($me, state = null) {
   $tool_menu.querySelectorAll('.tool-item.active').forEach(($e) => {
-    if ($e !== $me) $e.classList.remove('active');
+    if ($me.parentNode === $tool_menu &&  $e !== $me) $e.classList.remove('active');
   });
   if (state === null) {
     $me.classList.toggle('active');

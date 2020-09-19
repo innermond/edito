@@ -50,7 +50,8 @@ $ui.appendChild($floater_geometry);
 $ui.appendChild($floater_color);
 
 // here $ui is gone into document
-document.querySelector('#editor').appendChild($ui);
+const $ed = document.querySelector('#editor');
+$ed.appendChild($ui);
 $svg.style.width = '100%';
 $svg.style.height = '100%';
 
@@ -94,3 +95,12 @@ zoom_reset.viewbox = copy_viewbox($svg.viewBox);
 
 // cycle through svg and load all fonts found
 load_fonts_of($svg);
+
+// a lone click on document surface is a sign to close all floaters ans sections activated
+$ed.addEventListener('click', evt => {
+	if (evt.target !== $ed) return;
+	const $ll = $ed.querySelectorAll('li[class~=active]');
+	$ll.forEach($li => {
+		$li.click();
+	});
+})
