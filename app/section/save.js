@@ -26,9 +26,9 @@ const $estimate = $ui.querySelector('#save-estimate-storage');
 async function estimate_storage() {
 	if ('storage' in navigator && 'estimate' in navigator.storage) {
 		const {usage, quota} = await navigator.storage.estimate();
-		const percentUsed = (usage / quota * 100).toFixed(2);
+		const percentUsed = (usage / quota * 100).toFixed(4);
 		const usageInMib = (usage / (1024 * 1024)).toFixed(2);
-		const quotaInGib = (quota / (1024 * 1024 * 1000)).toFixed(2);
+		const quotaInGib = (quota / (1024 * 1024 * 1000)).toFixed(0);
 
 		const details = `utilizare: ${usageInMib}Mb (${percentUsed}% din ${quotaInGib} GB)`;
 
