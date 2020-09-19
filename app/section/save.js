@@ -63,9 +63,9 @@ document.addEventListener('panel:toggle', async (evt) => {
     $mark.insertAdjacentHTML('afterend', $tmp);
     saves_loaded = true;
   } catch (e) {
-      console.log(e);
+		console.log(e);
   } finally {
-      done();
+		done();
   }
 });
 
@@ -73,22 +73,22 @@ $mark.parentElement.addEventListener('click', async (evt) => {
   const $el = evt.target;
   const $action = $el.closest('[class="action"]');
 
-  const [done] = loading();
-
   if ($el.classList.contains('close')) {
+		const [done] = loading();
     try {
 			estimate_storage();
       await del_save($action.dataset.id);
       $action.remove();
     } catch (e) {
       console.log(e);
-    } finally {
+		} finally {
       done();
-    }
+		} 
     return;
   }
 
   if ('thumb' in $el.dataset) {
+		const [done] = loading();
     try {
       await apply_save($action.dataset.id);
       load_fonts_of($svg); 
@@ -108,13 +108,14 @@ $mark.parentElement.addEventListener('click', async (evt) => {
       if (!loaded) throw new Error('not all images loaded');
     } catch (e) {
       console.log(e);
-    } finally {
+		} finally {
       done();
-    }
+		}
     return;
   }
 
   if ($el.id === 'save_svg') {
+		const [done] = loading();
     const data = await svg_png($svg);
     try {
       const result = await save_svg(...data);
@@ -133,8 +134,6 @@ $mark.parentElement.addEventListener('click', async (evt) => {
     }
     return;
   }
-
-  done();
 });
 
 $open_file.addEventListener('change', async () => {
