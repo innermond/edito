@@ -12,7 +12,11 @@ const tpl = `<section class="vertical-align">
 		<label for="open-file-svg"><img class="tooltip" data-tooltip-text="Deschide un fișier svg de pe disc" data-tooltip-bottom src="/icon/open-file.svg">
 		<input class="none" type="file" id="open-file-svg">
 		</label>
-			<label for="save_svg"><img class="tooltip" data-tooltip-text="Salvează" data-tooltip-bottom id="save_svg" src="/icon/save.svg"></label>
+		<label for="save_svg"><img class="tooltip" data-tooltip-text="Salvează" data-tooltip-bottom id="save_svg" src="/icon/save.svg"></label>
+	<label class="tooltip" data-tooltip-text="Imaginile online sunt descarcate și incluse In salvare" data-tooltip-bottom for="save_with_images">
+Copiere imagini
+		<input type="checkbox" class="switch" id="save_with_images">
+	</label>
 	</div>
 	<hr/>
 	<label class="tooltip" data-tooltip-text="Documentele salvate" data-tooltip-bottom>Salvări</label>
@@ -21,6 +25,8 @@ const tpl = `<section class="vertical-align">
 </section>`;
 export const $ui = wrap(ui_fragment(tpl), 'save-svg', 'Salvare');
 const $open_file = $ui.querySelector('#open-file-svg');
+
+const $save_with_images= $ui.querySelector('#save_with_images');
 
 const $estimate = $ui.querySelector('#save-estimate-storage');
 async function estimate_storage() {
@@ -116,7 +122,7 @@ $mark.parentElement.addEventListener('click', async (evt) => {
 
   if ($el.id === 'save_svg') {
 		const [done] = loading();
-    const data = await svg_png($svg);
+    const data = await svg_png($svg, !!$save_with_images.checked);
     try {
       const result = await save_svg(...data);
 			await estimate_storage();

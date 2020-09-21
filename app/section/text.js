@@ -58,7 +58,7 @@ export const $textname = $ui.querySelector('#textname');
 const $add_text_btn = $ui.querySelector('#add-text-btn');
 
 // textname before changes
-let $old_textname = null;
+/*let $old_textname = null;
 $textname.addEventListener('keydown', (evt) => {
   $old_textname = $textname.cloneNode(true);
 });
@@ -90,7 +90,7 @@ keep_old = false;
   $old_textname = null;
   obs.observe($textname, { childList: true });
 }
-
+*/
 //export const observer = new MutationObserver(onenter);
 //observer.observe($textname, { childList: true });
 

@@ -128,7 +128,7 @@ export const render_image = async (
   $img.setAttribute('src', 'data:image/svg+xml;base64,' + srcdata);
 };
 
-export async function svg_png($svg_node, maxw = 200) {
+export async function svg_png($svg_node, include_images=false, maxw = 200) {
   let $svgclone = $svg_node.cloneNode(true);
   $svgclone.removeAttribute("xmlns");
   $svgclone.removeAttribute("xmlns:xlink");
@@ -150,6 +150,8 @@ export async function svg_png($svg_node, maxw = 200) {
   const svgdataEmbeded = new XMLSerializer().serializeToString($svgclone);
   const srcdata = btoa(unescape(encodeURIComponent(svgdataEmbeded)));
 
+	const svg_data = include_images ? svgdataEmbeded : svgdata;
+
   const cw = $svgclone.width.baseVal.value;
   const s = maxw / cw;
   const r = $svgclone.width.baseVal.value / $svgclone.height.baseVal.value;
@@ -170,7 +172,7 @@ export async function svg_png($svg_node, maxw = 200) {
       const pngdata = $canvas.toDataURL('image/png');
       $img = null;
       $canvas = null;
-      resolve([pngdata, svgdata]);
+      resolve([pngdata, svg_data]);
     });
     $img.addEventListener('error', (err) => reject(err));
     $img.setAttribute('src', 'data:image/svg+xml;base64,' + srcdata);
