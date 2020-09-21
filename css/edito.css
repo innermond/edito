@@ -493,7 +493,7 @@ hr {
     transition: width .2s ease-out, .2s ease-out, top 0s, margin-left .2s ease-out; }
   .scroller > .thumb {
     width: 0.5rem;
-    height: 8rem;
+    height: 4rem;
     cursor: pointer;
     position: absolute;
     background-color: #5a544b;

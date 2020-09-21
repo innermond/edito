@@ -10,12 +10,13 @@ export function load_font($fonts) {
     return;
   }
   const $opt = $fonts.options[inx];
+	const load_font_green = !['sans-serif', 'serif'].includes($opt.value);
   $selection.forEachAsync(async ($el) => {
     const $ee = $el.nodeName === 'g' ? Array.from($el.children) : [$el];
     for (let $e of $ee) {
       if (!$e || $e.nodeName !== 'text') continue;
       // wait the font to be loaded
-      await load_font_remote($opt.text);
+      if (load_font_green) await load_font_remote($opt.text);
       // apply font to text element
       $e.style.fontFamily = $opt.text;
       $e.querySelectorAll('tspan').forEach(
