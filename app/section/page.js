@@ -51,6 +51,7 @@ const $real = $ui.querySelector('#real');
 $media_width.value = $svg.width.baseVal.valueInSpecifiedUnits;
 $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits;
 
+// TODO load from idb a page then a new page. undo after new page is buggy 
 const $new_page = $ui.querySelector('#new_page');
 $new_page.addEventListener('click', () => {
     Array.from($svg.children).forEach(($c) => {
