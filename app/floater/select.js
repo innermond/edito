@@ -44,7 +44,7 @@ export const is_selectable = ($e) => {
   return true;
 };
 
-$select_all.addEventListener('change', (evt) => {
+$select_all.addEventListener('change', () => {
   if ($select_all.checked) {
     Array.from($svg.children).forEach(($c) => {
       if (!is_selectable($c)) return;

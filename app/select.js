@@ -10,9 +10,6 @@ import {
   remove_rectangling,
   $selectangle,
 } from './selectangle.js';
-import feature from './feature.js';
-
-const opt = feature.supportsPassive ? { passive: true } : false;
 
 function cycle_start(stage) {
   return (evt) => {

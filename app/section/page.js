@@ -6,12 +6,17 @@ import { background_color } from '../user_action/background.js';
 import { handle_step } from '../user_action/step.js';
 import { addEventInterval } from '../event_interval.js';
 import { add_patch, with_undo } from '../idb.js';
+import { is_selectable } from '../floater/select.js';
+import { deleting } from '../user_action/del_undel_clone.js';
+import { $selection } from '../selection/index.js';
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Schimbi lățimea documentului" data-tooltip-bottom for="media_width">Lățime</label>
 	<input type="number" id="media_width" value="210" />
 	<label class="tooltip" data-tooltip-text="Modifică mărimea dimensiunii verticale a paginii" data-tooltip-bottom for="media_height">Înălțime</label>
 	<input type="number" id="media_height" value="297" />
+	<button class="tooltip" data-tooltip-text="Începi o pagină nouă, cu dimensiunile de mai sus" data-tooltip-bottom id="new_page">Pagină nouă</button>
+	<hr/>
 	<label class="tooltip" data-tooltip-text="Arată pagina in intregime" data-tooltip-bottom for="all_visible">
 	Pagină intreagă
 		<input type="checkbox" class="switch" id="all_visible">
@@ -46,6 +51,14 @@ const $real = $ui.querySelector('#real');
 $media_width.value = $svg.width.baseVal.valueInSpecifiedUnits;
 $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits;
 
+const $new_page = $ui.querySelector('#new_page');
+$new_page.addEventListener('click', () => {
+    Array.from($svg.children).forEach(($c) => {
+      if (!is_selectable($c)) return;
+      $selection.add($c);
+    });
+		with_undo(deleting)();		
+});
 //let current_canvas_width
 
 /*const show_at_real_dimensions = () => {
