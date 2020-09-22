@@ -54,9 +54,12 @@ $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits;
 const $new_page = $ui.querySelector('#new_page');
 $new_page.addEventListener('click', () => {
     Array.from($svg.children).forEach(($c) => {
+			$c.removeAttribute('data-lock');
       if (!is_selectable($c)) return;
       $selection.add($c);
     });
+    background_color('');
+    $bkcolor.style.display = 'none';
 		with_undo(deleting)();		
 });
 //let current_canvas_width
