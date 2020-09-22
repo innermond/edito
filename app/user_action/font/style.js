@@ -1,4 +1,5 @@
 import { $clicked, $selection } from '../../selection/index.js';
+import { unit_conv } from '../../dom.js';
 
 export function styling_text(style_text, val = '') {
   $selection.forEach(($el) => {
@@ -69,17 +70,20 @@ export function spacing_lines_text(lh = '') {
     $ee.forEach(($e) => {
       if ($e.nodeName === 'text') {
         $e.style.lineHeight = lh;
+				let fz = window.getComputedStyle($e).fontSize;
+				// cant get fontsize from browser
+				if (!fz) {
+					// maybe is explicitly indicated as inline style
+					fz = $e.style.fontSize ?? '16px';
+					const ext = fz.slice(-2);
+					// calculate fz in px
+					if (ext !== 'px') fz = unit_conv(fz, 'px');
+				}
+				fz = parseFloat(fz);
+				if (isNaN(fz)) fz = '16px';
         $e.querySelectorAll('tspan').forEach(($t, inx) => {
-          let fz = window.getComputedStyle($e).fontSize;
-          if (
-            !lh ||
-            lh.toLowerCase() === 'normal' ||
-            lh.toLowerCase() === '0px'
-          ) {
-            if (fz === '') fz = '16px';
-          }
           let div = lh.slice(-1) == '%' ? 0.01 : 1;
-          let lineHeight = lh * parseFloat(fz) * div;
+          let lineHeight = lh * fz * div;
           let y = 1.0 * $e.getAttributeNS(null, 'y') + inx * lineHeight;
           $t.setAttributeNS(null, 'y', y);
         });
