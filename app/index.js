@@ -97,10 +97,13 @@ zoom_reset.viewbox = copy_viewbox($svg.viewBox);
 load_fonts_of($svg);
 
 // a lone click on document surface is a sign to close all floaters ans sections activated
+// and all rectangle selections on svg
 $ed.addEventListener('click', evt => {
 	if (evt.target !== $ed) return;
 	const $ll = $ed.querySelectorAll('li[class~=active]');
 	$ll.forEach($li => {
 		$li.click();
 	});
+
+	$svg.querySelectorAll('[data-ants=true],[data-selectangle=true]').forEach(($ant) => $ant.remove());
 })

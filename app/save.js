@@ -83,7 +83,7 @@ export const render_image = async (
 
   await imagesAsUrldata($svgclone);
   $svgclone
-    .querySelectorAll('[data-ants=true]')
+    .querySelectorAll('[data-ants=true],[data-selectangle=true]')
     .forEach(($ant) => $ant.remove());
 
   if (func != null && func instanceof Function) {
@@ -141,7 +141,7 @@ export async function svg_png($svg_node, include_images=false, maxw = 200) {
       $svgclone.setAttributeNS(prefix, "xmlns:xlink", "http://www.w3.org/1999/xlink");
   }
   $svgclone
-    .querySelectorAll('[data-ants=true]')
+    .querySelectorAll('[data-ants=true],[data-selectangle=true]')
     .forEach(($ant) => $ant.remove());
 	// images are not embeded - this is what we save in database
   const svgdata = new XMLSerializer().serializeToString($svgclone);
