@@ -6,8 +6,15 @@ import { update_svg } from '../idb.js';
 import { svg_png } from '../save.js';
 import { save_svg, clear_patch } from '../idb.js';
 import { load_fonts_of } from '../user_action/font/fontface.js';
+import { proxied_url } from '../section/image.js';
+import { with_undo } from '../idb.js';
+import { dragging_all_marks_reset } from '../ui.js';
+import { $selection } from '../selection/index.js';
 
 const tpl = `<section class="vertical-align">
+	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de fișier svg" data-tooltip-bottom>Adresă svg</label>
+	<input id="url_doc_svg" placeholder="https://fisier.svg"><button id="add_url_doc_svg">Adaugă URL fișier svg</button>
+	<hr/>
 	<div class="row">
 		<label for="open-file-svg"><img class="tooltip" data-tooltip-text="Deschide un fișier svg de pe disc" data-tooltip-bottom src="/icon/open-file.svg">
 		<input class="none" type="file" id="open-file-svg">
@@ -24,7 +31,53 @@ Copiere imagini
 	<a name="categories-mark" />
 </section>`;
 export const $ui = wrap(ui_fragment(tpl), 'save-svg', 'Salvare');
+const $add_url_doc_svg = $ui.querySelector('#add_url_doc_svg');
+const $url_doc_svg = $ui.querySelector('#url_doc_svg');
+$add_url_doc_svg.addEventListener('click', with_undo(addUrlSvg));
 const $open_file = $ui.querySelector('#open-file-svg');
+
+async function addUrlSvg() {
+  dragging_all_marks_reset();
+  $selection.clear();
+	await urlSvg($url_doc_svg.value);
+}
+
+async function urlSvg(src) {
+  const url_doc_svg = proxied_url(src);
+  const is_svg = src.split('.')?.pop()?.toLowerCase() === 'svg';
+	if (! is_svg) return;
+
+	const [done] = loading();
+
+	try {
+		let resp = await fetch(url_doc_svg);
+		if (!resp.ok) throw new Error('could not load svg');
+    const svg_text = await resp.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svg_text, 'image/svg+xml');
+    update_svg(doc);
+		load_fonts_of($svg); 
+		// check all svg images has been loaded
+		const imgs_loaded = [];
+		const $kk = $svg.querySelectorAll('image[*|href]');
+		$kk.forEach($img => imgs_loaded.push(
+			new Promise((resolve, reject) => {
+				$img.onload = () => {
+					resolve(true);
+				};
+				$img.onerror = reject;
+			})
+		));
+		let loaded = await Promise.all(imgs_loaded);
+		loaded = loaded.every(x => x === true);
+		if (!loaded) throw new Error('not all images loaded');
+  } catch (e) {
+    console.log(e);
+  } finally {
+    done();
+    $url_doc_svg.value = null;
+  }
+}
 
 const $save_with_images= $ui.querySelector('#save_with_images');
 
