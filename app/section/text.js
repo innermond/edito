@@ -31,7 +31,7 @@ const tpl = `<section class="vertical-align">
 					<li data-style="italic" class="tooltip" data-tooltip-text="Înclină text" data-tooltip-bottom><img src="/icon/italic.svg"></li>
 					<li data-style="bold" class="tooltip" data-tooltip-text="Bolduiește text" data-tooltip-bottom><img src="/icon/bold.svg"></li>
 			</ul>
-		
+	<hr/>	
 		<label for="fonts">Font</label>
 		<select id="fonts" style="display:none">
 				<option>Alege un font...</option>

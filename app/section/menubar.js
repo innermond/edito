@@ -6,7 +6,7 @@ import swarm from '../swarm.js';
 const tpl = `<section id="menu-bar">
 	<div>
 		<ul id="tool-menu-sections" class="tool-menu vertical-align">
-			<li id="tool-properties" data-panel="properties" class="tool-item tooltip" data-tooltip-text="Dimensiuni pagină, culoare fundal, mărime bleed, pas de mutare"><img src="/icon/properties.svg"></li>
+			<li id="tool-properties" data-panel="properties" class="tool-item tooltip" data-tooltip-text="Dimensiuni pagină, culoare fundal, mărime bleed, pas de mutare"><img src="/icon/page.svg"></li>
 			<li id="tool-filter" data-panel="manage-filter" class="tool-item tooltip" data-tooltip-text="Adaugă filter"><img src="/icon/filter.svg"></li>
 			<li id="tool-combine" data-panel="mask-clip-path" class="tool-item tooltip" data-tooltip-text="Maschează, decupează, text pe curbă"><img src="/icon/effect.svg"></li>
 			<li id="tool-element" data-panel="add-element" class="tool-item tooltip" data-tooltip-text="Adaugă elemente grafice"><img src="/icon/add-element.svg"></li>
