@@ -43,13 +43,18 @@ async function addUrlSvg() {
 }
 
 async function urlSvg(src) {
-  const url_doc_svg = proxied_url(src);
-  const is_svg = src.split('.')?.pop()?.toLowerCase() === 'svg';
-	if (! is_svg) return;
+	try {
+		const url = new URL(src);
+		const is_svg = url.pathname.split('.')?.pop()?.toLowerCase() === 'svg';
+		if (! is_svg) return;
+	} catch (e) {
+		return;
+	}
 
 	const [done] = loading();
 
 	try {
+		const url_doc_svg = proxied_url(src);
 		let resp = await fetch(url_doc_svg);
 		if (!resp.ok) throw new Error('could not load svg');
     const svg_text = await resp.text();
