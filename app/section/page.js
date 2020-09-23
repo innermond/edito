@@ -17,6 +17,11 @@ const tpl = `<section class="vertical-align">
 	<input type="number" id="media_height" value="297" />
 	<button class="tooltip" data-tooltip-text="Începi o pagină nouă, cu dimensiunile de mai sus" data-tooltip-bottom id="new_page">Pagină nouă</button>
 	<hr/>
+	<label class="tooltip" data-tooltip-text="Activezi / dezactivezi culoarea de fundal" data-tooltip-bottom  for="bkcolor">Background
+		<input class="tooltip" data-tooltip-text="alege culoare" data-tooltip-bottom type="color" id="bkcolor" value="#ffffff">
+		<input type="checkbox" class="switch" id="bkcolor-switch">
+	</label>
+	<hr/>
 	<label class="tooltip" data-tooltip-text="Arată pagina in intregime" data-tooltip-bottom for="all_visible">
 	Pagină intreagă
 		<input type="checkbox" class="switch" id="all_visible">
@@ -28,11 +33,6 @@ const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Modifică mărimea proporțional" data-tooltip-bottom>Scalare
 		<button id="canvas_plus" class="tooltip" data-tooltip-text="Mărește" data-tooltip-bottom ><img src="/icon/plus.svg"></button>
 		<button id="canvas_minus" class="tooltip" data-tooltip-text="Micșorează" data-tooltip-bottom ><img src="/icon/minus.svg"></button>
-	</label>
-	<hr/>
-	<label class="tooltip" data-tooltip-text="Activezi / dezactivezi culoarea de fundal" data-tooltip-bottom  for="bkcolor">Background
-		<input class="tooltip" data-tooltip-text="alege culoare" data-tooltip-bottom type="color" id="bkcolor" value="#ffffff">
-		<input type="checkbox" class="switch" id="bkcolor-switch">
 	</label>
 	<hr/>
 		<label class="tooltip" data-tooltip-text="Mărimea bleedului, distanța cu care se extinde pagina peste dimensiunile finale" data-tooltip-bottom for="bleed">Bleed</label>

@@ -24,7 +24,7 @@ export function sizing_text(val) {
   });
 }
 
-function sizing($e, r) {
+function sizing($e, r, pos =  true) {
   const $tt = Array.from($e.childNodes).filter(
     ($x) => $x.nodeType === Node.TEXT_NODE || $x.nodeType === Node.ELEMENT_NODE,
   );
@@ -36,6 +36,8 @@ function sizing($e, r) {
 		tfz = r * parseFloat(tfz);
 		$t.style.fontSize = tfz + 'px';
 
+		if (!pos)  return;
+
     let y0 = $e.getStartPositionOfChar(0).y;
     let y = $t.getStartPositionOfChar(0).y;
     const is_positioned = Number.isFinite(parseFloat(y));
@@ -46,6 +48,7 @@ function sizing($e, r) {
       dy = r * dy;
       $t.setAttributeNS(null, 'y', y0 + dy);
     }
-    if ($t.querySelectorAll('tspan').length) sizing($t, r);
+		// do not y position, only rows are y positioned
+    if ($t.querySelectorAll('tspan').length) sizing($t, r, false);
   });
 }
