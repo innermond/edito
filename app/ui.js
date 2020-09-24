@@ -101,6 +101,7 @@ export {
   $glass_two,
   $prev_svg,
   $send_svg,
+	$textname,
 };
 
 import {

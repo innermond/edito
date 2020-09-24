@@ -31,6 +31,7 @@ import {
 import { $svg, display_none, copy_viewbox } from './dom.js';
 import { zoom_reset } from './zoom.js';
 import { load_fonts_of } from './user_action/font/fontface.js';
+import {$textname, text_svg_html} from './ui.js';
 
 const $ui = new DocumentFragment();
 $ui.appendChild($section_menubar);
@@ -107,3 +108,10 @@ $ed.addEventListener('click', evt => {
 
 	$svg.querySelectorAll('[data-ants=true],[data-selectangle=true]').forEach(($ant) => $ant.remove());
 })
+
+// all texts on mouseup update text html element
+$svg.addEventListener('mouseup', (evt) => {
+	const $el = evt.target.closest('text');
+	if ($el.nodeName.toLowerCase() !== 'text') return;
+	text_svg_html($el, $textname);
+});
