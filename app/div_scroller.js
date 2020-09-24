@@ -53,6 +53,7 @@ export const scrollable = ($scrollee) => {
     move = false;
     $e.classList.remove('active');
     document.body.classList.remove('div-scroller-active');
+    document.body.classList.add('div-scroller-outside');
     $e.style.opacity = 0.0;
   });
   $e.addEventListener('click', (evt) => {

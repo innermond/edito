@@ -100,6 +100,10 @@ load_fonts_of($svg);
 // a lone click on document surface is a sign to close all floaters ans sections activated
 // and all rectangle selections on svg
 $ed.addEventListener('click', evt => {
+	if (document.body.classList.contains('div-scroller-outside')) {
+		document.body.classList.remove('div-scroller-outside');
+		return;
+	}
 	if (evt.target !== $ed) return;
 	const $ll = $ed.querySelectorAll('li[class~=active]');
 	$ll.forEach($li => {
