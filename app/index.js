@@ -112,6 +112,6 @@ $ed.addEventListener('click', evt => {
 // all texts on mouseup update text html element
 $svg.addEventListener('mouseup', (evt) => {
 	const $el = evt.target.closest('text');
-	if ($el.nodeName.toLowerCase() !== 'text') return;
+	if ($el === null || $el.nodeName.toLowerCase() !== 'text') return;
 	text_svg_html($el, $textname);
 });
