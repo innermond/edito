@@ -32,7 +32,8 @@ const tpl = `<section class="vertical-align">
 					<li data-style="bold" class="tooltip" data-tooltip-text="Bolduiește text" data-tooltip-bottom><img src="/icon/bold.svg"></li>
 			</ul>
 	<hr/>	
-		<label for="fonts">Font</label>
+		<label for="fonts">Fonturi</label>
+    <input id="font-search" placeholder="denumire parțială" />
 		<select id="fonts" style="display:none">
 				<option>Alege un font...</option>
 				<option value="serif">serif</option>
@@ -340,4 +341,18 @@ addEventListenerUndo(
 export const $fonts = $ui.querySelector('#fonts');
 $fonts.addEventListener('change', with_undo(load_font, $fonts));
 
-ul_select($fonts, ul_select.opt_fn, { class: 'folded relative' });
+const $ul_fonts = ul_select($fonts, ul_select.opt_fn, { class: 'folded relative' });
+
+const $font_search = $ui.querySelector('#font-search');
+$font_search.addEventListener('keyup', (evt) => {
+  let displayed = $ul_fonts.querySelectorAll('li');
+  displayed = Array.from(displayed)
+  const val = $font_search.value;
+  if (val.length === 0) {
+    displayed.forEach($li => $li.style.display = 'list-item');
+    return;
+  }
+  displayed.filter($li => $li.style.display === 'none').forEach($li => $li.style.display = 'list-item');
+  const selector = `li:not([data-value*="${val}"i])`;
+  $ul_fonts.querySelectorAll(selector).forEach($li => $li.style.display = 'none');
+});

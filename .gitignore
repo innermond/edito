@@ -140,6 +140,7 @@ tags
 lab
 go.mod
 *.svg
+*.old
 !icon/*.svg
 stock-*
 app/data
