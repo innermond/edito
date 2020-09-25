@@ -347,9 +347,9 @@ const $font_search = $ui.querySelector('#font-search');
 $font_search.addEventListener('keyup', (evt) => {
   let displayed = $ul_fonts.querySelectorAll('li');
   displayed = Array.from(displayed)
+  displayed.forEach($li => $li.style.display = 'list-item');
   const val = $font_search.value;
   if (val.length === 0) {
-    displayed.forEach($li => $li.style.display = 'list-item');
     return;
   }
   displayed.filter($li => $li.style.display === 'none').forEach($li => $li.style.display = 'list-item');
