@@ -1,6 +1,7 @@
-import {ui_fragment} from '../dom.js'
-import {wrap} from '../drawer.js'
-import * as filter from '../filter.js'
+import { ui_fragment } from '../dom.js';
+import { wrap } from '../drawer.js';
+import * as filter from '../filter.js';
+import { addEventListenerUndo } from '../idb.js';
 
 const tpl = `<section class="vertical-align">
     <button id="add_shadow">Adaugă umbră</button>
@@ -37,45 +38,104 @@ const tpl = `<section class="vertical-align">
     <label for="glass_two">Schimbă two</label>
     <input type="range" min="0" max="10" value="0.5" step="0.001" id="glass_two">
 		<hr/>
-</section>`
-export const $ui = wrap(ui_fragment(tpl), 'manage-filter', 'Filter')
+</section>`;
+export const $ui = wrap(ui_fragment(tpl), 'manage-filter', 'Filter');
 
-export const $shadow_blur = $ui.querySelector('#shadow_blur')
-export const $shadow_slope = $ui.querySelector('#shadow_slope')
-export const $shadow_dx = $ui.querySelector('#shadow_dx')
-export const $shadow_dy = $ui.querySelector('#shadow_dy')
-export const $shadow_color = $ui.querySelector('#shadow_color')
-export const $add_shadow = $ui.querySelector('#add_shadow')
-export const $remove_shadow = $ui.querySelector('#remove_shadow')
-export const $grayscale = $ui.querySelector('#grayscale')
-export const $blur = $ui.querySelector('#blur')
-export const $sharpen = $ui.querySelector('#sharpen')
-export const $hue_rotate = $ui.querySelector('#hue_rotate')
-export const $glass = $ui.querySelector('#glass')
-export const $glass_one = $ui.querySelector('#glass_one')
-export const $glass_two = $ui.querySelector('#glass_two')
+export const $shadow_blur = $ui.querySelector('#shadow_blur');
+export const $shadow_slope = $ui.querySelector('#shadow_slope');
+export const $shadow_dx = $ui.querySelector('#shadow_dx');
+export const $shadow_dy = $ui.querySelector('#shadow_dy');
+export const $shadow_color = $ui.querySelector('#shadow_color');
+export const $add_shadow = $ui.querySelector('#add_shadow');
+export const $remove_shadow = $ui.querySelector('#remove_shadow');
+export const $grayscale = $ui.querySelector('#grayscale');
+export const $blur = $ui.querySelector('#blur');
+export const $sharpen = $ui.querySelector('#sharpen');
+export const $hue_rotate = $ui.querySelector('#hue_rotate');
+export const $glass = $ui.querySelector('#glass');
+export const $glass_one = $ui.querySelector('#glass_one');
+export const $glass_two = $ui.querySelector('#glass_two');
 
-$shadow_blur.addEventListener('input', filter.updating('shadow', 'feGaussianBlur', 'stdDeviation'))
-$shadow_slope.addEventListener('input', filter.updating('shadow', 'feFuncA', 'slope'))
-$shadow_dx.addEventListener('input', filter.updating('shadow', 'feOffset', 'dx'))
-$shadow_dy.addEventListener('input', filter.updating('shadow', 'feOffset', 'dy'))
-$shadow_color.addEventListener('input',filter.updating('shadow', 'feFlood', 'flood-color'))
-$add_shadow.addEventListener('click', filter.add_shadow)
-$remove_shadow.addEventListener('click', filter.removing('shadow'))
-$grayscale.addEventListener('input', filter.updating('grayscale', 'feColorMatrix', 'values', 1))
-$blur.addEventListener('input', filter.updating('blur', 'feGaussianBlur', 'stdDeviation'))
-$sharpen.addEventListener('input', filter.sharpening())
-$hue_rotate.addEventListener('input',filter.updating('hueRotate', 'feColorMatrix', 'values'))
-const unglassing = filter.removing('glass')
-$glass.addEventListener('change', evt => {
-	if ($glass.checked) {
-		filter.add_glass()
-	} else {
-		unglassing()
-	}
-})
-const glass_one = filter.updating('glass', 'feGaussianBlur[one]', 'stdDeviation', $glass_one.value)
-$glass_one.addEventListener('input', evt => $glass.checked && glass_one(evt))
-const glass_two = filter.updating('glass', 'feGaussianBlur[two]', 'stdDeviation', $glass_two.value)
-$glass_two.addEventListener('input', evt => $glass.checked && glass_two(evt))
-
+addEventListenerUndo(
+  $shadow_blur,
+  'input',
+  filter.updating('shadow', 'feGaussianBlur', 'stdDeviation'),
+  'mouseup',
+);
+addEventListenerUndo(
+  $shadow_slope,
+  'input',
+  filter.updating('shadow', 'feFuncA', 'slope'),
+  'mouseup',
+);
+addEventListenerUndo(
+  $shadow_dx,
+  'input',
+  filter.updating('shadow', 'feOffset', 'dx'),
+  'mouseup',
+);
+addEventListenerUndo(
+  $shadow_dy,
+  'input',
+  filter.updating('shadow', 'feOffset', 'dy'),
+  'mouseup',
+);
+addEventListenerUndo(
+  $shadow_color,
+  'input',
+  filter.updating('shadow', 'feFlood', 'flood-color'),
+  'mouseup',
+);
+addEventListenerUndo($add_shadow, 'click', filter.add_shadow);
+addEventListenerUndo($remove_shadow, 'click', filter.removing('shadow'));
+addEventListenerUndo(
+  $grayscale,
+  'input',
+  filter.updating('grayscale', 'feColorMatrix', 'values', 1),
+  'mouseup',
+);
+addEventListenerUndo(
+  $blur,
+  'input',
+  filter.updating('blur', 'feGaussianBlur', 'stdDeviation'),
+  'mouseup',
+);
+addEventListenerUndo($sharpen, 'input', filter.sharpening(), 'mouseup');
+addEventListenerUndo(
+  $hue_rotate,
+  'input',
+  filter.updating('hueRotate', 'feColorMatrix', 'values'),
+  'mouseup',
+);
+const unglassing = filter.removing('glass');
+addEventListenerUndo($glass, 'change', () => {
+  if ($glass.checked) {
+    filter.add_glass();
+  } else {
+    unglassing();
+  }
+});
+const glass_one = filter.updating(
+  'glass',
+  'feGaussianBlur[one]',
+  'stdDeviation',
+  $glass_one.value,
+);
+addEventListenerUndo(
+  $glass_one,
+  'input',
+  (evt) => $glass.checked && glass_one(evt),
+  'nouseup',
+);
+const glass_two = filter.updating(
+  'glass',
+  'feGaussianBlur[two]',
+  'stdDeviation',
+  $glass_two.value,
+);
+addEventListenerUndo(
+  $glass_two,
+  'input',
+  (evt) => $glass.checked && glass_two(evt),
+  'nouseup',
+);

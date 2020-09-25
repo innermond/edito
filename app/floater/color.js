@@ -1,9 +1,10 @@
-import {$selection} from '../selection/index.js'
-import {fill_opacity} from '../user_action/opacity.js'
-import {stroke_opacity, stroke_width} from '../user_action/stroke.js'
-import {colorize, uncolorize} from '../selection/colorize.js'
-import {ui_fragment} from '../dom.js'
-import {addEventInterval} from '../event_interval.js'
+import { $selection } from '../selection/index.js';
+import { fill_opacity } from '../user_action/opacity.js';
+import { stroke_opacity, stroke_width } from '../user_action/stroke.js';
+import { colorize, uncolorize } from '../selection/colorize.js';
+import { ui_fragment } from '../dom.js';
+import { addEventInterval } from '../event_interval.js';
+import { add_patch } from '../idb.js';
 
 const tpl = `<section class="movable" id="fill_stroke_color">
 <div class="wrap-row">
@@ -40,102 +41,133 @@ const tpl = `<section class="movable" id="fill_stroke_color">
 	<img src="/icon/close.svg" class="close" />
 </div>
 </div>
-</section>`
-export const $ui = ui_fragment(tpl)
+</section>`;
+export const $ui = ui_fragment(tpl);
 
-$ui.querySelectorAll('[for]').forEach($e => {
-	$e.addEventListener('click', evt => {
-		evt.preventDefault()
-	})
-})
+$ui.querySelectorAll('[for]').forEach(($e) => {
+  $e.addEventListener('click', (evt) => {
+    evt.preventDefault();
+  });
+});
 
-export const $fill = $ui.querySelector('#fill')
+export const $fill = $ui.querySelector('#fill');
+$fill.addEventListener('change', () => {
+  add_patch();
+});
 $fill.addEventListener('input', () => {
-	if ($fill_switch.checked !== true) return
-	$fill.style.backgroundColor = colorize('fill', $fill.value)
-})
-$fill.style.display = 'none'
+  if ($fill_switch.checked !== true) return;
+  $fill.style.backgroundColor = colorize('fill', $fill.value);
+});
+$fill.style.display = 'none';
 
 // switch
-export const $fill_switch = $ui.querySelector('#fill-switch')
+export const $fill_switch = $ui.querySelector('#fill-switch');
 $fill_switch.addEventListener('change', () => {
-	if ($fill_switch.checked === true) {
-		const val = colorize('fill', $fill.value)
-		$fill.style.display = 'block'
-		$fill.value = val
-		$fill.style.backgroundColor = val
-	} else {
-		uncolorize('fill')
-		$fill.style.display = 'none'
-	}
-})
+  if ($fill_switch.checked === true) {
+    const val = colorize('fill', $fill.value);
+    $fill.style.display = 'block';
+    $fill.value = val;
+    $fill.style.backgroundColor = val;
+  } else {
+    uncolorize('fill');
+    $fill.style.display = 'none';
+  }
+});
 
-export const $fill_opacity = $ui.querySelector('#fill-opacity')
-$fill_opacity.addEventListener('input', () => fill_opacity($fill_opacity.value))
+export const $fill_opacity = $ui.querySelector('#fill-opacity');
+$fill_opacity.addEventListener('mouseup', () => {
+  add_patch();
+});
+$fill_opacity.addEventListener('input', () =>
+  fill_opacity($fill_opacity.value),
+);
 
-export const $stroke_fill = $ui.querySelector('#stroke-fill')
+export const $stroke_fill = $ui.querySelector('#stroke-fill');
+$stroke_fill.addEventListener('change', () => {
+  add_patch();
+});
 $stroke_fill.addEventListener('input', () => {
-	if ($stroke_fill_switch.checked !== true) return
-	$stroke_fill.style.backgroundColor = colorize('stroke', $stroke_fill.value)
-})
-$stroke_fill.style.display = 'none'
+  if ($stroke_fill_switch.checked !== true) return;
+  $stroke_fill.style.backgroundColor = colorize('stroke', $stroke_fill.value);
+});
+$stroke_fill.style.display = 'none';
 
-export const $stroke_fill_switch = $ui.querySelector('#stroke-fill-switch')
+export const $stroke_fill_switch = $ui.querySelector('#stroke-fill-switch');
 $stroke_fill_switch.addEventListener('change', () => {
-	if ($stroke_fill_switch.checked === true) {
-		const val = colorize('stroke', $stroke_fill.value)
-		$stroke_fill.value = val
-		$stroke_fill.style.backgroundColor = val
-		//FIXME stroke color always create a visible contour 
-		//even there is no width set
-		$stroke_fill.style.display = 'block'
-		$selection.each($e => $e.style.paintOrder = 'stroke')
-	} else {
-		uncolorize('stroke')
-		$stroke_fill.style.display = 'none'
-		$selection.each($e => $e.style.paintOrder = 'inherit')
-	}
-})
+  if ($stroke_fill_switch.checked === true) {
+    const val = colorize('stroke', $stroke_fill.value);
+    $stroke_fill.value = val;
+    $stroke_fill.style.backgroundColor = val;
+    //FIXME stroke color always create a visible contour
+    //even there is no width set
+    $stroke_fill.style.display = 'block';
+    $selection.each(($e) => ($e.style.paintOrder = 'stroke'));
+  } else {
+    uncolorize('stroke');
+    $stroke_fill.style.display = 'none';
+    $selection.each(($e) => ($e.style.paintOrder = 'inherit'));
+  }
+});
 
-export const $stroke_opacity = $ui.querySelector('#stroke-opacity')
+export const $stroke_opacity = $ui.querySelector('#stroke-opacity');
+$stroke_opacity.addEventListener('mouseup', () => {
+  add_patch();
+});
+$stroke_opacity.addEventListener('input', () =>
+  stroke_opacity($stroke_opacity.value),
+);
 
-const $stroke_plus = $ui.querySelector('#stroke_plus')
-const $stroke_minus = $ui.querySelector('#stroke_minus')
+const $stroke_plus = $ui.querySelector('#stroke_plus');
+const $stroke_minus = $ui.querySelector('#stroke_minus');
 
-const update_stroke_elements = v => {
-	v = v.toFixed(3)
-	$stroke_plus.value = $stroke_minus.value = v
-	if ($stroke_plus.dataset.tooltipId) {
-			const $tooltip = document.getElementById($stroke_plus.dataset.tooltipId)
-			if ($tooltip) $tooltip.textContent = v
-	}
-	if ($stroke_minus.dataset.tooltipId) {
-			const $tooltip = document.getElementById($stroke_minus.dataset.tooltipId)
-			if ($tooltip) $tooltip.textContent = v
-	}
-}
+const update_stroke_elements = (v) => {
+  v = v.toFixed(3);
+  $stroke_plus.value = $stroke_minus.value = v;
+  if ($stroke_plus.dataset.tooltipId) {
+    const $tooltip = document.getElementById($stroke_plus.dataset.tooltipId);
+    if ($tooltip) $tooltip.textContent = v;
+  }
+  if ($stroke_minus.dataset.tooltipId) {
+    const $tooltip = document.getElementById($stroke_minus.dataset.tooltipId);
+    if ($tooltip) $tooltip.textContent = v;
+  }
+};
 
-const step = 0.01
-export let k = 0.1
-export const set_k = v => {
-    k = v
-    update_stroke_elements(k)
-}
+const step = 0.01;
+export let k = 0.1;
+export const set_k = (v) => {
+  k = v;
+  update_stroke_elements(k);
+};
 
-const stop = 0
-const start_func = way => {
-	k += way*step
+const stop = 0;
+const start_func = (way) => {
+  k += way * step;
 
-	if (way < 0 && k < stop) {
-        k = stop
-        stroke_width(k)
-        return
-    }
-	stroke_width(k)
-	update_stroke_elements(k)
-}
-const end_func = () => {}
-addEventInterval($stroke_plus, 'mousedown', () => start_func(1), 10, 'mouseup', end_func)
-addEventInterval($stroke_minus, 'mousedown', () => start_func(-1), 10, 'mouseup', end_func)
-
-$stroke_opacity.addEventListener('input', () => stroke_opacity($stroke_opacity.value))    
+  if (way < 0 && k < stop) {
+    k = stop;
+    stroke_width(k);
+    return;
+  }
+  stroke_width(k);
+  update_stroke_elements(k);
+};
+const end_func = () => {
+  add_patch();
+};
+addEventInterval(
+  $stroke_plus,
+  'mousedown',
+  () => start_func(1),
+  10,
+  'mouseup',
+  end_func,
+);
+addEventInterval(
+  $stroke_minus,
+  'mousedown',
+  () => start_func(-1),
+  10,
+  'mouseup',
+  end_func,
+);

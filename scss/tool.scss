@@ -282,6 +282,10 @@ $title-height: 3rem;
 			margin: 0.5rem 1rem;
 		}
 
+		& > div[class~=full] {
+			margin: 0rem;
+		}
+
 		select {
 			background-color: $bk-color-loud;
 			border: none;
@@ -333,12 +337,29 @@ section label {
 	cursor: pointer;
 	width: 1rem;
 	height: 1rem;
-	opacity: .6;
+	opacity: .8;
 	padding: 0.5rem;
 	border-radius: 50%;
 	transition: all .2s ease-out;
 	&:hover {
 		background-color: $black-soft;
+	}
+}
+
+.action {
+	position: relative;
+	.close {
+		width: 0.8rem;
+		height: 0.8rem;
+		background: $bk-color;
+		&:hover {
+			width: 1rem;
+			height: 1rem;
+			opacity: 1.0;
+		}
+	}
+	img[data-thumb] {
+		cursor: progress;
 	}
 }
 
@@ -372,7 +393,7 @@ button, .file-upload {
 	transition: all .2s ease-out;
 }
 
-#file_image {
+.none {
 	display: none;
 }
 
@@ -576,7 +597,7 @@ hr {
 	transition: opacity .2s ease-out;
 	& > .thumb {
 		width: 0.5rem;
-		height: 8rem;
+		height: 4rem;
 		cursor: pointer;
 		position: absolute;
 		background-color: $txt-color-darkest;
@@ -609,7 +630,9 @@ hr {
 
 #bkg_modal {
     display: none;
-    position: fixed;
+    position: absolute;
+    padding:0;
+    margin:0;
     width: 100%;
     height: 100%;
     background-color: black;
@@ -627,7 +650,7 @@ hr {
 				left: 0;
 				right: 0;
 				bottom: 0;
-				background: url(/icon/loading.svg) no-repeat center black;
+				background: url(/icon/loading.svg) no-repeat center transparent;
 				animation-name: spinning;
 				animation-duration: 1s;
 				animation-iteration-count: infinite;
@@ -676,4 +699,17 @@ body{
 			cursor: zoom-out;
 		}
 	}
+}
+
+.row {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-evenly;
+}
+.textarea {
+  min-height: 2rem;
+  border: $border-size solid $txt-color-border;
+  padding: 2*$border-size;
+  font-size: 1.2rem;
+  overflow: auto;
 }

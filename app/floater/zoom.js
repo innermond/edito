@@ -1,16 +1,16 @@
-import {$clicked, $selection} from '../selection/index.js'
-import {$svg, ui_fragment, display_none} from '../dom.js'
-import {add_diving, remove_diving} from '../dive.js'
-import {add_panning, remove_panning} from '../pan.js'
-import {add_selecting, remove_selecting} from '../select.js'
-import {add_dragging, remove_dragging} from '../drag.js'
-import {zoom, zoom_reset} from '../zoom.js'
-import {centerpoint} from '../pos.js'
-import {ungroup_one} from '../user_action/group.js'
-import {addEventInterval} from '../event_interval.js'
-import {disable} from '../click.js'
-import movement from '../cap.js'
-import {toggle_dive} from '../section/menubar.js'
+import { $clicked, $selection } from '../selection/index.js';
+import { $svg, ui_fragment, display_none } from '../dom.js';
+import { add_diving, remove_diving } from '../dive.js';
+import { add_panning, remove_panning } from '../pan.js';
+import { add_selecting, remove_selecting } from '../select.js';
+import { add_dragging, remove_dragging } from '../drag.js';
+import { zoom, zoom_reset } from '../zoom.js';
+import { centerpoint } from '../pos.js';
+import { ungroup_one } from '../user_action/group.js';
+import { addEventInterval } from '../event_interval.js';
+import { disable } from '../click.js';
+import movement from '../cap.js';
+import { toggle_dive } from '../section/menubar.js';
 
 const tpl = `<section class="movable" id="zoom">
 <div class="wrap-row">
@@ -38,63 +38,77 @@ const tpl = `<section class="movable" id="zoom">
 	<img src="/icon/close.svg" class="close" />
 </div>
 </div>
-</section>`
-export const $ui = ui_fragment(tpl)
-export const $zoom_is_edit = $ui.querySelector('#zoom_is_edit')
+</section>`;
+export const $ui = ui_fragment(tpl);
+export const $zoom_is_edit = $ui.querySelector('#zoom_is_edit');
 
-const step = 1.01
+const step = 1.01;
 
-const $zoomin = $ui.querySelector('#zoom_in')
-const $zoomout = $ui.querySelector('#zoom_out')
+const $zoomin = $ui.querySelector('#zoom_in');
+const $zoomout = $ui.querySelector('#zoom_out');
 
-let $g = null
-let to = null
-const start_func = scale => {
-	if ($selection.size && !$g) {
-		$g = $selection.as_group(true)
-		to = centerpoint($g, $svg)
-	}
-	zoom(scale, to)
-}
+let $g = null;
+let to = null;
+const start_func = (scale) => {
+  if ($selection.size && !$g) {
+    $g = $selection.as_group(true);
+    to = centerpoint($g, $svg);
+  }
+  zoom(scale, to);
+};
 const end_func = () => {
-	if ($g) {
-		ungroup_one($g)
-		$g = null
-		to = null
-	}
-}
+  if ($g) {
+    ungroup_one($g);
+    $g = null;
+    to = null;
+  }
+};
 
-addEventInterval($zoomin, 'mousedown', () => start_func(step), 10, 'mouseup', end_func)
-addEventInterval($zoomout, 'mousedown', () => start_func(1/step), 10, 'mouseup', end_func)
+addEventInterval(
+  $zoomin,
+  'mousedown',
+  () => start_func(step),
+  10,
+  'mouseup',
+  end_func,
+);
+addEventInterval(
+  $zoomout,
+  'mousedown',
+  () => start_func(1 / step),
+  10,
+  'mouseup',
+  end_func,
+);
 
-const $zoomreset = $ui.querySelector('#zoom_reset')
-$zoomreset.addEventListener('click', evt => zoom_reset())
+const $zoomreset = $ui.querySelector('#zoom_reset');
+$zoomreset.addEventListener('click', (evt) => zoom_reset());
 
-const $pan = $ui.querySelector('#pan')
-let have_pan = false
+const $pan = $ui.querySelector('#pan');
+let have_pan = false;
 const panning = () => {
-    if(have_pan) {
-        movement.pan.off()
-        document.body.classList.remove('pan')
-    } else {
-        movement.pan.on()
-        document.body.classList.add('pan')
-    }
-    have_pan = !have_pan
-}
-$pan.addEventListener('click', panning)
-$pan.addEventListener('mousedown', evt => $pan.classList.toggle('active'))
+  if (have_pan) {
+    movement.pan.off();
+    document.body.classList.remove('pan');
+  } else {
+    movement.pan.on();
+    document.body.classList.add('pan');
+  }
+  have_pan = !have_pan;
+};
+$pan.addEventListener('click', panning);
+$pan.addEventListener('mousedown', (evt) => $pan.classList.toggle('active'));
 
-$ui.querySelectorAll('[for]').forEach($e => {
-	$e.addEventListener('click', evt => {
-		evt.preventDefault()
-	})
-})
+$ui.querySelectorAll('[for]').forEach(($e) => {
+  $e.addEventListener('click', (evt) => {
+    evt.preventDefault();
+  });
+});
 
-$ui.querySelector('.close').addEventListener('click', evt => {
-    toggle_dive()
-    if (have_pan) {
-        panning()
-        $pan.classList.remove('active')
-    }
-})
+$ui.querySelector('.close').addEventListener('click', (evt) => {
+  toggle_dive();
+  if (have_pan) {
+    panning();
+    $pan.classList.remove('active');
+  }
+});
