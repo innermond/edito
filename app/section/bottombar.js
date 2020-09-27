@@ -6,7 +6,7 @@ import { deleting, cloning, locking } from '../user_action/del_undel_clone.js';
 import { tooltip } from '../tooltip.js';
 import { $zoom_is_edit } from '../floater/zoom.js';
 import { apply_last_patch, with_undo, redo } from '../idb.js';
-import { loading } from '../loading.js';
+import { with_loading_after, loading } from '../loading.js';
 
 const tpl = `<section id="bottom-bar">
 		<p id="group_repr"></p>
@@ -70,7 +70,7 @@ $send_svg.addEventListener('click', async () => {
 });
 
 const $undo = $ui.querySelector('#undo');
-$undo.addEventListener('click', apply_last_patch);
+$undo.addEventListener('click', with_loading_after(apply_last_patch, 50));
 
 const $redo = $ui.querySelector('#redo');
-$redo.addEventListener('click', redo);
+$redo.addEventListener('click', with_loading_after(redo, 50));

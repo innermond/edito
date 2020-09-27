@@ -166,69 +166,72 @@ export function serialize_without_ants() {
   return new XMLSerializer().serializeToString($cloned);
 }
 
-export function apply_last_patch() {
-  const tx = db.transaction(['undo', 'redo', 'svg'], 'readwrite');
-  const store_patch = tx.objectStore('undo');
-  const c = store_patch.openCursor(null, 'prev');
-  c.onsuccess = (e) => {
-    const cursor = e.target.result;
-    if (!cursor) return;
-    const store_svg = tx.objectStore('svg');
-    const x = store_svg.get(1);
-    x.onsuccess = (evt) => {
-      const p = cursor.value.patch;
-      const svg_after = evt.target.result.svg;
-      let [svg_patched] = dmp.patch_apply(p, svg_after);
-
-      // redo patch
-      let diff = dmp.diff_main(svg_patched, svg_after, false);
-      let pp = dmp.patch_make(svg_patched, diff);
-      const store_redo = tx.objectStore('redo');
-      store_redo.add({ patch: pp });
-
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(svg_patched, 'image/svg+xml');
-      // remove last patch
-      cursor.delete();
-
-      store_svg.put({ id: 1, svg: svg_patched });
-
-      update_svg(doc);
-    };
-  };
+function patiently(x) {
+	return new Promise((resolve, reject) => {
+		x.onsuccess = e => resolve(e);
+		x.onerror = e => reject(e);
+	});
 }
 
-export function redo() {
+export async function apply_last_patch() {
+  const tx = db.transaction(['undo', 'redo', 'svg'], 'readwrite');
+  const store_patch = tx.objectStore('undo');
+
+  const c = store_patch.openCursor(null, 'prev');
+	const {target:{result: cursor}} = await patiently(c);
+	if (!cursor) return;
+	const p = cursor.value.patch;
+	cursor.delete();
+
+	const store_svg = tx.objectStore('svg');
+	const x = store_svg.get(1);
+	const {target:{result:{svg: svg_after}}} = await patiently(x);
+
+	let [svg_patched] = dmp.patch_apply(p, svg_after);
+	store_svg.put({ id: 1, svg: svg_patched });
+
+	// redo patch
+	let diff = dmp.diff_main(svg_patched, svg_after, false);
+	let pp = dmp.patch_make(svg_patched, diff);
+	
+	const store_redo = tx.objectStore('redo');
+	store_redo.add({ patch: pp });
+
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(svg_patched, 'image/svg+xml');
+	update_svg(doc);
+}
+
+export async function redo() {
   let tx = db.transaction(['redo', 'svg', 'undo'], 'readwrite');
   const store_patch = tx.objectStore('redo');
-  const c = store_patch.openCursor(null, 'prev');
-  c.onsuccess = (e) => {
-    const cursor = e.target.result;
-    if (!cursor) return;
-    const store_svg = tx.objectStore('svg');
-    const x = store_svg.get(1);
-    x.onsuccess = (evt) => {
-      const p = cursor.value.patch;
-      const svg_after = evt.target.result.svg;
-      let [svg_patched] = dmp.patch_apply(p, svg_after);
+  
+	const c = store_patch.openCursor(null, 'prev');
+	const {target:{result: cursor}} = await patiently(c);
+	if (!cursor) return;
+  
+	const store_svg = tx.objectStore('svg');
+	const x = store_svg.get(1);
+	const {target:{result:{svg: svg_after}}} = await patiently(x);
+  
+	const p = cursor.value.patch;
+	let [svg_patched] = dmp.patch_apply(p, svg_after);
 
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(svg_patched, 'image/svg+xml');
-      // remove last patch
-      cursor.delete();
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(svg_patched, 'image/svg+xml');
+	// remove last patch
+	cursor.delete();
 
-      store_svg.put({ id: 1, svg: svg_patched });
+	store_svg.put({ id: 1, svg: svg_patched });
 
-      update_svg(doc);
+	update_svg(doc);
 
-      const ffid = dmp.diff_main(svg_patched, svg_after, false);
-      const pz = dmp.patch_make(svg_patched, ffid);
-      if (pz.length === 0) return;
+	const ffid = dmp.diff_main(svg_patched, svg_after, false);
+	const pz = dmp.patch_make(svg_patched, ffid);
+	if (pz.length === 0) return;
 
-      const store_undo = tx.objectStore('undo');
-      store_undo.add({ patch: pz });
-    };
-  };
+	const store_undo = tx.objectStore('undo');
+	store_undo.add({ patch: pz });
 }
 
 export function update_svg(doc) {
@@ -283,6 +286,13 @@ export async function clear_patch(clear_svg = false) {
 export function with_undo(fn, ...args) {
   return () => {
     fn(...args);
+    add_patch();
+  };
+}
+
+export function with_undo_async(fn, ...args) {
+  return async () => {
+    await fn(...args);
     add_patch();
   };
 }

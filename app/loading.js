@@ -36,3 +36,21 @@ export function loading(onclick, $host='body') {
 
   return [done, stop];
 }
+
+export function with_loading_after(fn, ms) {
+	return async () => {
+		let done = null;
+		let peak = setTimeout(()=> {
+			[done] = loading();
+		}, ms);
+		try {
+			await fn();
+		} catch (e) {
+			console.log(e);
+		} finally {
+			if (done !== null) done();
+			clearTimeout(peak);
+			done = null;
+		}
+	}
+};

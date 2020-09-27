@@ -63,8 +63,8 @@ function endDrag() {
   }
   $clicked.clues.dragging = false;
   disable.click = moved;
+  if (moved) add_patch();
   moved = null;
-  add_patch();
 }
 
 function drag(evt) {

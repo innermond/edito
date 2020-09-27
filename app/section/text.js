@@ -13,7 +13,8 @@ import { sizing_text } from '../user_action/font/size.js';
 import { ui_fragment } from '../dom.js';
 import { ul_select } from '../ul_select.js';
 import { wrap } from '../drawer.js';
-import { addEventListenerUndo, add_patch, with_undo } from '../idb.js';
+import { addEventListenerUndo, add_patch, with_undo, with_undo_async } from '../idb.js';
+import { with_loading_after } from '../loading.js';
 
 const tpl = `<section class="vertical-align">
 	
@@ -44,56 +45,19 @@ const tpl = `<section class="vertical-align">
 		<label for="font-size">Mărime font</label>
 		<input class="tooltip" data-tooltip-text="Mărime font in puncte" data-tooltip-bottom type="range" min="7" max="300" value="10" step="1" id="font-size">
 			
+		<label for="line-spacing">Spațiere randuri</label>
+		<input class="tooltip" data-tooltip-text="Modifici spațiul dintre randuri" data-tooltip-bottom type="range" min="0" max="12" value="1.2" step="0.01" id="line-spacing">
+
 		<label for="word-spacing">Spațiere cuvinte</label>
 		<input class="tooltip" data-tooltip-text="Modifici spațiul dintre cuvinte" data-tooltip-bottom type="range" min="-20" max="20" value="0" step="0.01" id="word-spacing">
 
 		<label for="letter-spacing">Spațiere caractere</label>
 		<input class="tooltip" data-tooltip-text="Modifici spațiul dintre caractere" data-tooltip-bottom type="range" min="-10" max="10" value="0" step="0.01" id="letter-spacing">
-
-		<label for="line-spacing">Spațiere randuri</label>
-		<input class="tooltip" data-tooltip-text="Modifici spațiul dintre randuri" data-tooltip-bottom type="range" min="0" max="12" value="1.2" step="0.01" id="line-spacing">
 	</section>`;
 export const $ui = wrap(ui_fragment(tpl), 'add-text', 'text');
 
 export const $textname = $ui.querySelector('#textname');
 const $add_text_btn = $ui.querySelector('#add-text-btn');
-
-// textname before changes
-/*let $old_textname = null;
-$textname.addEventListener('keydown', (evt) => {
-  $old_textname = $textname.cloneNode(true);
-});
-// after keydown dom modifications may occur
-function onenter(ml, obs) {
-  if ($old_textname === null) return;
-  obs.disconnect(); 
-
-  let keep_old = true;
-  for (const m of ml) {
-    if (m.addedNodes.length) {
-      const just_br = Array.from(m.addedNodes).every(e => 'br' === e.nodeName.toLowerCase());
-      const just_text = Array.from(m.addedNodes).every(e => ['br', '#text'].includes(e.nodeName.toLowerCase()))
-
-      // do not allow adding nodes others than text mixed with br
-      keep_old = !just_text;
-      // do not allow just br
-      if (just_br) keep_old = true;
-      break;
-    }
-    if (m.removedNodes.length) {
-      keep_old = false;
-      break;
-    }
-  }
-keep_old = false;
-  // restore textname before adding/removing nodes
-  if (keep_old) $textname.innerHTML = $old_textname.innerHTML;
-  $old_textname = null;
-  obs.observe($textname, { childList: true });
-}
-*/
-//export const observer = new MutationObserver(onenter);
-//observer.observe($textname, { childList: true });
 
 $add_text_btn.addEventListener('click', with_undo(add_text, $textname));
 
@@ -339,12 +303,11 @@ addEventListenerUndo(
 );
 
 export const $fonts = $ui.querySelector('#fonts');
-$fonts.addEventListener('change', with_undo(load_font, $fonts));
+$fonts.addEventListener('change', with_loading_after(with_undo_async(load_font, $fonts), 15));
 
 const $ul_fonts = ul_select($fonts, ul_select.opt_fn, { class: 'folded relative' });
 
-const $font_search = $ui.querySelector('#font-search');
-$font_search.addEventListener('keyup', (evt) => {
+const font_search = () => {
   let displayed = $ul_fonts.querySelectorAll('li');
   displayed = Array.from(displayed)
   displayed.forEach($li => $li.style.display = 'list-item');
@@ -355,4 +318,7 @@ $font_search.addEventListener('keyup', (evt) => {
   displayed.filter($li => $li.style.display === 'none').forEach($li => $li.style.display = 'list-item');
   const selector = `li:not([data-value*="${val}"i])`;
   $ul_fonts.querySelectorAll(selector).forEach($li => $li.style.display = 'none');
-});
+};
+
+const $font_search = $ui.querySelector('#font-search');
+$font_search.addEventListener('keyup', with_undo(font_search));

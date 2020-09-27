@@ -1,22 +1,18 @@
-import { $svg, $style } from '../../dom.js';
+import { $style } from '../../dom.js';
 import { $clicked, $selection } from '../../selection/index.js';
 
-// native forEach method is not async
-// it will go without waiting for completion
-
-export function load_font($fonts) {
+export async function load_font($fonts) {
   const inx = $fonts.selectedIndex;
   if (inx === 0) {
     return;
   }
   const $opt = $fonts.options[inx];
 	const load_font_green = !['sans-serif', 'serif'].includes($opt.value);
-  $selection.forEachAsync(async ($el) => {
+	if (load_font_green) await load_font_remote($opt.text);
+  $selection.forEach(($el) => {
     const $ee = $el.nodeName === 'g' ? Array.from($el.children) : [$el];
     for (let $e of $ee) {
       if (!$e || $e.nodeName !== 'text') continue;
-      // wait the font to be loaded
-      if (load_font_green) await load_font_remote($opt.text);
       // apply font to text element
       $e.style.fontFamily = $opt.text;
       $e.querySelectorAll('tspan').forEach(
