@@ -101,7 +101,7 @@ export {
   $glass_two,
   $prev_svg,
   $send_svg,
-	$textname,
+  $textname,
 };
 
 import {
@@ -157,7 +157,8 @@ function simple_text($el) {
   if (has_plain_text) return false;
 
   // other elements than tspan?
-  const other_elements = $el.querySelectorAll(':scope>tspan').length < $el.childElementCount;
+  const other_elements =
+    $el.querySelectorAll(':scope>tspan').length < $el.childElementCount;
   if (other_elements) return false;
 
   return true;
@@ -167,31 +168,35 @@ function tspan_wrap_free_text($el) {
   const class_name = 'tspan-wrapped';
   if ($el.classList.contains(class_name)) return;
 
-  const $tt = Array.from($el.childNodes).filter($e => $e.nodeType === Node.TEXT_NODE);
+  const $tt = Array.from($el.childNodes).filter(
+    ($e) => $e.nodeType === Node.TEXT_NODE,
+  );
   const a = [];
-  $tt.forEach(n => {
+  $tt.forEach((n) => {
     n.parentNode.classList.add(class_name);
     a.push(n);
   });
-  a.forEach(e => {
+  a.forEach((e) => {
     const tspan = newtag('tspan');
     tspan.textContent = e.textContent;
     tspan.classList.add(class_name);
-    e.parentNode.replaceChild(tspan, e); 
+    e.parentNode.replaceChild(tspan, e);
   });
-  const $ee = Array.from($el.children).filter($e => $e.nodeType === Node.ELEMENT_NODE);
-	$ee.forEach($e => tspan_wrap_free_text($e));
-	$el.classList.add(class_name);
+  const $ee = Array.from($el.children).filter(
+    ($e) => $e.nodeType === Node.ELEMENT_NODE,
+  );
+  $ee.forEach(($e) => tspan_wrap_free_text($e));
+  $el.classList.add(class_name);
 }
 
 function adj($e) {
-	if ($e.nodeType === Node.TEXT_NODE) return;
+  if ($e.nodeType === Node.TEXT_NODE) return;
   //const X = +$e.getAttributeNS(null, 'x') ?? 0;
   const Y = +$e.getAttributeNS(null, 'y') ?? 0;
 
   const $cc = Array.from($e.children);
-  $cc.forEach($c => {
-		if ($c.nodeType === Node.TEXT_NODE) return;
+  $cc.forEach(($c) => {
+    if ($c.nodeType === Node.TEXT_NODE) return;
     let x = $c.getAttributeNS(null, 'x') ?? null;
     let dx = +$c.getAttributeNS(null, 'dx') ?? 0;
     if (x !== null) {
@@ -204,13 +209,15 @@ function adj($e) {
     let dy = +$c.getAttributeNS(null, 'dy') ?? 0;
     if (y !== null) {
       y = +y + dy;
-      let yprev = $c.previousElementSibling ? $c.previousElementSibling.getAttributeNS(null, 'y') ?? 0 : Y;
+      let yprev = $c.previousElementSibling
+        ? $c.previousElementSibling.getAttributeNS(null, 'y') ?? 0
+        : Y;
       yprev = +yprev;
       $c.setAttributeNS(null, 'ystep', y - yprev);
     }
     $c.removeAttributeNS(null, 'dy', dy);
     if ($c.childElementCount) adj($c);
-  })
+  });
 }
 
 export function text_svg_html($el, $text) {
@@ -226,7 +233,7 @@ export function text_svg_html($el, $text) {
         text += $t.textContent;
         break;
       case Node.ELEMENT_NODE:
-        if ($t.nodeName.toLowerCase() !== 'tspan') return; 
+        if ($t.nodeName.toLowerCase() !== 'tspan') return;
         const t_y = 1.0 * $t.getAttributeNS(null, 'y');
         // assume contained tspan are not y or x positioned
         //$t.querySelectorAll('tspan').forEach($s => $s.removeAttributeNS(null, 'y'))

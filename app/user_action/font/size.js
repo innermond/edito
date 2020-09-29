@@ -24,19 +24,19 @@ export function sizing_text(val) {
   });
 }
 
-function sizing($e, r, pos =  true) {
+function sizing($e, r, pos = true) {
   const $tt = Array.from($e.childNodes).filter(
     ($x) => $x.nodeType === Node.TEXT_NODE || $x.nodeType === Node.ELEMENT_NODE,
   );
   $tt.forEach(($t) => {
     if ($t.nodeType === Node.TEXT_NODE) return;
 
-		const tstyle = window.getComputedStyle($t);
-		let tfz = tstyle.getPropertyValue('font-size');
-		tfz = r * parseFloat(tfz);
-		$t.style.fontSize = tfz + 'px';
+    const tstyle = window.getComputedStyle($t);
+    let tfz = tstyle.getPropertyValue('font-size');
+    tfz = r * parseFloat(tfz);
+    $t.style.fontSize = tfz + 'px';
 
-		if (!pos)  return;
+    if (!pos) return;
 
     let y0 = $e.getStartPositionOfChar(0).y;
     let y = $t.getStartPositionOfChar(0).y;
@@ -48,7 +48,7 @@ function sizing($e, r, pos =  true) {
       dy = r * dy;
       $t.setAttributeNS(null, 'y', y0 + dy);
     }
-		// do not y position, only rows are y positioned
+    // do not y position, only rows are y positioned
     if ($t.querySelectorAll('tspan').length) sizing($t, r, false);
   });
 }

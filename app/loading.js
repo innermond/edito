@@ -18,12 +18,12 @@ function stop(fn) {
 
 let fn_onclick;
 
-export function loading(onclick, $host='body') {
+export function loading(onclick, $host = 'body') {
   if (!$bkg) {
     $bkg = document.createElement('div');
     $bkg.id = 'bkg_modal';
     done();
-    $host = typeof $host === 'string' ?  document.querySelector($host) : $host;
+    $host = typeof $host === 'string' ? document.querySelector($host) : $host;
     $host.appendChild($bkg);
   }
 
@@ -38,19 +38,19 @@ export function loading(onclick, $host='body') {
 }
 
 export function with_loading_after(fn, ms) {
-	return async () => {
-		let done = null;
-		let peak = setTimeout(()=> {
-			[done] = loading();
-		}, ms);
-		try {
-			await fn();
-		} catch (e) {
-			console.log(e);
-		} finally {
-			if (done !== null) done();
-			clearTimeout(peak);
-			done = null;
-		}
-	}
-};
+  return async () => {
+    let done = null;
+    let peak = setTimeout(() => {
+      [done] = loading();
+    }, ms);
+    try {
+      await fn();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      if (done !== null) done();
+      clearTimeout(peak);
+      done = null;
+    }
+  };
+}

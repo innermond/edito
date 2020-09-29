@@ -1,5 +1,5 @@
 import { $clicked } from '../selection/index.js';
-import {newtag} from '../dom.js';
+import { newtag } from '../dom.js';
 import { add_text } from '../user_action/add.js';
 import { aligning_text } from '../user_action/font/align.js';
 import { load_font } from '../user_action/font/fontface.js';
@@ -13,7 +13,12 @@ import { sizing_text } from '../user_action/font/size.js';
 import { ui_fragment } from '../dom.js';
 import { ul_select } from '../ul_select.js';
 import { wrap } from '../drawer.js';
-import { addEventListenerUndo, add_patch, with_undo, with_undo_async } from '../idb.js';
+import {
+  addEventListenerUndo,
+  add_patch,
+  with_undo,
+  with_undo_async,
+} from '../idb.js';
 import { with_loading_after } from '../loading.js';
 
 const tpl = `<section class="vertical-align">
@@ -63,177 +68,186 @@ $add_text_btn.addEventListener('click', with_undo(add_text, $textname));
 
 $textname.addEventListener('keyup', (evt) => {
   evt.stopPropagation();
-	// extract content of any not-svg element
-	convert_text_to_elements_and_separators(textname);
+  // extract content of any not-svg element
+  convert_text_to_elements_and_separators(textname);
 
-	// prepare to apply textname to svg
-	const $clone = $clicked.cloneNode(true);
-	$clone.innerHTML = '';
-	for(const $x of $textname.childNodes) {
-		$clone.appendChild($x.cloneNode(true));
-	};
-	reposition($clone); 
-  
-	// apply new content
-	$clicked.innerHTML = $clone.innerHTML.split('<br>').join('');
+  // prepare to apply textname to svg
+  const $clone = $clicked.cloneNode(true);
+  $clone.innerHTML = '';
+  for (const $x of $textname.childNodes) {
+    $clone.appendChild($x.cloneNode(true));
+  }
+  reposition($clone);
+
+  // apply new content
+  $clicked.innerHTML = $clone.innerHTML.split('<br>').join('');
   $clicked.over();
   add_patch();
 });
 
 // modify $el content to have "rows" (represented by tspan) separated by br elements
 function convert_text_to_elements_and_separators($el) {
-	const $tt = $el.children;
-	// prevent occurence of separated elements with same id
-	Array.from($el.children).forEach($c => $c.removeAttributeNS(null, 'id'));
+  const $tt = $el.children;
+  // prevent occurence of separated elements with same id
+  Array.from($el.children).forEach(($c) => $c.removeAttributeNS(null, 'id'));
 
-	// find separations - assumed as div elements
-	// TODO check for all valuable browsers if div tag is used to separate
-	const $separator = 'div'; // legal for Chrome / Firefox
-	const $last = Array.from($el.querySelectorAll($separator)).pop();
-	Array.from($tt).forEach($t => {
-		if (['tspan', 'br'].includes($t.nodeName.toLowerCase())) return;
-		
-		// now $t is a div or other element that means separation
-		if ($t === $last) {
-			$el.insertBefore(document.createElement('br'), $t);
-			// there are more elelents after so do a separation
-			if ($last.nextElementSibling !== null) $el.insertBefore(document.createElement('br'), $last.nextElementSibling);
-		}
+  // find separations - assumed as div elements
+  // TODO check for all valuable browsers if div tag is used to separate
+  const $separator = 'div'; // legal for Chrome / Firefox
+  const $last = Array.from($el.querySelectorAll($separator)).pop();
+  Array.from($tt).forEach(($t) => {
+    if (['tspan', 'br'].includes($t.nodeName.toLowerCase())) return;
 
-		// extract content of separation
-		Array.from($t.childNodes).forEach($c => {
-			$el.insertBefore($c, $t);
-		})
+    // now $t is a div or other element that means separation
+    if ($t === $last) {
+      $el.insertBefore(document.createElement('br'), $t);
+      // there are more elelents after so do a separation
+      if ($last.nextElementSibling !== null)
+        $el.insertBefore(
+          document.createElement('br'),
+          $last.nextElementSibling,
+        );
+    }
 
-		$t.remove()
-	})
+    // extract content of separation
+    Array.from($t.childNodes).forEach(($c) => {
+      $el.insertBefore($c, $t);
+    });
 
-	// remove non meaningfull empty tag, mostly tspans
-	Array.from($el.querySelectorAll(':empty')).filter($x => $x.nodeName.toLowerCase() !== 'br').forEach($x => $x.remove());
+    $t.remove();
+  });
+
+  // remove non meaningfull empty tag, mostly tspans
+  Array.from($el.querySelectorAll(':empty'))
+    .filter(($x) => $x.nodeName.toLowerCase() !== 'br')
+    .forEach(($x) => $x.remove());
 }
 
 function unhtml(str) {
-	const tmp = document.createElement('div');
-	tmp.innerHTML = str;
-	return tmp.textContent || tmp.innerText || '';
+  const tmp = document.createElement('div');
+  tmp.innerHTML = str;
+  return tmp.textContent || tmp.innerText || '';
 }
 
 // paste date is brutally striped by tags
-$textname.addEventListener('paste', evt => {
-	evt.preventDefault();
+$textname.addEventListener('paste', (evt) => {
+  evt.preventDefault();
 
-	const paste = (evt.clipboardData || window.clipboardData).getData('text');
-	const sel = window.getSelection();
-	if (!sel.rangeCount) return;
-	sel.deleteFromDocument();
-	
-	const txt = document.createTextNode(unhtml(paste));
-	const range = sel.getRangeAt(0);
-	range.insertNode(txt);
-})
+  const paste = (evt.clipboardData || window.clipboardData).getData('text');
+  const sel = window.getSelection();
+  if (!sel.rangeCount) return;
+  sel.deleteFromDocument();
 
-function group_elements_into_lines($cc, $sep='br') {
-	const lines = [];
-	let line = [];
-	// makes lines as separated by br tag
-	Array.from($cc).forEach($c => {
-		if ($c.nodeName.toLowerCase() === $sep) {
-			lines.push(line);
-			line = [];
-			return;
-		}
-		// element must be text or tspan
-		// anyother is converted to text node
-		const as_text = !['#text', 'tspan'].includes($c.nodeName.toLowerCase());
-		if (as_text) {
-			line.push(document.createTextNode($c.textContent));
-		} else {
-			line.push($c);
-		}
-	});
-	if (line.length) lines.push(line);
+  const txt = document.createTextNode(unhtml(paste));
+  const range = sel.getRangeAt(0);
+  range.insertNode(txt);
+});
 
-	return lines;
+function group_elements_into_lines($cc, $sep = 'br') {
+  const lines = [];
+  let line = [];
+  // makes lines as separated by br tag
+  Array.from($cc).forEach(($c) => {
+    if ($c.nodeName.toLowerCase() === $sep) {
+      lines.push(line);
+      line = [];
+      return;
+    }
+    // element must be text or tspan
+    // anyother is converted to text node
+    const as_text = !['#text', 'tspan'].includes($c.nodeName.toLowerCase());
+    if (as_text) {
+      line.push(document.createTextNode($c.textContent));
+    } else {
+      line.push($c);
+    }
+  });
+  if (line.length) lines.push(line);
+
+  return lines;
 }
 
 function unposition_inside($e) {
-	Array.from($e.children).forEach($c => {
-		if ($c.children.length) unposition_inside($c);
-		$c.removeAttributeNS(null, 'x');
-		$c.removeAttributeNS(null, 'y');
-	})
+  Array.from($e.children).forEach(($c) => {
+    if ($c.children.length) unposition_inside($c);
+    $c.removeAttributeNS(null, 'x');
+    $c.removeAttributeNS(null, 'y');
+  });
 }
 
 function reposition($text) {
-	const $cc = $text.childNodes;
-	const lines = group_elements_into_lines($cc);
-	// we have lines
-	// lets reposition them on y and x axis
-	let prev = $text
-	let prev_ystep = prev.getAttributeNS(null, 'ystep') || line_height($text);
-	let prev_y = +prev.getAttributeNS(null, 'y');
-	let y = prev_y;  
-	const y_is_number = (!isNaN(y) && y !== null);
+  const $cc = $text.childNodes;
+  const lines = group_elements_into_lines($cc);
+  // we have lines
+  // lets reposition them on y and x axis
+  let prev = $text;
+  let prev_ystep = prev.getAttributeNS(null, 'ystep') || line_height($text);
+  let prev_y = +prev.getAttributeNS(null, 'y');
+  let y = prev_y;
+  const y_is_number = !isNaN(y) && y !== null;
 
-	let prev_x = +prev.getAttributeNS(null, 'x');
-	let x = prev_x;
-	const x_is_number = (!isNaN(x) && x !== null);
-	
-	for (const line of lines) {
-		const just_one_element = line.length === 1 && line[0].nodeType === Node.ELEMENT_NODE;
+  let prev_x = +prev.getAttributeNS(null, 'x');
+  let x = prev_x;
+  const x_is_number = !isNaN(x) && x !== null;
 
-		// consume line and collect it to $line_container
-		let $line_container = newtag('tspan');
-		if (just_one_element && line[0].nodeName.toLowerCase() !== '#text') $line_container = line[0];
-		
-		// position line as parent
-		if (y_is_number && 'setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'y', y);
-		if (x_is_number && 'setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'x', x);
-		if ('setAttributeNS' in $line_container) $line_container.setAttributeNS(null, 'ystep', prev_ystep);
+  for (const line of lines) {
+    const just_one_element =
+      line.length === 1 && line[0].nodeType === Node.ELEMENT_NODE;
 
-		// find a reference node to insert line
-		let $before_node = line[line.length-1]?.nextElementSibling;
-		while ($before_node?.nodeName.toLowerCase() === 'br') {
-			$before_node = $before_node.nextElementSibling;
-		}
+    // consume line and collect it to $line_container
+    let $line_container = newtag('tspan');
+    if (just_one_element && line[0].nodeName.toLowerCase() !== '#text')
+      $line_container = line[0];
 
-		// compute x, y of a line
-		// proces every line child
-		line.forEach( 
-			($e) => {
-				switch ($e.nodeName.toLowerCase()){
-					case '#text':
-						$line_container.appendChild($e);
-					break;
-					default:
-						unposition_inside($e);
-						if (!just_one_element) {
-							$e.removeAttributeNS(null, 'x');
-							$e.removeAttributeNS(null, 'y');
-							$line_container.appendChild($e);
-						}
-				}
-			}
-		)
+    // position line as parent
+    if (y_is_number && 'setAttributeNS' in $line_container)
+      $line_container.setAttributeNS(null, 'y', y);
+    if (x_is_number && 'setAttributeNS' in $line_container)
+      $line_container.setAttributeNS(null, 'x', x);
+    if ('setAttributeNS' in $line_container)
+      $line_container.setAttributeNS(null, 'ystep', prev_ystep);
 
-		$text.insertBefore($line_container, $before_node);
+    // find a reference node to insert line
+    let $before_node = line[line.length - 1]?.nextElementSibling;
+    while ($before_node?.nodeName.toLowerCase() === 'br') {
+      $before_node = $before_node.nextElementSibling;
+    }
 
-		// prepare position for next line
-		y = +y + prev_ystep;
-		if (y === prev_y) {
-			y += line_height(prev);
-		}
-		prev_y = y;
-		x = prev_x;
-	}
+    // compute x, y of a line
+    // proces every line child
+    line.forEach(($e) => {
+      switch ($e.nodeName.toLowerCase()) {
+        case '#text':
+          $line_container.appendChild($e);
+          break;
+        default:
+          unposition_inside($e);
+          if (!just_one_element) {
+            $e.removeAttributeNS(null, 'x');
+            $e.removeAttributeNS(null, 'y');
+            $line_container.appendChild($e);
+          }
+      }
+    });
+
+    $text.insertBefore($line_container, $before_node);
+
+    // prepare position for next line
+    y = +y + prev_ystep;
+    if (y === prev_y) {
+      y += line_height(prev);
+    }
+    prev_y = y;
+    x = prev_x;
+  }
 }
 
 function line_height($e) {
-	const css = window.getComputedStyle($e);
-	let fs = css.getPropertyValue('font-size') || '16px';
-	fs = parseFloat(fs);
-	let lh = css.getPropertyValue('line-height') || fs*1.25;
-	return lh;
+  const css = window.getComputedStyle($e);
+  let fs = css.getPropertyValue('font-size') || '16px';
+  fs = parseFloat(fs);
+  let lh = css.getPropertyValue('line-height') || fs * 1.25;
+  return lh;
 }
 
 export const $text_features = $ui.querySelector('#text-features');
@@ -303,21 +317,30 @@ addEventListenerUndo(
 );
 
 export const $fonts = $ui.querySelector('#fonts');
-$fonts.addEventListener('change', with_loading_after(with_undo_async(load_font, $fonts), 15));
+$fonts.addEventListener(
+  'change',
+  with_loading_after(with_undo_async(load_font, $fonts), 15),
+);
 
-const $ul_fonts = ul_select($fonts, ul_select.opt_fn, { class: 'folded relative' });
+const $ul_fonts = ul_select($fonts, ul_select.opt_fn, {
+  class: 'folded relative',
+});
 
 const font_search = () => {
   let displayed = $ul_fonts.querySelectorAll('li');
-  displayed = Array.from(displayed)
-  displayed.forEach($li => $li.style.display = 'list-item');
+  displayed = Array.from(displayed);
+  displayed.forEach(($li) => ($li.style.display = 'list-item'));
   const val = $font_search.value;
   if (val.length === 0) {
     return;
   }
-  displayed.filter($li => $li.style.display === 'none').forEach($li => $li.style.display = 'list-item');
+  displayed
+    .filter(($li) => $li.style.display === 'none')
+    .forEach(($li) => ($li.style.display = 'list-item'));
   const selector = `li:not([data-value*="${val}"i])`;
-  $ul_fonts.querySelectorAll(selector).forEach($li => $li.style.display = 'none');
+  $ul_fonts
+    .querySelectorAll(selector)
+    .forEach(($li) => ($li.style.display = 'none'));
 };
 
 const $font_search = $ui.querySelector('#font-search');

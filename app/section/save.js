@@ -39,43 +39,45 @@ const $open_file = $ui.querySelector('#open-file-svg');
 async function addUrlSvg() {
   dragging_all_marks_reset();
   $selection.clear();
-	await urlSvg($url_doc_svg.value);
+  await urlSvg($url_doc_svg.value);
 }
 
 async function urlSvg(src) {
-	try {
-		const url = new URL(src);
-		const is_svg = url.pathname.split('.')?.pop()?.toLowerCase() === 'svg';
-		if (! is_svg) return;
-	} catch (e) {
-		return;
-	}
+  try {
+    const url = new URL(src);
+    const is_svg = url.pathname.split('.')?.pop()?.toLowerCase() === 'svg';
+    if (!is_svg) return;
+  } catch (e) {
+    return;
+  }
 
-	const [done] = loading();
+  const [done] = loading();
 
-	try {
-		const url_doc_svg = proxied_url(src);
-		let resp = await fetch(url_doc_svg);
-		if (!resp.ok) throw new Error('could not load svg');
+  try {
+    const url_doc_svg = proxied_url(src);
+    let resp = await fetch(url_doc_svg);
+    if (!resp.ok) throw new Error('could not load svg');
     const svg_text = await resp.text();
     const parser = new DOMParser();
     const doc = parser.parseFromString(svg_text, 'image/svg+xml');
     update_svg(doc);
-		load_fonts_of($svg); 
-		// check all svg images has been loaded
-		const imgs_loaded = [];
-		const $kk = $svg.querySelectorAll('image[*|href]');
-		$kk.forEach($img => imgs_loaded.push(
-			new Promise((resolve, reject) => {
-				$img.onload = () => {
-					resolve(true);
-				};
-				$img.onerror = reject;
-			})
-		));
-		let loaded = await Promise.all(imgs_loaded);
-		loaded = loaded.every(x => x === true);
-		if (!loaded) throw new Error('not all images loaded');
+    load_fonts_of($svg);
+    // check all svg images has been loaded
+    const imgs_loaded = [];
+    const $kk = $svg.querySelectorAll('image[*|href]');
+    $kk.forEach(($img) =>
+      imgs_loaded.push(
+        new Promise((resolve, reject) => {
+          $img.onload = () => {
+            resolve(true);
+          };
+          $img.onerror = reject;
+        }),
+      ),
+    );
+    let loaded = await Promise.all(imgs_loaded);
+    loaded = loaded.every((x) => x === true);
+    if (!loaded) throw new Error('not all images loaded');
   } catch (e) {
     console.log(e);
   } finally {
@@ -84,20 +86,20 @@ async function urlSvg(src) {
   }
 }
 
-const $save_with_images= $ui.querySelector('#save_with_images');
+const $save_with_images = $ui.querySelector('#save_with_images');
 
 const $estimate = $ui.querySelector('#save-estimate-storage');
 async function estimate_storage() {
-	if ('storage' in navigator && 'estimate' in navigator.storage) {
-		const {usage, quota} = await navigator.storage.estimate();
-		const percentUsed = (usage / quota * 100).toFixed(4);
-		const usageInMib = (usage / (1024 * 1024)).toFixed(2);
-		const quotaInGib = (quota / (1024 * 1024 * 1000)).toFixed(0);
+  if ('storage' in navigator && 'estimate' in navigator.storage) {
+    const { usage, quota } = await navigator.storage.estimate();
+    const percentUsed = ((usage / quota) * 100).toFixed(4);
+    const usageInMib = (usage / (1024 * 1024)).toFixed(2);
+    const quotaInGib = (quota / (1024 * 1024 * 1000)).toFixed(0);
 
-		const details = `utilizare: ${usageInMib}Mb (${percentUsed}% din ${quotaInGib} GB)`;
+    const details = `utilizare: ${usageInMib}Mb (${percentUsed}% din ${quotaInGib} GB)`;
 
-		$estimate.innerText = details;
-	}
+    $estimate.innerText = details;
+  }
 }
 
 const $mark = $ui.querySelector('a[name=categories-mark]');
@@ -110,12 +112,12 @@ document.addEventListener('panel:toggle', async (evt) => {
   if (panel_id !== 'save-svg') return;
   const $panel = document.getElementById(panel_id);
   if (!$panel || !$panel.classList.contains('active')) return;
-  
+
   if (emmiter.DB === null) return;
 
   const [done] = loading(null, $mark.parentNode);
   try {
-		estimate_storage();
+    estimate_storage();
     let ss = await get_saves();
 
     let $tmp = '';
@@ -127,9 +129,9 @@ document.addEventListener('panel:toggle', async (evt) => {
     $mark.insertAdjacentHTML('afterend', $tmp);
     saves_loaded = true;
   } catch (e) {
-		console.log(e);
+    console.log(e);
   } finally {
-		done();
+    done();
   }
 });
 
@@ -138,52 +140,54 @@ $mark.parentElement.addEventListener('click', async (evt) => {
   const $action = $el.closest('[class="action"]');
 
   if ($el.classList.contains('close')) {
-		const [done] = loading();
+    const [done] = loading();
     try {
-			estimate_storage();
+      estimate_storage();
       await del_save($action.dataset.id);
       $action.remove();
     } catch (e) {
       console.log(e);
-		} finally {
+    } finally {
       done();
-		} 
+    }
     return;
   }
 
   if ('thumb' in $el.dataset) {
-		const [done] = loading();
+    const [done] = loading();
     try {
       await apply_save($action.dataset.id);
-      load_fonts_of($svg); 
+      load_fonts_of($svg);
       // check all svg images has been loaded
       const imgs_loaded = [];
       const $kk = $svg.querySelectorAll('image[*|href]');
-      $kk.forEach($img => imgs_loaded.push(
-        new Promise((resolve, reject) => {
-          $img.onload = () => {
-            resolve(true);
-          };
-          $img.onerror = reject;
-        })
-      ));
+      $kk.forEach(($img) =>
+        imgs_loaded.push(
+          new Promise((resolve, reject) => {
+            $img.onload = () => {
+              resolve(true);
+            };
+            $img.onerror = reject;
+          }),
+        ),
+      );
       let loaded = await Promise.all(imgs_loaded);
-      loaded = loaded.every(x => x === true);
+      loaded = loaded.every((x) => x === true);
       if (!loaded) throw new Error('not all images loaded');
     } catch (e) {
       console.log(e);
-		} finally {
+    } finally {
       done();
-		}
+    }
     return;
   }
 
   if ($el.id === 'save_svg') {
-		const [done] = loading();
+    const [done] = loading();
     const data = await svg_png($svg, !!$save_with_images.checked);
     try {
       const result = await save_svg(...data);
-			await estimate_storage();
+      await estimate_storage();
       let saved = `<div class="action" data-id="${result[0]}" ><img data-thumb src=${data[0]}><img src="/icon/close.svg" class="close"></img></div>`;
       const $place = document.querySelector(
         '#save-svg a[name=categories-mark]+div.full',

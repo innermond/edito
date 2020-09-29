@@ -7,8 +7,8 @@ export async function load_font($fonts) {
     return;
   }
   const $opt = $fonts.options[inx];
-	const load_font_green = !['sans-serif', 'serif'].includes($opt.value);
-	if (load_font_green) await load_font_remote($opt.text);
+  const load_font_green = !['sans-serif', 'serif'].includes($opt.value);
+  if (load_font_green) await load_font_remote($opt.text);
   $selection.forEach(($el) => {
     const $ee = $el.nodeName === 'g' ? Array.from($el.children) : [$el];
     for (let $e of $ee) {
@@ -101,7 +101,7 @@ src: url(data:application/font-woff;charset=utf-8;base64,${b64}) format('woff');
   loaded[url] = true;
 };
 // TODO is async so use it as async
-export function load_fonts_of($el, only=false) {
+export function load_fonts_of($el, only = false) {
   // load fonts used in svg document
   const $tt = only ? [$el] : $el.querySelectorAll('tspan');
   $tt.forEach(($tspan) => {

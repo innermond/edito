@@ -70,17 +70,17 @@ export function spacing_lines_text(lh = '') {
     $ee.forEach(($e) => {
       if ($e.nodeName === 'text') {
         $e.style.lineHeight = lh;
-				let fz = window.getComputedStyle($e).fontSize;
-				// cant get fontsize from browser
-				if (!fz) {
-					// maybe is explicitly indicated as inline style
-					fz = $e.style.fontSize ?? '16px';
-					const ext = fz.slice(-2);
-					// calculate fz in px
-					if (ext !== 'px') fz = unit_conv(fz, 'px');
-				}
-				fz = parseFloat(fz);
-				if (isNaN(fz)) fz = '16px';
+        let fz = window.getComputedStyle($e).fontSize;
+        // cant get fontsize from browser
+        if (!fz) {
+          // maybe is explicitly indicated as inline style
+          fz = $e.style.fontSize ?? '16px';
+          const ext = fz.slice(-2);
+          // calculate fz in px
+          if (ext !== 'px') fz = unit_conv(fz, 'px');
+        }
+        fz = parseFloat(fz);
+        if (isNaN(fz)) fz = '16px';
         $e.querySelectorAll('tspan').forEach(($t, inx) => {
           let div = lh.slice(-1) == '%' ? 0.01 : 1;
           let lineHeight = lh * fz * div;

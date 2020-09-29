@@ -55,11 +55,11 @@ export function add_text(text) {
   const text_default = 'text nou';
   let val = text_default;
   if (typeof text === 'object') {
-		if ('textContent' in text && text.textContent.length > 0) {
-			const clone = text.cloneNode(true);
-			clone.innerHTML = clone.innerHTML.replaceAll('<br>', "\n");
-			val = clone.textContent;
-		}
+    if ('textContent' in text && text.textContent.length > 0) {
+      const clone = text.cloneNode(true);
+      clone.innerHTML = clone.innerHTML.replaceAll('<br>', '\n');
+      val = clone.textContent;
+    }
   } else if (typeof text === 'string') {
     val = text;
   }
@@ -68,7 +68,7 @@ export function add_text(text) {
   txt.style.textAlign = 'center';
   txt.style.textAnchor = 'middle';
 
-  const lines = val.split("\n");
+  const lines = val.split('\n');
   const fs = 20;
   lines.forEach((line, inx) => {
     let tspan = newtag('tspan');

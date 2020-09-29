@@ -61,7 +61,7 @@ function handle_ul_select($ul, func, keep_first = false) {
           ? ($el.style.display = 'none')
           : ($el.style.display = 'list-item');
       } else if (isClicked) {
-				const is_first = $ul.firstElementChild === $el;
+        const is_first = $ul.firstElementChild === $el;
         $ul.insertAdjacentElement('afterbegin', $el);
         $el.style.display = 'list-item';
         if (!is_first) func($el);

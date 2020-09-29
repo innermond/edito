@@ -128,29 +128,33 @@ export const render_image = async (
   $img.setAttribute('src', 'data:image/svg+xml;base64,' + srcdata);
 };
 
-export async function svg_png($svg_node, include_images=false, maxw = 200) {
+export async function svg_png($svg_node, include_images = false, maxw = 200) {
   let $svgclone = $svg_node.cloneNode(true);
-  $svgclone.removeAttribute("xmlns");
-  $svgclone.removeAttribute("xmlns:xlink");
-  const prefix = "http://www.w3.org/2000/xmlns/";
-  if (!$svgclone.hasAttributeNS(prefix, "xmlns")) {
-      $svgclone.setAttributeNS(prefix, "xmlns", "http://www.w3.org/2000/svg");
+  $svgclone.removeAttribute('xmlns');
+  $svgclone.removeAttribute('xmlns:xlink');
+  const prefix = 'http://www.w3.org/2000/xmlns/';
+  if (!$svgclone.hasAttributeNS(prefix, 'xmlns')) {
+    $svgclone.setAttributeNS(prefix, 'xmlns', 'http://www.w3.org/2000/svg');
   }
 
-  if (!$svgclone.hasAttributeNS(prefix, "xmlns:xlink")) {
-      $svgclone.setAttributeNS(prefix, "xmlns:xlink", "http://www.w3.org/1999/xlink");
+  if (!$svgclone.hasAttributeNS(prefix, 'xmlns:xlink')) {
+    $svgclone.setAttributeNS(
+      prefix,
+      'xmlns:xlink',
+      'http://www.w3.org/1999/xlink',
+    );
   }
   $svgclone
     .querySelectorAll('[data-ants=true],[data-selectangle=true]')
     .forEach(($ant) => $ant.remove());
-	// images are not embeded - this is what we save in database
+  // images are not embeded - this is what we save in database
   const svgdata = new XMLSerializer().serializeToString($svgclone);
   // embed images to help canvas generate thumbnail
-	await imagesAsUrldata($svgclone);
+  await imagesAsUrldata($svgclone);
   const svgdataEmbeded = new XMLSerializer().serializeToString($svgclone);
   const srcdata = btoa(unescape(encodeURIComponent(svgdataEmbeded)));
 
-	const svg_data = include_images ? svgdataEmbeded : svgdata;
+  const svg_data = include_images ? svgdataEmbeded : svgdata;
 
   const cw = $svgclone.width.baseVal.value;
   const s = maxw / cw;
