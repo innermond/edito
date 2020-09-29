@@ -97,10 +97,26 @@ export const render_image = async (
   $svgclone = null;
 
   let $canvas = document.createElement('canvas');
-  $canvas.width = cw * k;
-  $canvas.height = ch * k;
-  $canvas.style.width = $canvas.width + 'px';
-  $canvas.style.height = $canvas.height + 'px';
+  let cwidth = cw * k;
+  let cheight = ch * k;
+	// limit image generated for memory reason
+	const ratio = cw/ch;
+	const MAX_W = 500;
+	const MAX_H = 500;
+	if (cwidth > MAX_W) {
+		cwidth = MAX_W;
+		k = cwidth / cw;
+		cheight = MAX_W / ratio;
+	}
+	if (cheight > MAX_H) {
+		cheight = MAX_H;
+		k = cheight / ch;
+		cwidth = MAX_H * ratio;
+	}
+	$canvas.width = cwidth;
+	$canvas.height = cheight;
+  $canvas.style.width = cwidth + 'px';
+  $canvas.style.height = cheight + 'px';
   let ctx = $canvas.getContext('2d');
   ctx.scale(k, k);
 
