@@ -11,6 +11,7 @@ import './idb.js';
 import {
   $section_menubar,
   $section_properties,
+  $section_add_layout,
   $section_add_shape,
   $section_text,
   $section_image,
@@ -38,6 +39,7 @@ $ui.appendChild($section_menubar);
 $ui.appendChild($section_properties);
 $ui.appendChild($section_filter);
 $ui.appendChild($section_mask_clip_path);
+$ui.appendChild($section_add_layout);
 $ui.appendChild($section_add_shape);
 $ui.appendChild($section_text);
 $ui.appendChild($section_image);

@@ -9,6 +9,7 @@ const tpl = `<section id="menu-bar">
 			<li id="tool-properties" data-panel="properties" class="tool-item tooltip" data-tooltip-text="Dimensiuni pagină, culoare fundal, mărime bleed, pas de mutare"><img src="/icon/page.svg"></li>
 			<li id="tool-filter" data-panel="manage-filter" class="tool-item tooltip" data-tooltip-text="Adaugă filter"><img src="/icon/filter.svg"></li>
 			<li id="tool-combine" data-panel="mask-clip-path" class="tool-item tooltip" data-tooltip-text="Maschează, decupează, text pe curbă"><img src="/icon/effect.svg"></li>
+			<li id="tool-layout" data-panel="add-layout" class="tool-item tooltip" data-tooltip-text="Alege un layout de la care să "ncepi><img src="/icon/layout.svg"></li>
 			<li id="tool-element" data-panel="add-element" class="tool-item tooltip" data-tooltip-text="Adaugă elemente grafice"><img src="/icon/add-element.svg"></li>
 			<li id="tool-text" data-panel="add-text" class="tool-item tooltip" data-tooltip-text="Adaugă text"><img src="/icon/add-text.svg"></li>
 			<li id="tool-image" data-panel="add-image" class="tool-item tooltip" data-tooltip-text="Adaugă imagini"><img src="/icon/add-image.svg"></li>
@@ -90,6 +91,14 @@ const load_colections_shapes = swarm(
   'category-shape',
 );
 $add_element.addEventListener('click', load_colections_shapes);
+
+const $add_layout = $ui.querySelector('#tool-layout');
+const load_collections_svg = swarm(
+	'layout-category.json',
+	'section/category_layout.js',
+	'category-layout',
+);
+$add_layout.addEventListener('click', load_collections_svg);
 
 const $tool_menu = $ui.querySelector('#tool-menu-sections');
 

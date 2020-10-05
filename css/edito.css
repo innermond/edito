@@ -96,14 +96,14 @@ section.movable button.active img, section.tool-drawer button.active img, #botto
 section.movable:hover, section.tool-drawer:hover, #bottom-bar:hover {
   background-color: #24272b; }
 
-#add-image button.category-image {
+section > button.category-image {
   margin: 0;
   padding: 0;
   display: flex;
   flex-flow: column wrap;
   align-items: center;
   justify-content: center; }
-  #add-image button.category-image > .category-image-text {
+  section > button.category-image > .category-image-text {
     font-size: 1.2rem;
     color: white;
     padding: 0.5rem;
@@ -111,15 +111,15 @@ section.movable:hover, section.tool-drawer:hover, #bottom-bar:hover {
     position: absolute;
     flex: 100%;
     transition: background-color 0.5s linear; }
-    #add-image button.category-image > .category-image-text:hover {
+    section > button.category-image > .category-image-text:hover {
       background-color: #171717; }
-  #add-image button.category-image > img:hover + .category-image-text {
+  section > button.category-image > img:hover + .category-image-text {
     background-color: #40454d; }
-  #add-image button.category-image > img:not([src$=svg]) {
+  section > button.category-image > img:not([src$=svg]) {
     width: 100%;
     pointer-events: auto;
     transition: all 0.25s linear; }
-    #add-image button.category-image > img:not([src$=svg]):hover {
+    section > button.category-image > img:not([src$=svg]):hover {
       opacity: 1;
       filter: saturate(4); }
 

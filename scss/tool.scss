@@ -111,7 +111,7 @@ section.movable, section.tool-drawer, #bottom-bar {
 	}
 }
 
-#add-image button.category-image {
+section > button.category-image {
 	margin: 0;
 	padding: 0;
 	display: flex;
