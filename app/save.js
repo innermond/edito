@@ -101,8 +101,8 @@ export const render_image = async (
   let cheight = ch * k;
 	// limit image generated for memory reason
 	const ratio = cw/ch;
-	const MAX_W = 500;
-	const MAX_H = 500;
+	const MAX_W = 1920;
+	const MAX_H = 1080;
 	if (cwidth > MAX_W) {
 		cwidth = MAX_W;
 		k = cwidth / cw;
