@@ -1,0 +1,9 @@
+#!/bin/bash
+echo [
+for img in stock-layouts/pliante/*; do
+	noext="${img%.*}"
+	thumb=stock-layouts-thumbs/"${noext#*/}".png
+	wh=$(identify -format '%w, %h' "$img")
+	echo ,[\""$thumb"\", "$wh"]
+done
+echo ]

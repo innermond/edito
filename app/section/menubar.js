@@ -97,7 +97,7 @@ const layout_click_fn = async (evt) => {
 	const imgsrc = evt.target.dataset.src.replace(
 		'stock-layouts-thumbs',
 		'stock-layouts',
-	);
+	).replace('.png', '.svg');
 	await urlSvg(imgsrc)
 };
 
