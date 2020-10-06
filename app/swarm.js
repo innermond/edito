@@ -6,7 +6,37 @@ import { $clicked, $selection } from './selection/index.js';
 import { urlImage } from './section/image.js';
 import { add_patch } from './idb.js';
 
-export default (categories_data, image_panel, category_images_id) => {
+const default_click_fn = async (evt) => {
+	const imgsrc = evt.target.dataset.src.replace(
+		'stock-images-thumbs',
+		'stock-images',
+	);
+	const tag = await urlImage(imgsrc, (img) => {
+		center(img);
+	});
+	$svg.appendChild(tag);
+	$clicked.from(tag).over();
+};
+
+export const make_click_fn = (fn=default_click_fn) => {
+	
+	return async (evt) => {
+		if (evt.target.nodeName.toLowerCase() !== 'img') return;
+		for (let cls of ['late', 'loaded']) {
+			if (evt.target.classList.contains(cls)) continue;
+			return;
+		}
+
+		dragging_all_marks_reset();
+		$selection.clear();
+
+		fn(evt);
+
+		add_patch();
+	}
+};
+
+export default (categories_data, image_panel, category_images_id, click_fn=make_click_fn()) => {
   let already_loaded = false;
   async function fn() {
     if (already_loaded) {
@@ -48,27 +78,7 @@ export default (categories_data, image_panel, category_images_id) => {
                 box = document.querySelector(
                   `#${category_images_id} [name=box]`,
                 );
-                box.addEventListener('click', async (evt) => {
-                  if (evt.target.nodeName.toLowerCase() !== 'img') return;
-                  for (let cls of ['late', 'loaded']) {
-                    if (evt.target.classList.contains(cls)) continue;
-                    return;
-                  }
-
-                  dragging_all_marks_reset();
-                  $selection.clear();
-
-                  const imgsrc = evt.target.dataset.src.replace(
-                    'stock-images-thumbs',
-                    'stock-images',
-                  );
-                  const tag = await urlImage(imgsrc, (img) => {
-                    center(img);
-                  });
-                  $svg.appendChild(tag);
-                  $clicked.from(tag).over();
-                  add_patch();
-                });
+                box.addEventListener('click', click_fn);
               }
               if (!box)
                 box = document.querySelector(

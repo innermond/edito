@@ -1,7 +1,8 @@
 import { ui_fragment, display_none, cycle_zindex } from '../dom.js';
 import { tooltip } from '../tooltip.js';
 import movement from '../cap.js';
-import swarm from '../swarm.js';
+import {default as swarm, make_click_fn} from '../swarm.js';
+import { urlSvg } from './save.js';
 
 const tpl = `<section id="menu-bar">
 	<div>
@@ -92,11 +93,20 @@ const load_colections_shapes = swarm(
 );
 $add_element.addEventListener('click', load_colections_shapes);
 
+const layout_click_fn = async (evt) => {
+	const imgsrc = evt.target.dataset.src.replace(
+		'stock-layouts-thumbs',
+		'stock-layouts',
+	);
+	await urlSvg(imgsrc)
+};
+
 const $add_layout = $ui.querySelector('#tool-layout');
 const load_collections_svg = swarm(
 	'layout-category.json',
 	'section/category_layout.js',
 	'category-layout',
+	make_click_fn(layout_click_fn),
 );
 $add_layout.addEventListener('click', load_collections_svg);
 

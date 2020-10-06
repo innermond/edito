@@ -42,7 +42,7 @@ async function addUrlSvg() {
   await urlSvg($url_doc_svg.value);
 }
 
-async function urlSvg(src) {
+export async function urlSvg(src) {
   try {
     const url = new URL(src);
     const is_svg = url.pathname.split('.')?.pop()?.toLowerCase() === 'svg';
