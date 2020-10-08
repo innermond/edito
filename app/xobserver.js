@@ -28,6 +28,7 @@ export default function (nextnum = 1, q = '') {
         let hx = parseFloat(window.getComputedStyle(img).height);
         let wx = r * hx;
         img.style.width = wx + 'px';
+        img.style.height = hx + 'px';
         observer.observe(img);
       }
       if (img) img.callnext = (next) => loadimg(observer, $box, z, z + next);
@@ -68,10 +69,11 @@ export default function (nextnum = 1, q = '') {
         //} else if (yup) {
       } else {
         window.requestAnimationFrame(() => {
-          const { width: w, height: h } = x.target;
-          x.target.style.width = w + 'px';
-          x.target.style.height = h + 'px';
+          //const { height: h } = x.target;
           x.target.src = blankimg;
+					// w already calculated
+          //x.target.style.width = x.target.style.width;
+          //x.target.style.height = h + 'px';
           x.target.onload = null;
           x.target.classList.remove('loaded');
         });
