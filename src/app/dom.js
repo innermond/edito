@@ -64,6 +64,37 @@ export const update_def_style = () => {
   }
 };
 
+export function update_wh($doc=$svg) {
+  const box = $doc.viewBox.baseVal;
+  const w = $doc.width.baseVal;
+  const h = $doc.height.baseVal;
+  // convert to mm from anything
+  if (w.unitType !== SVGLength.SVG_LENGTHTYPE_MM) {
+    if (w.value === 0) {
+      // set value from viewbox
+      // TODO assumed viewbox is in px, but can be in other units ?
+      w.newValueSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_PX, box.width);
+    }
+    w.convertToSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_MM);
+  }
+  if (h.unitType !== SVGLength.SVG_LENGTHTYPE_MM) {
+    if (h.value === 0) {
+      // set value from viewbox
+      h.newValueSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_PX, box.height);
+    }
+    h.convertToSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_MM);
+  }
+  $svg.width.baseVal.newValueSpecifiedUnits(
+    w.unitType,
+    w.valueInSpecifiedUnits,
+  );
+  $svg.height.baseVal.newValueSpecifiedUnits(
+    h.unitType,
+    h.valueInSpecifiedUnits,
+  );
+}
+
+update_wh();
 update_def_style();
 
 export function group_parent($el) {

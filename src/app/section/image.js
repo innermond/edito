@@ -42,6 +42,7 @@ async function addUrlImage() {
     $clicked.from(tag).over();
   } catch (e) {
     console.log(e);
+		done();
   }
 }
 
@@ -64,41 +65,69 @@ export async function urlImage(src, onload) {
 
   let tag = newtag('image');
   const is_svg = src.split('.')?.pop()?.toLowerCase() === 'svg';
-  if (is_svg) {
-    try {
-      let resp = await fetch(url_image);
-      if (resp.ok) {
-        let svg = await resp.text();
-        let p = new DOMParser();
-        let osvg = p.parseFromString(svg, 'image/svg+xml');
-        osvg
-          .querySelectorAll('defs')
-          ?.children?.foreach(($c) => $defs.appendChild($c));
-        osvg
-          .querySelectorAll('style')
-          ?.children?.foreach(($c) => $style.appendChild($c));
+  if (!is_svg) {
+		tag.addEventListener('load', () => {
+			onload(tag);
+		});
+		tag.href.baseVal = url_image;
 
-        tag = newtag('g');
-        tag.classList.add('group');
-        tag.insertAdjacentHTML('beforeend', osvg.documentElement.innerHTML);
+		return tag;
+	}
+    
+	try {
+		let resp = await fetch(url_image);
+		if (resp.ok) {
+			tag = newtag('g');
+			tag.addEventListener('load', () => {
+				onload(tag);
+			});
 
-        return tag;
-      } else {
-        console.log(resp.status);
-      }
-    } catch (e) {
+			let svg = await resp.text();
+			let p = new DOMParser();
+			let osvg = p.parseFromString(svg, 'image/svg+xml');
+			osvg
+				.querySelectorAll('defs')
+				?.children?.foreach(($c) => $defs.appendChild($c));
+			osvg
+				.querySelectorAll('style')
+				?.children?.foreach(($c) => $style.appendChild($c));
+
+			tag.classList.add('group');
+			tag.insertAdjacentHTML('beforeend', osvg.documentElement.innerHTML);
+
+			//TODO make a function to simulate load on container elements that contain images
+			// this func exists in section/save.js
+      // check all svg images has been loaded
+      const imgs_loaded = [];
+      const $kk = tag.querySelectorAll('image[*|href]');
+      $kk.forEach(($img) =>
+        imgs_loaded.push(
+          new Promise((resolve, reject) => {
+            $img.onload = () => {
+              resolve(true);
+            };
+            $img.onerror = reject;
+          }),
+        ),
+      );
+      Promise.all(imgs_loaded).then(loaded => {
+				loaded = loaded.every((x) => x === true);
+				if (!loaded) {
+					throw new Error('not all images loaded');
+				}
+				tag.dispatchEvent(new Event('load'));
+			});
+
+			return tag;
+
+		} else {
+			console.log(resp.status);
+			onload(tag);
+		}
+   } catch (e) {
       console.log(e);
-    }
-
-    return null;
-  }
-
-  tag.addEventListener('load', () => {
-    onload(tag);
-  });
-  tag.href.baseVal = url_image;
-
-  return tag;
+			onload(tag);
+   }
 }
 
 function addFileImage() {

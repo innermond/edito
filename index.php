@@ -15,7 +15,10 @@
 
 <div id="editor">
 <div id="canvas" style="opacity:0">
-<?php include('src.svg') ?>
+<?php 
+$src = $_GET['model'] ?? 'blanc.svg';
+if ($src) include($src); 
+?>
 </div>
 </div>
 

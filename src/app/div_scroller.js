@@ -149,9 +149,10 @@ export const scrollable = ($scrollee) => {
   const roScrolee = new ResizeObserver((ee) => {
     const $s = $scrollee;
     ee.forEach(() => {
-      console.log($s);
+			// recalculate H of scroller
       H = window.getComputedStyle($s).height;
       H = parseFloat(H);
+			// reposition thumb
       const d = $s.scrollHeight - $s.clientHeight;
       if (d === 0) return;
       const percent_scroll = $s.scrollTop / d;
