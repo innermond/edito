@@ -1,0 +1,76 @@
+body{
+	&.pan.panning{
+		cursor: grabbing;
+	}	
+	&.pan, &.pan.area{
+		cursor: grab;
+	}	
+	&.area {
+		cursor: zoom-in;
+		&.out {
+			cursor: zoom-out;
+		}
+	}
+}
+
+textarea {
+	resize: none;
+	overflow: hidden;
+	@include textual;
+}
+
+input {
+	@include textual;
+}
+
+hr {
+	width: 100%;
+	border-style: none;
+	height: 0.05rem;
+	background-color: $black-soft;
+}
+
+button, .file-upload {
+	text-align: center;
+	display: block;
+	margin: 1rem 0rem;
+	font-size: 0.75rem;
+	padding: 0.75rem;
+	background-color: $bk-color-loud;
+	color: $txt-color;
+	cursor: pointer;
+	border: none;
+    outline: none;
+	text-transform: uppercase;
+	&:hover {
+		background-color: lighten($bk-color-loud, 2%);
+		color: white;
+	}
+	transition: all .2s ease-out;
+}
+
+.none {
+	display: none;
+}
+
+input[type=color] {
+	box-sizing: content-box;
+	overflow: hidden;
+	width: 1rem;
+	height: 1rem;
+	border: 0.1rem solid $txt-color-darkest;
+	padding: 0;
+	cursor: pointer;
+	background-color: transparent;
+	&:focus {
+		outline: none;
+	}
+	border-radius: 50%;
+	transition: background-color .2s ease-out;
+	&::-moz-color-swatch {
+		border: none;
+	}
+	&::-webkit-color-swatch {
+		border: none;
+	}
+}

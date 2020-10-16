@@ -1,7 +1,16 @@
 @import '_var';
+@import '_mixin';
+@import 'plain';
 @import 'svg';
 @import 'tool';
 @import 'swarm';
+
+// overwrite scroller variables with theme variables
+@import '_var_scroller_map';
+@import 'scroller';
+
+@import 'tooltip';
 @import 'edito';
 @import '_folded';
 @import '_inputrange';
+@import 'id';

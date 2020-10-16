@@ -1,0 +1,64 @@
+#menu-bar {
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: $tool-width;
+	position: absolute;
+	user-select: none;
+	display: flex;
+	flex-flow: column;
+	z-index: 2;
+	border-right: 0.1rem solid $black-soft;
+	@include background-color;
+}
+
+#bottom-bar {
+	bottom: 0;
+	color: $txt-color;
+	@include opacity;
+	@include bar-position;
+	& > button {
+		margin: 0;
+		&:hover > img {
+			opacity: 1;
+		}
+	}
+}
+
+#group_repr {
+	padding: 0.5rem;
+}
+
+#bkg_modal {
+    display: none;
+    position: absolute;
+    padding:0;
+    margin:0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    left: 0; top: 0; bottom: 0; right: 0;
+    opacity:0;
+		transition: opacity 0.25s ease-in-out;
+    z-index: 1000;
+		&.on {
+			display: block;
+			opacity: 0.9;
+			&::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: url(/icon/loading.svg) no-repeat center transparent;
+				animation-name: spinning;
+				animation-duration: 1s;
+				animation-iteration-count: infinite;
+			}
+			&.loading-off::before {
+				background: none;
+				animation: none;
+			}
+		}
+}

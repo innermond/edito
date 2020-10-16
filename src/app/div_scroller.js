@@ -10,7 +10,7 @@ export const scrollable = ($scrollee) => {
   // scroller thumb
   const $thumb = $e.firstChild;
 
-  $scrollee.addEventListener('mouseenter', (evt) => {
+  $scrollee.addEventListener('mouseenter', () => {
     const $s = $e.parentNode;
     // there is hidden content in need to show ?
     const d = $s.scrollHeight - $s.clientHeight;
@@ -18,14 +18,14 @@ export const scrollable = ($scrollee) => {
     if (d > 0) $e.style.opacity = 1.0;
   });
   // hide scroller when leave scrollee
-  $scrollee.addEventListener('mouseleave', (evt) => {
+  $scrollee.addEventListener('mouseleave', () => {
     if (move === false) {
       $e.style.opacity = 0.0;
     }
   });
 
   // terminate
-  $scrollee.addEventListener('mouseup', (evt) => {
+  $scrollee.addEventListener('mouseup', () => {
     move = false;
     $e.classList.remove('active');
     document.body.classList.remove('div-scroller-active');
@@ -33,8 +33,8 @@ export const scrollable = ($scrollee) => {
 
   const bb = $e.getBoundingClientRect();
   let H = window.getComputedStyle($e).height;
-  let h = window.getComputedStyle($thumb).height;
   H = parseFloat(H);
+  let h = window.getComputedStyle($thumb).height;
   h = parseFloat(h);
   let move = false;
   let adj = 0;
@@ -48,7 +48,7 @@ export const scrollable = ($scrollee) => {
     if (adj < 0) adj = 0;
   });
   // terminate
-  document.addEventListener('mouseup', (evt) => {
+  document.addEventListener('mouseup', () => {
     if (move === false) return;
     move = false;
     $e.classList.remove('active');
@@ -88,13 +88,12 @@ export const scrollable = ($scrollee) => {
       $e.classList.add('active');
       move = true;
       let step = evt.deltaY > 0 ? 1 : evt.deltaY === 0 ? 0 : -1;
-      const $s = $e.parentNode;
       // step could be an arbitrary number
       // or calculated related la how much is the invisible part
       // related to the visible one
       //const d = ($s.scrollHeight - $s.clientHeight)/$s.clientHeight
       //step *= Math.ceil(d)
-      step *= 20;
+      step *= 5;
       const y = $thumb.getBoundingClientRect().top + step;
       mouse_pos(y);
       move = false;
@@ -129,13 +128,13 @@ export const scrollable = ($scrollee) => {
     $s.scrollTop = percent_scroll * d;
   }
   const ro = new ResizeObserver((ee) => {
-    for (const e of ee) {
-      const $s = $scrollee;
+    const $s = $scrollee;
+    ee.forEach(() => {
       const d = $s.scrollHeight - $s.clientHeight;
       if (d === 0) return;
       const percent_scroll = $s.scrollTop / d;
       $thumb.style.top = percent_scroll * (H - h) + 'px';
-    }
+    });
   });
 
   // react to scrollee resising
@@ -146,6 +145,20 @@ export const scrollable = ($scrollee) => {
     if (bb.width === 0 || bb.heigth || $r.style.display === 'none') return;
     ro.observe($r);
   });
+
+  const roScrolee = new ResizeObserver((ee) => {
+    const $s = $scrollee;
+    ee.forEach(() => {
+      console.log($s);
+      H = window.getComputedStyle($s).height;
+      H = parseFloat(H);
+      const d = $s.scrollHeight - $s.clientHeight;
+      if (d === 0) return;
+      const percent_scroll = $s.scrollTop / d;
+      $thumb.style.top = percent_scroll * (H - h) + 'px';
+    });
+  });
+  roScrolee.observe($scrollee);
 };
 
 export function div_scroller($ss, add_scrollable_now = false) {
@@ -153,7 +166,7 @@ export function div_scroller($ss, add_scrollable_now = false) {
   //  so execute the scrolling ritual after they have been inserted
   add_scrollable_now
     ? $ss.forEach(($element) => scrollable($element))
-    : document.addEventListener('DOMContentLoaded', (evt_dom_loaded) => {
+    : document.addEventListener('DOMContentLoaded', () => {
         $ss.forEach(($element) => scrollable($element));
       });
 }

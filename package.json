@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "sass": "node-sass  --include-path scss scss/main.scss css/edito.css -w scss -r",
     "liteserver": "lite-server",
-    "nice": "yarn prettier --write app",
+    "nice": "yarn prettier --write src",
     "dev": "webpack --config webpack.dev.js && cp dist/*.js .",
     "prod": "webpack --config webpack.prod.js"
   },

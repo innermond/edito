@@ -10,7 +10,7 @@ if ($z < $a) {
 $z *= 1;
 $a *= 1;
 
-$src = 'app/data/' . $key . '.js';
+$src = 'data/' . $key . '.js';
 $f = fopen($src, 'r');
 if ($f) {
 	$collect = '';

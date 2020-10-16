@@ -1,0 +1,42 @@
+@mixin opacity {
+	opacity: 0.4;
+	transition: opacity .5s ease-out;
+	&:hover {
+		opacity: 1;
+	}
+}
+@mixin bar-position {
+	margin-left: $tool-width*0.5;
+	//right: 0;
+	position: absolute;
+	user-select: none;
+	justify-content: center;
+	display: flex;
+	flex-flow: row wrap;
+	background-color: $bk-color-loud;
+}
+
+@mixin background-color {
+	background-color: black;
+	transition: background-color .5s ease-out;
+	&:hover {
+		background-color: $bk-color;
+		border-right: none;
+	}
+}
+
+@mixin textual {
+	font-family: Arial Narrow,Arial,sans-serif;
+	padding: 0.25rem;
+	//margin-top: 0.25rem;
+	color: $txt-color;
+	font-size: 0.9rem;
+	transition: all .15s linear;
+	border: 0.1rem solid $txt-color-border;
+	border-radius: 0.2rem;
+	background-color: $black-soft;
+	&:focus {
+		outline: none;
+    box-shadow: 0px 0px 20px 1px $black-soft;
+	}
+}

@@ -1,0 +1,34 @@
+.scroller {
+	position: absolute;
+	z-index: 2;
+	right: 0;
+	bottom: $scroller-bottom;
+	top: $scroller-top;
+	width: 0.5rem;
+	border-left: 1px solid $scroller-border-left-color;
+	background-color: $scroller-background-color;
+	opacity: 0.0;
+	margin-left: 0;
+	&[class~=active], &:hover {
+		opacity: 1.0;
+		& > .thumb {
+			width: 1rem;
+			background-color: $scroller--hover-thumb-background-color;
+			margin-left: -0.5rem;
+		}
+		background-color: $scroller--hover-background-color;
+	}
+	&[class~=active] > .thumb {
+		transition: width .2s ease-out, .2s ease-out, top 0s, margin-left .2s ease-out;
+		z-index: 3;
+	}
+	transition: opacity .2s ease-out;
+	& > .thumb {
+		width: 0.5rem;
+		height: 4rem;
+		cursor: pointer;
+		position: absolute;
+		background-color: $scroller-thumb-background-color;
+		transition:  width .2s ease-out, top .2s ease-out, margin-left .2s ease-out;
+	}
+}

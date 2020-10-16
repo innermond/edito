@@ -1,4 +1,4 @@
-import { $selection, $clicked } from '../selection';
+import { $selection, $clicked } from '../selection/index.js';
 import { px } from '../dom.js';
 
 export function stroke_width(val) {

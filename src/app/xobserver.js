@@ -71,7 +71,7 @@ export default function (nextnum = 1, q = '') {
         window.requestAnimationFrame(() => {
           //const { height: h } = x.target;
           x.target.src = blankimg;
-					// w already calculated
+          // w already calculated
           //x.target.style.width = x.target.style.width;
           //x.target.style.height = h + 'px';
           x.target.onload = null;
