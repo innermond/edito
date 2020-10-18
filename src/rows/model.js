@@ -21,17 +21,21 @@ const ui_fragment = (html) => {
 };
 
 const wrap = (newid) => {
-	const tpl_box = `<div class="tool-drawer-scroll" name="box"></div>`;
+  const tpl_box = `<div class="tool-drawer-scroll" name="box"></div>`;
   const $ui = ui_fragment(tpl_box);
   $ui.firstElementChild.id = newid;
 
   const $ss = $ui.querySelector('.tool-drawer-scroll');
-	const ro = new ResizeObserver((ee) => {
-	 if( ee.length === 0 || window.getComputedStyle(ee[0].target).height === '0px') return;
-		scrollable($ss);
-		ro.unobserve($ss);
-	});
-	ro.observe($ss);
+  const ro = new ResizeObserver((ee) => {
+    if (
+      ee.length === 0 ||
+      window.getComputedStyle(ee[0].target).height === '0px'
+    )
+      return;
+    scrollable($ss);
+    ro.unobserve($ss);
+  });
+  ro.observe($ss);
 
   return $ui;
 };
@@ -40,20 +44,20 @@ const $model = wrap('model');
 document.querySelector('#models').appendChild($model);
 
 const layout_click_fn = async (evt) => {
-	if (!evt.target.dataset.src) return;
+  if (!evt.target.dataset.src) return;
 
   let imgsrc = evt.target.dataset.src
     .replace('stock-layouts-thumbs', 'stock-layouts')
     .replace('.png', '.svg');
-	try {
-		imgsrc = new URL(imgsrc);
-		// left trim
-		imgsrc = imgsrc.pathname.replace(/^\s*\//, '');
-	} catch (e) {
-		// TODO imgsrc = 'error.svg';
-		imgsrc = 'blanc.svg';
-	}
-	window.location.href = `http://localhost:3000?model=${imgsrc}`;
+  try {
+    imgsrc = new URL(imgsrc);
+    // left trim
+    imgsrc = imgsrc.pathname.replace(/^\s*\//, '');
+  } catch (e) {
+    // TODO imgsrc = 'error.svg';
+    imgsrc = 'blanc.svg';
+  }
+  window.location.href = `http://localhost:3000?model=${imgsrc}`;
 };
 build_infinite_rows('models', layout_click_fn, 'pliante')();
 
@@ -62,7 +66,7 @@ function build_infinite_rows(category_images_id, click_fn, toload) {
     // we build list images for respective category
     let $el = document.querySelector(`#${category_images_id}`);
     let box = $el.querySelector(`[name=box]`);
-		box.addEventListener('click', click_fn);
+    box.addEventListener('click', click_fn);
     box.innerHTML = '';
 
     try {

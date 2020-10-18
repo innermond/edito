@@ -1,4 +1,10 @@
-import { ui_fragment, $svg, media_zoom, copy_viewbox } from '../dom.js';
+import {
+  ui_fragment,
+  $svg,
+  media_zoom,
+  copy_viewbox,
+  human_aprox,
+} from '../dom.js';
 import { zoom_reset } from '../zoom.js';
 import { wrap } from '../drawer.js';
 import { rgb_hex, computed_color } from '../color.js';
@@ -48,8 +54,10 @@ const $all_visible = $ui.querySelector('#all_visible');
 const $real = $ui.querySelector('#real');
 
 // get media dimensions
-$media_width.value = $svg.width.baseVal.valueInSpecifiedUnits;
-$media_height.value = $svg.height.baseVal.valueInSpecifiedUnits;
+[$media_width.value, $media_height.value] = human_aprox(
+  $svg.width.baseVal.valueInSpecifiedUnits,
+  $svg.height.baseVal.valueInSpecifiedUnits,
+);
 
 // TODO load from idb a page then a new page. undo after new page is buggy
 const $new_page = $ui.querySelector('#new_page');

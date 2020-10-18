@@ -64,7 +64,7 @@ export const update_def_style = () => {
   }
 };
 
-export function update_wh($doc=$svg) {
+export function update_wh($doc = $svg) {
   const box = $doc.viewBox.baseVal;
   const w = $doc.width.baseVal;
   const h = $doc.height.baseVal;
@@ -430,6 +430,10 @@ export function find_my_ants($el, shape = 'rect') {
     if ($e.$element === $el) return $e;
   }
   return null;
+}
+
+export function human_aprox(...vv) {
+  return vv.map((v) => v.toFixed(2));
 }
 
 export { attr, newtag, rnd, xmlns, nsattr, rectpage, px };

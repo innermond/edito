@@ -1,4 +1,4 @@
-import { $svg, update_wh, update_def_style } from './dom.js';
+import { $svg, update_wh, update_def_style, human_aprox } from './dom.js';
 import { diff_match_patch } from 'diff-match-patch';
 import { $media_width, $media_height } from './ui.js';
 
@@ -253,8 +253,8 @@ export function update_svg(doc) {
   Array.from(doc.documentElement.attributes).forEach(($attr) =>
     $svg.setAttributeNode($attr.cloneNode(true)),
   );
-	const $doc = doc.documentElement;
-	update_wh($doc);
+  const $doc = doc.documentElement;
+  update_wh($doc);
   $svg.innerHTML = $doc.innerHTML;
   update_def_style();
 
@@ -263,8 +263,10 @@ export function update_svg(doc) {
   $svg.height.baseVal.convertToSpecifiedUnits(SVGLength.SVG_LENGTHTYPE_MM);
 
   // update page controlls
-  $media_width.value = $svg.width.baseVal.valueInSpecifiedUnits;
-  $media_height.value = $svg.height.baseVal.valueInSpecifiedUnits;
+  [$media_width.value, $media_height.value] = human_aprox(
+    $svg.width.baseVal.valueInSpecifiedUnits,
+    $svg.height.baseVal.valueInSpecifiedUnits,
+  );
 
   // inline style
   $svg.style.width = '100%';

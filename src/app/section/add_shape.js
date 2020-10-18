@@ -9,7 +9,8 @@ import { proxied_url } from './image.js';
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de imagine" data-tooltip-bottom>Adresa de web</label>
-	<input id="url_svg" placeholder="https://imagine"><button id="add_url_svg">Adaugă URL imagine</button>
+	<input id="url_svg" placeholder="https://adresă-fișier,svg">
+	<button id="add_url_svg" class="tooltip" data-tooltip-text="Doar fișiere cu extensia .svg" data-tooltip-bottom >Adaugă grafica</button>
 	<hr/>
 	<label for="file_svg" class="file-upload tooltip" data-tooltip-text="Alegeți un fișier svg de pe calculatorul dvs." data-tooltip-bottom>Fișier local</label>
 	<input class="none" type="file" id="file_svg">

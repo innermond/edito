@@ -13,9 +13,9 @@ const default_click_fn = async (evt) => {
     'stock-images',
   );
   const tag = await urlImage(imgsrc, (img) => {
+    $svg.appendChild(img);
     center(img);
   });
-  $svg.appendChild(tag);
   $clicked.from(tag).over();
 };
 

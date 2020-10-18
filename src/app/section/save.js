@@ -6,7 +6,7 @@ import { update_svg } from '../idb.js';
 import { svg_png } from '../save.js';
 import { save_svg, clear_patch } from '../idb.js';
 import { load_fonts_of } from '../user_action/font/fontface.js';
-import { proxied_url } from '../section/image.js';
+import { proxied_url, try_load_images } from '../section/image.js';
 import { with_undo } from '../idb.js';
 import { dragging_all_marks_reset } from '../ui.js';
 import { $selection } from '../selection/index.js';
@@ -62,22 +62,7 @@ export async function urlSvg(src) {
     const doc = parser.parseFromString(svg_text, 'image/svg+xml');
     update_svg(doc);
     load_fonts_of($svg);
-    // check all svg images has been loaded
-    const imgs_loaded = [];
-    const $kk = $svg.querySelectorAll('image[*|href]');
-    $kk.forEach(($img) =>
-      imgs_loaded.push(
-        new Promise((resolve, reject) => {
-          $img.onload = () => {
-            resolve(true);
-          };
-          $img.onerror = reject;
-        }),
-      ),
-    );
-    let loaded = await Promise.all(imgs_loaded);
-    loaded = loaded.every((x) => x === true);
-    if (!loaded) throw new Error('not all images loaded');
+    try_load_images($svg, false);
   } catch (e) {
     console.log(e);
   } finally {
