@@ -279,6 +279,13 @@ input[type=checkbox][class~=switch] {
 
 .wrap-row {
 	border: $border-size solid $txt-color-border;
+	&.section {
+		border: none;
+		justify-content: center;
+		& > div {
+			margin: 0;
+		}
+	}
 	display: flex;
 	flex-flow: row wrap;
 	& label {
@@ -405,4 +412,8 @@ div.preview {
   padding: 2*$border-size;
   font-size: 1.2rem;
   overflow: auto;
+}
+
+input[type=number][class~=num3] {
+	width: 3rem;
 }

@@ -6,7 +6,7 @@ import {
   dragging_all_marks_relax_except,
   after_click_update_ui,
 } from './ui.js';
-import { $svg, element_from, newtag, newtag_html } from './dom.js';
+import { $svg, element_from } from './dom.js';
 import { $selection } from './selection/grouping.js';
 import { $clicked } from './selection/clicked.js';
 

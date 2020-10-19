@@ -17,10 +17,17 @@ import { deleting } from '../user_action/del_undel_clone.js';
 import { $selection } from '../selection/index.js';
 
 const tpl = `<section class="vertical-align">
+<div class="wrap-row section">
+<div>
 	<label class="tooltip" data-tooltip-text="Schimbi lățimea documentului" data-tooltip-bottom for="media_width">Lățime</label>
-	<input type="number" id="media_width" value="210" />
+	<input type="number" class="num3" id="media_width" value="210" />
+</div>
+<div>
 	<label class="tooltip" data-tooltip-text="Modifică mărimea dimensiunii verticale a paginii" data-tooltip-bottom for="media_height">Înălțime</label>
-	<input type="number" id="media_height" value="297" />
+	<input type="number" class="num3" id="media_height" value="297" />
+</div>
+</div>
+</hr>
 	<button class="tooltip" data-tooltip-text="Începi o pagină nouă, cu dimensiunile de mai sus" data-tooltip-bottom id="new_page">Pagină nouă</button>
 	<hr/>
 	<label class="tooltip" data-tooltip-text="Activezi / dezactivezi culoarea de fundal" data-tooltip-bottom  for="bkcolor">Background
@@ -41,10 +48,16 @@ const tpl = `<section class="vertical-align">
 		<button id="canvas_minus" class="tooltip" data-tooltip-text="Micșorează" data-tooltip-bottom ><img src="/icon/minus.svg"></button>
 	</label>
 	<hr/>
+<div class="wrap-row section">
+<div>
 		<label class="tooltip" data-tooltip-text="Mărimea bleedului, distanța cu care se extinde pagina peste dimensiunile finale" data-tooltip-bottom for="bleed">Bleed</label>
-	<input type="number" min="0.0" max="5.0" value="2" step="0.5" id="bleed">
-    <label class="tooltip" data-tooltip-text="Stabilește mărimea pasului cu care se mută obiectele cu tastele săgeți" data-tooltip-bottom for="step">Mărime pas</label>
-    <input type="number" min="0.01" max="90" value="2" step="0.1" id="step">
+	<input type="number" class="num3" min="0.0" max="5.0" value="2" step="0.5" id="bleed">
+	</div>
+	<div>
+    <label class="tooltip" data-tooltip-text="Stabilește mărimea pasului cu care se mută obiectele cu tastele săgeți" data-tooltip-bottom for="step">Pas</label>
+    <input type="number" class="num3" min="0.01" max="90" value="2" step="0.1" id="step">
+	</div>
+	</div>
 </section>`;
 export const $ui = wrap(ui_fragment(tpl), 'properties', 'pagină');
 

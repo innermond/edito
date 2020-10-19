@@ -323,6 +323,11 @@ input[type=checkbox][class~=switch] {
   border: 0.125rem solid #40454d;
   display: flex;
   flex-flow: row wrap; }
+  .wrap-row.section {
+    border: none;
+    justify-content: center; }
+    .wrap-row.section > div {
+      margin: 0; }
   .wrap-row label {
     cursor: pointer; }
   .wrap-row input[type=range] {
@@ -423,6 +428,9 @@ div.preview {
   font-size: 1.2rem;
   overflow: auto; }
 
+input[type=number][class~=num3] {
+  width: 3rem; }
+
 .tool-drawer-scroll > section > [name=box] {
   background-color: transparent;
   transition: background-color 1s, border 1s;
@@ -498,7 +506,7 @@ img.late.loaded:hover {
   padding: 5px;
   border-radius: 6px;
   min-width: 1rem;
-  max-width: 8rem;
+  max-width: 300px;
   width: 90%;
   cursor: default;
   display: flex;
