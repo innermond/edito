@@ -123,3 +123,7 @@ $svg.addEventListener('mouseup', (evt) => {
   if ($el === null || $el.nodeName.toLowerCase() !== 'text') return;
   text_svg_html($el, $textname);
 });
+
+window.onerror = (message, url, line, col, error) => {
+  console.log(message);
+};

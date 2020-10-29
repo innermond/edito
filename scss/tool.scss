@@ -417,3 +417,7 @@ div.preview {
 input[type=number][class~=num3] {
 	width: 3rem;
 }
+
+.notify {
+	border: 1px solid $notify-color;
+}

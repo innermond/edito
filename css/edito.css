@@ -431,6 +431,9 @@ div.preview {
 input[type=number][class~=num3] {
   width: 3rem; }
 
+.notify {
+  border: 1px solid orange; }
+
 .tool-drawer-scroll > section > [name=box] {
   background-color: transparent;
   transition: background-color 1s, border 1s;
