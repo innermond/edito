@@ -13,8 +13,6 @@ export function tooltip($explained, adjx = 0, adjy = 0) {
 
   $explained.dataset.tooltipId = $e.id;
 
-  const bb_thumb = $e.getBoundingClientRect();
-
   const position_top = (posx, bb) => {
     $e.style.left = posx + adjx + 'px';
     $e.style.top = bb.top + bb.height * 0.5 + adjy + 'px';
@@ -55,7 +53,7 @@ export function tooltip($explained, adjx = 0, adjy = 0) {
     return next_overflow;
   };
 
-  const position_right = (posx, bb) => {
+  const position_right = (posx) => {
     let bb_tooltip = $e.getBoundingClientRect();
     const vw = Math.max(
       document.documentElement.clientWidth || 0,
@@ -78,12 +76,8 @@ export function tooltip($explained, adjx = 0, adjy = 0) {
     return next_overflow;
   };
 
-  const position_left = (posx, bb) => {
+  const position_left = (posx) => {
     let bb_tooltip = $e.getBoundingClientRect();
-    const vw = Math.max(
-      document.documentElement.clientWidth || 0,
-      window.innerWidth || 0,
-    );
     let overflow = bb_tooltip.left < 0 ? -1 * bb_tooltip.left : 0;
     let inx = 0,
       peak = 30;
@@ -113,7 +107,7 @@ export function tooltip($explained, adjx = 0, adjy = 0) {
   };
 
   let move = false;
-  $explained.addEventListener('mouseenter', (evt) => {
+	const init_tooltip = () => {
     if ($explained.classList.contains('active')) {
       move = false;
       return;
@@ -123,7 +117,8 @@ export function tooltip($explained, adjx = 0, adjy = 0) {
     $e.style.maxWidth = '8rem';
     move = true;
     $e.classList.add('active');
-  });
+  };
+  $explained.addEventListener('mouseenter', init_tooltip);
   let show_val = false;
 
   $explained.addEventListener('mousedown', (evt) => {
@@ -150,7 +145,7 @@ export function tooltip($explained, adjx = 0, adjy = 0) {
       $e.textContent = $explained.value;
   });
 
-  $explained.addEventListener('mouseout', (evt) => {
+  $explained.addEventListener('mouseout', () => {
     move = false;
     show_val = false;
     $e.classList.remove('active');
@@ -177,6 +172,18 @@ export function tooltip($explained, adjx = 0, adjy = 0) {
     )
       $e.textContent = $explained.value;
   });
+
+	$explained.__proto__.Unshow = () => {
+		delete $explained.dataset.tooltipId;
+		$e.remove();
+	};
+
+	$e.__proto__.Show = () => {
+		init_tooltip();
+    const bb = $explained.getBoundingClientRect();
+		const posx = bb.left + bb.width*0.5;
+		position(posx, bb);
+	}; 
 
   return $e;
 }

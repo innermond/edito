@@ -1,8 +1,26 @@
-export function Notify(err, $target) {
-  $target && $target.classList.add('notify');
+import { tooltip } from './tooltip.js';
 
+export function Notify(err, $target, note='A avut loc o eroare!') {
+ if ($target) {
+	clear($target);
+	$target.classList.add('notify');
+ $target.dataset.tooltipBottom = true;
+	const $note = tooltip($target);
+	$note.textContent = note;
+	$note.style.backgroundColor = 'orange';
+	$note.style.color = 'black';
+	$note.Show();
+ }
   // cut any happy execution
   throw err;
+}
+
+function clear($target) {
+	$target.classList.remove('notify');
+	const id = $target.dataset.tooltipId;
+	if (id) {
+		document.getElementById(id)?.remove();
+	}
 }
 
 // catch eror from async

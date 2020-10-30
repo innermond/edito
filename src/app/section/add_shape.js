@@ -24,7 +24,10 @@ const $file_svg = $ui.querySelector('#file_svg');
 const $url_svg = $ui.querySelector('#url_svg');
 const $add_url_svg = $ui.querySelector('#add_url_svg');
 
-$url_svg.addEventListener('focus', () => $url_svg.classList.remove('notify'));
+$url_svg.addEventListener('focus', () => {
+	$url_svg?.Unshow();
+	$url_svg.classList.remove('notify');
+});
 $add_url_svg.addEventListener(
   'click',
   error.Ycatch(add_url_svg, null, (err) => error.Notify(err, $url_svg)),

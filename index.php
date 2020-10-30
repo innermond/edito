@@ -23,7 +23,7 @@ if ($src) include($src);
 </div>
 
 <! //-- <script type="module" src="app/index.js"></script> //-->
-<script src="./app.pak.js"></script>
+<script type="module" src="./app.pak.js"></script>
 
 </body>
 
