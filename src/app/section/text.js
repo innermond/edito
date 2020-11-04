@@ -1,5 +1,4 @@
 import { $clicked } from '../selection/index.js';
-import { newtag } from '../dom.js';
 import { add_text } from '../user_action/add.js';
 import { aligning_text } from '../user_action/font/align.js';
 import { load_font } from '../user_action/font/fontface.js';
@@ -10,9 +9,9 @@ import {
   spacing_lines_text,
 } from '../user_action/font/style.js';
 import { sizing_text } from '../user_action/font/size.js';
-import { ui_fragment } from '../dom.js';
 import { ul_select } from '../ul_select.js';
 import { wrap } from '../drawer.js';
+import { ui_fragment, newtag } from '../dom.js';
 import {
   addEventListenerUndo,
   add_patch,

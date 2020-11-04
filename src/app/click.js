@@ -12,9 +12,11 @@ import { $clicked } from './selection/clicked.js';
 
 export const disable = { click: false };
 
-$svg.addEventListener('click', click);
+export function add_clicking() {
+  $svg.addEventListener('click', click);
+}
 
-export function click(evt) {
+function click(evt) {
   if (disable.click) return;
 
   // deselect anything
@@ -73,7 +75,6 @@ export function click(evt) {
   let $el = element_from(evt.target);
   $clicked.from($el);
 
-  let show_marks = true;
   if (evt.shiftKey) {
     $clicked.over();
   } else if (evt.ctrlKey) {

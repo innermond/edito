@@ -15,6 +15,7 @@ import { add_patch, with_undo } from '../idb.js';
 import { is_selectable } from '../floater/select.js';
 import { deleting } from '../user_action/del_undel_clone.js';
 import { $selection } from '../selection/index.js';
+import { Notify } from '../error.js';
 
 const tpl = `<section class="vertical-align">
 <div class="wrap-row section">
@@ -101,24 +102,24 @@ $new_page.addEventListener('click', () => {
 }*/
 // FIXME for real dimensions auto is not appropriate
 const media_zoom_event = () => {
+  // error checks
+  if ($media_width.value === '') {
+    Notify($media_width, 'Pentru lățime introduceți un număr');
+  }
+
+  if ($media_height.value === '') {
+    Notify($media_height, 'Pentru inălțime introduceți un număr');
+  }
+
   const $canvas = document.querySelector('#canvas');
   $canvas.style.width = '100%';
-  //current_canvas_width = $canvas.style.width
 
   zoom_reset();
   media_zoom($media_width.value, $media_height.value);
   zoom_reset.viewbox = copy_viewbox($svg.viewBox);
 
-  // fit?
-  /*	if (!$all_visible.checked) {
-		if ($real.checked) show_at_real_dimensions()
-		return
-	}
-*/
   if ($real.checked) {
     $canvas.style.width = 'auto';
-    //show_at_real_dimensions()
-    //return
   }
   if (!$all_visible.checked) return;
   const $bottom = document.querySelector('#bottom-bar');
@@ -139,10 +140,17 @@ const media_zoom_event = () => {
     bottom_box = $bottom.getBoundingClientRect();
     d = canvas_box.bottom - bottom_box.top;
   }
-  //current_canvas_width = $canvas.style.width
 };
 
-const media_zoom_undo = with_undo(media_zoom_event);
+const media_zoom_undo_fn = with_undo(media_zoom_event);
+const media_zoom_undo = () => {
+  try {
+    media_zoom_undo_fn();
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 $media_width.addEventListener('change', media_zoom_undo);
 $media_height.addEventListener('change', media_zoom_undo);
 

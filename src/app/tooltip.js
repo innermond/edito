@@ -107,7 +107,7 @@ export function tooltip($explained, adjx = 0, adjy = 0) {
   };
 
   let move = false;
-	const init_tooltip = () => {
+  const init_tooltip = () => {
     if ($explained.classList.contains('active')) {
       move = false;
       return;
@@ -173,17 +173,17 @@ export function tooltip($explained, adjx = 0, adjy = 0) {
       $e.textContent = $explained.value;
   });
 
-	$explained.__proto__.Unshow = () => {
-		delete $explained.dataset.tooltipId;
-		$e.remove();
-	};
+  $explained.__proto__.Unshow = () => {
+    delete $explained.dataset.tooltipId;
+    $e.remove();
+  };
 
-	$e.__proto__.Show = () => {
-		init_tooltip();
+  $e.__proto__.Show = () => {
+    init_tooltip();
     const bb = $explained.getBoundingClientRect();
-		const posx = bb.left + bb.width*0.5;
-		position(posx, bb);
-	}; 
+    const posx = bb.left + bb.width * 0.5;
+    position(posx, bb);
+  };
 
   return $e;
 }

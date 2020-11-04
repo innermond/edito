@@ -21,8 +21,6 @@ export function remove_dragging() {
   $svg.removeEventListener('mouseleave', endDrag);
 }
 
-add_dragging();
-
 let mouseStart;
 let moved = null;
 // is startDrag ~= click event?

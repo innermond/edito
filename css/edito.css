@@ -454,6 +454,8 @@ div[name=box] {
 img.late, body[class~=div-scroller-active] img.late.loaded:not(:hover) {
   position: relative;
   height: 100%;
+  max-height: 150px;
+  max-width: 500px;
   flex: 0 1 auto;
   filter: grayscale(100%) brightness(150%);
   transition: filter 0.5s ease, box-shadow 0.5s ease; }

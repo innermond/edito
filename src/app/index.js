@@ -1,12 +1,9 @@
-import './feature.js';
-import './click.js';
-import './drag.js';
-import './ul_select.js';
+import { add_clicking } from './click.js';
+import { add_dragging } from './drag.js';
 import { tooltip } from './tooltip.js';
 import { span_checkbox } from './span_checkbox.js';
 import { dragElement, show_hide } from './html_drag.js';
-
-import './idb.js';
+import * as error from './error.js';
 
 import {
   $section_menubar,
@@ -34,6 +31,10 @@ import { zoom_reset } from './zoom.js';
 import { load_fonts_of } from './user_action/font/fontface.js';
 import { $textname, text_svg_html } from './ui.js';
 
+// put after all imports else exception
+// TODO understand why
+import './idb.js';
+
 const $ui = new DocumentFragment();
 $ui.appendChild($section_menubar);
 $ui.appendChild($section_properties);
@@ -58,72 +59,113 @@ $ed.appendChild($ui);
 $svg.style.width = '100%';
 $svg.style.height = '100%';
 
-document.querySelectorAll('.movable').forEach(($e) => {
-  dragElement($e);
-  $e.querySelectorAll('.wrap-row > div > label').forEach(($el) =>
-    show_hide($el),
-  );
+// here we start
+function main() {
+  add_clicking();
+  add_dragging();
 
-  $e.dataset.display = $e.style.display;
-  $e.style.display = 'none';
+  document.querySelectorAll('.movable').forEach(($e) => {
+    dragElement($e);
+    $e.querySelectorAll('.wrap-row > div > label').forEach(($el) =>
+      show_hide($el),
+    );
 
-  const $img = $e.querySelector('img[class~="close"]');
-  $img?.addEventListener('click', (evt) => {
-    const $el = evt.target.closest('section');
-    if ($el) {
-      display_none($el);
-      const qry = `[data-panel="${$el.id}"]`;
-      const $remote = document.querySelector(qry);
-      $remote.classList.toggle('active');
+    $e.dataset.display = $e.style.display;
+    $e.style.display = 'none';
+
+    const $img = $e.querySelector('img[class~="close"]');
+    $img?.addEventListener('click', (evt) => {
+      const $el = evt.target.closest('section');
+      if ($el) {
+        display_none($el);
+        const qry = `[data-panel="${$el.id}"]`;
+        const $remote = document.querySelector(qry);
+        $remote.classList.toggle('active');
+      }
+    });
+
+    const $kk = $e.querySelectorAll('[type=checkbox][class~=switch]');
+    span_checkbox($kk);
+
+    $e.querySelectorAll('[class~="tooltip"]')?.forEach(($e) => {
+      tooltip($e);
+    });
+
+    $e.querySelectorAll('input[type=range]')?.forEach(($e) =>
+      $e.addEventListener('mousedown', (evt) => evt.stopPropagation()),
+    );
+  });
+  document.querySelector('#canvas').style.opacity = 1;
+  // assure viewbox is ok
+  const vbox = $svg.viewBox.baseVal;
+  if (vbox.width === 0) vbox.width = $svg.width.baseVal.value;
+  if (vbox.height === 0) vbox.height = $svg.height.baseVal.value;
+  zoom_reset.viewbox = copy_viewbox($svg.viewBox);
+
+  // cycle through svg and load all fonts found
+  load_fonts_of($svg);
+
+  // a lone click on document surface is a sign to close all floaters ans sections activated
+  // and all rectangle selections on svg
+  // and all error notes
+  $ed.addEventListener('click', (evt) => {
+    if (document.body.classList.contains('div-scroller-outside')) {
+      document.body.classList.remove('div-scroller-outside');
+      return;
     }
+    if (evt.target !== $ed) return;
+    const $ll = $ed.querySelectorAll('li[class~=active]');
+    $ll.forEach(($li) => {
+      $li.click();
+    });
+
+    $svg
+      .querySelectorAll('[data-ants=true],[data-selectangle=true]')
+      .forEach(($ant) => $ant.remove());
+
+    document
+      .querySelectorAll('.tooltip-text.active')
+      ?.forEach(($note) => $note.classList.remove('active'));
   });
 
-  const $kk = $e.querySelectorAll('[type=checkbox][class~=switch]');
-  span_checkbox($kk);
-
-  $e.querySelectorAll('[class~="tooltip"]')?.forEach(($e) => {
-    tooltip($e);
+  // all texts on mouseup update text html element
+  $svg.addEventListener('mouseup', (evt) => {
+    const $el = evt.target.closest('text');
+    if ($el === null || $el.nodeName.toLowerCase() !== 'text') return;
+    text_svg_html($el, $textname);
   });
+}
 
-  $e.querySelectorAll('input[type=range]')?.forEach(($e) =>
-    $e.addEventListener('mousedown', (evt) => evt.stopPropagation()),
-  );
-});
-document.querySelector('#canvas').style.opacity = 1;
-// assure viewbox is ok
-const vbox = $svg.viewBox.baseVal;
-if (vbox.width === 0) vbox.width = $svg.width.baseVal.value;
-if (vbox.height === 0) vbox.height = $svg.height.baseVal.value;
-zoom_reset.viewbox = copy_viewbox($svg.viewBox);
-
-// cycle through svg and load all fonts found
-load_fonts_of($svg);
-
-// a lone click on document surface is a sign to close all floaters ans sections activated
-// and all rectangle selections on svg
-$ed.addEventListener('click', (evt) => {
-  if (document.body.classList.contains('div-scroller-outside')) {
-    document.body.classList.remove('div-scroller-outside');
-    return;
+// instead of unhandledrejection and alikes
+const we_catch_sync_exceptions = function () {
+  try {
+    main();
+  } catch (e) {
+    console.log(e);
   }
-  if (evt.target !== $ed) return;
-  const $ll = $ed.querySelectorAll('li[class~=active]');
-  $ll.forEach(($li) => {
-    $li.click();
-  });
-
-  $svg
-    .querySelectorAll('[data-ants=true],[data-selectangle=true]')
-    .forEach(($ant) => $ant.remove());
-});
-
-// all texts on mouseup update text html element
-$svg.addEventListener('mouseup', (evt) => {
-  const $el = evt.target.closest('text');
-  if ($el === null || $el.nodeName.toLowerCase() !== 'text') return;
-  text_svg_html($el, $textname);
-});
-
-window.onerror = (message, url, line, col, error) => {
-  console.log(message);
 };
+
+error
+  .Ycatch(
+    (err) =>
+      error.Notify(
+        null,
+        'un eveniment neașteptat a produs o eroare surprinzătoare',
+        err,
+      ),
+    we_catch_sync_exceptions,
+  )(null)
+  .catch((e) => {
+    console.log(e);
+  });
+// to use add on top of anything
+/*window.addEventListener('error', function (e) {
+	e.stopImmediatePropagation();
+	e.preventDefault();
+   console.log('Error occurred: ' + e.error.message);
+})
+
+window.addEventListener('unhandledrejection', function (e) {
+	e.preventDefault();
+  console.log('Rejection occurred: ' + e.reason.message);
+})*/

@@ -24,15 +24,32 @@ const $file_svg = $ui.querySelector('#file_svg');
 const $url_svg = $ui.querySelector('#url_svg');
 const $add_url_svg = $ui.querySelector('#add_url_svg');
 
-$url_svg.addEventListener('focus', () => {
-	$url_svg?.Unshow();
-	$url_svg.classList.remove('notify');
-});
 $add_url_svg.addEventListener(
   'click',
-  error.Ycatch(add_url_svg, null, (err) => error.Notify(err, $url_svg)),
+  error.Ycatch(
+    (err) =>
+      error.Notify(
+        $url_svg,
+        'adresa introdusă nu produce un fișier corect de tip SVG',
+        err,
+      ),
+    add_url_svg,
+  ),
 );
 
+/*
+$add_url_svg.addEventListener(
+  'click',
+	async (evt) => {
+		try {
+			await add_url_svg();
+		} catch (e) {
+			evt.preventDefault();
+			console.log(e);
+		}
+	},
+);
+*/
 $file_svg.addEventListener('change', async () => {
   const file = $file_svg.files[0] ?? null;
   if (!file) return;
@@ -94,9 +111,8 @@ async function add_url_svg() {
 
   //const is_svg = u?.pathname.split('.').pop().toLowerCase() === 'svg';
   //if (is_svg) {
-  //if (true) {
   try {
-    const url_image = proxied_url(src);
+    const url_image = proxied_url(u.href);
     let resp;
     try {
       resp = await fetch(src);
@@ -138,5 +154,4 @@ async function add_url_svg() {
     console.log(e);
   }
   done();
-  //}
 }
