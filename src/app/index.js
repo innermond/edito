@@ -136,36 +136,8 @@ function main() {
   });
 }
 
-// instead of unhandledrejection and alikes
-const we_catch_sync_exceptions = function () {
-  try {
-    main();
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-error
-  .Ycatch(
-    (err) =>
-      error.Notify(
-        null,
-        'un eveniment neașteptat a produs o eroare surprinzătoare',
-        err,
-      ),
-    we_catch_sync_exceptions,
-  )(null)
-  .catch((e) => {
-    console.log(e);
-  });
-// to use add on top of anything
-/*window.addEventListener('error', function (e) {
-	e.stopImmediatePropagation();
-	e.preventDefault();
-   console.log('Error occurred: ' + e.error.message);
-})
-
-window.addEventListener('unhandledrejection', function (e) {
-	e.preventDefault();
-  console.log('Rejection occurred: ' + e.reason.message);
-})*/
+try {
+	main();
+} catch (e) {
+	console.log(e);
+}

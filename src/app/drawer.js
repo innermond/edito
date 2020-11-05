@@ -2,6 +2,7 @@ import { ui_fragment } from './dom.js';
 import { tooltip } from './tooltip.js';
 import { div_scroller } from './div_scroller.js';
 import { span_checkbox } from './span_checkbox.js';
+import { hideNote } from './error.js';
 
 const tpl = `<section data-closeable class="tool-drawer vertical-align">
 	<div class="title">
@@ -49,6 +50,7 @@ document.addEventListener('panel:toggle', (evt) => {
   });
   const $panel = document.getElementById(panel_id);
   if ($panel) {
+		if ($panel.classList.contains('active')) hideNote();
     $panel.classList.toggle('active');
     if (evt.target.dataset.panel !== panel_id) return;
     const $actives = evt.target.parentNode.querySelectorAll(

@@ -6,6 +6,8 @@ export function Notify($target, note = 'A avut loc o eroare!', err = null) {
     $target.classList.add('notify');
     $target.dataset.tooltipBottom = true;
     const $note = tooltip($target);
+		const $attr = document.createAttribute('data-note');
+		$note.setAttributeNode($attr);
     $note.textContent = note;
     $note.style.backgroundColor = 'orange';
     $note.style.color = 'black';
@@ -18,11 +20,8 @@ export function Notify($target, note = 'A avut loc o eroare!', err = null) {
 }
 
 function clear($target) {
-  $target.classList.remove('notify');
-  const id = $target.dataset.tooltipId;
-  if (id) {
-    document.getElementById(id)?.remove();
-  }
+  $target?.classList.remove('notify');
+	$target.Unshow?.call()
 }
 
 // catch eror from async
@@ -49,18 +48,16 @@ export function Ycatch(fn_catch, fn, ...args) {
   };
 }
 
-// TODO it doesnt work properly
 export function ycatch($target, message, ...fn) {
-  return Ycatch((err) => error.Notify($target, message, err), ...fn);
+  return Ycatch((err) => Notify($target, message, err), ...fn);
 }
 
-const hideNote = () => {
-  const $target = document.activeElement;
-  const skip = !$target.classList.contains('notify');
-  if (skip) return;
+export const hideNote = () => {
+	document.querySelectorAll('[data-note]')?.forEach(($note) => {
+		const $target = document.querySelector(`[data-tooltip-id=${$note.id}]`);
+		if (!$target) return;
 
-  $target?.Unshow();
-  $target.classList.remove('notify');
+		$target.Unshow();
+		$target.classList.remove('notify');
+	})
 };
-document.addEventListener('focusin', hideNote);
-document.addEventListener('blur', hideNote);
