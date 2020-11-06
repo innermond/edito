@@ -15,7 +15,7 @@ import { add_patch, with_undo } from '../idb.js';
 import { is_selectable } from '../floater/select.js';
 import { deleting } from '../user_action/del_undel_clone.js';
 import { $selection } from '../selection/index.js';
-import { Notify } from '../error.js';
+import { clear, Notify } from '../error.js';
 
 const tpl = `<section class="vertical-align">
 <div class="wrap-row section">
@@ -102,15 +102,6 @@ $new_page.addEventListener('click', () => {
 }*/
 // FIXME for real dimensions auto is not appropriate
 const media_zoom_event = () => {
-  // error checks
-  if ($media_width.value === '') {
-    Notify($media_width, 'Pentru lățime introduceți un număr');
-  }
-
-  if ($media_height.value === '') {
-    Notify($media_height, 'Pentru inălțime introduceți un număr');
-  }
-
   const $canvas = document.querySelector('#canvas');
   $canvas.style.width = '100%';
 
@@ -151,7 +142,39 @@ const media_zoom_undo = () => {
   }
 };
 
-$media_width.addEventListener('change', media_zoom_undo);
+const check_run_notify = ($target, check_fn, run_fn, ...args) => {
+  $target.addEventListener('focusin', (evt) => clear(evt.target));
+  return () => {
+    try {
+      const msg = check_fn($target.value);
+      if (msg) Notify($target, msg);
+
+      !args ? run_fn() : run_fn(...args);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+};
+
+$media_width.addEventListener(
+  'change',
+  check_run_notify(
+    $media_width,
+    (value) => {
+      // check
+      let msg = false;
+      if (parseFloat(value) === NaN) {
+        msg = 'valoarea introdusă nu e număr';
+      } else if (1 * value <= 0) {
+        msg = 'lățimea nu e număr mai mare ca zero';
+      } else if (1 * value > 420) {
+        msg = 'lățimea depășește maximul pe care se poate printa';
+      }
+      return msg;
+    },
+    media_zoom_undo,
+  ),
+);
 $media_height.addEventListener('change', media_zoom_undo);
 
 $all_visible.addEventListener('change', media_zoom_undo);

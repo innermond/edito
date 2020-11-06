@@ -137,7 +137,7 @@ function main() {
 }
 
 try {
-	main();
+  main();
 } catch (e) {
-	console.log(e);
+  console.log(e);
 }

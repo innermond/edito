@@ -6,7 +6,7 @@ import { center } from '../pos.js';
 import { $selection, $clicked } from '../selection/index.js';
 import { add_patch } from '../idb.js';
 import { proxied_url } from './image.js';
-import { ycatch } from '../error.js';
+import { ycatch, clear } from '../error.js';
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de imagine" data-tooltip-bottom>Adresa de web</label>
@@ -27,8 +27,8 @@ const $add_url_svg = $ui.querySelector('#add_url_svg');
 $add_url_svg.addEventListener(
   'click',
   ycatch(
-		$url_svg,
-		'adresa introdusă nu produce un fișier corect de tip SVG',
+    $url_svg,
+    'adresa introdusă nu produce un fișier corect de tip SVG',
     add_url_svg,
   ),
 );

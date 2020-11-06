@@ -173,12 +173,16 @@ export function tooltip($explained, adjx = 0, adjy = 0) {
       $e.textContent = $explained.value;
   });
 
-  $explained.__proto__.Unshow = () => {
+  $explained.__proto__.HideTooltip = () => {
+    $e.style.display = 'none';
+  };
+
+  $explained.RemoveTooltip = () => {
     delete $explained.dataset.tooltipId;
     $e.remove();
   };
 
-  $e.__proto__.Show = () => {
+  $e.Show = () => {
     init_tooltip();
     const bb = $explained.getBoundingClientRect();
     const posx = bb.left + bb.width * 0.5;

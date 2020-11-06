@@ -6,8 +6,8 @@ export function Notify($target, note = 'A avut loc o eroare!', err = null) {
     $target.classList.add('notify');
     $target.dataset.tooltipBottom = true;
     const $note = tooltip($target);
-		const $attr = document.createAttribute('data-note');
-		$note.setAttributeNode($attr);
+    const $attr = document.createAttribute('data-note');
+    $note.setAttributeNode($attr);
     $note.textContent = note;
     $note.style.backgroundColor = 'orange';
     $note.style.color = 'black';
@@ -19,9 +19,9 @@ export function Notify($target, note = 'A avut loc o eroare!', err = null) {
   throw err;
 }
 
-function clear($target) {
+export function clear($target) {
   $target?.classList.remove('notify');
-	$target.Unshow?.call()
+  $target.RemoveTooltip?.call();
 }
 
 // catch eror from async
@@ -48,16 +48,45 @@ export function Ycatch(fn_catch, fn, ...args) {
   };
 }
 
+// catch eror from sync
+export function Xcatch(fn_catch, fn, ...args) {
+  return (evt = null) => {
+    if (evt) {
+      evt.preventDefault();
+    }
+    try {
+      !args ? fn() : fn(...args);
+    } catch (e) {
+      if (!fn_catch) fn_catch = console.log;
+      if (fn_catch instanceof Function) {
+        // Notify in order to cut happy path
+        // is (re)throwing
+        // so catch it here
+        try {
+          fn_catch(e);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    }
+  };
+}
+
 export function ycatch($target, message, ...fn) {
+  $target.addEventListener('focusin', () => clear($target));
   return Ycatch((err) => Notify($target, message, err), ...fn);
 }
 
-export const hideNote = () => {
-	document.querySelectorAll('[data-note]')?.forEach(($note) => {
-		const $target = document.querySelector(`[data-tooltip-id=${$note.id}]`);
-		if (!$target) return;
+export function xcatch($target, message, ...fn) {
+  $target.addEventListener('focusin', () => clear($target));
+  return Xcatch((err) => Notify($target, message, err), ...fn);
+}
 
-		$target.Unshow();
-		$target.classList.remove('notify');
-	})
+export const hideNote = () => {
+  document.querySelectorAll('[data-note]')?.forEach(($note) => {
+    const $target = document.querySelector(`[data-tooltip-id=${$note.id}]`);
+    if (!$target) return;
+
+    $target.HideTooltip();
+  });
 };
