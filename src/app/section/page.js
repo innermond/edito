@@ -15,7 +15,7 @@ import { add_patch, with_undo } from '../idb.js';
 import { is_selectable } from '../floater/select.js';
 import { deleting } from '../user_action/del_undel_clone.js';
 import { $selection } from '../selection/index.js';
-import { clear, Notify } from '../error.js';
+import { clear, Notify, xcatch } from '../error.js';
 
 const tpl = `<section class="vertical-align">
 <div class="wrap-row section">
@@ -142,40 +142,35 @@ const media_zoom_undo = () => {
   }
 };
 
-const check_run_notify = ($target, check_fn, run_fn, ...args) => {
-  $target.addEventListener('focusin', (evt) => clear(evt.target));
-  return () => {
-    try {
-      const msg = check_fn($target.value);
-      if (msg) Notify($target, msg);
-
-      !args ? run_fn() : run_fn(...args);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+const check_dimensions = (value) => {
+	// check
+	let msg = false;
+	if (parseFloat(value) === NaN) {
+		msg = 'valoarea introdusă nu e număr';
+	} else if (1 * value <= 0) {
+		msg = 'lățimea nu e număr mai mare ca zero';
+	} else if (1 * value > 420) {
+		msg = 'lățimea depășește maximul pe care se poate printa';
+	}
+	return msg;
 };
-
+	
 $media_width.addEventListener(
   'change',
-  check_run_notify(
+  xcatch(
     $media_width,
-    (value) => {
-      // check
-      let msg = false;
-      if (parseFloat(value) === NaN) {
-        msg = 'valoarea introdusă nu e număr';
-      } else if (1 * value <= 0) {
-        msg = 'lățimea nu e număr mai mare ca zero';
-      } else if (1 * value > 420) {
-        msg = 'lățimea depășește maximul pe care se poate printa';
-      }
-      return msg;
-    },
+		check_dimensions,
     media_zoom_undo,
   ),
 );
-$media_height.addEventListener('change', media_zoom_undo);
+$media_height.addEventListener(
+  'change',
+  xcatch(
+    $media_height,
+		check_dimensions,
+    media_zoom_undo,
+  ),
+);
 
 $all_visible.addEventListener('change', media_zoom_undo);
 $real.addEventListener('change', media_zoom_undo);
