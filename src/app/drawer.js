@@ -50,7 +50,7 @@ document.addEventListener('panel:toggle', (evt) => {
   });
   const $panel = document.getElementById(panel_id);
   if ($panel) {
-    if ($panel.classList.contains('active')) hideNote();
+    hideNote();
     $panel.classList.toggle('active');
     if (evt.target.dataset.panel !== panel_id) return;
     const $actives = evt.target.parentNode.querySelectorAll(

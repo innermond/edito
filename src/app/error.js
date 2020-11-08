@@ -1,23 +1,34 @@
 import { tooltip } from './tooltip.js';
 
-export function Notify($target, note = 'A avut loc o eroare!', err = null) {
-  if ($target) {
-    clear($target);
-    $target.classList.add('notify');
-    $target.dataset.tooltipBottom = true;
-    const $note = tooltip($target);
-    const $attr = document.createAttribute('data-note');
-    $note.setAttributeNode($attr);
-    $note.textContent = note;
-    $note.style.backgroundColor = 'orange';
-    $note.style.color = 'black';
-    $note.Show();
+export function Notify(dat, note = 'A avut loc o eroare!', err = null) {
+  let iter = [];
+  const are_manny = Array.isArray(dat);
+  if (are_manny) {
+    iter = dat;
+  } else {
+    iter.push([dat, note]);
   }
+  iter.forEach(([$target, note]) => {
+    if ($target) {
+      clear($target);
+      $target.classList.add('notify');
+      $target.dataset.tooltipBottom = true;
+      const $note = tooltip($target);
+      const $attr = document.createAttribute('data-note');
+      $note.setAttributeNode($attr);
+      if (note instanceof Function) note = note($target.value);
+      $note.textContent = note;
+      $note.style.backgroundColor = 'orange';
+      $note.style.color = 'black';
+      $note.Show();
+    }
+  });
 
-	if (note instanceof Function) note = note($target.value);
-  if (err === null && note) err = new Error(note);
-  // cut any happy execution
-  throw err;
+  if (are_manny) {
+    if (err === null && note) err = new Error(note);
+    // cut any happy execution
+    throw err;
+  }
 }
 
 export function clear($target) {
@@ -73,59 +84,99 @@ export function Xcatch(fn_catch, fn, ...args) {
   };
 }
 
-export function ycatch($target, message, ...fn) {
-	// add handler once
-	if (!$target.dataset.notifyErrorFocusin) {
-		$target.addEventListener('focusin', (evt) => clear(evt.target));
-		$target.dataset.notifyErrorFocusin = true;
-	}
-  $target.addEventListener('focusin', () => clear($target));
-  return Ycatch((err) => Notify($target, message, err), ...fn);
+export function ycatch($target, note, ...fn) {
+  // add handler once
+  if (!$target.dataset.notifyErrorFocusin) {
+    $target.addEventListener('focusin', (evt) => clear(evt.target));
+    $target.dataset.notifyErrorFocusin = true;
+  }
+
+  // is run after run_fn is called
+  const catch_fn = (err) => {
+    if (Array.isArray(err)) {
+      Notify(err);
+    } else {
+      Notify($target, note, err);
+    }
+  };
+
+  let run_fn = () => {};
+  let args = [];
+  switch (fn.length) {
+    case 0:
+      break;
+    case 1:
+      run_fn = fn.pop();
+      break;
+    default:
+      [run_fn, args] = fn;
+  }
+
+  const prepared_run_fn = (params) => {
+    // note can be a before / check function
+    if (note instanceof Function) {
+      // copy function here
+      prepared_run_fn.note_call = note;
+    }
+    // overwrite note for catch_fn
+    note = prepared_run_fn.note_call?.call(null, $target.value);
+    if (note !== false) {
+      throw new Error(note);
+    }
+    run_fn(params);
+  };
+
+  // make func
+  const composed_fn = Ycatch(catch_fn, prepared_run_fn, args);
+
+  return composed_fn;
 }
 
 export function xcatch($target, note, ...fn) {
-	// add handler once
-	if (!$target.dataset.notifyErrorFocusin) {
-		$target.addEventListener('focusin', (evt) => clear(evt.target));
-		$target.dataset.notifyErrorFocusin = true;
-	}
-	
-	// is run after run_fn is called
-	const catch_fn = (err) => Notify($target, note, err);
+  // add handler once
+  if (!$target.dataset.notifyErrorFocusin) {
+    $target.addEventListener('focusin', (evt) => clear(evt.target));
+    $target.dataset.notifyErrorFocusin = true;
+  }
 
-	let run_fn = ()=>{};
-	let args = [];
-	switch (fn.length) {
-		case 0:
-		break;
-		case 1:
-			run_fn = fn.pop();
-		break;
-		default:
-			[run_fn, args] = fn;
-	}
-	const prepared_run_fn = (params) => {
-		// note can be a before / check function
-		if (note instanceof Function) {
-			// copy function here
-			prepared_run_fn.note_call = note;
-		}
-		// overwrite note for catch_fn
-		note = prepared_run_fn.note_call?.call(null, $target.value);
-		if (note !== false) {
-			throw new Error(note);
-		}
-		run_fn(params);
-	};
+  // is run after run_fn is called
+  const catch_fn = (err) => {
+    if (Array.isArray(err)) {
+      Notify(err);
+    } else {
+      Notify($target, note, err);
+    }
+  };
 
-	// make func
-	const composed_fn = Xcatch(
-		catch_fn,	
-		prepared_run_fn,
-		args,
-	);
-	
-	return composed_fn;
+  let run_fn = () => {};
+  let args = [];
+  switch (fn.length) {
+    case 0:
+      break;
+    case 1:
+      run_fn = fn.pop();
+      break;
+    default:
+      [run_fn, args] = fn;
+  }
+  const prepared_run_fn = (params) => {
+    // note can be a before / check function
+    if (note instanceof Function) {
+      // copy function here
+      prepared_run_fn.note_call = note;
+    }
+    // overwrite note for catch_fn
+    note = prepared_run_fn.note_call?.call(null, $target.value);
+    if (note !== false) {
+      throw new Error(note);
+    }
+    run_fn(params);
+  };
+
+  // make func
+  const composed_fn = Xcatch(catch_fn, prepared_run_fn, args);
+
+  return composed_fn;
 }
 
 export const hideNote = () => {

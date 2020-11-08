@@ -15,7 +15,7 @@ import { add_patch, with_undo } from '../idb.js';
 import { is_selectable } from '../floater/select.js';
 import { deleting } from '../user_action/del_undel_clone.js';
 import { $selection } from '../selection/index.js';
-import { clear, Notify, xcatch } from '../error.js';
+import { xcatch } from '../error.js';
 
 const tpl = `<section class="vertical-align">
 <div class="wrap-row section">
@@ -56,7 +56,7 @@ const tpl = `<section class="vertical-align">
 	</div>
 	<div>
     <label class="tooltip" data-tooltip-text="Stabilește mărimea pasului cu care se mută obiectele cu tastele săgeți" data-tooltip-bottom for="step">Pas</label>
-    <input type="number" class="num3" min="0.01" max="90" value="2" step="0.1" id="step">
+    <input type="number" class="num3" min="0.01" max="90.0" value="2.0" step="0.1" id="step">
 	</div>
 	</div>
 </section>`;
@@ -73,33 +73,43 @@ const $real = $ui.querySelector('#real');
   $svg.height.baseVal.valueInSpecifiedUnits,
 );
 
+// functions intended to run before
+// mus thave throw
+// to be catched
+const check_dimensions_many = () => {
+  let err = [];
+  [$media_width, $media_height].forEach(($el) => {
+    const note = check_dimensions($el.value);
+    if (note !== false) {
+      err.push([$el, note]);
+    }
+  });
+  if (err.length > 0) {
+    throw err;
+  }
+  return false;
+};
+
 // TODO load from idb a page then a new page. undo after new page is buggy
 const $new_page = $ui.querySelector('#new_page');
-$new_page.addEventListener('click', () => {
-  Array.from($svg.children).forEach(($c) => {
-    $c.removeAttribute('data-lock');
-    if (!is_selectable($c)) return;
-    $selection.add($c);
-  });
-  background_color('');
-  $bkcolor.style.display = 'none';
-  with_undo(deleting)();
-});
-//let current_canvas_width
+$new_page.addEventListener(
+  'click',
+  xcatch($new_page, check_dimensions_many, () => {
+    Array.from($svg.children).forEach(($c) => {
+      $c.removeAttribute('data-lock');
+      if (!is_selectable($c)) return;
+      $selection.add($c);
+    });
+    if ($bkcolor_switch.checked) {
+      const id = $bkcolor_switch.dataset.proxy;
+      document.querySelector(id)?.click();
+    }
+    background_color('');
+    $bkcolor.style.display = 'none';
+    with_undo(deleting)();
+  }),
+);
 
-/*const show_at_real_dimensions = () => {
-	const $canvas = document.querySelector('#canvas')
-	if ($real.checked) {
-		$canvas.style.width = 'auto'
-	} else {
-		if(!$all_visible.checked) {
-		 $canvas.style.width = '100%'
-		} else {
-			//$canvas.style.width = current_canvas_width
-			media_zoom_event()
-		}
-	}
-}*/
 // FIXME for real dimensions auto is not appropriate
 const media_zoom_event = () => {
   const $canvas = document.querySelector('#canvas');
@@ -142,34 +152,26 @@ const media_zoom_undo = () => {
   }
 };
 
-const check_dimensions = (value) => {
-	// check
-	let msg = false;
-	if (parseFloat(value) === NaN) {
-		msg = 'valoarea introdusă nu e număr';
-	} else if (1 * value <= 0) {
-		msg = 'lățimea nu e număr mai mare ca zero';
-	} else if (1 * value > 420) {
-		msg = 'lățimea depășește maximul pe care se poate printa';
-	}
-	return msg;
-};
-	
+function check_dimensions(value) {
+  // check
+  let msg = false;
+  if (parseFloat(value) === NaN) {
+    msg = 'valoarea introdusă nu e număr';
+  } else if (1 * value <= 0) {
+    msg = 'lățimea nu e număr mai mare ca zero';
+  } else if (1 * value > 420) {
+    msg = 'lățimea depășește maximul pe care se poate printa';
+  }
+  return msg;
+}
+
 $media_width.addEventListener(
-  'change',
-  xcatch(
-    $media_width,
-		check_dimensions,
-    media_zoom_undo,
-  ),
+  'input',
+  xcatch($media_width, check_dimensions_many, media_zoom_undo),
 );
 $media_height.addEventListener(
-  'change',
-  xcatch(
-    $media_height,
-		check_dimensions,
-    media_zoom_undo,
-  ),
+  'input',
+  xcatch($media_height, check_dimensions_many, media_zoom_undo),
 );
 
 $all_visible.addEventListener('change', media_zoom_undo);

@@ -173,7 +173,7 @@ export function tooltip($explained, adjx = 0, adjy = 0) {
       $e.textContent = $explained.value;
   });
 
-  $explained.__proto__.HideTooltip = () => {
+  $explained.HideTooltip = () => {
     $e.style.display = 'none';
   };
 
@@ -182,11 +182,12 @@ export function tooltip($explained, adjx = 0, adjy = 0) {
     $e.remove();
   };
 
-  $e.Show = () => {
+  $explained.ShowTooltip = $e.Show = (with_message = null) => {
     init_tooltip();
     const bb = $explained.getBoundingClientRect();
     const posx = bb.left + bb.width * 0.5;
     position(posx, bb);
+    if (with_message !== null) $e.textContent = with_message;
   };
 
   return $e;

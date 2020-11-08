@@ -95,7 +95,7 @@ export function updating(type, inner, prop, val = 0) {
       val = valfunc ? valfunc(evt.target.value) : evt.target.value || val;
       // there is no host filter attached at all
       if (!get_filter_id($el)) {
-        let $flt = filterFuncMap[type]?.call(val);
+        let $flt = filterFuncMap[type]?.call(null, val);
         if (!$flt) return;
         let $mtx = $flt.querySelector(inner);
         $defs.appendChild($flt);
