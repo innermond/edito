@@ -21,11 +21,11 @@ const tpl = `<section class="vertical-align">
 <div class="wrap-row section">
 <div>
 	<label class="tooltip" data-tooltip-text="Schimbi lățimea documentului" data-tooltip-bottom for="media_width">Lățime</label>
-	<input type="number" class="num3" id="media_width" value="210" />
+	<input type="number" class="num3" id="media_width" value="210" min="20" />
 </div>
 <div>
 	<label class="tooltip" data-tooltip-text="Modifică mărimea dimensiunii verticale a paginii" data-tooltip-bottom for="media_height">Înălțime</label>
-	<input type="number" class="num3" id="media_height" value="297" />
+	<input type="number" class="num3" id="media_height" value="297" min="20" />
 </div>
 </div>
 </hr>
@@ -157,10 +157,10 @@ function check_dimensions(value) {
   let msg = false;
   if (parseFloat(value) === NaN) {
     msg = 'valoarea introdusă nu e număr';
-  } else if (1 * value <= 0) {
-    msg = 'lățimea nu e număr mai mare ca zero';
+  } else if (1 * value < 20) {
+    msg = 'lățimea nu e număr mai mare ca 20';
   } else if (1 * value > 420) {
-    msg = 'lățimea depășește maximul pe care se poate printa';
+    msg = 'lățimea depășește maximul de 420 pe care se poate printa';
   }
   return msg;
 }
@@ -178,6 +178,21 @@ $all_visible.addEventListener('change', media_zoom_undo);
 $real.addEventListener('change', media_zoom_undo);
 
 export const $bleed = $ui.querySelector('#bleed');
+$bleed.addEventListener('input', xcatch(
+	$bleed,
+	(val) => {
+		if (isNaN(val)) return 'introduceți cifre';
+
+		if (val > 5.0) {
+			return 'nu se acceptă numere mai mari de 5.0';
+		} else if (val < 0.0) {
+			return 'introduceți un număr mai mare ca zero';
+		}
+
+		return false;
+	},
+	()=>{},
+));
 
 export const $step = $ui.querySelector('#step');
 document.addEventListener('keyup', (evt) => {
