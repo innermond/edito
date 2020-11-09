@@ -56,7 +56,7 @@ const tpl = `<section class="vertical-align">
 	</div>
 	<div>
     <label class="tooltip" data-tooltip-text="Stabilește mărimea pasului cu care se mută obiectele cu tastele săgeți" data-tooltip-bottom for="step">Pas</label>
-    <input type="number" class="num3" min="0.01" max="90.0" value="2.0" step="0.1" id="step">
+    <input type="number" class="num3" min="0.1" max="90.0" value="2.0" step="0.1" id="step">
 	</div>
 	</div>
 </section>`;
@@ -195,6 +195,20 @@ $bleed.addEventListener('input', xcatch(
 ));
 
 export const $step = $ui.querySelector('#step');
+$step.addEventListener('input', xcatch(
+    $step, 
+    (val) => {
+		if (isNaN(val)) return 'introduceți cifre';
+
+		if (val > 5.0) {
+			return 'nu se acceptă numere mai mari de 90.0';
+		} else if (val < 0.1) {
+			return 'introduceți un număr mai mare ca 0.1';
+		}
+
+		return false;
+    }
+));
 document.addEventListener('keyup', (evt) => {
   handle_step($step.value, evt.key);
   add_patch();
