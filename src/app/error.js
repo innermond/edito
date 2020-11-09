@@ -162,10 +162,10 @@ export function xcatch($target, note, ...fn) {
   const prepared_run_fn = (params) => {
     // clear posible error visual hints
     if (Array.isArray($target)) {
-        $target.forEach(([$t, _]) => clear($t));
+      $target.forEach(([$t, _]) => clear($t));
     } else {
-        clear($target);
-    }    
+      clear($target);
+    }
     // note can be a before / check function
     if (note instanceof Function) {
       // copy function here

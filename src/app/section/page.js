@@ -178,37 +178,40 @@ $all_visible.addEventListener('change', media_zoom_undo);
 $real.addEventListener('change', media_zoom_undo);
 
 export const $bleed = $ui.querySelector('#bleed');
-$bleed.addEventListener('input', xcatch(
-	$bleed,
-	(val) => {
-		if (isNaN(val)) return 'introduceți cifre';
+$bleed.addEventListener(
+  'input',
+  xcatch(
+    $bleed,
+    (val) => {
+      if (isNaN(val)) return 'introduceți cifre';
 
-		if (val > 5.0) {
-			return 'nu se acceptă numere mai mari de 5.0';
-		} else if (val < 0.0) {
-			return 'introduceți un număr mai mare ca zero';
-		}
+      if (val > 5.0) {
+        return 'nu se acceptă numere mai mari de 5.0';
+      } else if (val < 0.0) {
+        return 'introduceți un număr mai mare ca zero';
+      }
 
-		return false;
-	},
-	()=>{},
-));
+      return false;
+    },
+    () => {},
+  ),
+);
 
 export const $step = $ui.querySelector('#step');
-$step.addEventListener('input', xcatch(
-    $step, 
-    (val) => {
-		if (isNaN(val)) return 'introduceți cifre';
+$step.addEventListener(
+  'input',
+  xcatch($step, (val) => {
+    if (isNaN(val)) return 'introduceți cifre';
 
-		if (val > 5.0) {
-			return 'nu se acceptă numere mai mari de 90.0';
-		} else if (val < 0.1) {
-			return 'introduceți un număr mai mare ca 0.1';
-		}
-
-		return false;
+    if (val > 5.0) {
+      return 'nu se acceptă numere mai mari de 90.0';
+    } else if (val < 0.1) {
+      return 'introduceți un număr mai mare ca 0.1';
     }
-));
+
+    return false;
+  }),
+);
 document.addEventListener('keyup', (evt) => {
   handle_step($step.value, evt.key);
   add_patch();
