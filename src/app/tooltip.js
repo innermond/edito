@@ -119,11 +119,14 @@ export function tooltip($explained, adjx = 0, adjy = 0) {
     $e.classList.add('active');
   };
   $explained.addEventListener('mouseenter', init_tooltip);
+
   let show_val = false;
+	let use_existent_show_val = false;
 
   $explained.addEventListener('mousedown', (evt) => {
     move = true;
-    show_val = true;
+    if (!use_existent_show_val)
+			show_val = true;
 
     if (evt.target !== $explained) return;
     const bb = evt.currentTarget.getBoundingClientRect();
@@ -189,6 +192,15 @@ export function tooltip($explained, adjx = 0, adjy = 0) {
     position(posx, bb);
     if (with_message !== null) $e.textContent = with_message;
   };
+
+	$explained.ShowValue = (show = true) => {
+		use_existent_show_val = true;
+		show_val = show;
+	};
+
+	$explained.UseExistentShowValue = (val = true) => {
+		use_existent_show_val = val;
+	};
 
   return $e;
 }

@@ -74,7 +74,7 @@ const $real = $ui.querySelector('#real');
 );
 
 // functions intended to run before
-// mus thave throw
+// must thave throw
 // to be catched
 const check_dimensions_many = () => {
   let err = [];
