@@ -128,7 +128,7 @@ export function ycatch($target, note, ...fn) {
       prepared_run_fn.note_call = note;
     }
     // overwrite note for catch_fn
-    note = prepared_run_fn.note_call?.call(null, $target.value);
+    note = prepared_run_fn.note_call ? prepared_run_fn.note_call.call(null, $target.value) : note;
     if (note !== false) {
       throw new Error(note);
     }
@@ -181,7 +181,7 @@ export function xcatch($target, note, ...fn) {
       prepared_run_fn.note_call = note;
     }
     // overwrite note for catch_fn
-    note = prepared_run_fn.note_call?.call(null, $target.value);
+    note = prepared_run_fn.note_call ? prepared_run_fn.note_call.call(null, $target.value) : note;
     if (note !== false) {
       throw new Error(note);
     }
