@@ -34,7 +34,7 @@ export function Notify(dat, note = 'A avut loc o eroare!', err = null) {
 export function clear($target) {
   $target?.classList.remove('notify');
   $target.RemoveTooltip?.call();
-	$target.ShowValue?.call(null, false);
+  $target.ShowValue?.call(null, false);
 }
 
 // catch eror from async
@@ -68,9 +68,9 @@ export function Xcatch(fn_catch, fn, ...args) {
       evt.preventDefault();
     }
     try {
-			evt.target.ShowValue?.call();
+      evt.target.ShowValue?.call();
       !args ? fn() : fn(...args);
-			evt.target.UseExistentShowValue(false);
+      evt.target.UseExistentShowValue(false);
     } catch (e) {
       if (!fn_catch) fn_catch = console.log;
       if (fn_catch instanceof Function) {
