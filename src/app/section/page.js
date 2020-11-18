@@ -156,11 +156,11 @@ function check_dimensions(value) {
   // check
   let msg = false;
   if (parseFloat(value) === NaN) {
-    msg = 'valoarea introdusă nu e număr';
+    msg = 'introduceți un număr';
   } else if (1 * value < 20) {
-    msg = 'lățimea nu e număr mai mare ca 20';
+    msg = 'introduceți un număr mai mare sau egal cu 20';
   } else if (1 * value > 420) {
-    msg = 'lățimea depășește maximul de 420 pe care se poate printa';
+    msg = 'se depășește maximul de 420 pe care se poate printa';
   }
   return msg;
 }

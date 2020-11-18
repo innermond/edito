@@ -8,6 +8,7 @@ export function Notify(dat, note = 'A avut loc o eroare!', err = null) {
   } else {
     iter.push([dat, note]);
   }
+  let notes = [];
   iter.forEach(([$target, note]) => {
     if ($target) {
       clear($target);
@@ -16,19 +17,19 @@ export function Notify(dat, note = 'A avut loc o eroare!', err = null) {
       const $note = tooltip($target);
       const $attr = document.createAttribute('data-note');
       $note.setAttributeNode($attr);
-      if (note instanceof Function) note = note($target.value);
-      $note.textContent = note;
+      let errnote = note;
+      if (note instanceof Function) errnote = note($target.value);
+      $note.textContent = errnote;
+      notes.push(errnote);
       $note.style.backgroundColor = 'orange';
       $note.style.color = 'black';
       $note.Show();
     }
   });
 
-  if (are_manny) {
-    if (err === null && note) err = new Error(note);
-    // cut any happy execution
-    throw err;
-  }
+  if (err === null && notes.length > 0) err = new Error(notes);
+  // cut any happy execution
+  throw err;
 }
 
 export function clear($target) {
