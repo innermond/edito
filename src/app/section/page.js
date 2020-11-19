@@ -183,7 +183,9 @@ $bleed.addEventListener(
   xcatch(
     $bleed,
     (val) => {
-      if (isNaN(val)) return 'introduceți cifre';
+      // isNaN see empty spaces as 0
+      if (isNaN(val) || val.trim().length === 0) return 'introduceți cifre';
+      val *= 1;
 
       if (val > 5.0) {
         return 'nu se acceptă numere mai mari de 5.0';
@@ -201,7 +203,7 @@ export const $step = $ui.querySelector('#step');
 $step.addEventListener(
   'input',
   xcatch($step, (val) => {
-    if (isNaN(val)) return 'introduceți cifre';
+    if (isNaN(val) || val.trim().length === 0) return 'introduceți cifre';
 
     if (val > 5.0) {
       return 'nu se acceptă numere mai mari de 90.0';

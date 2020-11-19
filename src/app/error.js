@@ -71,7 +71,7 @@ export function Xcatch(fn_catch, fn, ...args) {
     try {
       evt.target.ShowValue?.call();
       !args ? fn() : fn(...args);
-      evt.target.UseExistentShowValue(false);
+      evt.target.UseExistentShowValue?.call(evt.target, false);
     } catch (e) {
       if (!fn_catch) fn_catch = console.log;
       if (fn_catch instanceof Function) {
