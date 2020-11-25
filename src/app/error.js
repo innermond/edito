@@ -18,7 +18,9 @@ export function Notify(dat, note = 'A avut loc o eroare!', err = null) {
       const $attr = document.createAttribute('data-note');
       $note.setAttributeNode($attr);
       let errnote = note;
-      if (note instanceof Function) errnote = note($target.value);
+      if (note instanceof Function) {
+        errnote = err === null ? note($target.value) : note(err);
+      }
       $note.textContent = errnote;
       notes.push(errnote);
       $note.style.backgroundColor = 'orange';
@@ -38,14 +40,18 @@ export function clear($target) {
   $target.ShowValue?.call(null, false);
 }
 
+export class MessageError extends Error {
+  constructor(...args) {
+    super(...args);
+  }
+}
+
 // catch eror from async
 export function Ycatch(fn_catch, fn, ...args) {
   return async (evt = null) => {
-    if (evt) {
-      evt.preventDefault();
-    }
+    if (evt) evt.preventDefault();
     try {
-      !args ? await fn() : await fn(...args);
+      args.length === 0 ? await fn() : await fn(...args);
     } catch (e) {
       if (!fn_catch) fn_catch = console.log;
       if (fn_catch instanceof Function) {
@@ -96,7 +102,7 @@ export function ycatch($target, note, ...fn) {
   }
 
   // is run after run_fn is called
-  const catch_fn = (err) => {
+  const fn_catch = (err) => {
     if (Array.isArray(err)) {
       Notify(err);
     } else {
@@ -116,32 +122,46 @@ export function ycatch($target, note, ...fn) {
       [run_fn, args] = fn;
   }
 
-  const prepared_run_fn = (params) => {
+  const prepared_run_fn = async (params) => {
     // clear posible error visual hints
     if (Array.isArray($target)) {
       $target.forEach(([$t, _]) => clear($t));
     } else {
       clear($target);
     }
-    // note can be a before / check function
     if (note instanceof Function) {
-      // copy function here
-      prepared_run_fn.note_call = note;
+      const mayerror = note($target.value);
+      if (mayerror !== false) throw new MessageError(mayerror);
     }
-    // overwrite note for catch_fn
-    note = prepared_run_fn.note_call
-      ? prepared_run_fn.note_call.call(null, $target.value)
-      : note;
-    if (note !== false) {
-      throw new Error(note);
-    }
-    run_fn(params);
+    await run_fn(params);
   };
 
+  return async (evt = null) => {
+    if (evt) evt.preventDefault();
+    try {
+      if (args.length === 0) {
+        await prepared_run_fn();
+      } else {
+        await prepared_run_fn(...args);
+      }
+    } catch (e) {
+      if (!fn_catch) fn_catch = console.log;
+      if (fn_catch instanceof Function) {
+        // Notify in order to cut happy path
+        // is (re)throwing
+        // so catch it here
+        try {
+          fn_catch(e);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    }
+  };
   // make func
-  const composed_fn = Ycatch(catch_fn, prepared_run_fn, args);
+  //const composed_fn = Ycatch(catch_fn, prepared_run_fn, args);
 
-  return composed_fn;
+  //return composed_fn;
 }
 
 export function xcatch($target, note, ...fn) {

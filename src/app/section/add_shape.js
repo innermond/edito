@@ -6,7 +6,7 @@ import { center } from '../pos.js';
 import { $selection, $clicked } from '../selection/index.js';
 import { add_patch } from '../idb.js';
 import { proxied_url } from './image.js';
-import { ycatch, clear } from '../error.js';
+import { ycatch, MessageError } from '../error.js';
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de imagine" data-tooltip-bottom>Adresa de web</label>
@@ -28,7 +28,17 @@ $add_url_svg.addEventListener(
   'click',
   ycatch(
     $url_svg,
-    'adresa introdusă nu produce un fișier corect de tip SVG',
+    (val) => {
+      if (val instanceof MessageError) {
+        return val.message;
+      }
+      if (val instanceof Error) {
+        return 'adresa introdusă nu produce un fișier de tip SVG';
+      }
+      if (val === '' || val.match(/^\s+$/) !== null)
+        return 'introduceți adresa fișierului vectorial de tip SVG';
+      return false;
+    },
     add_url_svg,
   ),
 );
