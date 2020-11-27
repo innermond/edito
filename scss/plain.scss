@@ -74,3 +74,8 @@ input[type=color] {
 		border: none;
 	}
 }
+
+// focusable label without border
+label[tabindex]:focus {
+	outline: none;
+}

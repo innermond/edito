@@ -13,7 +13,8 @@ const tpl = `<section class="vertical-align">
 	<input id="url_svg" placeholder="https://adresă-fișier,svg">
 	<button id="add_url_svg" class="tooltip" data-tooltip-text="Doar fișiere tip .svg" data-tooltip-bottom >Adaugă grafica</button>
 	<hr/>
-	<label for="file_svg" class="file-upload tooltip" data-tooltip-text="Alegeți un fișier svg de pe calculatorul dvs." data-tooltip-bottom>Fișier local</label>
+	<label id="for_file_svg" tabindex="1000">Grafică locală tip SVG</label>
+	<label for="file_svg" class="file-upload tooltip" data-tooltip-text="Alegeți un fișier svg de pe calculatorul dvs." data-tooltip-bottom>Adaugă fișier</label>
 	<input class="none" type="file" id="file_svg">
 	<hr/>
 	<label class="tooltip" data-tooltip-text="Alegeți o colecție de vectori" data-tooltip-bottom>Librărie</label>
@@ -21,6 +22,8 @@ const tpl = `<section class="vertical-align">
 </section>`;
 export const $ui = wrap(ui_fragment(tpl), 'add-element', 'Forme');
 const $file_svg = $ui.querySelector('#file_svg');
+const $a_file_svg = $ui.querySelector('#for_file_svg');
+const $label_file_svg = $ui.querySelector('label[for=file_svg]');
 const $url_svg = $ui.querySelector('#url_svg');
 const $add_url_svg = $ui.querySelector('#add_url_svg');
 
@@ -31,17 +34,29 @@ $add_url_svg.addEventListener(
     check((val) => {
       if (val === '' || val.match(/^\s+$/) !== null)
         return 'introduceți adresa fișierului vectorial de tip SVG';
-    },
-		 'adresa introdusă nu produce un fișier de tip SVG'),
+    }, 'adresa introdusă nu produce un fișier de tip SVG'),
     add_url_svg,
   ),
 );
 
-$file_svg.addEventListener('change', async () => {
-  const file = $file_svg.files[0] ?? null;
-  if (!file) return;
-  const is_svg = $file_svg.value.split('.')?.pop()?.toLowerCase() === 'svg';
-  if (!is_svg) return;
+$a_file_svg.addEventListener('click', () => {
+	//$label_file_svg.dispatchEvent(new Event('click'));
+	$label_file_svg.click();
+});
+
+$file_svg.addEventListener('change', ycatch(
+	$a_file_svg,
+	check(() => {
+		const file = $file_svg.files[0] ?? null;
+		if (!file) return 'alegeți un fișier vectorial de tip SVG';
+		const is_svg = $file_svg.value.split('.')?.pop()?.toLowerCase() === 'svg';
+		if (!is_svg) return 'fișierul ales nu este tip SVG';
+	}, 'fișierul nu poate fi utilizat'),
+	add_file_svg),
+);
+
+async function add_file_svg() {
+  const file = $file_svg.files[0];
 
   const [done] = loading();
 
@@ -80,7 +95,7 @@ $file_svg.addEventListener('change', async () => {
     done();
     $file_svg.value = null;
   }
-});
+}
 
 async function add_url_svg() {
   dragging_all_marks_reset();

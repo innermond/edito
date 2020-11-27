@@ -82,6 +82,9 @@ input[type=color] {
   input[type=color]::-webkit-color-swatch {
     border: none; }
 
+label[tabindex]:focus {
+  outline: none; }
+
 body {
   font-family: Roboto; }
 
