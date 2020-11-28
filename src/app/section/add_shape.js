@@ -40,18 +40,21 @@ $add_url_svg.addEventListener(
 );
 
 $a_file_svg.addEventListener('click', () => {
-	clear($a_file_svg);
+  clear($a_file_svg);
 });
 
-$file_svg.addEventListener('change', ycatch(
-	$a_file_svg,
-	check(() => {
-		const file = $file_svg.files[0] ?? null;
-		if (!file) return false;
-		const is_svg = $file_svg.value.split('.')?.pop()?.toLowerCase() === 'svg';
-		if (!is_svg) return 'fișierul ales nu este tip SVG';
-	}, 'fișierul nu poate fi utilizat'),
-	add_file_svg),
+$file_svg.addEventListener(
+  'change',
+  ycatch(
+    $a_file_svg,
+    check(() => {
+      const file = $file_svg.files[0] ?? null;
+      if (!file) return false;
+      const is_svg = $file_svg.value.split('.')?.pop()?.toLowerCase() === 'svg';
+      if (!is_svg) return 'fișierul ales nu este tip SVG';
+    }, 'fișierul nu poate fi utilizat'),
+    add_file_svg,
+  ),
 );
 
 async function add_file_svg() {

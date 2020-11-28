@@ -20,11 +20,11 @@ export function Notify(dat, note = 'A avut loc o eroare!', err = null) {
       let errnote = note;
       if (note instanceof Function) {
         if (err === null) {
-					errnote = note($target.value);
-				} else {
-					errnote = note(err);
-				}
-			}
+          errnote = note($target.value);
+        } else {
+          errnote = note(err);
+        }
+      }
       $note.textContent = errnote;
       notes.push(errnote);
       $note.style.backgroundColor = 'orange';
@@ -39,17 +39,17 @@ export function Notify(dat, note = 'A avut loc o eroare!', err = null) {
 }
 
 export const check = (fn, message) => {
-	return (val) => {
-			if (val instanceof MessageError) {
-        return val.message;
-      }
-			if (val instanceof Error) {
-        return message;
-      }
-			const ret = fn(val);
-			if (typeof ret === 'string') return ret;
-			return false;
-	}
+  return (val) => {
+    if (val instanceof MessageError) {
+      return val.message;
+    }
+    if (val instanceof Error) {
+      return message;
+    }
+    const ret = fn(val);
+    if (typeof ret === 'string') return ret;
+    return false;
+  };
 };
 
 export function clear($target) {
@@ -66,7 +66,7 @@ export class MessageError extends Error {
 
 // catch eror from async
 export function Ycatch(fn_catch, fn, ...args) {
-	return async (evt = null) => {
+  return async (evt = null) => {
     if (evt) evt.preventDefault();
     try {
       if (args.length === 0) {
