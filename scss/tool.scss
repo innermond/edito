@@ -419,5 +419,10 @@ input[type=number][class~=num3] {
 }
 
 .notify {
-	border: 1px solid $notify-color;
+	background-color: $notify-color;
+	color: black;
+}
+
+label[tabindex].notify {
+	cursor: pointer;
 }

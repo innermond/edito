@@ -6,7 +6,7 @@ import { center } from '../pos.js';
 import { $selection, $clicked } from '../selection/index.js';
 import { add_patch } from '../idb.js';
 import { proxied_url } from './image.js';
-import { ycatch, check } from '../error.js';
+import { ycatch, check, clear } from '../error.js';
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de imagine" data-tooltip-bottom>Adresa de web</label>
@@ -40,15 +40,14 @@ $add_url_svg.addEventListener(
 );
 
 $a_file_svg.addEventListener('click', () => {
-	//$label_file_svg.dispatchEvent(new Event('click'));
-	$label_file_svg.click();
+	clear($a_file_svg);
 });
 
 $file_svg.addEventListener('change', ycatch(
 	$a_file_svg,
 	check(() => {
 		const file = $file_svg.files[0] ?? null;
-		if (!file) return 'alegeți un fișier vectorial de tip SVG';
+		if (!file) return false;
 		const is_svg = $file_svg.value.split('.')?.pop()?.toLowerCase() === 'svg';
 		if (!is_svg) return 'fișierul ales nu este tip SVG';
 	}, 'fișierul nu poate fi utilizat'),

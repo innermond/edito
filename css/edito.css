@@ -435,7 +435,11 @@ input[type=number][class~=num3] {
   width: 3rem; }
 
 .notify {
-  border: 1px solid orange; }
+  background-color: orange;
+  color: black; }
+
+label[tabindex].notify {
+  cursor: pointer; }
 
 .tool-drawer-scroll > section > [name=box] {
   background-color: transparent;
