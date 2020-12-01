@@ -182,7 +182,7 @@ $bleed.addEventListener(
   xcatch(
     $bleed,
     check((val) => {
-			return check_numeric_bounds(val, 0.0, 5.0);
+      return check_numeric_bounds(val, 0.0, 5.0);
     }, 'introduceți un număr de la 0 la 5'),
     () => {},
   ),
@@ -191,9 +191,10 @@ $bleed.addEventListener(
 export const $step = $ui.querySelector('#step');
 $step.addEventListener(
   'input',
-  xcatch($step, 
+  xcatch(
+    $step,
     check((val) => {
-			return check_numeric_bounds(val, 0.1, Number.MAX_SAFE_INTEGER);
+      return check_numeric_bounds(val, 0.1, Number.MAX_SAFE_INTEGER);
     }, 'număr minim acceptat 0.1'),
   ),
 );
