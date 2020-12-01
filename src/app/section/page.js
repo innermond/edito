@@ -15,7 +15,7 @@ import { add_patch, with_undo } from '../idb.js';
 import { is_selectable } from '../floater/select.js';
 import { deleting } from '../user_action/del_undel_clone.js';
 import { $selection } from '../selection/index.js';
-import { xcatch } from '../error.js';
+import { xcatch, check } from '../error.js';
 
 const tpl = `<section class="vertical-align">
 <div class="wrap-row section">
@@ -76,10 +76,10 @@ const $real = $ui.querySelector('#real');
 // functions intended to run before
 // must thave throw
 // to be catched
-const check_dimensions_many = () => {
+const check_numeric_bounds_many = () => {
   let err = [];
   [$media_width, $media_height].forEach(($el) => {
-    const note = check_dimensions($el.value);
+    const note = check_numeric_bounds($el.value, 20, 440);
     if (note !== false) {
       err.push([$el, note]);
     }
@@ -94,7 +94,7 @@ const check_dimensions_many = () => {
 const $new_page = $ui.querySelector('#new_page');
 $new_page.addEventListener(
   'click',
-  xcatch($new_page, check_dimensions_many, () => {
+  xcatch($new_page, check_numeric_bounds_many, () => {
     Array.from($svg.children).forEach(($c) => {
       $c.removeAttribute('data-lock');
       if (!is_selectable($c)) return;
@@ -110,7 +110,6 @@ $new_page.addEventListener(
   }),
 );
 
-// FIXME for real dimensions auto is not appropriate
 const media_zoom_event = () => {
   const $canvas = document.querySelector('#canvas');
   $canvas.style.width = '100%';
@@ -152,26 +151,26 @@ const media_zoom_undo = () => {
   }
 };
 
-function check_dimensions(value) {
+function check_numeric_bounds(value, min, max) {
   // check
   let msg = false;
-  if (parseFloat(value) === NaN) {
+  if (isNaN(parseFloat(value))) {
     msg = 'introduceți un număr';
-  } else if (1 * value < 20) {
-    msg = 'introduceți un număr mai mare sau egal cu 20';
-  } else if (1 * value > 420) {
-    msg = 'se depășește maximul de 420 pe care se poate printa';
+  } else if (1 * value < min) {
+    msg = `introduceți un număr mai mare sau egal cu ${min}`;
+  } else if (1 * value > max) {
+    msg = `introduceți un număr mai mic sau egal cu ${max}`;
   }
   return msg;
 }
 
 $media_width.addEventListener(
   'input',
-  xcatch($media_width, check_dimensions_many, media_zoom_undo),
+  xcatch($media_width, check_numeric_bounds_many, media_zoom_undo),
 );
 $media_height.addEventListener(
   'input',
-  xcatch($media_height, check_dimensions_many, media_zoom_undo),
+  xcatch($media_height, check_numeric_bounds_many, media_zoom_undo),
 );
 
 $all_visible.addEventListener('change', media_zoom_undo);
@@ -182,19 +181,9 @@ $bleed.addEventListener(
   'input',
   xcatch(
     $bleed,
-    (val) => {
-      // isNaN see empty spaces as 0
-      if (isNaN(val) || val.trim().length === 0) return 'introduceți cifre';
-      val *= 1;
-
-      if (val > 5.0) {
-        return 'nu se acceptă numere mai mari de 5.0';
-      } else if (val < 0.0) {
-        return 'introduceți un număr mai mare ca zero';
-      }
-
-      return false;
-    },
+    check((val) => {
+			return check_numeric_bounds(val, 0.0, 5.0);
+    }, 'introduceți un număr de la 0 la 5'),
     () => {},
   ),
 );
@@ -202,17 +191,11 @@ $bleed.addEventListener(
 export const $step = $ui.querySelector('#step');
 $step.addEventListener(
   'input',
-  xcatch($step, (val) => {
-    if (isNaN(val) || val.trim().length === 0) return 'introduceți cifre';
-
-    if (val > 5.0) {
-      return 'nu se acceptă numere mai mari de 90.0';
-    } else if (val < 0.1) {
-      return 'introduceți un număr mai mare ca 0.1';
-    }
-
-    return false;
-  }),
+  xcatch($step, 
+    check((val) => {
+			return check_numeric_bounds(val, 0.1, Number.MAX_SAFE_INTEGER);
+    }, 'număr minim acceptat 0.1'),
+  ),
 );
 document.addEventListener('keyup', (evt) => {
   handle_step($step.value, evt.key);
