@@ -23,15 +23,16 @@ export const $url_image = $ui.querySelector('#url_image');
 export const $add_url_image = $ui.querySelector('#add_url_imagine');
 export const $file_image = $ui.querySelector('#file_image');
 
-$add_url_image.addEventListener('click', 
-	ycatch(
-		$url_image,		
+$add_url_image.addEventListener(
+  'click',
+  ycatch(
+    $url_image,
     check((val) => {
       if (val === '' || val.match(/^\s+$/) !== null)
         return 'introduceți adresa unei imagini';
     }, 'adresa introdusă nu produce un fișier imagine'),
-		with_undo_async(addUrlImage),
-	),
+    with_undo_async(addUrlImage),
+  ),
 );
 $url_image.addEventListener('keyup', (evt) => evt.stopPropagation());
 $file_image.addEventListener('change', with_undo(addFileImage));
@@ -52,8 +53,8 @@ async function addUrlImage() {
     $clicked.from(tag).over();
   } catch (e) {
     done();
-		// pass this error to notifying system
-		throw e;
+    // pass this error to notifying system
+    throw e;
   }
 }
 

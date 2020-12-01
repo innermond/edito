@@ -113,29 +113,31 @@ async function add_url_svg() {
 
   const [done] = loading();
 
-	// an unfortunate case of flow control through try ... catch 
-	let resp, url_image, err_first;
+  // an unfortunate case of flow control through try ... catch
+  let resp, url_image, err_first;
   try {
-		resp = await fetch(src);
-	} catch(e) {
-		url_image = proxied_url(u.href);
-		err_first = e;
-	}
+    resp = await fetch(src);
+  } catch (e) {
+    url_image = proxied_url(u.href);
+    err_first = e;
+  }
 
-	try {
-		if (err_first) {
-			resp = await fetch(url_image);
-			// TODO: is svg file
-			if (!/svg/.test(resp.headers.get('Content-Type'))) {
-				throw new MessageError(`[${err_first.message}] nu se recepționează un fișier SVG`);
-			}
-		}
-	} catch (e) {
-		done();
-		throw e;
-	}
+  try {
+    if (err_first) {
+      resp = await fetch(url_image);
+      // TODO: is svg file
+      if (!/svg/.test(resp.headers.get('Content-Type'))) {
+        throw new MessageError(
+          `[${err_first.message}] nu se recepționează un fișier SVG`,
+        );
+      }
+    }
+  } catch (e) {
+    done();
+    throw e;
+  }
 
-	try {
+  try {
     let svg = '';
     const dec = new TextDecoder('utf8');
     if (resp.ok) {
@@ -164,12 +166,14 @@ async function add_url_svg() {
       center(tag);
       $clicked.from(tag).over();
     } else {
-			throw new MessageError(`adresa introdusă se comportă nefavorabil [code: ${resp.status}]`); 
+      throw new MessageError(
+        `adresa introdusă se comportă nefavorabil [code: ${resp.status}]`,
+      );
     }
   } catch (e) {
-		console.log('me', e);
-		throw e;
-	} finally {
-		done();
-	}
+    console.log('me', e);
+    throw e;
+  } finally {
+    done();
+  }
 }
