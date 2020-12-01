@@ -4,7 +4,8 @@ import { center } from '../pos.js';
 import { wrap } from '../drawer.js';
 import { dragging_all_marks_reset } from '../ui.js';
 import { loading } from '../loading.js';
-import { with_undo } from '../idb.js';
+import { with_undo, with_undo_async } from '../idb.js';
+import { ycatch, check } from '../error.js';
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de imagine" data-tooltip-bottom>Adresa de web</label>
@@ -22,7 +23,16 @@ export const $url_image = $ui.querySelector('#url_image');
 export const $add_url_image = $ui.querySelector('#add_url_imagine');
 export const $file_image = $ui.querySelector('#file_image');
 
-$add_url_image.addEventListener('click', with_undo(addUrlImage));
+$add_url_image.addEventListener('click', 
+	ycatch(
+		$url_image,		
+    check((val) => {
+      if (val === '' || val.match(/^\s+$/) !== null)
+        return 'introduceți adresa unei imagini';
+    }, 'adresa introdusă nu produce un fișier imagine'),
+		with_undo_async(addUrlImage),
+	),
+);
 $url_image.addEventListener('keyup', (evt) => evt.stopPropagation());
 $file_image.addEventListener('change', with_undo(addFileImage));
 
@@ -41,8 +51,9 @@ async function addUrlImage() {
     $svg.appendChild(tag);
     $clicked.from(tag).over();
   } catch (e) {
-    console.log(e);
     done();
+		// pass this error to notifying system
+		throw e;
   }
 }
 

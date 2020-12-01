@@ -6,7 +6,8 @@ import { center } from '../pos.js';
 import { $selection, $clicked } from '../selection/index.js';
 import { add_patch } from '../idb.js';
 import { proxied_url } from './image.js';
-import { ycatch, check, clear } from '../error.js';
+import { MessageError, ycatch, check, clear } from '../error.js';
+import { with_undo_async } from '../idb.js';
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de imagine" data-tooltip-bottom>Adresa de web</label>
@@ -23,7 +24,6 @@ const tpl = `<section class="vertical-align">
 export const $ui = wrap(ui_fragment(tpl), 'add-element', 'Forme');
 const $file_svg = $ui.querySelector('#file_svg');
 const $a_file_svg = $ui.querySelector('#for_file_svg');
-const $label_file_svg = $ui.querySelector('label[for=file_svg]');
 const $url_svg = $ui.querySelector('#url_svg');
 const $add_url_svg = $ui.querySelector('#add_url_svg');
 
@@ -35,7 +35,7 @@ $add_url_svg.addEventListener(
       if (val === '' || val.match(/^\s+$/) !== null)
         return 'introduceți adresa fișierului vectorial de tip SVG';
     }, 'adresa introdusă nu produce un fișier de tip SVG'),
-    add_url_svg,
+    with_undo_async(add_url_svg),
   ),
 );
 
@@ -53,7 +53,7 @@ $file_svg.addEventListener(
       const is_svg = $file_svg.value.split('.')?.pop()?.toLowerCase() === 'svg';
       if (!is_svg) return 'fișierul ales nu este tip SVG';
     }, 'fișierul nu poate fi utilizat'),
-    add_file_svg,
+    with_undo_async(add_file_svg),
   ),
 );
 
@@ -113,16 +113,29 @@ async function add_url_svg() {
 
   const [done] = loading();
 
-  //const is_svg = u?.pathname.split('.').pop().toLowerCase() === 'svg';
-  //if (is_svg) {
+	// an unfortunate case of flow control through try ... catch 
+	let resp, url_image, err_first;
   try {
-    const url_image = proxied_url(u.href);
-    let resp;
-    try {
-      resp = await fetch(src);
-    } catch (e) {
-      resp = await fetch(url_image);
-    }
+		resp = await fetch(src);
+	} catch(e) {
+		url_image = proxied_url(u.href);
+		err_first = e;
+	}
+
+	try {
+		if (err_first) {
+			resp = await fetch(url_image);
+			// TODO: is svg file
+			if (!/svg/.test(resp.headers.get('Content-Type'))) {
+				throw new MessageError(`[${err_first.message}] nu se recepționează un fișier SVG`);
+			}
+		}
+	} catch (e) {
+		done();
+		throw e;
+	}
+
+	try {
     let svg = '';
     const dec = new TextDecoder('utf8');
     if (resp.ok) {
@@ -150,12 +163,13 @@ async function add_url_svg() {
       $svg.appendChild(tag);
       center(tag);
       $clicked.from(tag).over();
-      add_patch();
     } else {
-      console.log(resp.status);
+			throw new MessageError(`adresa introdusă se comportă nefavorabil [code: ${resp.status}]`); 
     }
   } catch (e) {
-    console.log(e);
-  }
-  done();
+		console.log('me', e);
+		throw e;
+	} finally {
+		done();
+	}
 }
