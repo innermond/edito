@@ -5,12 +5,13 @@ import { wrap } from '../drawer.js';
 import { dragging_all_marks_reset } from '../ui.js';
 import { loading } from '../loading.js';
 import { with_undo, with_undo_async } from '../idb.js';
-import { MessageError, ycatch, check } from '../error.js';
+import { MessageError, ycatch, check, clear } from '../error.js';
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de imagine" data-tooltip-bottom>Adresa de web</label>
 	<input id="url_image" placeholder="https://imagine"><button id="add_url_imagine">Adaugă URL imagine</button>
 	<hr/>
+	<label id="for_file_image" tabindex="1000">Imagini de pe hard disc</label>
 	<label for="file_image" class="file-upload tooltip" data-tooltip-text="Alegeți o imagine de pe calculatorul dvs." data-tooltip-bottom>Fișier local</label>
 	<input class="none" type="file" id="file_image">
 	<hr/>
@@ -20,6 +21,7 @@ const tpl = `<section class="vertical-align">
 export const $ui = wrap(ui_fragment(tpl), 'add-image', 'imagini');
 
 export const $url_image = $ui.querySelector('#url_image');
+const $a_file_image = $ui.querySelector('#for_file_image');
 export const $add_url_image = $ui.querySelector('#add_url_imagine');
 export const $file_image = $ui.querySelector('#file_image');
 
@@ -35,7 +37,26 @@ $add_url_image.addEventListener(
   ),
 );
 $url_image.addEventListener('keyup', (evt) => evt.stopPropagation());
-$file_image.addEventListener('change', with_undo(addFileImage));
+
+$a_file_image.addEventListener('click', () => {
+  clear($a_file_image);
+});
+
+$file_image.addEventListener(
+  'change',
+  ycatch(
+    $a_file_image,
+    check(() => {
+      const file = $file_image.files[0] ?? null;
+      if (!file) return false;
+      const is_image = /jpe?g|png/i.test(
+        $file_image.value.split('.')?.pop()?.toLowerCase(),
+      );
+      if (!is_image) return 'fișierul ales nu este tip jpg sau png';
+    }, 'fișierul nu poate fi utilizat'),
+    with_undo_async(add_file_image),
+  ),
+);
 
 async function addUrlImage() {
   dragging_all_marks_reset();
@@ -63,7 +84,6 @@ async function addUrlImage() {
   try {
     if (err_first) {
       resp = await fetch(url_image);
-      // TODO: is svg file
       if (!/jpe?g|png|svg/i.test(resp.headers.get('Content-Type'))) {
         throw new MessageError(
           `[${err_first.message}] nu se recepționează un fișier imagine`,
@@ -80,11 +100,8 @@ async function addUrlImage() {
     $svg.appendChild(tag);
     $clicked.from(tag).over();
   } catch (e) {
-    // pass this error to notifying system
-    console.log('me', e);
-    throw e;
-  } finally {
     done();
+    throw e;
   }
 }
 
@@ -181,7 +198,7 @@ export function try_load_images($container, $evt = null) {
   });
 }
 
-function addFileImage() {
+function add_file_image() {
   dragging_all_marks_reset();
   $selection.clear();
 

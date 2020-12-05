@@ -93,8 +93,8 @@ async function add_file_svg() {
     add_patch();
   } catch (e) {
     console.log(e);
-  } finally {
     done();
+  } finally {
     $file_svg.value = null;
   }
 }
@@ -124,7 +124,6 @@ async function add_url_svg() {
   try {
     if (err_first) {
       resp = await fetch(url_image);
-      // TODO: is svg file
       if (!/svg/i.test(resp.headers.get('Content-Type'))) {
         throw new MessageError(
           `[${err_first.message}] nu se recepționează un fișier SVG`,
@@ -170,9 +169,7 @@ async function add_url_svg() {
       );
     }
   } catch (e) {
-    console.log('me', e);
-    throw e;
-  } finally {
     done();
+    throw e;
   }
 }
