@@ -113,7 +113,6 @@ async function add_url_svg() {
 
   const [done] = loading();
 
-  // an unfortunate case of flow control through try ... catch
   let resp, url_image, err_first;
   try {
     resp = await fetch(src);
@@ -126,7 +125,7 @@ async function add_url_svg() {
     if (err_first) {
       resp = await fetch(url_image);
       // TODO: is svg file
-      if (!/svg/.test(resp.headers.get('Content-Type'))) {
+      if (!/svg/i.test(resp.headers.get('Content-Type'))) {
         throw new MessageError(
           `[${err_first.message}] nu se recepționează un fișier SVG`,
         );

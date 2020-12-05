@@ -5,7 +5,7 @@ import { wrap } from '../drawer.js';
 import { dragging_all_marks_reset } from '../ui.js';
 import { loading } from '../loading.js';
 import { with_undo, with_undo_async } from '../idb.js';
-import { ycatch, check } from '../error.js';
+import { MessageError, ycatch, check } from '../error.js';
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de imagine" data-tooltip-bottom>Adresa de web</label>
@@ -41,20 +41,50 @@ async function addUrlImage() {
   dragging_all_marks_reset();
   $selection.clear();
 
+  const src = $url_image.value;
+  const u = new URL(src);
+
   const [done] = loading();
 
+  const load_image_fully = (img) => {
+    center(img);
+    $url_image.value = '';
+    done();
+  };
+
+  let resp, url_image, err_first;
   try {
-    const tag = await urlImage($url_image.value, (img) => {
-      center(img);
-      $url_image.value = '';
-      done();
-    });
+    resp = await fetch(src);
+  } catch (e) {
+    url_image = proxied_url(u.href);
+    err_first = e;
+  }
+
+  try {
+    if (err_first) {
+      resp = await fetch(url_image);
+      // TODO: is svg file
+      if (!/jpe?g|png|svg/i.test(resp.headers.get('Content-Type'))) {
+        throw new MessageError(
+          `[${err_first.message}] nu se recepționează un fișier imagine`,
+        );
+      }
+    }
+  } catch (e) {
+    done();
+    throw e;
+  }
+
+  try {
+    const tag = await urlImage(resp, load_image_fully);
     $svg.appendChild(tag);
     $clicked.from(tag).over();
   } catch (e) {
-    done();
     // pass this error to notifying system
+    console.log('me', e);
     throw e;
+  } finally {
+    done();
   }
 }
 
@@ -72,16 +102,14 @@ export function proxied_url(src) {
   return url_image;
 }
 
-export async function urlImage(src, onload) {
-  const url_image = proxied_url(src);
-
+export async function urlImage(resp, onload) {
   let tag = newtag('image');
-  const is_svg = src.split('.')?.pop()?.toLowerCase() === 'svg';
+  const is_svg = resp.url.split('.')?.pop()?.toLowerCase() === 'svg';
   if (!is_svg) {
     tag.addEventListener('load', () => {
       onload(tag);
     });
-    tag.href.baseVal = url_image;
+    tag.href.baseVal = resp.url;
 
     return tag;
   }
@@ -111,12 +139,16 @@ export async function urlImage(src, onload) {
 
       return tag;
     } else {
-      console.log(resp.status);
-      onload(tag);
+      //onload(tag);
+      throw new MessageError(
+        `adresa introdusă se comportă nefavorabil [code: ${resp.status}]`,
+      );
     }
   } catch (e) {
-    console.log(e);
-    onload(tag);
+    //onload(tag);
+    throw new MessageError(
+      `adresa introdusă se comportă nefavorabil [${e.message}]`,
+    );
   }
 }
 
