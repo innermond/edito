@@ -10,6 +10,7 @@ import { proxied_url, try_load_images } from '../section/image.js';
 import { with_undo } from '../idb.js';
 import { dragging_all_marks_reset } from '../ui.js';
 import { $selection } from '../selection/index.js';
+import { MessageError } from '../error.js';
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de fișier svg" data-tooltip-bottom>Adresă svg</label>
@@ -48,7 +49,7 @@ export async function urlSvg(src) {
     const is_svg = url.pathname.split('.')?.pop()?.toLowerCase() === 'svg';
     if (!is_svg) return;
   } catch (e) {
-    return;
+    throw new MessageError(`nu s-a putut incarca [${e.message}]`);
   }
 
   const [done] = loading();

@@ -124,7 +124,10 @@ async function add_url_svg() {
   try {
     if (err_first) {
       resp = await fetch(url_image);
-      if (!/svg/i.test(resp.headers.get('Content-Type'))) {
+      const typ = resp.headers.get('Content-Type');
+      // TODO case 'octet-stream' may be elaborated more
+      // test it to be a svg file actually
+      if (!/svg|octet\-stream/i.test(typ)) {
         throw new MessageError(
           `[${err_first.message}] nu se recepționează un fișier SVG`,
         );
@@ -169,7 +172,8 @@ async function add_url_svg() {
       );
     }
   } catch (e) {
-    done();
     throw e;
+  } finally {
+    done();
   }
 }

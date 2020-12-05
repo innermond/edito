@@ -84,15 +84,17 @@ async function addUrlImage() {
   try {
     if (err_first) {
       resp = await fetch(url_image);
-      if (!/jpe?g|png|svg/i.test(resp.headers.get('Content-Type'))) {
+      const typ = resp.headers.get('Content-Type');
+      if (!/jpe?g|png|svg|octet\-stream/i.test(typ)) {
         throw new MessageError(
           `[${err_first.message}] nu se recepționează un fișier imagine`,
         );
       }
     }
   } catch (e) {
-    done();
     throw e;
+  } finally {
+    done();
   }
 
   try {
