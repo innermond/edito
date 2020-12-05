@@ -4,7 +4,7 @@ import { center } from '../pos.js';
 import { wrap } from '../drawer.js';
 import { dragging_all_marks_reset } from '../ui.js';
 import { loading } from '../loading.js';
-import { with_undo, with_undo_async } from '../idb.js';
+import { with_undo_async } from '../idb.js';
 import { MessageError, ycatch, check, clear } from '../error.js';
 
 const tpl = `<section class="vertical-align">
@@ -120,21 +120,23 @@ export function proxied_url(src) {
 }
 
 export async function urlImage(resp, onload) {
-  let tag = newtag('image');
-  const is_svg = resp.url.split('.')?.pop()?.toLowerCase() === 'svg';
+  let url = resp;
+  if (resp instanceof Response) url = resp.url;
+  const is_svg = url.split('.')?.pop()?.toLowerCase() === 'svg';
   if (!is_svg) {
+    const tag = newtag('image');
     tag.addEventListener('load', () => {
       onload(tag);
     });
-    tag.href.baseVal = resp.url;
+    tag.href.baseVal = url;
 
     return tag;
   }
 
   try {
-    let resp = await fetch(url_image);
+    let resp = await fetch(url);
     if (resp.ok) {
-      tag = newtag('g');
+      const tag = newtag('g');
       tag.addEventListener('load', () => {
         onload(tag);
       });
