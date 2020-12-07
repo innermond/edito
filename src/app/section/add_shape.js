@@ -4,7 +4,6 @@ import { loading } from '../loading.js';
 import { dragging_all_marks_reset } from '../ui.js';
 import { center } from '../pos.js';
 import { $selection, $clicked } from '../selection/index.js';
-import { add_patch } from '../idb.js';
 import { proxied_url } from './image.js';
 import { MessageError, ycatch, check, clear } from '../error.js';
 import { with_undo_async } from '../idb.js';
@@ -58,6 +57,9 @@ $file_svg.addEventListener(
 );
 
 async function add_file_svg() {
+  dragging_all_marks_reset();
+  $selection.clear();
+
   const file = $file_svg.files[0];
 
   const [done] = loading();
@@ -90,12 +92,11 @@ async function add_file_svg() {
     $svg.appendChild(tag);
     center(tag);
     $clicked.from(tag).over();
-    add_patch();
   } catch (e) {
-    console.log(e);
-    done();
+    throw new MessageError(`operațiune nereușită [${e.message}]`);
   } finally {
     $file_svg.value = null;
+    done();
   }
 }
 

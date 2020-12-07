@@ -202,29 +202,50 @@ export function try_load_images($container, $evt = null) {
   });
 }
 
-function add_file_image() {
+async function add_file_image() {
   dragging_all_marks_reset();
   $selection.clear();
 
-  const file = $file_image.files[0] ?? null;
-  if (!file) return;
+  const file = $file_image.files[0];
+
+  const [done] = loading();
+
   const reader = new FileReader();
-  reader.addEventListener(
-    'load',
-    () => {
-      let $img = new Image();
-      $img.src = reader.result;
-      $img.addEventListener('load', () => {
-        let tag = newtag('image');
-        tag.href.baseVal = reader.result;
-        $svg.appendChild(tag);
-        center(tag);
-        $url_image.value = '';
-        $clicked.from(tag).over();
-        $file_image.value = null;
-      });
-    },
-    false,
-  );
-  reader.readAsDataURL(file);
+  const future_result = new Promise((resolve, reject) => {
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = (evt) => reject(evt);
+    reader.readAsDataURL(file);
+  });
+
+  let $img = new Image();
+  try {
+    $img.src = await future_result;
+  } catch (e) {
+    done();
+    throw new MessageError(`operațiune nereușită [${e.message}]`);
+  }
+
+  const future_src = new Promise((resolve, reject) => {
+    $img.onload = () => {
+      resolve(true);
+    };
+    $img.onerror = (evt) => reject(evt);
+  });
+
+  try {
+    await future_src;
+    let tag = newtag('image');
+    tag.href.baseVal = reader.result;
+    $svg.appendChild(tag);
+    center(tag);
+    $url_image.value = '';
+    $clicked.from(tag).over();
+    $file_image.value = null;
+  } catch (e) {
+    throw new MessageError(`operațiune nereușită [${e.message}]`);
+  } finally {
+    done();
+  }
 }
