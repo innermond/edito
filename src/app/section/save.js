@@ -10,7 +10,7 @@ import { proxied_url, try_load_images } from '../section/image.js';
 import { with_undo } from '../idb.js';
 import { dragging_all_marks_reset } from '../ui.js';
 import { $selection } from '../selection/index.js';
-import { MessageError } from '../error.js';
+import { MessageError, ycatch } from '../error.js';
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de fișier svg" data-tooltip-bottom>Adresă svg</label>
@@ -121,7 +121,7 @@ document.addEventListener('panel:toggle', async (evt) => {
   }
 });
 
-$mark.parentElement.addEventListener('click', async (evt) => {
+const manage_click = async (evt) => {
   const $el = evt.target;
   const $action = $el.closest('[class="action"]');
 
@@ -131,8 +131,8 @@ $mark.parentElement.addEventListener('click', async (evt) => {
       estimate_storage();
       await del_save($action.dataset.id);
       $action.remove();
-    } catch (e) {
-      console.log(e);
+		} catch (e) {
+			throw new MessageError(`acțiunea de stergere nu a reușit [${e.message}]`)
     } finally {
       done();
     }
@@ -140,30 +140,37 @@ $mark.parentElement.addEventListener('click', async (evt) => {
   }
 
   if ('thumb' in $el.dataset) {
+		const errors = [];
     const [done] = loading();
     try {
       await apply_save($action.dataset.id);
       load_fonts_of($svg);
       // check all svg images has been loaded
-      const imgs_loaded = [];
+			const futures = [];
       const $kk = $svg.querySelectorAll('image[*|href]');
-      $kk.forEach(($img) =>
-        imgs_loaded.push(
-          new Promise((resolve, reject) => {
-            $img.onload = () => {
-              resolve(true);
-            };
-            $img.onerror = reject;
-          }),
-        ),
-      );
-      let loaded = await Promise.all(imgs_loaded);
-      loaded = loaded.every((x) => x === true);
-      if (!loaded) throw new Error('not all images loaded');
+			$kk.forEach(async ($img) => {
+				const future = new Promise((resolve, reject) => {
+					$img.onload = () => resolve(true);
+					$img.onerror = reject;
+				});
+				futures.push(future);
+			});
+			await	(async function(){
+				await futures.reduce(async (_, next) => {
+					try {
+						await next;
+					} catch(e) {
+						errors.push(e);
+					}
+				}, Promise.resolve());
+			})();
     } catch (e) {
-      console.log(e);
+			throw new MessageError(`operațiune nereușita [${e.message}]`);
     } finally {
       done();
+			if (errors.length) {
+				throw  new MessageError('nu s-au incarcat toate imaginile');
+			}
     }
     return;
   }
@@ -181,14 +188,23 @@ $mark.parentElement.addEventListener('click', async (evt) => {
       $place.insertAdjacentHTML('afterbegin', saved);
       clear_patch();
     } catch (e) {
-      console.log(e);
+			throw new MessageError(`acțiunea de salvare nu a reușit [${e.message}]`)
     } finally {
       evt.stopPropagation();
       done();
     }
     return;
   }
-});
+}
+$mark.parentElement.addEventListener('click',
+	ycatch(
+		true,
+		(err) => {
+			if (err instanceof Error) return err.message;
+			return false;
+		},
+		manage_click,
+));
 
 $open_file.addEventListener('change', async () => {
   const file = $open_file.files[0] ?? null;

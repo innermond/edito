@@ -53,7 +53,7 @@ export const check = (fn, message) => {
 };
 
 export function clear($target) {
-  $target?.classList.remove('notify');
+  $target.classList?.remove('notify');
   $target.RemoveTooltip?.call();
   $target.ShowValue?.call(null, false);
 }
@@ -65,12 +65,16 @@ export class MessageError extends Error {
 }
 
 // catch eror from async
-export function Ycatch(fn_catch, fn, ...args) {
+export function Ycatch(fn_catch, fn, args) {
   return async (evt = null) => {
     if (evt) evt.preventDefault();
     try {
       if (args.length === 0) {
-        await fn();
+				if (evt) {
+					await fn(evt);
+				} else {
+				 await fn();
+				} 
       } else {
         await fn(...args);
       }
@@ -91,14 +95,14 @@ export function Ycatch(fn_catch, fn, ...args) {
 }
 
 // catch eror from sync
-export function Xcatch(fn_catch, fn, ...args) {
+export function Xcatch(fn_catch, fn, args) {
   return (evt = null) => {
     if (evt) {
       evt.preventDefault();
     }
     try {
       evt.target.ShowValue?.call();
-      !args ? fn() : fn(...args);
+      !args ? ( evt ? fn(evt) : fn() ) : fn(...args);
       evt.target.UseExistentShowValue?.call(evt.target, false);
     } catch (e) {
       if (!fn_catch) fn_catch = console.log;
@@ -117,11 +121,15 @@ export function Xcatch(fn_catch, fn, ...args) {
 }
 
 export function ycatch($target, note, ...fn) {
-  // add handler once
-  if (!$target.dataset.notifyErrorFocusin) {
-    $target.addEventListener('focusin', (evt) => clear(evt.target));
-    $target.dataset.notifyErrorFocusin = true;
-  }
+	const add_notify = ($t) => {
+		if (!$t.dataset.notifyErrorFocusin) {
+			$t.addEventListener('focusin', (evt) => clear(evt.target));
+			$t.dataset.notifyErrorFocusin = true;
+		}
+	};
+
+	const is_node = typeof $target == 'object' && 'nodeType' in $target && $target.nodeType === 1;
+	if (is_node) add_notify($target);
 
   // is run after run_fn is called
   const catch_fn = (err) => {
@@ -145,6 +153,10 @@ export function ycatch($target, note, ...fn) {
   }
 
   const prepared_run_fn = async (params) => {
+		if ($target === true && params instanceof Event) {
+			$target = params.target;
+			add_notify($target);
+		}
     // clear posible error visual hints
     if (Array.isArray($target)) {
       $target.forEach(([$t, _]) => clear($t));
