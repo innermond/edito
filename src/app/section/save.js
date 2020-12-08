@@ -131,8 +131,8 @@ const manage_click = async (evt) => {
       estimate_storage();
       await del_save($action.dataset.id);
       $action.remove();
-		} catch (e) {
-			throw new MessageError(`acțiunea de stergere nu a reușit [${e.message}]`)
+    } catch (e) {
+      throw new MessageError(`acțiunea de stergere nu a reușit [${e.message}]`);
     } finally {
       done();
     }
@@ -140,37 +140,37 @@ const manage_click = async (evt) => {
   }
 
   if ('thumb' in $el.dataset) {
-		const errors = [];
+    const errors = [];
     const [done] = loading();
     try {
       await apply_save($action.dataset.id);
       load_fonts_of($svg);
       // check all svg images has been loaded
-			const futures = [];
+      const futures = [];
       const $kk = $svg.querySelectorAll('image[*|href]');
-			$kk.forEach(async ($img) => {
-				const future = new Promise((resolve, reject) => {
-					$img.onload = () => resolve(true);
-					$img.onerror = reject;
-				});
-				futures.push(future);
-			});
-			await	(async function(){
-				await futures.reduce(async (_, next) => {
-					try {
-						await next;
-					} catch(e) {
-						errors.push(e);
-					}
-				}, Promise.resolve());
-			})();
+      $kk.forEach(async ($img) => {
+        const future = new Promise((resolve, reject) => {
+          $img.onload = () => resolve(true);
+          $img.onerror = reject;
+        });
+        futures.push(future);
+      });
+      await (async function () {
+        await futures.reduce(async (_, next) => {
+          try {
+            await next;
+          } catch (e) {
+            errors.push(e);
+          }
+        }, Promise.resolve());
+      })();
     } catch (e) {
-			throw new MessageError(`operațiune nereușita [${e.message}]`);
+      throw new MessageError(`operațiune nereușita [${e.message}]`);
     } finally {
       done();
-			if (errors.length) {
-				throw  new MessageError('nu s-au incarcat toate imaginile');
-			}
+      if (errors.length) {
+        throw new MessageError('nu s-au incarcat toate imaginile');
+      }
     }
     return;
   }
@@ -188,23 +188,25 @@ const manage_click = async (evt) => {
       $place.insertAdjacentHTML('afterbegin', saved);
       clear_patch();
     } catch (e) {
-			throw new MessageError(`acțiunea de salvare nu a reușit [${e.message}]`)
+      throw new MessageError(`acțiunea de salvare nu a reușit [${e.message}]`);
     } finally {
       evt.stopPropagation();
       done();
     }
     return;
   }
-}
-$mark.parentElement.addEventListener('click',
-	ycatch(
-		true,
-		(err) => {
-			if (err instanceof Error) return err.message;
-			return false;
-		},
-		manage_click,
-));
+};
+$mark.parentElement.addEventListener(
+  'click',
+  ycatch(
+    true,
+    (err) => {
+      if (err instanceof Error) return err.message;
+      return false;
+    },
+    manage_click,
+  ),
+);
 
 $open_file.addEventListener('change', async () => {
   const file = $open_file.files[0] ?? null;

@@ -41,8 +41,9 @@ function x_cancel_operation(evt) {
   this.dispatchEvent(
     new CustomEvent('tool_menu:all_inactive', { bubbles: true }),
   );
-	document .querySelectorAll('.tooltip-text.active')?.forEach(($note) => $note.classList.remove('active'));
-
+  document
+    .querySelectorAll('.tooltip-text.active')
+    ?.forEach(($note) => $note.classList.remove('active'));
 }
 
 document.addEventListener('panel:toggle', (evt) => {

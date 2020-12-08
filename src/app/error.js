@@ -70,11 +70,11 @@ export function Ycatch(fn_catch, fn, args) {
     if (evt) evt.preventDefault();
     try {
       if (args.length === 0) {
-				if (evt) {
-					await fn(evt);
-				} else {
-				 await fn();
-				} 
+        if (evt) {
+          await fn(evt);
+        } else {
+          await fn();
+        }
       } else {
         await fn(...args);
       }
@@ -102,7 +102,7 @@ export function Xcatch(fn_catch, fn, args) {
     }
     try {
       evt.target.ShowValue?.call();
-      !args ? ( evt ? fn(evt) : fn() ) : fn(...args);
+      !args ? (evt ? fn(evt) : fn()) : fn(...args);
       evt.target.UseExistentShowValue?.call(evt.target, false);
     } catch (e) {
       if (!fn_catch) fn_catch = console.log;
@@ -121,15 +121,18 @@ export function Xcatch(fn_catch, fn, args) {
 }
 
 export function ycatch($target, note, ...fn) {
-	const add_notify = ($t) => {
-		if (!$t.dataset.notifyErrorFocusin) {
-			$t.addEventListener('focusin', (evt) => clear(evt.target));
-			$t.dataset.notifyErrorFocusin = true;
-		}
-	};
+  const add_notify = ($t) => {
+    if (!$t.dataset.notifyErrorFocusin) {
+      $t.addEventListener('focusin', (evt) => clear(evt.target));
+      $t.dataset.notifyErrorFocusin = true;
+    }
+  };
 
-	const is_node = typeof $target == 'object' && 'nodeType' in $target && $target.nodeType === 1;
-	if (is_node) add_notify($target);
+  const is_node =
+    typeof $target == 'object' &&
+    'nodeType' in $target &&
+    $target.nodeType === 1;
+  if (is_node) add_notify($target);
 
   // is run after run_fn is called
   const catch_fn = (err) => {
@@ -153,10 +156,10 @@ export function ycatch($target, note, ...fn) {
   }
 
   const prepared_run_fn = async (params) => {
-		if ($target === true && params instanceof Event) {
-			$target = params.target;
-			add_notify($target);
-		}
+    if ($target === true && params instanceof Event) {
+      $target = params.target;
+      add_notify($target);
+    }
     // clear posible error visual hints
     if (Array.isArray($target)) {
       $target.forEach(([$t, _]) => clear($t));
