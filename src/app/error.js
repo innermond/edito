@@ -156,8 +156,10 @@ export function ycatch($target, note, ...fn) {
   }
 
   const prepared_run_fn = async (params) => {
-    if ($target === true && params instanceof Event) {
+    // TODO handle case of $target == true and its changes
+    if (params instanceof Event || $target == true) {
       $target = params.target;
+      console.log($target);
       add_notify($target);
     }
     // clear posible error visual hints
@@ -171,6 +173,7 @@ export function ycatch($target, note, ...fn) {
       if (mayerror !== false) throw new MessageError(mayerror);
     }
     await run_fn(params);
+    console.log($target);
   };
 
   // make func

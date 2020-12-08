@@ -115,6 +115,7 @@ export function tooltip($explained, adjx = 0, adjy = 0) {
     $e.style.display = 'initial';
     $e.style.width = 'min-content';
     $e.style.maxWidth = '8rem';
+    $e.style.overflow = 'hidden';
     move = true;
     $e.classList.add('active');
   };

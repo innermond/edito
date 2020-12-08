@@ -123,6 +123,7 @@ document.addEventListener('panel:toggle', async (evt) => {
 
 const manage_click = async (evt) => {
   const $el = evt.target;
+  console.log($el);
   const $action = $el.closest('[class="action"]');
 
   if ($el.classList.contains('close')) {
@@ -169,7 +170,16 @@ const manage_click = async (evt) => {
     } finally {
       done();
       if (errors.length) {
-        throw new MessageError('nu s-au incarcat toate imaginile');
+        let ee = '';
+        errors.forEach((err) => {
+          if (err instanceof Event && err.type === 'error') {
+            err = err.target.href?.baseVal;
+          } else if (err instanceof Error) {
+            err = err.message;
+          }
+          ee += 'imagine neincarcata: ' + err + '\n';
+        });
+        throw new MessageError(ee);
       }
     }
     return;
