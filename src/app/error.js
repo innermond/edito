@@ -121,6 +121,9 @@ export function Xcatch(fn_catch, fn, args) {
 }
 
 export function ycatch($target, note, ...fn) {
+  // $target can be changed at runtime
+  let $wanted = $target;
+
   const add_notify = ($t) => {
     if (!$t.dataset.notifyErrorFocusin) {
       $t.addEventListener('focusin', (evt) => clear(evt.target));
@@ -139,7 +142,7 @@ export function ycatch($target, note, ...fn) {
     if (Array.isArray(err)) {
       Notify(err);
     } else {
-      Notify($target, note, err);
+      Notify($wanted, note, err);
     }
   };
 
@@ -157,23 +160,23 @@ export function ycatch($target, note, ...fn) {
 
   const prepared_run_fn = async (params) => {
     // TODO handle case of $target == true and its changes
-    if (params instanceof Event || $target == true) {
-      $target = params.target;
-      console.log($target);
-      add_notify($target);
+    if (params instanceof Event && $target == true) {
+      $wanted = params.target;
+      add_notify($wanted);
+    } else {
+      $wanted = $target;
     }
     // clear posible error visual hints
-    if (Array.isArray($target)) {
+    if (Array.isArray($wanted)) {
       $target.forEach(([$t, _]) => clear($t));
     } else {
-      clear($target);
+      clear($wanted);
     }
     if (note instanceof Function) {
-      const mayerror = note($target.value);
+      const mayerror = note($wanted.value);
       if (mayerror !== false) throw new MessageError(mayerror);
     }
     await run_fn(params);
-    console.log($target);
   };
 
   // make func

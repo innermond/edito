@@ -123,7 +123,6 @@ document.addEventListener('panel:toggle', async (evt) => {
 
 const manage_click = async (evt) => {
   const $el = evt.target;
-  console.log($el);
   const $action = $el.closest('[class="action"]');
 
   if ($el.classList.contains('close')) {
@@ -145,26 +144,24 @@ const manage_click = async (evt) => {
     const [done] = loading();
     try {
       await apply_save($action.dataset.id);
+      // needs updated svg from above apply_save
       load_fonts_of($svg);
       // check all svg images has been loaded
       const futures = [];
       const $kk = $svg.querySelectorAll('image[*|href]');
       $kk.forEach(async ($img) => {
         const future = new Promise((resolve, reject) => {
-          $img.onload = () => resolve(true);
+          $img.addEventListener('load', () => {
+            resolve(true);
+          });
           $img.onerror = reject;
         });
         futures.push(future);
       });
-      await (async function () {
-        await futures.reduce(async (_, next) => {
-          try {
-            await next;
-          } catch (e) {
-            errors.push(e);
-          }
-        }, Promise.resolve());
-      })();
+      const all = await Promise.allSettled(futures);
+      for (const one of all) {
+        if (one.status === 'rejected') errors.push(one.reason);
+      }
     } catch (e) {
       throw new MessageError(`operațiune nereușita [${e.message}]`);
     } finally {
