@@ -7,10 +7,10 @@ import { svg_png } from '../save.js';
 import { save_svg, clear_patch } from '../idb.js';
 import { load_fonts_of } from '../user_action/font/fontface.js';
 import { proxied_url, try_load_images } from '../section/image.js';
-import { with_undo } from '../idb.js';
+import { with_undo_async } from '../idb.js';
 import { dragging_all_marks_reset } from '../ui.js';
 import { $selection } from '../selection/index.js';
-import { MessageError, ycatch } from '../error.js';
+import { MessageError, ycatch, check } from '../error.js';
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de fișier svg" data-tooltip-bottom>Adresă svg</label>
@@ -34,7 +34,17 @@ Copiere imagini
 export const $ui = wrap(ui_fragment(tpl), 'save-svg', 'Salvare');
 const $add_url_doc_svg = $ui.querySelector('#add_url_doc_svg');
 const $url_doc_svg = $ui.querySelector('#url_doc_svg');
-$add_url_doc_svg.addEventListener('click', with_undo(addUrlSvg));
+$add_url_doc_svg.addEventListener(
+  'click',
+  ycatch(
+    $url_doc_svg,
+    check((val) => {
+      if (val === '' || val.match(/^\s+$/) !== null)
+        return 'introduceți adresa fișierului vectorial de tip SVG';
+    }, 'adresa introdusă nu produce un fișier de tip SVG'),
+    with_undo_async(addUrlSvg),
+  ),
+);
 const $open_file = $ui.querySelector('#open-file-svg');
 
 async function addUrlSvg() {
@@ -46,8 +56,8 @@ async function addUrlSvg() {
 export async function urlSvg(src) {
   try {
     const url = new URL(src);
-    const is_svg = url.pathname.split('.')?.pop()?.toLowerCase() === 'svg';
-    if (!is_svg) return;
+    //const is_svg = url.pathname.split('.')?.pop()?.toLowerCase() === 'svg';
+    //if (!is_svg) throw new MessageError('fișierul nu e de tip SVG');
   } catch (e) {
     throw new MessageError(`nu s-a putut incarca [${e.message}]`);
   }
@@ -57,7 +67,10 @@ export async function urlSvg(src) {
   try {
     const url_doc_svg = proxied_url(src);
     let resp = await fetch(url_doc_svg);
-    if (!resp.ok) throw new Error('could not load svg');
+    if (!resp.ok) throw new MessageError('fișierul nu s-a putut recepționa');
+    const typ = resp.headers.get('content-type');
+    if (!typ || !typ.includes('image/svg+xml'))
+      throw new MessageError(`fișierul nu e SVG. Tipul e "${typ}"`);
     const svg_text = await resp.text();
     const parser = new DOMParser();
     const doc = parser.parseFromString(svg_text, 'image/svg+xml');
@@ -65,7 +78,7 @@ export async function urlSvg(src) {
     load_fonts_of($svg);
     try_load_images($svg, false);
   } catch (e) {
-    console.log(e);
+    throw new MessageError(`fișier neincărcat [${e.message}]`);
   } finally {
     done();
     $url_doc_svg.value = null;

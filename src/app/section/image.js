@@ -84,15 +84,20 @@ async function addUrlImage() {
   try {
     if (err_first) {
       resp = await fetch(url_image);
-      const typ = resp.headers.get('Content-Type');
-      if (!/jpe?g|png|svg|octet\-stream/i.test(typ)) {
-        throw new MessageError(
-          `[${err_first.message}] nu se recepționează un fișier imagine`,
-        );
-      }
+    }
+    if (!resp.ok) throw new MessageError(`cod erroare ${resp.status}`);
+    const typ = resp.headers.get('Content-Type');
+    if (!/jpe?g|png|svg|octet\-stream/i.test(typ)) {
+      throw new MessageError(
+        `nu se recepționează un fișier imagine, ci de tip ${typ} `,
+      );
     }
   } catch (e) {
-    throw e;
+    let msg = '';
+    if (e instanceof Error) msg = e.message;
+    else if (e instanceof Event && e.type === 'error')
+      msg = e.target.href?.baseVal ?? e.target.href;
+    throw new MessageError(`imagine neincărcată [${msg}]`);
   } finally {
     done();
   }

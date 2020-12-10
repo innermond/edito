@@ -125,18 +125,23 @@ async function add_url_svg() {
   try {
     if (err_first) {
       resp = await fetch(url_image);
-      const typ = resp.headers.get('Content-Type');
-      // TODO case 'octet-stream' may be elaborated more
-      // test it to be a svg file actually
-      if (!/svg|octet\-stream/i.test(typ)) {
-        throw new MessageError(
-          `[${err_first.message}] nu se recepționează un fișier SVG`,
-        );
-      }
+    }
+    if (!resp.ok) throw new MessageError(`cod erroare ${resp.status}`);
+    const typ = resp.headers.get('Content-Type');
+    // TODO case 'octet-stream' may be elaborated more
+    // test it to be a svg file actually
+    if (!/svg|octet\-stream/i.test(typ)) {
+      throw new MessageError(
+        `nu se recepționează un fișier SVG, ci de tip ${typ} `,
+      );
     }
   } catch (e) {
     done();
-    throw e;
+    let msg = '';
+    if (e instanceof Error) msg = e.message;
+    else if (e instanceof Event && e.type === 'error')
+      msg = e.target.href?.baseVal ?? e.target.href;
+    throw new MessageError(`grafică neincărcată [${msg}]`);
   }
 
   try {
