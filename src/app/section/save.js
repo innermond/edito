@@ -10,16 +10,18 @@ import { proxied_url, try_load_images } from '../section/image.js';
 import { with_undo_async } from '../idb.js';
 import { dragging_all_marks_reset } from '../ui.js';
 import { $selection } from '../selection/index.js';
-import { MessageError, ycatch, check } from '../error.js';
+import { MessageError, ycatch, check, clear } from '../error.js';
 
 const tpl = `<section class="vertical-align">
 	<label class="tooltip" data-tooltip-text="Introduceți o adresă validă de fișier svg" data-tooltip-bottom>Adresă svg</label>
 	<input id="url_doc_svg" placeholder="https://fisier.svg"><button id="add_url_doc_svg">Adaugă URL fișier svg</button>
 	<hr/>
 	<div class="row">
-		<label for="open-file-svg"><img class="tooltip" data-tooltip-text="Deschide un fișier svg de pe disc" data-tooltip-bottom src="/icon/open-file.svg">
-		<input class="none" type="file" id="open-file-svg">
+		<label id="for_local_svg" tabindex="1000">Grafică de pe hard disc</label>
+		<label for="open-file-svg" class="file-upload tooltip" data-tooltip-text="Deschide un fișier svg de pe disc" data-tooltip-bottom >
+		<img src="/icon/open-file.svg">
 		</label>
+		<input class="none" type="file" id="open-file-svg">
 		<label for="save_svg"><img class="tooltip" data-tooltip-text="Salvează" data-tooltip-bottom id="save_svg" src="/icon/save.svg"></label>
 	<label class="tooltip" data-tooltip-text="Imaginile online sunt descarcate și incluse In salvare" data-tooltip-bottom for="save_with_images">
 Copiere imagini
@@ -46,6 +48,18 @@ $add_url_doc_svg.addEventListener(
   ),
 );
 const $open_file = $ui.querySelector('#open-file-svg');
+const $a_local_svg = $ui.querySelector('#for_local_svg');
+
+$a_local_svg.addEventListener('click', (evt) => {
+  clear($a_local_svg);
+  evt.stopPropagation();
+});
+
+const $label_open_file = $ui.querySelector('[for=open-file-svg]');
+$label_open_file.addEventListener('click', (evt) => {
+  evt.stopPropagation();
+  $open_file.dispatchEvent(new MouseEvent('click'));
+});
 
 async function addUrlSvg() {
   dragging_all_marks_reset();
@@ -55,7 +69,7 @@ async function addUrlSvg() {
 
 export async function urlSvg(src) {
   try {
-    const url = new URL(src);
+    new URL(src);
     //const is_svg = url.pathname.split('.')?.pop()?.toLowerCase() === 'svg';
     //if (!is_svg) throw new MessageError('fișierul nu e de tip SVG');
   } catch (e) {
@@ -136,6 +150,15 @@ document.addEventListener('panel:toggle', async (evt) => {
 
 const manage_click = async (evt) => {
   const $el = evt.target;
+  const go_down =
+    $el.classList.contains('close') ||
+    'thumb' in $el.dataset ||
+    $el.id === 'save_svg';
+  if (!go_down) {
+    evt.stopPropagation();
+    return;
+  }
+
   const $action = $el.closest('[class="action"]');
 
   if ($el.classList.contains('close')) {
@@ -173,7 +196,16 @@ const manage_click = async (evt) => {
       });
       const all = await Promise.allSettled(futures);
       for (const one of all) {
-        if (one.status === 'rejected') errors.push(one.reason);
+        if (one.status === 'rejected') {
+          try {
+            one.reason.target.dataset.hrefNotFound =
+              one.reason.target.href.baseVal;
+            one.reason.target.href.baseVal = '/icon/not-found.svg';
+          } catch (error_to_ignore) {
+            console.log(error_to_ignore);
+          }
+          errors.push(one.reason);
+        }
       }
     } catch (e) {
       throw new MessageError(`operațiune nereușita [${e.message}]`);
@@ -183,7 +215,14 @@ const manage_click = async (evt) => {
         let ee = '';
         errors.forEach((err) => {
           if (err instanceof Event && err.type === 'error') {
-            err = err.target.href?.baseVal;
+            err =
+              err.target?.dataset?.hrefNotFound ?? err.target?.href?.baseval;
+            try {
+              err = new URL(err);
+              err = err.search.substring('?url='.length);
+            } catch (error_to_ignore) {
+              console.log(error_to_ignore);
+            }
           } else if (err instanceof Error) {
             err = err.message;
           }
@@ -216,6 +255,8 @@ const manage_click = async (evt) => {
     return;
   }
 };
+// FIXME this overwrite $target for open_file_svg
+// TODO split this to small handlers attached to specific dom elements
 $mark.parentElement.addEventListener(
   'click',
   ycatch(
@@ -228,7 +269,7 @@ $mark.parentElement.addEventListener(
   ),
 );
 
-$open_file.addEventListener('change', async () => {
+const open_file_svg = async () => {
   const file = $open_file.files[0] ?? null;
   if (!file) return;
 
@@ -254,4 +295,19 @@ $open_file.addEventListener('change', async () => {
     done();
     $open_file.value = null;
   }
-});
+};
+
+$open_file.addEventListener(
+  'change',
+  ycatch(
+    $a_local_svg,
+    check(() => {
+      const file = $open_file.files[0] ?? null;
+      if (!file) return false;
+      const is_svg =
+        $open_file.value.split('.')?.pop()?.toLowerCase() === 'svg';
+      if (!is_svg) return 'fișierul ales nu este SVG';
+    }, 'fișierul nu poate fi utilizat'),
+    with_undo_async(open_file_svg),
+  ),
+);

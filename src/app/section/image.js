@@ -212,6 +212,10 @@ async function add_file_image() {
   $selection.clear();
 
   const file = $file_image.files[0];
+  // we got here without error
+  // but no fille chosen
+  // means user aborted chosing
+  if (!file) return;
 
   const [done] = loading();
 

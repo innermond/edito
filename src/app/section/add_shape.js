@@ -61,6 +61,10 @@ async function add_file_svg() {
   $selection.clear();
 
   const file = $file_svg.files[0];
+  // we got here without error
+  // but no fille chosen
+  // means user aborted chosing
+  if (!file) return;
 
   const [done] = loading();
 

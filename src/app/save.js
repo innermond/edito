@@ -163,6 +163,10 @@ export async function svg_png($svg_node, include_images = false, maxw = 200) {
   $svgclone
     .querySelectorAll('[data-ants=true],[data-selectangle=true]')
     .forEach(($ant) => $ant.remove());
+  $svgclone.querySelectorAll('image[data-href-not-found]').forEach(($img) => {
+    $img.href.baseVal = $img.dataset.hrefNotFound;
+    $img.removeAttribute('data-href-not-found');
+  });
   // images are not embeded - this is what we save in database
   const svgdata = new XMLSerializer().serializeToString($svgclone);
   // embed images to help canvas generate thumbnail

@@ -38,7 +38,7 @@ export function Notify(dat, note = 'A avut loc o eroare!', err = null) {
   throw err;
 }
 
-export const check = (fn, message) => {
+export function check(fn, message) {
   return (val) => {
     if (val instanceof MessageError) {
       return val.message;
@@ -50,7 +50,7 @@ export const check = (fn, message) => {
     if (typeof ret === 'string') return ret;
     return false;
   };
-};
+}
 
 export function clear($target) {
   $target.classList?.remove('notify');
@@ -159,7 +159,6 @@ export function ycatch($target, note, ...fn) {
   }
 
   const prepared_run_fn = async (params) => {
-    // TODO handle case of $target == true and its changes
     if (params instanceof Event && $target == true) {
       $wanted = params.target;
       add_notify($wanted);
