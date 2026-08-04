@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "sass": "node-sass  --include-path scss scss/main.scss css/edito.css -w scss -r",
-    "liteserver": "lite-server",
+    "sass": "sass --load-path=scss scss/main.scss css/edito.css --watch",
+    "liteserver": "browser-sync start --config bs-config.js",
     "nice": "yarn prettier --write src",
     "dev": "webpack --config webpack.dev.js && cp dist/*.js .",
     "prod": "webpack --config webpack.prod.js"
@@ -14,24 +14,31 @@
   "author": "Gabriel Braila",
   "license": "ISC",
   "devDependencies": {
-    "@babel/cli": "^7.10.5",
     "@babel/core": "^7.12.3",
     "@babel/plugin-transform-runtime": "^7.10.5",
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-modules": "^0.1.4",
     "@babel/runtime": "^7.10.5",
     "babel-loader": "^8.1.0",
+    "browser-sync": "^3.0.4",
     "clean-webpack-plugin": "^3.0.0",
     "core-js": "3",
-    "lite-server": "^2.5.4",
-    "node-sass": "^4.14.0",
     "prettier": "2.1.1",
-    "terser-webpack-plugin": "^3.0.7",
-    "webpack": "^4.43.0",
+    "sass": "^1.102.0",
+    "terser-webpack-plugin": "^5.3.14",
+    "webpack": "^5.109.2",
     "webpack-cli": "^4.1.0",
     "webpack-merge": "^5.0.9"
   },
   "dependencies": {
     "diff-match-patch": "^1.0.5"
+  },
+  "overrides": {
+    "browser-sync": {
+      "immutable": "^5.1.9"
+    },
+    "browser-sync-ui": {
+      "immutable": "^5.1.9"
+    }
   }
 }
